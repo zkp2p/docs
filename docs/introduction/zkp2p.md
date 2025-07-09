@@ -1,9 +1,11 @@
 ---
 id: zkp2p
-title: Introducing ZKP2P
+title: ZKP2P
 ---
 
-# Introducing ZKP2P
+# 🐣 ZKP2P
+
+## Introducing ZKP2P
 
 Our mission is to bridge the gap between traditional Web2 platforms and decentralized Web3 platforms in a secure, private and user-friendly way. Our initial focus is to create the cheapest, fastest, lowest fraud and most composable fiat-to-crypto on/off ramp.
 

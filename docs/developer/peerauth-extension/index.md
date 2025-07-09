@@ -25,7 +25,8 @@ PeerAuth plays a key role in helping buyers authenticate their payment transacti
 
 Currently, PeerAuth only supports ZKP2P as its first integration, but the extension is generalized to support OAuth into any website.
 
-![](https://docs.zkp2p.xyz/~gitbook/image?url=https%3A%2F%2F3629680097-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F6e2L3XxfmJSq8oZRw1gA%252Fuploads%252Fjhh6aWqabuBuTgu7wpa0%252Fextension_diagram.png%3Falt%3Dmedia%26token%3Dcd72adcd-2427-4889-9c3f-4eae8d7fde3a&width=768&dpr=4&quality=100&sign=52091610&sv=2)
+![PeerAuth](/img/developer/PeerAuth1.avif)  
+
 
 #### Install
 

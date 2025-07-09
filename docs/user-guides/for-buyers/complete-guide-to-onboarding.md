@@ -11,6 +11,8 @@ This guide will walk you through the process of buying USDC and cryptocurrency o
 
 Visit [https://zkp2p.xyz](https://zkp2p.xyz) in your browser.
 
+![Onramp Step 1](/img/onramping/OnrampStep1.avif)
+
 ### Step 2: Connect Your Wallet
 
 You'll need to connect a wallet like Rabby, MetaMask, or sign in with Twitter, Google, or Email. If you sign in using socials, you do not need to pay any network fees.
@@ -23,14 +25,26 @@ You'll need to connect a wallet like Rabby, MetaMask, or sign in with Twitter, G
 
 Click on the **Buy** tab in the main navigation bar.
 
+![Onramp Step 3](/img/onramping/OnrampStep3.avif)
+
+
 ### Step 4: Configure Your Purchase
 
 - Select your currency from the dropdown menu (USD, EUR, GBP, etc.)  
+
+![Onramp Step 4](/img/onramping/OnrampStep4.avif)
+
 - Enter the amount you want to send in your local currency (e.g., 1 USD)  
 - Choose your payment method (Revolut, Venmo, Cash App, Wise)  
+
+![Onramp Step 4a](/img/onramping/OnrampStep4a.avif)
+
 - Choose the amount of USD you want to send  
 
 ZKP2P will automatically calculate how much USDC you'll receive based on liquidity available.
+
+![Onramp Step 4b](/img/onramping/OnrampStep4b.avif)
+
 
 ### Step 5: Review Order Details
 
@@ -43,12 +57,18 @@ ZKP2P will automatically calculate how much USDC you'll receive based on liquidi
 - Click the **Start Order** button to proceed  
 - You will be prompted to sign a transaction  
 
+![Onramp Step 6](/img/onramping/OnrampStep6.avif)
+
+
 ### Step 7: Install the PeerAuth Chrome Extension
 
 For first-time users, you'll need to install the PeerAuth Extension that helps verify your payments.
 
 - You'll see the **Install PeerAuth Extension** screen  
-- Click **Add to Chrome** to install the extension  
+- Click **Add to Chrome** to install the extension
+
+![Onramp Step 7](/img/onramping/OnrampStep7.avif)
+
 
 ### Step 8: Make and Confirm the Payment
 
@@ -57,6 +77,9 @@ For first-time users, you'll need to install the PeerAuth Extension that helps v
 - Make sure to use the correct currency (e.g., USD, EUR)  
 - **Do not perform cross-currency swaps** (e.g., in Revolut), as this can cause verification issues  
 - Return to ZKP2P and click **I have completed payment**  
+
+![Onramp Step 8](/img/onramping/OnrampStep8.avif)
+
 
 ### Step 9: Payment Verification Process
 
@@ -72,16 +95,27 @@ If you have multiple payments in your payment platform:
 - Select the correct payment that matches your ZKP2P order  
 - Click **Verify Payment** to continue  
 
+![Onramp Step 10](/img/onramping/OnrampStep10.avif)
+
+
 ### Step 11: Wait for Transaction Verification
 
 - The system generates a zero-knowledge proof of your payment  
 - This process is private and secure  
 - Wait for the verification to complete (usually around 30 seconds)  
 
+![Onramp Step 11](/img/onramping/OnrampStep11.avif)
+
+
 ### Step 12: Receive Your USDC
 
 - Once verified, you will be able to complete your order  
 - Click **Complete Order** and sign the transaction to receive your USDC or cryptocurrency  
+![Onramp Step 12](/img/onramping/OnrampStep12.avif)
+
 - Wait for the transaction to finish and use your USDC or crypto on-chain!  
+
+![Onramp Step 12a](/img/onramping/OnrampStep12a.avif)
+
 
 ➡️ _Next: [Handling Verification Issues as a Buyer](handling-verification-issues.md)_

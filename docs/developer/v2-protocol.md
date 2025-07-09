@@ -1,7 +1,11 @@
+---
 id: developer-v2-protocol
-title: The ZKP2P V2 Protocol
+title: 📔 The ZKP2P V2 Protocol
+---
 
-# Introduction
+# 📔 The ZKP2P V2 Protocol
+
+## Introduction
 
 The ZKP2P V2 Protocol enables trust minimized and fully noncustodial buying and selling of any offchain digital asset (e.g. fiat currencies) for any onchain asset (e.g. USDC, Ethereum, Solana). The protocol functions as a set of onchain smart contracts that escrows and unlocks tokens upon satisfaction of a predefined predicate (i.e. proof of web2 payment). These predicates can be defined in the form of any cryptographic primitive whether proxy-TLS (zkTLS), MPC-TLS (TLSNotary), zkEmail or TEEs.
 
@@ -48,6 +52,8 @@ ZKP2P V2 is a doubling down of this vision to create an exchange that enables fa
 - Timing of the payment post-intent
 
 Below is an illustrative example of a flow using MPC-TLS (TLSNotary) which can be extended to any crypto primitive.
+
+![Protocol Overview](/img/developer/ZKP2PProtocolOverview.png)  
 
 ## The Tech Stack
 **Escrow Protocol:** Smart contracts on the Ethereum blockchain enable trustless transactions and manage the logic of the protocol.

@@ -40,9 +40,10 @@ module.exports = {
         // This is the top-level entry: "The ZKP2P V2 Protocol"
         {
           type: 'doc',
-          id: 'developer/v2-protocol',
+          id: 'developer/developer-v2-protocol',
           label: 'The ZKP2P V2 Protocol',
         },
+        
         {
           type: 'category',
           label: 'Smart Contracts',
@@ -70,11 +71,13 @@ module.exports = {
         {
           type: 'category',
           label: 'Integrate ZKP2P',
+          link: { type: 'doc', id: 'developer/integrate-zkp2p/index' },
           items: [
-            'developer/integrate-onramp',
-            'developer/integrate-offramp',
+            'developer/integrate-zkp2p/integrate-onramp',
+            'developer/integrate-zkp2p/integrate-offramp',
           ],
         },
+        
         'developer/build-new-provider',
         'developer/security',
         'developer/risks',

@@ -3,6 +3,8 @@ id: zk-tls
 title: 🖥️ zkTLS
 ---
 
+# 🖥️ zkTLS
+
 ## Overview
 
 At ZKP2P, we make heavy use of zkTLS techniques to prove authenticity of data while preserving user privacy. zkTLS enables us to port any data from the web served through TLS1.2 and TLS1.3 to smart contracts. In particular, there are 2 techniques: TLSNotary (MPC-TLS) and TLSProxy (proxy based approach e.g [Reclaim Protocol](https://reclaimprotocol.org/))
@@ -16,12 +18,15 @@ The Notary runs the 2PC-TLS protocol with the Buyer and attests the transcript t
 
 #### Generating proof of payment for ZKP2P using TLSN
 
-![](https://docs.zkp2p.xyz/~gitbook/image?url=https%3A%2F%2Flh7-us.googleusercontent.com%2FVsvr4V0SKecmStzru9uuhag2bMlGuONqNA3zNj6NzVvYy--cc9jiEAUZCuIMR2q7tpQowRNMxl3S_rz2MzTKpdvdXg1y7GIcDv6RS2RPApIp_LkaYDozlPu1bCUh3Qt6sGO2Usfv7cdnqEiNEb2pzJzjGg%3Ds2048&width=768&dpr=4&quality=100&sign=351b1636&sv=2)
+ 
+![zkTLS 1](/img/developer/zkTLS1.webp)  
+
+
 
 
 #### Simplified 2PC-TLS protocol between the Prover and the Verifier (Notary)
 
-![](https://docs.zkp2p.xyz/~gitbook/image?url=https%3A%2F%2F3629680097-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F6e2L3XxfmJSq8oZRw1gA%252Fuploads%252FtkeKhlroW2LPia2MDRWc%252Fgaranti%2520circuits%2520diagram%2520%281%29.png%3Falt%3Dmedia%26token%3D58bf305a-9288-4245-b7ed-6478e0bb4e6b&width=768&dpr=4&quality=100&sign=ac1dc5e5&sv=2)
+![zkTLS 2](/img/developer/zkTLS2.avif)  
 
 
 ### WebSocket Proxy
@@ -34,8 +39,7 @@ Note that, the seller is trusting the Notary to not collude with the Buyer and g
 
 #### Optimistic Notarization with a network of Notaries
 
-![](https://docs.zkp2p.xyz/~gitbook/image?url=https%3A%2F%2Flh7-us.googleusercontent.com%2FWN8pzQrQOghkgqRDt4L-P73KRhqelGebUWPq78Z1LvCA7JwWDxjrA2JEHZ19U-l24VkCAt5fOfPYuhdUGHbcgfWxS0q3leGX1pWJVPNYQdhfCXF_y4jXmB7_SU6VAPjUqQdf7CF4vQl5aKFNFMTcFrmfOQ%3Ds2048&width=768&dpr=4&quality=100&sign=197e2e64&sv=2)
-
+![zkTLS 3](/img/developer/zkTLS3.webp)
 
 #### Arbitration
 

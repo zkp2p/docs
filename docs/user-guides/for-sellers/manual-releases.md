@@ -21,6 +21,8 @@ You should **only consider manual release** if:
 - The **amount, currency, and timing** align with your ZKP2P order
 - You can **verify** the payment in your own payment platform
 
+![Step 1](/img/manual-release/ManualReleaseStep1.avif)  
+
 Alternatively, you can refund the buyer and ask them to re-initiate the order properly.
 
 ### How to Verify Buyer Payments
@@ -39,6 +41,9 @@ Alternatively, you can refund the buyer and ask them to re-initiate the order pr
 - Check that the **amount**, **currency**, and **buyer address** match  
 - Confirm the **"Locked" amount** corresponds to the payment  
 
+![Step 2](/img/manual-release/ManualReleaseStep2.png)  
+
+
 #### Request Appropriate Verification
 
 - Ask the buyer for a **screenshot** of their payment confirmation  
@@ -53,11 +58,16 @@ Alternatively, you can refund the buyer and ask them to re-initiate the order pr
 - Find the relevant order (match amount + buyer address)  
 - Click the **"Release"** button  
 
+![Step 3](/img/manual-release/ManualReleaseStep3.avif)  
+
 #### Confirm the Release
 
 - A **"Release Funds"** screen will appear  
 - Review the warning about bypassing verification  
 - Confirm you're releasing the **correct amount** to the **correct buyer**  
+
+![Step 3a](/img/manual-release/ManualReleaseStep3a.avif)
+
 
 #### Sign the Transaction
 
