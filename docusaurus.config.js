@@ -34,20 +34,13 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          sidebarPath: require.resolve('./sidebars.js'),
+          id: 'guides',
+          path: 'guides',
+          routeBasePath: 'guides',
+          sidebarPath: require.resolve('./guides-sidebars.js'),
           editUrl: 'https://github.com/zkp2p/docs/edit/main/',
         },
-        blog: {
-          showReadingTime: true,
-          feedOptions: {
-            type: ['rss', 'atom'],
-            xslt: true,
-          },
-          editUrl: 'https://github.com/zkp2p/docs/edit/main/',
-          onInlineTags: 'warn',
-          onInlineAuthors: 'warn',
-          onUntruncatedBlogPosts: 'warn',
-        },
+        blog: false,
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
@@ -55,10 +48,38 @@ const config = {
     ],
   ],
 
+  plugins: [
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'protocol',
+        path: 'protocol',
+        routeBasePath: 'protocol',
+        sidebarPath: require.resolve('./protocol-sidebars.js'),
+        editUrl: 'https://github.com/zkp2p/docs/edit/main/',
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'developer',
+        path: 'developer',
+        routeBasePath: 'developer',
+        sidebarPath: require.resolve('./developer-sidebars.js'),
+        editUrl: 'https://github.com/zkp2p/docs/edit/main/',
+      },
+    ],
+  ],
+
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       image: 'img/social-preview.png', // Customize this
+      colorMode: {
+        defaultMode: 'dark',
+        disableSwitch: true,
+        respectPrefersColorScheme: false,
+      },
       navbar: {
         title: 'ZKP2P',
         logo: {
@@ -68,11 +89,25 @@ const config = {
         items: [
           {
             type: 'docSidebar',
-            sidebarId: 'docsSidebar', // ✅ Matches sidebars.js
+            sidebarId: 'defaultSidebar',
+            docsPluginId: 'guides',
             position: 'left',
-            label: 'Docs',
+            label: 'User',
           },
-          {to: '/blog', label: 'Blog', position: 'left'},
+          {
+            type: 'docSidebar',
+            sidebarId: 'defaultSidebar',
+            docsPluginId: 'protocol',
+            position: 'left',
+            label: 'Protocol',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'defaultSidebar',
+            docsPluginId: 'developer',
+            position: 'left',
+            label: 'Developer',
+          },
           {
             href: 'https://github.com/zkp2p',
             label: 'GitHub',
@@ -84,15 +119,19 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Docs',
+            title: 'Documentation',
             items: [
               {
-                label: 'User Guides',
-                to: '/docs/user-guides/for-buyers/complete-guide-to-onboarding',
+                label: 'User',
+                to: '/guides/for-buyers/complete-guide-to-onboarding',
+              },
+              {
+                label: 'Protocol',
+                to: '/protocol/developer-v2-protocol',
               },
               {
                 label: 'Developer',
-                to: '/docs/developer/v2-protocol',
+                to: '/developer/integrate-zkp2p',
               },
             ],
           },
@@ -120,6 +159,10 @@ const config = {
                 label: 'GitHub',
                 href: 'https://github.com/zkp2p',
               },
+              {
+                label: 'Team',
+                href: 'https://zkp2p.xyz/team',
+              },
             ],
           },
         ],
@@ -128,6 +171,11 @@ const config = {
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
+      },
+      algolia: {
+        appId: 'UNO601BRCA',
+        apiKey: '524d7835cc97c4df8948a7a7600e6654',
+        indexName: 'Documentation Website',
       },
     }),
 };

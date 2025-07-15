@@ -69,4 +69,4 @@ Send the following info to the seller:
 - Once they confirm your payment, they'll **manually release the funds**  
 - The process can take some time, depending on the seller's availability  
 
-➡️ _Next: [For Sellers](../../for-sellers/provide-liquidity-sell-usdc.md)_
+➡️ _Next: [For Sellers](../for-sellers/provide-liquidity-sell-usdc.md)_

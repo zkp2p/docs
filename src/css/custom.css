@@ -4,27 +4,387 @@
  * work well for content-centric websites.
  */
 
-/* You can override the default Infima variables here. */
+/* Font Face - Graphik */
+/* Note: Add Graphik-Regular.otf to src/css/fonts/ directory */
+/* Fallback to system fonts if Graphik is not available */
+
+/* Custom theme colors - Dark mode only */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
+  --ifm-color-primary: #FF3F3E;
+  --ifm-color-primary-dark: #B82524;
+  --ifm-color-primary-darker: #A01F1E;
+  --ifm-color-primary-darkest: #881918;
+  --ifm-color-primary-light: #FF5958;
+  --ifm-color-primary-lighter: #FF7372;
+  --ifm-color-primary-lightest: #FF8D8C;
+  
+  --ifm-link-color: #0066CC;
   --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --ifm-font-family-base: 'Graphik', -apple-system, BlinkMacSystemFont, 
+    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --ifm-heading-font-family: var(--ifm-font-family-base);
+  --ifm-font-weight-normal: 300;
+  --ifm-font-weight-semibold: 535;
+  --ifm-font-weight-bold: 600;
+  
+  /* Dark theme colors */
+  --ifm-background-color: #171717;
+  --ifm-background-surface-color: #131A2A;
+  --ifm-navbar-background-color: #0D111C;
+  --ifm-card-background-color: #131A2A;
+  
+  --ifm-toc-border-color: #98A1C03D;
+  --ifm-color-emphasis-100: #1B1E29;
+  --ifm-color-emphasis-200: #98A1C03D;
+  --ifm-color-emphasis-300: #98A1C055;
+  --ifm-color-emphasis-700: #9CA3AA;
+  --ifm-color-emphasis-800: #6C757D;
+  --ifm-color-emphasis-900: #FFFFFF;
+  
+  --ifm-color-content: #FFFFFF;
+  --ifm-color-content-secondary: #9CA3AA;
+  
+  --docusaurus-highlighted-code-line-bg: rgba(152, 161, 192, 0.1);
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
+/* Force dark theme */
 [data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  --ifm-background-color: #171717;
+}
+
+/* Global styles */
+html {
+  font-family: var(--ifm-font-family-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #171717 !important;
+  color: #FFFFFF;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #171717;
+  color: #FFFFFF;
+  font-family: 'Graphik', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  color: #FFFFFF;
+  line-height: 1.1;
+}
+
+p, li {
+  color: #9CA3AA;
+  font-weight: 300;
+  line-height: 1.5;
+}
+
+strong, b {
+  font-weight: 535;
+}
+
+/* Navbar styling */
+.navbar {
+  background: rgba(13, 17, 28, 0.9);
+  border-bottom: 1px solid #98A1C03D;
+  backdrop-filter: blur(10px);
+}
+
+.navbar__title {
+  font-weight: 535;
+  color: #FFFFFF;
+}
+
+.navbar__link {
+  font-weight: 300;
+  color: #9CA3AA;
+}
+
+.navbar__link:hover {
+  color: #FFFFFF;
+}
+
+.navbar__link--active {
+  color: #0066CC;
+  font-weight: 535;
+}
+
+/* Search bar styling */
+.navbar__search-input {
+  border-radius: 16px;
+  background: #131A2A;
+  border: 1px solid #98A1C03D;
+  color: #FFFFFF;
+}
+
+.navbar__search-input::placeholder {
+  color: #6C757D;
+}
+
+.navbar__search-input:focus {
+  outline: none;
+  border-color: #98A1C055;
+  background: #131A2A;
+}
+
+/* DocSearch styling */
+.DocSearch-Button {
+  border-radius: 16px !important;
+  background: #131A2A !important;
+  border: 1px solid #98A1C03D !important;
+  padding: 0 16px !important;
+  height: 40px !important;
+  color: #9CA3AA !important;
+  font-weight: 300 !important;
+}
+
+.DocSearch-Button:hover {
+  background: #1B1E29 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* DocSearch Modal */
+.DocSearch-Modal {
+  background: rgba(23, 23, 23, 0.95) !important;
+}
+
+.DocSearch-SearchBar {
+  border-bottom: 1px solid #98A1C03D !important;
+  padding: 1rem !important;
+}
+
+.DocSearch-Form {
+  background: #131A2A !important;
+  border: 1px solid #FF3F3E !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+}
+
+.DocSearch-Input {
+  color: #FFFFFF !important;
+  font-weight: 300 !important;
+  padding: 0.75rem 1rem !important;
+}
+
+.DocSearch-Hit {
+  border-bottom: 1px solid #98A1C03D !important;
+}
+
+.DocSearch-Hit:hover,
+.DocSearch-Hit[aria-selected='true'] {
+  background: #1B1E29 !important;
+}
+
+.DocSearch-Hit-source {
+  background: #0D111C !important;
+  border-bottom: 1px solid #98A1C03D !important;
+  color: #9CA3AA !important;
+}
+
+/* Content styling */
+article {
+  max-width: 100%;
+  color: #FFFFFF;
+  font-weight: 300;
+}
+
+article h1, article h2, article h3, article h4, article h5, article h6 {
+  font-weight: 600;
+}
+
+/* Links */
+a {
+  color: #0066CC;
+  font-weight: 300;
+}
+
+a:hover {
+  color: #0066CC;
+  text-decoration: underline;
+}
+
+/* Code blocks */
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+pre {
+  border-radius: 16px;
+  border: 1px solid #98A1C03D;
+  background: #131A2A;
+}
+
+/* Tables */
+table {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #98A1C03D;
+}
+
+table th {
+  font-weight: 535;
+}
+
+table td {
+  font-weight: 300;
+}
+
+/* Sidebar */
+.menu {
+  font-weight: 300;
+}
+
+.menu__link {
+  border-radius: 16px;
+  transition: all 0.2s ease;
+  color: #9CA3AA;
+  font-weight: 300;
+}
+
+.menu__link:hover {
+  background: #1B1E29;
+  color: #FFFFFF;
+  text-decoration: none;
+}
+
+.menu__link--active {
+  background: rgba(0, 102, 204, 0.1);
+  color: #0066CC;
+  font-weight: 535;
+}
+
+/* Footer */
+.footer {
+  background: #0D111C;
+  border-top: 1px solid #98A1C03D;
+  color: #9CA3AA;
+}
+
+.footer__title {
+  font-weight: 535;
+}
+
+.footer__link-item {
+  font-weight: 300;
+}
+
+/* Admonitions */
+.admonition {
+  border-radius: 16px;
+  background: #131A2A;
+  border: 1px solid #98A1C03D;
+  border-left: 4px solid #98A1C055;
+}
+
+/* Buttons */
+.button {
+  border-radius: 16px;
+  font-weight: 535;
+  transition: all 0.3s ease;
+  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.25);
+}
+
+.button--primary {
+  background: #FF3F3E;
+  border-color: #FF3F3E;
+}
+
+.button--primary:hover {
+  background: #B82524;
+  border-color: #B82524;
+  transform: translateY(-5px);
+  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.25);
+}
+
+/* Icon buttons */
+.button--secondary {
+  background: #98A1C03D;
+  border-color: transparent;
+  color: #FFFFFF;
+}
+
+.button--secondary:hover {
+  background: #98A1C055;
+  color: #FFFFFF;
+  transform: translateY(-2px);
+}
+
+/* Pagination */
+.pagination-nav__link {
+  border-radius: 16px;
+  border: 1px solid #98A1C03D;
+  transition: all 0.3s ease;
+  background: #131A2A;
+  font-weight: 300;
+}
+
+.pagination-nav__link:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+  text-decoration: none;
+  background: #131A2A;
+  transform: translateY(-5px);
+}
+
+.pagination-nav__label {
+  font-weight: 535;
+}
+
+/* Card hover effects */
+.card {
+  border-radius: 16px;
+  border: 1px solid #98A1C03D;
+  background-color: #131A2A;
+  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transform: translateY(-5px);
+}
+
+/* Input fields */
+input, textarea {
+  background: transparent;
+  color: #FFFFFF;
+  border: 1px solid #98A1C03D;
+  border-radius: 16px;
+  font-weight: 300;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: #98A1C055;
+}
+
+/* TOC */
+.table-of-contents {
+  font-weight: 300;
+}
+
+.table-of-contents__link {
+  font-weight: 300;
+}
+
+.table-of-contents__link--active {
+  font-weight: 535;
+  color: #0066CC;
+}
+
+/* Remove all light theme overrides */
+[data-theme='light'] {
+  display: none !important;
 }
