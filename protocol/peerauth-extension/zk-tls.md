@@ -1,9 +1,9 @@
 ---
 id: zk-tls
-title: 🖥️ zkTLS
+title: zkTLS
 ---
 
-# 🖥️ zkTLS
+# zkTLS
 
 ## Overview
 

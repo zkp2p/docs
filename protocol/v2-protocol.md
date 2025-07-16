@@ -1,9 +1,9 @@
 ---
 id: developer-v2-protocol
-title: 📔 The ZKP2P V2 Protocol
+title: The ZKP2P V2 Protocol
 ---
 
-# 📔 The ZKP2P V2 Protocol
+# The ZKP2P V2 Protocol
 
 ## Introduction
 

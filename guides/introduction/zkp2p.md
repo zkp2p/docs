@@ -3,7 +3,7 @@ id: zkp2p
 title: ZKP2P
 ---
 
-# 🐣 ZKP2P
+# ZKP2P
 
 ## Introducing ZKP2P
 
