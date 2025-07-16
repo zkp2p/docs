@@ -10,11 +10,29 @@ function HomepageHero() {
   return (
     <div className={styles.heroContainer}>
       <h1 className={styles.heroTitle}>
-        ZKP2P Documentation
+        Welcome to ZKP2P Docs
       </h1>
       <p className={styles.heroSubtitle}>
         A fast, permissionless fiat ↔ crypto on/offramp protocol powered by zero-knowledge proofs
       </p>
+      <div className={styles.searchContainer}>
+        <div className={styles.searchBar}>
+          <svg className={styles.searchIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+          <input 
+            type="text" 
+            placeholder="Search" 
+            className={styles.searchInput}
+            disabled
+          />
+          <div className={styles.searchShortcut}>
+            <span>⌘</span>
+            <span>K</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -83,62 +101,51 @@ function HomepageFeatures() {
   );
 }
 
-function QuickLinks() {
-  const links = [
-    {
-      title: 'Quick Start',
-      items: [
-        { label: 'Complete Onboarding Guide', link: '/guides/for-buyers/complete-guide-to-onboarding' },
-        { label: 'Provide Liquidity', link: '/guides/for-sellers/provide-liquidity-sell-usdc' },
-        { label: 'Integration Guide', link: '/developer/integrate-zkp2p/integrate-onramp' },
-      ],
-    },
-    {
-      title: 'Key Concepts',
-      items: [
-        { label: 'What is ZKP2P?', link: '/guides/introduction/zkp2p' },
-        { label: 'Smart Contracts', link: '/protocol/smart-contracts' },
-        { label: 'Security & Privacy', link: '/protocol/security' },
-      ],
-    },
-  ];
-
-  return (
-    <section className={styles.quickLinks}>
-      <div className={styles.container}>
-        <h2 className={styles.sectionTitle}>Popular Resources</h2>
-        <div className={styles.linksGrid}>
-          {links.map((section, idx) => (
-            <div key={idx} className={styles.linkSection}>
-              <h3 className={styles.linkSectionTitle}>{section.title}</h3>
-              <ul className={styles.linkList}>
-                {section.items.map((item, itemIdx) => (
-                  <li key={itemIdx}>
-                    <Link to={item.link} className={styles.linkItem}>
-                      {item.label} →
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function CommunitySection() {
   const communityLinks = [
-    { label: 'GitHub', href: 'https://github.com/zkp2p', icon: '🐙' },
-    { label: 'Telegram', href: 'https://t.me/zkp2p', icon: '💬' },
-    { label: 'Twitter', href: 'https://twitter.com/zkp2p', icon: '🐦' },
+    { 
+      label: 'Twitter', 
+      description: 'Follow us for updates and announcements',
+      href: 'https://twitter.com/zkp2p',
+      icon: (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/>
+        </svg>
+      )
+    },
+    { 
+      label: 'Telegram', 
+      description: 'Join our community discussions',
+      href: 'https://t.me/zk_p2p',
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="90 90 330 330"
+          fill="currentColor"
+        >
+          <path d="M109.5 250.5l283.4-117.7c11.2-4.7 21.7 2.7 18.1 19.7l-48.2 226.7c-2.9 13.5-11.2 16.8-22.7 10.5l-63-46.6-30.4 29.3c-3.4 3.4-6.2 6.2-12.7 6.2l4.5-63.3 115-104.1c5-4.5-1.1-7-7.8-2.5l-142 89.2-61.2-19.1c-13.3-4.1-13.5-13.3 2.8-19.7z" />
+        </svg>
+      )
+      
+      
+    },
+    { 
+      label: 'GitHub', 
+      description: 'View all ZKP2P repositories',
+      href: 'https://github.com/zkp2p',
+      icon: (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+        </svg>
+      )
+    },
   ];
 
   return (
     <section className={styles.community}>
       <div className={styles.container}>
-        <h2 className={styles.sectionTitle}>Join the Community</h2>
         <div className={styles.communityGrid}>
           {communityLinks.map((link, idx) => (
             <a
@@ -148,8 +155,13 @@ function CommunitySection() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <span className={styles.communityIcon}>{link.icon}</span>
-              <span className={styles.communityLabel}>{link.label}</span>
+              <div className={styles.communityIconWrapper}>
+                {link.icon}
+              </div>
+              <div className={styles.communityContent}>
+                <span className={styles.communityLabel}>{link.label}</span>
+                <span className={styles.communityDescription}>{link.description}</span>
+              </div>
             </a>
           ))}
         </div>
@@ -169,7 +181,6 @@ export default function Home() {
           <HomepageHero />
           <HomepageFeatures />
         </section>
-        <QuickLinks />
         <CommunitySection />
       </main>
     </Layout>
