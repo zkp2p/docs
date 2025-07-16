@@ -139,7 +139,7 @@ const config = {
             items: [
               {
                 label: 'Telegram',
-                href: 'https://t.me/zkp2p',
+                href: 'https://t.me/zk_p2p',
               },
               {
                 label: 'Twitter/X',

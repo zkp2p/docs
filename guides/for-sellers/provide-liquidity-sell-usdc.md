@@ -189,6 +189,6 @@ View the guide on optimal currency conversion rates for more tips.
 
 - Long pending? Check gas — you need ETH on Base  
 - Deposit not appearing? Refresh or reconnect wallet  
-- Still stuck? Join [ZKP2P Telegram](https://t.me/zkp2p) for help  
+- Still stuck? Join [ZKP2P Telegram](https://t.me/zk_p2p) for help  
 
 ➡️ _Next: [How to Update USDC Conversion Rates](update-usdc-rates.md)_
