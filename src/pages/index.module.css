@@ -159,7 +159,7 @@ main::after {
 
 /* Features Section */
 .features {
-  padding: 0.5rem 0 2rem;
+  padding: 0.5rem 0 4rem;
   background: transparent;
   position: relative;
   z-index: 1;
@@ -257,7 +257,7 @@ main::after {
 
 /* Community Section */
 .community {
-  padding: 2rem 0;
+  padding: 2rem 0 4rem;
   background: transparent;
   position: relative;
   z-index: 1;
