@@ -1,15 +1,14 @@
 module.exports = {
   defaultSidebar: [
+    'integrate-zkp2p/integrate-redirect-onramp',
     {
       type: 'category',
-      label: 'Integrate ZKP2P',
-      link: { type: 'doc', id: 'integrate-zkp2p/index' },
+      label: 'API',
       items: [
-        'integrate-zkp2p/integrate-onramp',
-        'integrate-zkp2p/integrate-offramp',
+        'api/onramp-integration',
+        'api/offramp-integration',
       ],
     },
     'build-new-provider',
-    'faq',
   ],
 };
