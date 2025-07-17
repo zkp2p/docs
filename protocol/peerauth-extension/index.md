@@ -30,4 +30,4 @@ Currently, PeerAuth only supports ZKP2P as its first integration, but the extens
 
 #### Install
 
-You can install the [ZKP2P PeerAuth](https://chromewebstore.google.com/detail/zkp2p-extension/ijpgccednehjpeclfcllnjjcmiohdjih?hl=en&authuser=3&pli=1) from the Chrome web store.
+You can install the [**ZKP2P PeerAuth Extension**](https://chromewebstore.google.com/detail/zkp2p-extension/ijpgccednehjpeclfcllnjjcmiohdjih?hl=en&authuser=3&pli=1) from the Chrome web store.

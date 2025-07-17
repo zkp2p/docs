@@ -69,10 +69,20 @@ const config = {
         editUrl: 'https://github.com/zkp2p/docs/edit/main/',
       },
     ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'brand-kit',
+        path: 'brand-kit',
+        routeBasePath: 'brand-kit',
+        sidebarPath: require.resolve('./brand-kit-sidebars.js'),
+        editUrl: 'https://github.com/zkp2p/docs/edit/main/',
+      },
+    ],
   ],
 
   themeConfig:
-    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
+    /** @type {import('@docusaurus/types').ThemeConfig} */
     ({
       colorMode: {
         defaultMode: 'dark',
@@ -113,6 +123,13 @@ const config = {
             position: 'right',
           },
           {
+            type: 'docSidebar',
+            sidebarId: 'defaultSidebar',
+            docsPluginId: 'brand-kit',
+            position: 'right',
+            label: 'Brand Kit',
+          },
+          {
             href: 'https://github.com/zkp2p',
             label: 'GitHub',
             position: 'right',
@@ -139,7 +156,7 @@ const config = {
               },
               {
                 label: 'Brand Kit',
-                to: '/guides/brand-kit',
+                to: '/brand-kit',
               },
             ],
           },

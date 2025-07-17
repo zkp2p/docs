@@ -27,6 +27,5 @@ module.exports = {
         'for-sellers/manual-releases',
       ],
     },
-
   ],
 };

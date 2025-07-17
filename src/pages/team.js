@@ -8,7 +8,7 @@ export default function Team() {
   const teamMembers = [
     {
       name: 'Richard',
-      role: 'Co-Founder & CEO',
+      role: '',
       bio: '',
       twitter: 'https://x.com/richardzliang',
       github: 'https://github.com/richardliang',
@@ -16,7 +16,7 @@ export default function Team() {
     },
     {
       name: 'Sachin',
-      role: 'Co-Founder & CTO',
+      role: '',
       bio: '',
       twitter: 'https://x.com/0xSachinK',
       github: 'https://github.com/0xSachinK',
@@ -24,7 +24,7 @@ export default function Team() {
     },
     {
       name: 'Ben',
-      role: 'Head of Growth & Marketing',
+      role: '',
       bio: '',
       twitter: 'https://x.com/unhappyben',
       github: 'https://github.com/unhappyben',
@@ -32,16 +32,16 @@ export default function Team() {
       image: '/img/team/ben.jpg'
     },
     {
-      name: 'Andy',
-      role: 'Senior Full Stack Engineer',
+      name: 'Andrew',
+      role: '',
       bio: '',
       twitter: 'https://x.com/davyjones0x',
       github: 'https://github.com/ADWilkinson',
-      image: '/img/team/andy.jpg'
+      image: '/img/team/andrew.jpg'
     },
     {
       name: 'Jay',
-      role: 'Senior Back End Engineer',
+      role: '',
       bio: '',
       twitter: 'https://x.com/jayssj1',
       github: 'https://github.com/emma_zkp2p',
