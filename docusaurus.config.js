@@ -177,12 +177,16 @@ const config = {
             title: 'More',
             items: [
               {
-                label: 'Main Site',
+                label: 'ZKP2P',
                 href: 'https://zkp2p.xyz',
               },
               {
                 label: 'GitHub',
                 href: 'https://github.com/zkp2p',
+              },
+              {
+                label: 'Support',
+                href: 'https://support.zkp2p.xyz',
               },
             ],
           },

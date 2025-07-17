@@ -1,9 +1,10 @@
 ---
-id: privacy-and-safety
+id: privacy
 title: Privacy
 ---
 
-### zkTLS OAuth
+ZKP2P is committed to making sure that your transactions are as private as possible, and that your personal data is not exposed in anyway.
+
 
 > **I'm concerned that I'm giving PeerAuth OAuth access to all of my data when I'm on a website.**
 

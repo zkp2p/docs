@@ -196,6 +196,48 @@ article {
   font-weight: 300;
 }
 
+/* Add padding between sidebar and main content */
+.theme-doc-layout {
+  gap: 16px !important;
+}
+
+.theme-doc-sidebar {
+  margin-right: 16px !important;
+}
+
+/* Ensure main content has proper spacing from sidebar */
+.theme-doc-layout-main {
+  padding-left: 16px !important;
+}
+
+/* Alternative selectors for different Docusaurus versions */
+.docMainContainer_gTbr {
+  padding-left: 16px !important;
+}
+
+.docSidebarContainer_1lqW {
+  margin-right: 16px !important;
+}
+
+/* More specific selectors */
+[class*="docMainContainer"] {
+  padding-left: 16px !important;
+}
+
+[class*="docSidebarContainer"] {
+  margin-right: 16px !important;
+}
+
+/* Direct approach - target the main content area */
+main {
+  padding-left: 16px !important;
+}
+
+/* Target the sidebar container */
+aside {
+  margin-right: 16px !important;
+}
+
 article h1, article h2, article h3, article h4, article h5, article h6 {
   font-weight: 600;
 }
