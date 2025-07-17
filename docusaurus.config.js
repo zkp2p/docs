@@ -108,6 +108,11 @@ const config = {
             label: 'Developer',
           },
           {
+            to: '/team',
+            label: 'Team',
+            position: 'right',
+          },
+          {
             href: 'https://github.com/zkp2p',
             label: 'GitHub',
             position: 'right',
@@ -131,6 +136,10 @@ const config = {
               {
                 label: 'Developer',
                 to: '/developer/integrate-zkp2p',
+              },
+              {
+                label: 'Brand Kit',
+                to: '/guides/brand-kit',
               },
             ],
           },
@@ -157,10 +166,6 @@ const config = {
               {
                 label: 'GitHub',
                 href: 'https://github.com/zkp2p',
-              },
-              {
-                label: 'Team',
-                href: 'https://zkp2p.xyz/team',
               },
             ],
           },

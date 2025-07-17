@@ -27,9 +27,6 @@ module.exports = {
         'for-sellers/manual-releases',
       ],
     },
-    {
-      type: 'doc',
-      id: 'brand-kit',
-    },
+
   ],
 };

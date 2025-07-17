@@ -228,14 +228,49 @@ table {
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid #98A1C03D;
+  table-layout: auto;
+  width: 100%;
 }
 
 table th {
   font-weight: 535;
+  padding: 0.75rem;
+  text-align: left;
 }
 
 table td {
   font-weight: 300;
+  padding: 0.75rem;
+}
+
+/* Ensure tables only show intended columns */
+table th:empty,
+table td:empty {
+  display: none;
+}
+
+/* Force table to respect column count */
+table {
+  border-collapse: collapse;
+}
+
+/* Ensure proper table structure */
+table {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Simple table fixes */
+table {
+  width: 100%;
+  table-layout: auto;
+}
+
+table th,
+table td {
+  white-space: normal;
+  word-break: break-word;
+  vertical-align: top;
 }
 
 /* Sidebar */
@@ -702,4 +737,212 @@ svg[data-icon="external-link"],
 .small-logo {
   width: 150px;
   height: auto;
+}
+
+/* Team Page Styles */
+.team-page {
+  padding: 2rem 0;
+  min-height: 100vh;
+}
+
+.team-page .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.hero-section {
+  text-align: center;
+  margin-bottom: 4rem;
+  padding-top: 2rem;
+}
+
+.hero-section h1 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  line-height: 1.1;
+  color: #FFFFFF;
+  letter-spacing: -0.02em;
+}
+
+.hero-description {
+  font-size: 1.25rem;
+  color: #D1D5DB;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.team-member-card {
+  background: #262626;
+  border: 1px solid #404040;
+  border-radius: 16px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.team-member-card:hover {
+  transform: translateY(-4px);
+  border-color: #525252;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.member-avatar {
+  margin-bottom: 1.5rem;
+}
+
+.member-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto;
+  display: block;
+  border: 2px solid #404040;
+}
+
+.avatar-placeholder {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #98A1C0 0%, #B8BEC3 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin: 0 auto;
+}
+
+.avatar-placeholder.fallback {
+  display: none;
+}
+
+.member-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin-bottom: 0.5rem;
+}
+
+.member-role {
+  font-size: 1rem;
+  color: #98A1C0;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.member-bio {
+  color: #D1D5DB;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.member-social {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: #333333;
+  color: #D1D5DB;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.social-link:hover {
+  background: #98A1C0;
+  color: #FFFFFF;
+  transform: translateY(-2px);
+}
+
+.join-section {
+  text-align: center;
+  background: #262626;
+  border: 1px solid #404040;
+  border-radius: 16px;
+  padding: 3rem;
+  margin-top: 2rem;
+}
+
+.join-section h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #FFFFFF;
+}
+
+.join-section p {
+  color: #D1D5DB;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.cta-buttons .button {
+  min-width: 150px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .team-page .container {
+    padding: 0 1rem;
+  }
+  
+  .hero-section h1 {
+    font-size: 2rem;
+  }
+  
+  .hero-description {
+    font-size: 1rem;
+  }
+  
+  .team-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .team-member-card {
+    padding: 1.5rem;
+  }
+  
+  .join-section {
+    padding: 2rem 1.5rem;
+  }
+  
+  .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .cta-buttons .button {
+    width: 100%;
+    max-width: 250px;
+  }
 }

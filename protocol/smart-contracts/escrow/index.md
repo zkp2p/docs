@@ -2,97 +2,75 @@
 title: Escrow
 ---
 
-###
-
-Overview
+## Overview
 
 The Escrow contract allows users to lock ERC-20 tokens in order to receive off-chain payments. Users deposit tokens specifying:
 
--   Which off-chain payment verifiers they accept.
--   Conversion rates for various fiat currencies.
--   A gating service (optional) that can sign a user's intent to claim funds.
+- Which off-chain payment verifiers they accept.
+- Conversion rates for various fiat currencies.
+- A gating service (optional) that can sign a user's intent to claim funds.
 
 When a taker signals an intent to pay off-chain, they specify how many tokens they want to claim and through which payment verifier. Upon proving the off-chain payment has occurred (by calling `fulfillIntent`), the escrow releases the on-chain tokens to the taker (minus applicable fees).
 
-###
+---
 
-[](https://docs.zkp2p.xyz/developer/smart-contracts/escrow#constants)
+## [Constants](https://docs.zkp2p.xyz/developer/smart-contracts/escrow#constants)
 
-Constants
+- `uint256 internal constant PRECISE_UNIT = 1e18;`
+- `uint256 constant CIRCOM_PRIME_FIELD = ...;`
+- `uint256 constant MAX_SUSTAINABILITY_FEE = 5e16; // 5%`
 
--   `uint256 internal constant PRECISE_UNIT = 1e18;`
+---
 
--   `uint256 constant CIRCOM_PRIME_FIELD = ...;`
+## [State Variables](https://docs.zkp2p.xyz/developer/smart-contracts/escrow#state-variables)
 
--   `uint256 constant MAX_SUSTAINABILITY_FEE = 5e16; // 5%`
+- `uint256 public immutable chainId;`  
+  The chain ID where this contract is deployed.
 
-###
+- `mapping(address => uint256[]) public accountDeposits;`  
+  Which deposits belong to a given address.
 
-[](https://docs.zkp2p.xyz/developer/smart-contracts/escrow#state-variables)
+- `mapping(address => bytes32) public accountIntent;`  
+  Tracks a single active intent for each address.
 
-State Variables
+- `mapping(uint256 => mapping(address => DepositVerifierData)) public depositVerifierData;`  
+  Links a deposit ID + verifier to the relevant verification data (e.g., payee details).
 
--   `uint256 public immutable chainId;` 
+- `mapping(uint256 => address[]) public depositVerifiers;`  
+  Lists all verifiers associated with a deposit.
 
-The chain ID where this contract is deployed.
+- `mapping(uint256 => mapping(address => mapping(bytes32 => uint256))) public depositCurrencyConversionRate;`  
+  For a given deposit ID and verifier, maps fiat currency -> conversion rate.
 
--   `mapping(address => uint256[]) public accountDeposits;` 
+- `mapping(uint256 => mapping(address => bytes32[])) public depositCurrencies;`  
+  For a given deposit ID and verifier, stores an array of fiat currencies.
 
-Which deposits belong to a given address.
+- `mapping(uint256 => Deposit) public deposits;`  
+  The core deposit data.
 
--   `mapping(address => bytes32) public accountIntent;` 
+- `mapping(bytes32 => Intent) public intents;`  
+  All signaled intents (by their intent hash).
 
-Tracks a single active intent for each address.
+- Whitelist / Governance  
+  - `bool public acceptAllPaymentVerifiers;`  
+  - `mapping(address => bool) public whitelistedPaymentVerifiers;`  
+  - `mapping(address => uint256) public paymentVerifierFeeShare;`
 
--   `mapping(uint256 => mapping(address => DepositVerifierData)) public depositVerifierData;` 
+- `uint256 public intentExpirationPeriod;`  
+  After which an intent is considered expired.
 
-Links a deposit ID + verifier to the relevant verification data (e.g., payee details).
+- `uint256 public sustainabilityFee;`  
+  Fee (in `PRECISE_UNIT` terms) taken from each successful intent fulfillment.
 
--   `mapping(uint256 => address[]) public depositVerifiers;` 
+- `address public sustainabilityFeeRecipient;`  
+  Where the sustainability fee is sent.
 
-Lists all verifiers associated with a deposit.
+- `uint256 public depositCounter;`  
+  Incremented to create unique deposit IDs.
 
--   `mapping(uint256 => mapping(address => mapping(bytes32 => uint256))) public depositCurrencyConversionRate;` 
+---
 
-For a given deposit ID and verifier, maps fiat currency -> conversion rate.
-
--   `mapping(uint256 => mapping(address => bytes32[])) public depositCurrencies;` 
-
-For a given deposit ID and verifier, stores an array of fiat currencies.
-
--   `mapping(uint256 => Deposit) public deposits;` 
-
-The core deposit data.
-
--   `mapping(bytes32 => Intent) public intents;` 
-
-All signaled intents (by their intent hash).
-
--   Whitelist / Governance
-
-    -   `bool public acceptAllPaymentVerifiers;`
-
-    -   `mapping(address => bool) public whitelistedPaymentVerifiers;`
-
-    -   `mapping(address => uint256) public paymentVerifierFeeShare;`
-
--   `uint256 public intentExpirationPeriod;` 
-
-After which an intent is considered expired.
-
--   `uint256 public sustainabilityFee;` 
-
-Fee (in `PRECISE_UNIT` terms) taken from each successful intent fulfillment.
-
--   `address public sustainabilityFeeRecipient;` 
-
-Where the sustainability fee is sent.
-
--   `uint256 public depositCounter;` 
-
-Incremented to create unique deposit IDs.
-
-### Constructor
+## Constructor
 
 ```
 constructor(
@@ -106,23 +84,19 @@ constructor(
 
 Parameters:
 
--   `_owner`: The address to set as the contract owner (can pause, unpause, and manage verifiers).
-
--   `_chainId`: The chain ID for which this escrow is valid.
-
--   `_intentExpirationPeriod`: Time (in seconds) after which an open intent can be pruned.
-
--   `_sustainabilityFee`: Percentage (in 1e18 precision) charged upon successful intent fulfillment.
-
--   `_sustainabilityFeeRecipient`: Address to receive the sustainability fees.
+- `_owner`: The address to set as the contract owner (can pause, unpause, and manage verifiers).
+- `_chainId`: The chain ID for which this escrow is valid.
+- `_intentExpirationPeriod`: Time (in seconds) after which an open intent can be pruned.
+- `_sustainabilityFee`: Percentage (in 1e18 precision) charged upon successful intent fulfillment.
+- `_sustainabilityFeeRecipient`: Address to receive the sustainability fees.
 
 Transfers ownership to `_owner` and sets initial contract state.
 
-* * * * *
+---
 
-### External Functions
+## External Functions
 
-#### createDeposit
+### createDeposit
 
 ```
 function createDeposit(
@@ -139,41 +113,30 @@ function createDeposit(
 
 Description: Deposits `_amount` of `_token` into escrow. You specify:
 
--   A range of intent sizes (`_intentAmountRange`).
-
--   Which verifiers (`_verifiers`) the deposit will accept.
-
--   Gating + payee details for each verifier (`_verifierData`).
-
--   Which currencies (and rates) each verifier can handle (`_currencies`).
+- A range of intent sizes (`_intentAmountRange`).
+- Which verifiers (`_verifiers`) the deposit will accept.
+- Gating + payee details for each verifier (`_verifierData`).
+- Which currencies (and rates) each verifier can handle (`_currencies`).
 
 Requirements:
 
--   User must have approved this contract to transfer `_amount` of `_token`.
-
--   The deposit is unique (each call yields a new `depositId`).
-
--   `_amount` must be >= `min` of `_intentAmountRange`.
-
--   `_verifiers` length must match `_verifierData` and `_currencies` length.
-
--   Each verifier must be whitelisted or `acceptAllPaymentVerifiers` must be `true`.
-
--   Each currency's `conversionRate` must be > 0.
+- User must have approved this contract to transfer `_amount` of `_token`.
+- The deposit is unique (each call yields a new `depositId`).
+- `_amount` must be >= `min` of `_intentAmountRange`.
+- `_verifiers` length must match `_verifierData` and `_currencies` length.
+- Each verifier must be whitelisted or `acceptAllPaymentVerifiers` must be `true`.
+- Each currency's `conversionRate` must be > 0.
 
 Effects:
 
--   Increments `depositCounter`.
+- Increments `depositCounter`.
+- Stores the deposit data.
+- Locks the tokens in this contract.
+- Emits `DepositReceived` and `DepositVerifierAdded` (and `DepositCurrencyAdded`) events.
 
--   Stores the deposit data.
+---
 
--   Locks the tokens in this contract.
-
--   Emits `DepositReceived` and `DepositVerifierAdded` (and `DepositCurrencyAdded`) events.
-
-* * * * *
-
-#### signalIntent
+### signalIntent
 
 ```
 function signalIntent(
@@ -190,33 +153,26 @@ function signalIntent(
 
 Description: A taker declares an intent to pay the deposit's off-chain counterpart. This:
 
--   Ensures the deposit is still `acceptingIntents`.
-
--   Validates `_amount` against deposit's range.
-
--   Optionally checks a gating service signature.
-
--   Reserves `_amount` from the deposit's `remainingDeposits`.
-
--   Records a new `Intent` in `intents`.
+- Ensures the deposit is still `acceptingIntents`.
+- Validates `_amount` against deposit's range.
+- Optionally checks a gating service signature.
+- Reserves `_amount` from the deposit's `remainingDeposits`.
+- Records a new `Intent` in `intents`.
 
 Requirements:
 
--   Caller must not have another active `Intent` (`accountIntent[msg.sender] == 0`).
-
--   `_amount` is within the deposit's `intentAmountRange`.
-
--   `_fiatCurrency` is recognized in `depositCurrencyConversionRate[_depositId][_verifier]`.
+- Caller must not have another active `Intent` (`accountIntent[msg.sender] == 0`).
+- `_amount` is within the deposit's `intentAmountRange`.
+- `_fiatCurrency` is recognized in `depositCurrencyConversionRate[_depositId][_verifier]`.
 
 Effects:
 
--   May prune expired intents if liquidity is insufficient.
+- May prune expired intents if liquidity is insufficient.
+- Emits `IntentSignaled` upon success.
 
--   Emits `IntentSignaled` upon success.
+---
 
-* * * * *
-
-#### cancelIntent
+### cancelIntent
 
 ```
 function cancelIntent(bytes32 _intentHash) external
@@ -224,10 +180,9 @@ function cancelIntent(bytes32 _intentHash) external
 
 Description: Allows the intent owner to cancel an intent. This frees up the escrowed amount. Reverts if `msg.sender` is not the intent owner.
 
-* * * * *
+---
 
-#### fulfillIntent
-
+### fulfillIntent
 
 ```
 function fulfillIntent(bytes calldata _paymentProof, bytes32 _intentHash) external whenNotPaused
@@ -235,29 +190,26 @@ function fulfillIntent(bytes calldata _paymentProof, bytes32 _intentHash) extern
 
 Description: Attempts to prove that the off-chain payment has been made according to the associated payment verifier. On success:
 
--   The escrowed tokens are transferred to the specified `to` address.
-
--   Fees are taken out for sustainability and optionally the payment verifier.
+- The escrowed tokens are transferred to the specified `to` address.
+- Fees are taken out for sustainability and optionally the payment verifier.
 
 Parameters:
 
--   `_paymentProof` -- The proof data for verifying off-chain payment (e.g., TLSNotary, ZK, etc.).
-
--   `_intentHash` -- The ID of the signaled intent.
+- `_paymentProof` -- The proof data for verifying off-chain payment (e.g., TLSNotary, ZK, etc.).
+- `_intentHash` -- The ID of the signaled intent.
 
 Reverts if:
 
--   The verifier check fails.
-
--   The `_intentHash` does not match the proof's extracted intent hash.
+- The verifier check fails.
+- The `_intentHash` does not match the proof's extracted intent hash.
 
 Emits:
 
--   `IntentFulfilled` event.
+- `IntentFulfilled` event.
 
-* * * * *
+---
 
-#### releaseFundsToPayer
+### releaseFundsToPayer
 
 ```
 function releaseFundsToPayer(bytes32 _intentHash) external
@@ -267,15 +219,13 @@ Description: Allows the deposit owner (not the intent owner) to push funds to th
 
 Effects:
 
--   Removes the intent from state.
+- Removes the intent from state.
+- Transfers tokens to the `intent.owner` or `intent.to`.
+- Emits `IntentFulfilled` event with zero verifier address.
 
--   Transfers tokens to the `intent.owner` or `intent.to`.
+---
 
--   Emits `IntentFulfilled` event with zero verifier address.
-
-* * * * *
-
-#### updateDepositConversionRate
+### updateDepositConversionRate
 
 ```
 function updateDepositConversionRate(
@@ -290,9 +240,9 @@ function updateDepositConversionRate(
 
 Description: The depositor can adjust the deposit's conversion rate for a specific currency and verifier. Only future intents will be affected; existing ones store the old rate.
 
-* * * * *
+---
 
-#### withdrawDeposit
+### withdrawDeposit
 
 ```
 function withdrawDeposit(uint256 _depositId) external
@@ -300,11 +250,11 @@ function withdrawDeposit(uint256 _depositId) external
 
 Description: Withdraws any unencumbered tokens from the deposit. Prunes any expired intents (making more tokens claimable). If no tokens remain (and no open intents), the deposit is fully closed and removed.
 
-* * * * *
+---
 
-### Governance Functions
+## Governance Functions
 
-#### addWhitelistedPaymentVerifier
+### addWhitelistedPaymentVerifier
 
 ```
 function addWhitelistedPaymentVerifier(address _verifier, uint256 _feeShare) external onlyOwner
@@ -312,7 +262,7 @@ function addWhitelistedPaymentVerifier(address _verifier, uint256 _feeShare) ext
 
 Adds a payment verifier to the whitelist, with a certain `_feeShare`.
 
-#### removeWhitelistedPaymentVerifier
+### removeWhitelistedPaymentVerifier
 
 ```
 function removeWhitelistedPaymentVerifier(address _verifier) external onlyOwner
@@ -320,7 +270,7 @@ function removeWhitelistedPaymentVerifier(address _verifier) external onlyOwner
 
 Removes a verifier from the whitelist.
 
-#### updatePaymentVerifierFeeShare
+### updatePaymentVerifierFeeShare
 
 ```
 function updatePaymentVerifierFeeShare(address _verifier, uint256 _feeShare) external onlyOwner
@@ -328,7 +278,7 @@ function updatePaymentVerifierFeeShare(address _verifier, uint256 _feeShare) ext
 
 Updates the fee share for a given whitelisted verifier.
 
-#### updateAcceptAllPaymentVerifiers
+### updateAcceptAllPaymentVerifiers
 
 ```
 function updateAcceptAllPaymentVerifiers(bool _acceptAllPaymentVerifiers) external onlyOwner
@@ -336,7 +286,7 @@ function updateAcceptAllPaymentVerifiers(bool _acceptAllPaymentVerifiers) extern
 
 Toggles whether any verifier address can be used (bypassing the whitelist).
 
-#### setSustainabilityFee
+### setSustainabilityFee
 
 ```
 function setSustainabilityFee(uint256 _fee) external onlyOwner
@@ -344,7 +294,7 @@ function setSustainabilityFee(uint256 _fee) external onlyOwner
 
 Sets the global sustainability fee (max 5%). Fee is taken upon intent fulfillment.
 
-#### setSustainabilityFeeRecipient
+### setSustainabilityFeeRecipient
 
 ```
 function setSustainabilityFeeRecipient(address _feeRecipient) external onlyOwner
@@ -352,7 +302,7 @@ function setSustainabilityFeeRecipient(address _feeRecipient) external onlyOwner
 
 Sets the address receiving protocol fees.
 
-#### setIntentExpirationPeriod
+### setIntentExpirationPeriod
 
 ```
 function setIntentExpirationPeriod(uint256 _intentExpirationPeriod) external onlyOwner
@@ -360,7 +310,7 @@ function setIntentExpirationPeriod(uint256 _intentExpirationPeriod) external onl
 
 Updates how long an intent remains valid before it can be pruned.
 
-#### pauseEscrow / unpauseEscrow
+### pauseEscrow / unpauseEscrow
 
 ```
 function pauseEscrow() external onlyOwner
@@ -369,15 +319,14 @@ function unpauseEscrow() external onlyOwner
 
 Pauses or unpauses the contract's core functions:
 
--   Paused: Creates deposit, updates conversion rate, signals/fulfills intent are disabled.
+- Paused: Creates deposit, updates conversion rate, signals/fulfills intent are disabled.
+- Unpaused: Resumes all functionalities.
 
--   Unpaused: Resumes all functionalities.
+---
 
-* * * * *
+## External View Functions
 
-### External View Functions
-
-#### getPrunableIntents
+### getPrunableIntents
 
 ```
 function getPrunableIntents(uint256 _depositId)
@@ -388,7 +337,7 @@ function getPrunableIntents(uint256 _depositId)
 
 Returns a list of expired (prunable) intent hashes for a deposit and the total amount they occupy.
 
-#### getDeposit
+### getDeposit
 
 ```
 function getDeposit(uint256 _depositId)
@@ -399,13 +348,11 @@ function getDeposit(uint256 _depositId)
 
 Returns a DepositView, including:
 
--   The deposit details.
+- The deposit details.
+- Available liquidity (accounting for expired intents).
+- Associated verifiers/currency data.
 
--   Available liquidity (accounting for expired intents).
-
--   Associated verifiers/currency data.
-
-#### getAccountDeposits
+### getAccountDeposits
 
 ```
 function getAccountDeposits(address _account)
@@ -416,7 +363,7 @@ function getAccountDeposits(address _account)
 
 Returns the set of deposits belonging to `_account`.
 
-#### getDepositFromIds
+### getDepositFromIds
 
 ```
 function getDepositFromIds(uint256[] memory _depositIds)
@@ -427,7 +374,7 @@ function getDepositFromIds(uint256[] memory _depositIds)
 
 Returns the `DepositView[]` for a given list of deposit IDs (part of IEscrow interface).
 
-#### getIntent
+### getIntent
 
 ```
 function getIntent(bytes32 _intentHash)
@@ -438,7 +385,7 @@ function getIntent(bytes32 _intentHash)
 
 Provides the IntentView, linking the intent to its deposit.
 
-#### getIntents
+### getIntents
 
 ```
 function getIntents(bytes32[] calldata _intentHashes)
@@ -449,7 +396,7 @@ function getIntents(bytes32[] calldata _intentHashes)
 
 Batch retrieval of multiple intents.
 
-#### getAccountIntent
+### getAccountIntent
 
 ```
 function getAccountIntent(address _account)
