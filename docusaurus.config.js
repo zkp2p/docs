@@ -96,7 +96,7 @@ const config = {
           src: 'img/logo.svg',
         },
         items: [
-          {
+                    {
             type: 'docSidebar',
             sidebarId: 'defaultSidebar',
             docsPluginId: 'guides',

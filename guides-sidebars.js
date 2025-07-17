@@ -27,5 +27,14 @@ module.exports = {
         'for-sellers/manual-releases',
       ],
     },
+    {
+      type: 'category',
+      label: 'Privacy & Safety',
+      link: { type: 'doc', id: 'privacy-safety/index' },
+      items: [
+        'privacy-safety/privacy',
+        'privacy-safety/risks',
+      ],
+    },
   ],
 };

@@ -29,7 +29,5 @@ module.exports = {
     },
     'gating-service',
     'security',
-    'privacy-safety',
-    'risks',
   ],
 };
