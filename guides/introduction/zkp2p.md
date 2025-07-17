@@ -39,6 +39,6 @@ ZKP2P is the first trust-minimized onramp and offramp protocol powered by advanc
 - **Low Fees**: Eliminates intermediaries by using ZK proofs of payment to minimize fees in fiat-to-crypto conversions.
 - **Fast**: Enables rapid, permissionless, private transactions that settle efficiently on-chain.
 
-### Looking Ahead
+ZKP2P isn’t building a bank, it’s creating a permissionless protocol to match people who need capital with those who have capital; unreliant on institutions. Think of it as an order book of intents, every user becomes a market maker setting their own spread, payment method, and risk profile dependent on their own needs. Similar to how Airbnb lets users set price, dates, rules and availability, ZKP2P facilitates the interaction between capital providers and seekers matching based on intents.
 
-We see the ZKP2P protocol evolving into a global, trustless payment network deployed on-chain. This network will enable permissionless innovation around new payment use cases, providing composability with DeFi, NFTs, games, and beyond.
+ZKP2P is evolving into global, permissionless Capital-as-a-Service network deployed on-chain. Anyone can deploy idle funds, earn yield, and serve real world demand. ZKP2P isn't just a marketplace,  but programmable infrastructure for permissionless innovation around private, instant payments across borders and platforms.  

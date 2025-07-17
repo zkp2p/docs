@@ -7,9 +7,10 @@ title: For Buyers
 
 ### Why Buy on ZKP2P?
 
-By leveraging **ZK proofs of payment**, you receive **USDC as soon as the payment is confirmed** — no waiting for the seller to manually release like in traditional P2P marketplaces.
+Traditional P2P marketplaces make you wait for the seller to confirm your payment, message them, and send them your personal information. 
 
-ZKP2P uses cryptography to instantly prove that you made the correct payment. You can get crypto in as fast as **60 seconds**.
+By leveraging **Zero Knowledge proofs of payment**, your USDC is automatically released from escrow as soon as the payment is confirmed. No waiting for the seller to manually release, no messaging, and no sharing of personal information. 
+
 
 ### Get Started
 
