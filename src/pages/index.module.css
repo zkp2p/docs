@@ -1,26 +1,28 @@
+
 /* Global Background */
 body {
   position: relative;
 }
 
-body::before {
-  display: none;
-}
-
-body::after {
-  content: '';
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  background: #171717 !important;
-  z-index: -1 !important;
-  pointer-events: none !important;
-}
-
+/* Make the main content exactly one screen height */
 main {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   position: relative;
+}
+
+/* Background pattern is handled in custom.css globally */
+
+/* Floating orbs - removed for cleaner linear gradient look */
+.hero {
+  position: relative;
+}
+
+.hero .orb1,
+.hero .orb2,
+.hero .orb3 {
+  display: none;
 }
 
 main::before {
@@ -35,15 +37,16 @@ main::after {
 .hero {
   background: transparent;
   color: #FFFFFF;
-  padding: 5rem 0 0;
+  padding: 4rem 0 0;
   position: relative;
   overflow: hidden;
-  min-height: 50vh;
+  min-height: auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
 }
 
+/* Remove grid pattern, keep clean background */
 .hero::before {
   display: none;
 }
@@ -85,7 +88,7 @@ main::after {
 .heroSubtitle {
   font-size: 1rem;
   color: #D1D5DB;
-  margin-bottom: 2rem;
+  margin-bottom: 4.5rem;
   line-height: 1.5;
   font-weight: 300;
   max-width: 700px;
@@ -159,7 +162,7 @@ main::after {
 
 /* Features Section */
 .features {
-  padding: 0.5rem 0 4rem;
+  padding: 3rem 0 3rem;
   background: transparent;
   position: relative;
   z-index: 1;
@@ -181,28 +184,31 @@ main::after {
 }
 
 .featureCard {
-  background: #262626;
-  border-radius: 16px;
+  background: rgba(38, 38, 38, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
   padding: 1.5rem;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   text-decoration: none !important;
   color: inherit !important;
   display: block;
-  border: 1px solid #404040;
+  border: 1px solid rgba(255, 255, 255, 0.06);
   position: relative;
   animation: fadeInUp 0.8s ease-out;
   animation-fill-mode: both;
+  overflow: hidden;
 }
+
 
 .featureCard:nth-child(1) { animation-delay: 0.1s; }
 .featureCard:nth-child(2) { animation-delay: 0.2s; }
 .featureCard:nth-child(3) { animation-delay: 0.3s; }
 
 .featureCard:hover {
-  transform: translateY(-2px);
-  border-color: #525252;
-  background: #333333;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transform: translateY(-4px) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(51, 51, 51, 0.7);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
 .featureIconWrapper {
@@ -257,7 +263,7 @@ main::after {
 
 /* Community Section */
 .community {
-  padding: 2rem 0 4rem;
+  padding: 2rem 0 3rem;
   background: transparent;
   position: relative;
   z-index: 1;
@@ -274,8 +280,9 @@ main::after {
 }
 
 .communityCard {
-  background: #262626;
-  border-radius: 16px;
+  background: rgba(38, 38, 38, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
   padding: 1.5rem;
   text-decoration: none !important;
   color: inherit !important;
@@ -283,11 +290,13 @@ main::after {
   align-items: flex-start;
   gap: 1rem;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  border: 1px solid #404040;
+  border: 1px solid rgba(255, 255, 255, 0.06);
   min-width: 200px;
   flex: 1;
   animation: fadeInUp 0.8s ease-out;
   animation-fill-mode: both;
+  position: relative;
+  overflow: hidden;
 }
 
 .communityCard:nth-child(1) { animation-delay: 0.1s; }
@@ -295,10 +304,10 @@ main::after {
 .communityCard:nth-child(3) { animation-delay: 0.3s; }
 
 .communityCard:hover {
-  transform: translateY(-2px) scale(1.02);
-  border-color: #525252;
-  background: #333333;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transform: translateY(-4px) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(51, 51, 51, 0.7);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
 .communityIconWrapper {
@@ -362,8 +371,8 @@ main::after {
 /* Responsive Design */
 @media (max-width: 768px) {
   .hero {
-    padding: 2rem 0 0;
-    min-height: 50vh;
+    padding: 3rem 0 0;
+    min-height: auto;
   }
   
   .heroTitle {

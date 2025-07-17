@@ -13,15 +13,15 @@ Our mission is to bridge the gap between traditional Web2 platforms and decentra
 
 As crypto evolves (DeFi, NFTs, social, on-chain gaming), the necessity for seamless interoperability between fiat and cryptoassets becomes much more important. Existing solutions for onramping are not sufficient to address this need:
 
-❌ Not globally inclusive (Coinbase is not available everywhere)
+1. Not globally inclusive (Coinbase is not available everywhere)
 
-❌ High fees for direct onramps (direct onramps charge up to 5%)
+2. High fees for direct onramps (direct onramps charge up to 5%)
 
-❌ Complex KYC processes
+3. Complex KYC processes
 
-❌ Slow (Coinbase ACH takes 5 days to clear)
+4. Slow (Coinbase ACH takes 5 days to clear)
 
-❌ Not composable with rest of smart contract ecosystem (e.g. fiat to Aave, fiat to Uniswap LP)
+5. Not composable with rest of smart contract ecosystem (e.g. fiat to Aave, fiat to Uniswap LP)
 
 ### ZKP2P
 

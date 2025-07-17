@@ -32,3 +32,6 @@ title: Risks
 **_The protocol cannot reverse payments, freeze funds, or mediate disputes related to off-platform fiat activity._**
 
 
+### Audits
+-   Reclaim circuits that are used in our zkTLS flows are [audited by ZKSecurity](https://www.zksecurity.xyz/blog/posts/reclaim/)
+-   ZKP2P V2 Protocol has been audited by independent smart contract security engineers and Sherlock.

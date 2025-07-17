@@ -191,17 +191,13 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} ZKP2P. Built with Docusaurus.`,
+        copyright: `© ${new Date().getFullYear()} P2P Labs Inc.`,
       },
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
       },
-      algolia: {
-        appId: 'UNO601BRCA',
-        apiKey: '524d7835cc97c4df8948a7a7600e6654',
-        indexName: 'Documentation Website',
-      },
+      algolia: false,
     }),
 };
 

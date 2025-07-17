@@ -193,7 +193,7 @@ const depositData = ethers.utils.defaultAbiCoder.encode(
 ```
 
 - **Currency**:
-  - Code: `keccak("ARS")` == `0x8fd50654b7dd2dc839f7cab32800ba0c6f7f66e1ccf89b21c09405469c2175ec`
+  - Code: `keccak("ARS")`
   - Conversion rate: the ARSUSDC rate to set scaled by 10e18. E.g. `1245000000000000000000`
 
 ## Help?

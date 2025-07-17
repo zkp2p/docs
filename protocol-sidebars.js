@@ -27,7 +27,6 @@ module.exports = {
         'peerauth-extension/zk-tls',
       ],
     },
-    'gating-service',
-    'security',
+    'gating-service'
   ],
 };

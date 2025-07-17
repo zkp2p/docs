@@ -8,32 +8,19 @@ import styles from './index.module.css';
 
 function HomepageHero() {
   return (
-    <div className={styles.heroContainer}>
-      <h1 className={styles.heroTitle}>
-        Welcome to ZKP2P Docs
-      </h1>
-      <p className={styles.heroSubtitle}>
-        A fast, permissionless fiat ↔ crypto on/offramp protocol powered by zero-knowledge proofs
-      </p>
-      <div className={styles.searchContainer}>
-        <div className={styles.searchBar}>
-          <svg className={styles.searchIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <path d="m21 21-4.35-4.35"></path>
-          </svg>
-          <input 
-            type="text" 
-            placeholder="Search" 
-            className={styles.searchInput}
-            disabled
-          />
-          <div className={styles.searchShortcut}>
-            <span>⌘</span>
-            <span>K</span>
-          </div>
-        </div>
+    <>
+      <div className={styles.orb1}></div>
+      <div className={styles.orb2}></div>
+      <div className={styles.orb3}></div>
+      <div className={styles.heroContainer}>
+        <h1 className={styles.heroTitle}>
+          Welcome to ZKP2P Docs
+        </h1>
+        <p className={styles.heroSubtitle}>
+          A fast, permissionless fiat ↔ crypto on/offramp protocol powered by zero-knowledge proofs
+        </p>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -65,7 +52,7 @@ function HomepageFeatures() {
     {
       title: 'Integrate ZKP2P',
       description: 'Guide for integrating ZKP2P on/offramp into your application.',
-      link: '/developer/integrate-zkp2p',
+      link: '/developer/integrate-zkp2p/integrate-redirect-onramp',
       icon: (
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>

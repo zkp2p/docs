@@ -48,9 +48,57 @@
   --ifm-background-color: var(--zkp2p-background);
 }
 
-/* Remove light theme */
 [data-theme='light'] {
   display: none;
+}
+
+/* Subtle gradient animation */
+@keyframes gradientShift {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1) rotate(1deg);
+  }
+}
+
+/* Global background */
+body {
+  background: var(--zkp2p-background);
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Background layer */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--zkp2p-background);
+  z-index: -2;
+  pointer-events: none;
+}
+
+/* Prominent gradient overlay using brand colors */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(ellipse 800px 600px at 80% 0%, rgba(0, 102, 204, 0.4) 0%, transparent 40%),
+    radial-gradient(ellipse 600px 500px at 20% 100%, rgba(255, 63, 62, 0.35) 0%, transparent 45%),
+    radial-gradient(ellipse 400px 400px at 100% 50%, rgba(75, 181, 67, 0.25) 0%, transparent 35%),
+    radial-gradient(ellipse 500px 500px at 0% 30%, rgba(255, 193, 7, 0.2) 0%, transparent 40%);
+  z-index: 0;
+  pointer-events: none;
 }
 
 /* ===========================
@@ -96,194 +144,10 @@ strong, b {
   font-weight: var(--zkp2p-font-weight-medium);
 }
 
-/* Navbar styling */
-.navbar {
-  background: rgba(38, 38, 38, 0.9);
-  border-bottom: 1px solid #404040;
-  backdrop-filter: blur(10px);
-}
-
-.navbar__title {
-  font-weight: 535;
-  color: #FFFFFF;
-}
-
-.navbar__link {
-  font-weight: 300;
-  color: #D1D5DB;
-}
-
-.navbar__link:hover {
-  color: #FFFFFF;
-}
-
-.navbar__link--active {
-  color: #FFFFFF;
-  font-weight: 535;
-}
-
-/* Search bar styling */
-.navbar__search-input {
-  border-radius: 16px;
-  background: #262626;
-  border: 1px solid #404040;
-  color: #FFFFFF;
-}
-
-.navbar__search-input::placeholder {
-  color: #6C757D;
-}
-
-.navbar__search-input:focus {
-  outline: none;
-  border-color: #525252;
-  background: #333333;
-}
-
-/* DocSearch styling */
-.DocSearch-Button {
-  border-radius: 16px !important;
-  background: #262626 !important;
-  border: 1px solid #404040 !important;
-  padding: 0 16px !important;
-  height: 40px !important;
-  color: #D1D5DB !important;
-  font-weight: 300 !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 0.75rem !important;
-}
-
-.DocSearch-Button:hover {
-  background: #333333 !important;
-  border-color: #525252 !important;
-  transform: translateY(-2px) !important;
-}
-
-/* Style the DocSearch shortcut to match our search bar */
-.DocSearch-Button .DocSearch-Button-Key {
-  display: flex !important;
-  align-items: center !important;
-  gap: 0.125rem !important;
-  background: rgba(209, 213, 219, 0.1) !important;
-  border-radius: 4px !important;
-  padding: 0.25rem 0.5rem !important;
-  font-size: 0.75rem !important;
-  color: #D1D5DB !important;
-  font-weight: 400 !important;
-  flex-shrink: 0 !important;
-}
-
-.DocSearch-Button .DocSearch-Button-Key span {
-  display: inline-block !important;
-}
-
-/* Force override any DocSearch default colors */
-html body .DocSearch-Button,
-html body .DocSearch-Button * {
-  color: #D1D5DB !important;
-  background: #262626 !important;
-  border-color: #404040 !important;
-}
-
-html body .DocSearch-Button:hover,
-html body .DocSearch-Button:hover * {
-  background: #333333 !important;
-  border-color: #525252 !important;
-}
-
-/* DocSearch Modal */
-.DocSearch-Modal {
-  background: rgba(23, 23, 23, 0.95) !important;
-}
-
-.DocSearch-SearchBar {
-  border-bottom: 1px solid #98A1C03D !important;
-  padding: 1rem !important;
-}
-
-.DocSearch-Form {
-  background: #262626 !important;
-  border: 1px solid #404040 !important;
-  border-radius: 16px !important;
-  overflow: hidden !important;
-}
-
-.DocSearch-Input {
-  color: #FFFFFF !important;
-  font-weight: 300 !important;
-  padding: 0.75rem 1rem !important;
-}
-
-.DocSearch-Hit {
-  border-bottom: 1px solid #98A1C03D !important;
-}
-
-.DocSearch-Hit:hover,
-.DocSearch-Hit[aria-selected='true'] {
-  background: #333333 !important;
-}
-
-.DocSearch-Hit-source {
-  background: #262626 !important;
-  border-bottom: 1px solid #404040 !important;
-  color: #9CA3AA !important;
-}
-
-/* Content styling */
-article {
-  max-width: 100%;
-  color: #FFFFFF;
-  font-weight: 300;
-}
-
-/* Add padding between sidebar and main content */
-.theme-doc-layout {
-  gap: 16px !important;
-}
-
-.theme-doc-sidebar {
-  margin-right: 16px !important;
-}
-
-/* Ensure main content has proper spacing from sidebar */
-.theme-doc-layout-main {
-  padding-left: 16px !important;
-}
-
-/* Alternative selectors for different Docusaurus versions */
-.docMainContainer_gTbr {
-  padding-left: 16px !important;
-}
-
-.docSidebarContainer_1lqW {
-  margin-right: 16px !important;
-}
-
-/* More specific selectors */
-[class*="docMainContainer"] {
-  padding-left: 16px !important;
-}
-
-[class*="docSidebarContainer"] {
-  margin-right: 16px !important;
-}
-
-/* Direct approach - target the main content area */
-main {
-  padding-left: 16px !important;
-}
-
-/* Target the sidebar container */
-aside {
-  margin-right: 16px !important;
-}
-
-article h1, article h2, article h3, article h4, article h5, article h6 {
-  font-weight: 600;
-}
-
-/* Links */
+/* ===========================
+   Links
+   =========================== */
+/* Default links inherit color */
 a {
   color: inherit;
   text-decoration: none;
@@ -298,18 +162,14 @@ a:hover {
 /* Documentation content links */
 article a,
 .markdown a,
-.theme-doc-markdown a,
-main article a,
-.docMainContainer a:not(.navbar__link):not(.menu__link):not(.footer__link-item):not(.table-of-contents__link):not(.pagination-nav__link) {
+.theme-doc-markdown a {
   color: var(--zkp2p-link);
   text-decoration: underline;
 }
 
 article a:hover,
 .markdown a:hover,
-.theme-doc-markdown a:hover,
-main article a:hover,
-.docMainContainer a:hover:not(.navbar__link):not(.menu__link):not(.footer__link-item):not(.table-of-contents__link):not(.pagination-nav__link) {
+.theme-doc-markdown a:hover {
   color: var(--zkp2p-link-hover);
   text-decoration: underline;
 }
@@ -332,7 +192,7 @@ a::before {
    Navbar
    =========================== */
 .navbar {
-  background: rgba(38, 38, 38, 0.9);
+  background: rgba(23, 23, 23, 0.9);
   border-bottom: 1px solid var(--zkp2p-border);
   backdrop-filter: blur(10px);
 }
@@ -354,6 +214,24 @@ a::before {
 .navbar__link--active {
   color: var(--zkp2p-text-primary);
   font-weight: var(--zkp2p-font-weight-medium);
+}
+
+/* Search bar styling */
+.navbar__search-input {
+  border-radius: var(--zkp2p-radius-xlarge);
+  background: var(--zkp2p-surface);
+  border: 1px solid var(--zkp2p-border);
+  color: var(--zkp2p-text-primary);
+}
+
+.navbar__search-input::placeholder {
+  color: var(--zkp2p-text-subtle);
+}
+
+.navbar__search-input:focus {
+  outline: none;
+  border-color: var(--zkp2p-border-hover);
+  background: var(--zkp2p-surface-hover);
 }
 
 /* ===========================
@@ -431,8 +309,13 @@ a::before {
 /* ===========================
    Sidebar
    =========================== */
+.theme-doc-sidebar-container {
+  background: var(--zkp2p-background);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
 .menu {
-  background: var(--zkp2p-surface);
+  background: transparent;
 }
 
 .menu__link {
@@ -468,6 +351,32 @@ a::before {
 .theme-doc-sidebar-item-category--active {
   color: var(--zkp2p-accent);
   background: rgba(152, 161, 192, 0.1);
+}
+
+/* ===========================
+   Layout Spacing
+   =========================== */
+/* Add consistent spacing between sidebar and content */
+.theme-doc-layout {
+  gap: 0;
+}
+
+.theme-doc-layout-content {
+  background: var(--zkp2p-background);
+}
+
+.theme-doc-wrapper {
+  background: var(--zkp2p-background);
+}
+
+aside {
+  margin-right: 0;
+  background: var(--zkp2p-background);
+}
+
+main {
+  padding-left: 2rem;
+  background: var(--zkp2p-background);
 }
 
 /* ===========================
@@ -745,8 +654,25 @@ input:focus, textarea:focus {
   flex-shrink: 0;
 }
 
-.headerSearchShortcut span {
-  display: inline-block;
+/* ===========================
+   Breadcrumbs
+   =========================== */
+.breadcrumbs__link {
+  color: var(--zkp2p-text-secondary);
+  text-decoration: none;
+}
+
+.breadcrumbs__link:hover {
+  color: var(--zkp2p-text-primary);
+  text-decoration: none;
+}
+
+.breadcrumbs__item--active .breadcrumbs__link {
+  color: var(--zkp2p-text-secondary);
+}
+
+.breadcrumbs__item:not(:last-child)::after {
+  color: var(--zkp2p-text-muted);
 }
 
 /* ===========================
@@ -970,33 +896,17 @@ input:focus, textarea:focus {
 }
 
 /* ===========================
-   Breadcrumbs
-   =========================== */
-.breadcrumbs__link {
-  color: var(--zkp2p-text-secondary);
-  text-decoration: none;
-}
-
-.breadcrumbs__link:hover {
-  color: var(--zkp2p-text-primary);
-  text-decoration: none;
-}
-
-/* Current breadcrumb item */
-.breadcrumbs__item--active .breadcrumbs__link {
-  color: var(--zkp2p-text-secondary);
-}
-
-/* Breadcrumb separators */
-.breadcrumbs__item:not(:last-child)::after {
-  color: var(--zkp2p-text-muted);
-}
-
-/* ===========================
    Special Overrides
    =========================== */
+/* Hide navbar search */
+.navbar__search,
+.navbar__search-input,
+[class*="searchBox"],
+[class*="DocSearch"] {
+  display: none;
+}
+
 /* Community card SVG fix */
 .communityCard svg:not(.communityIconWrapper svg) {
   display: none;
 }
-
