@@ -2,12 +2,13 @@ module.exports = {
   defaultSidebar: [
     {
       type: 'doc',
-      id: 'developer-v2-protocol',
+      id: 'v2-protocol',
       label: 'The ZKP2P V2 Protocol',
     },
     {
       type: 'category',
       label: 'Smart Contracts',
+      link: { type: 'doc', id: 'smart-contracts/index' },
       items: [
         {
           type: 'category',

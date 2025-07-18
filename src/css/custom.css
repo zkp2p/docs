@@ -52,17 +52,6 @@
   display: none;
 }
 
-/* Subtle gradient animation */
-@keyframes gradientShift {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1) rotate(0deg);
-  }
-  50% {
-    opacity: 0.8;
-    transform: scale(1.1) rotate(1deg);
-  }
-}
 
 /* Global background */
 body {
@@ -71,35 +60,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Background layer */
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--zkp2p-background);
-  z-index: -2;
-  pointer-events: none;
-}
 
-/* Prominent gradient overlay using brand colors */
-body::after {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(ellipse 800px 600px at 80% 0%, rgba(0, 102, 204, 0.4) 0%, transparent 40%),
-    radial-gradient(ellipse 600px 500px at 20% 100%, rgba(255, 63, 62, 0.35) 0%, transparent 45%),
-    radial-gradient(ellipse 400px 400px at 100% 50%, rgba(75, 181, 67, 0.25) 0%, transparent 35%),
-    radial-gradient(ellipse 500px 500px at 0% 30%, rgba(255, 193, 7, 0.2) 0%, transparent 40%);
-  z-index: 0;
-  pointer-events: none;
-}
 
 /* ===========================
    Base Styles
@@ -454,6 +415,8 @@ code,
   background: var(--zkp2p-surface);
   border-top: 1px solid var(--zkp2p-border);
   padding: 2rem 0;
+  position: relative;
+  z-index: 10;
 }
 
 .footer__title {

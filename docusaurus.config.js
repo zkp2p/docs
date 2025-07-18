@@ -155,11 +155,11 @@ const config = {
               },
               {
                 label: 'Protocol',
-                to: '/protocol/developer-v2-protocol',
+                to: '/protocol/v2-protocol',
               },
               {
                 label: 'Developer',
-                to: '/developer/integrate-zkp2p',
+                to: '/developer/integrate-zkp2p/integrate-redirect-onramp',
               },
               {
                 label: 'Brand Kit',

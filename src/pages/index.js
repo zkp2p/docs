@@ -8,19 +8,14 @@ import styles from './index.module.css';
 
 function HomepageHero() {
   return (
-    <>
-      <div className={styles.orb1}></div>
-      <div className={styles.orb2}></div>
-      <div className={styles.orb3}></div>
-      <div className={styles.heroContainer}>
-        <h1 className={styles.heroTitle}>
-          Welcome to ZKP2P Docs
-        </h1>
-        <p className={styles.heroSubtitle}>
-          A fast, permissionless fiat ↔ crypto on/offramp protocol powered by zero-knowledge proofs
-        </p>
-      </div>
-    </>
+    <div className={styles.heroContainer}>
+      <h1 className={styles.heroTitle}>
+        Welcome to ZKP2P Docs
+      </h1>
+      <p className={styles.heroSubtitle}>
+        Fast, permissionless fiat ↔ crypto on/offramp protocol powered by ZK
+      </p>
+    </div>
   );
 }
 

@@ -2,7 +2,7 @@
 title: Smart Contracts
 ---
 
-# 📜 Smart Contracts
+# Smart Contracts
 
 [](https://docs.zkp2p.xyz/developer/smart-contracts#escrow)
 
