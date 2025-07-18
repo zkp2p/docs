@@ -51,7 +51,7 @@ main::after {
 .hero {
   background: transparent;
   color: #FFFFFF;
-  padding: 4rem 0 0;
+  padding: var(--zkp2p-spacing-16) 0 0;
   position: relative;
   overflow: hidden;
   min-height: auto;
@@ -151,10 +151,10 @@ main::after {
 .searchShortcut {
   display: flex;
   align-items: center;
-  gap: 0.125rem;
+  gap: var(--zkp2p-spacing-0);
   background: transparent;
   border-radius: 4px;
-  padding: 0.25rem 0.5rem;
+  padding: var(--zkp2p-spacing-1) var(--zkp2p-spacing-2);
   font-size: 0.75rem;
   color: #FFFFFF;
   font-weight: 400;
@@ -167,7 +167,7 @@ main::after {
 
 /* Features Section */
 .features {
-  padding: 3rem 0 3rem;
+  padding: var(--zkp2p-spacing-12) 0 var(--zkp2p-spacing-12);
   background: transparent;
   position: relative;
   z-index: 10;
@@ -184,7 +184,7 @@ main::after {
 .featureGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1rem;
+  gap: var(--zkp2p-spacing-4);
   margin-top: 1rem;
 }
 
@@ -192,7 +192,7 @@ main::after {
   background: rgba(38, 38, 38, 0.6);
   backdrop-filter: blur(10px);
   border-radius: 20px;
-  padding: 1.5rem;
+  padding: var(--zkp2p-spacing-4) var(--zkp2p-spacing-6);
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   text-decoration: none !important;
   color: inherit !important;
@@ -261,7 +261,7 @@ main::after {
 
 /* Community Section */
 .community {
-  padding: 2rem 0 3rem;
+  padding: var(--zkp2p-spacing-8) 0 var(--zkp2p-spacing-12);
   background: transparent;
   position: relative;
   z-index: 10;
@@ -271,7 +271,7 @@ main::after {
   display: flex;
   justify-content: center;
   align-items: stretch;
-  gap: 1.5rem;
+  gap: var(--zkp2p-spacing-6);
   flex-wrap: wrap;
   max-width: 800px;
   margin: 0 auto;
@@ -281,12 +281,12 @@ main::after {
   background: rgba(38, 38, 38, 0.6);
   backdrop-filter: blur(10px);
   border-radius: 20px;
-  padding: 1.5rem;
+  padding: var(--zkp2p-spacing-4) var(--zkp2p-spacing-4);
   text-decoration: none !important;
   color: inherit !important;
   display: flex;
   align-items: flex-start;
-  gap: 1rem;
+  gap: var(--zkp2p-spacing-4);
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   border: 1px solid rgba(255, 255, 255, 0.06);
   min-width: 200px;
@@ -333,7 +333,7 @@ main::after {
 .communityContent {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: var(--zkp2p-spacing-1);
   flex: 1;
 }
 
@@ -364,7 +364,7 @@ main::after {
 /* Responsive Design */
 @media (max-width: 768px) {
   .hero {
-    padding: 8rem 0 2rem;
+    padding: var(--zkp2p-spacing-32) 0 var(--zkp2p-spacing-8);
     min-height: 60vh;
     display: flex;
     align-items: center;
@@ -387,21 +387,25 @@ main::after {
   }
   
   .features {
-    padding: 1rem 0 2rem;
+    padding: var(--zkp2p-spacing-4) 0 var(--zkp2p-spacing-6);
   }
   
   .featureGrid {
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: var(--zkp2p-spacing-4);
   }
   
   .communityGrid {
     flex-direction: column;
-    gap: 0.75rem;
+    gap: var(--zkp2p-spacing-3);
   }
   
   .communityCard {
-    padding: 1rem 1.25rem;
+    padding: var(--zkp2p-spacing-4) var(--zkp2p-spacing-5);
     min-width: 180px;
+  }
+  
+  .community {
+    padding: var(--zkp2p-spacing-6) 0 var(--zkp2p-spacing-8);
   }
 }

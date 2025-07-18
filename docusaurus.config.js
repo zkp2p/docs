@@ -161,14 +161,6 @@ const config = {
                 label: 'Developer',
                 to: '/developer/integrate-zkp2p/integrate-redirect-onramp',
               },
-              {
-                label: 'Brand Kit',
-                to: '/brand-kit',
-              },
-              {
-                label: 'Blogs',
-                to: '/blogs',
-              },
             ],
           },
           {
@@ -198,6 +190,14 @@ const config = {
               {
                 label: 'Support',
                 href: 'https://support.zkp2p.xyz',
+              },
+              {
+                label: 'Brand Kit',
+                to: '/brand-kit',
+              },
+              {
+                label: 'Blogs',
+                to: '/blogs',
               },
             ],
           },
