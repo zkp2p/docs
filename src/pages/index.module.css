@@ -1,23 +1,393 @@
-/**
- * CSS files with the .module.css suffix will be treated as CSS modules
- * and scoped locally.
- */
 
-.heroBanner {
-  padding: 4rem 0;
+
+/* Global Background */
+body {
+  position: relative;
+}
+
+/* Make the main content exactly one screen height */
+main {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Homepage background gradient layer */
+main::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: 
+    radial-gradient(circle 1000px at 70% 10%, rgba(91, 159, 255, 0.2) 0%, transparent 70%),
+    radial-gradient(circle 800px at 10% 50%, rgba(255, 63, 62, 0.15) 0%, transparent 70%),
+    radial-gradient(circle 600px at 90% 70%, rgba(75, 181, 67, 0.1) 0%, transparent 70%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Optional noise texture overlay for smoother gradients */
+main::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  opacity: 0.02;
+  z-index: 1;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+}
+
+
+
+
+
+/* Hero Section */
+.hero {
+  background: transparent;
+  color: #FFFFFF;
+  padding: 4rem 0 0;
+  position: relative;
+  overflow: hidden;
+  min-height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  z-index: 10;
+}
+
+/* Remove grid pattern, keep clean background */
+.hero::before {
+  display: none;
+}
+
+.hero::after {
+  display: none;
+}
+
+.heroContainer {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 2rem;
   text-align: center;
+  position: relative;
+  z-index: 10;
+}
+
+
+.heroTitle {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  line-height: 1.1;
+  color: #FFFFFF;
+  letter-spacing: -0.02em;
+}
+
+.heroSubtitle {
+  font-size: 1.2rem;
+  color: #FFFFFF;
+  margin-bottom: 4.5rem;
+  line-height: 1.5;
+  font-weight: 300;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Search Bar */
+.searchContainer {
+  max-width: 400px;
+  margin: 0 auto 2rem;
+  width: 100%;
+}
+
+.searchBar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #262626;
+  border: 1px solid #404040;
+  border-radius: 16px;
+  padding: 0 16px;
+  height: 40px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.searchBar:hover {
+  background: #333333;
+  border-color: #525252;
+  transform: translateY(-2px);
+}
+
+.searchIcon {
+  color: #FFFFFF;
+  margin-right: 0.75rem;
+  flex-shrink: 0;
+}
+
+.searchInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #FFFFFF;
+  font-size: 0.875rem;
+  font-weight: 300;
+  cursor: pointer;
+}
+
+.searchInput::placeholder {
+  color: #FFFFFF;
+  opacity: 0.7;
+}
+
+.searchShortcut {
+  display: flex;
+  align-items: center;
+  gap: 0.125rem;
+  background: transparent;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  color: #FFFFFF;
+  font-weight: 400;
+  flex-shrink: 0;
+}
+
+.searchShortcut span {
+  display: inline-block;
+}
+
+/* Features Section */
+.features {
+  padding: 3rem 0 3rem;
+  background: transparent;
+  position: relative;
+  z-index: 10;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 10;
+}
+
+.featureGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.featureCard {
+  background: rgba(38, 38, 38, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 1.5rem;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  text-decoration: none !important;
+  color: inherit !important;
+  display: block;
+  border: 1px solid rgba(255, 255, 255, 0.06);
   position: relative;
   overflow: hidden;
 }
 
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 2rem;
-  }
+.featureCard:hover {
+  transform: translateY(-4px) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.8);
+  background: rgba(51, 51, 51, 0.7);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
-.buttons {
+.featureIconWrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(152, 161, 192, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+}
+
+.featureCard:hover .featureIconWrapper {
+  background: rgba(152, 161, 192, 0.2);
+  transform: scale(1.05);
+}
+
+.featureIcon {
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  width: 20px;
+  height: 20px;
+}
+
+.featureCard:hover .featureIcon {
+  transform: rotate(2deg);
+}
+
+.featureTitle {
+  font-size: 1.125rem;
+  font-weight: 535;
+  margin-bottom: 0.5rem;
+  color: #FFFFFF;
+  transition: color 0.3s ease;
+}
+
+.featureCard:hover .featureTitle {
+  color: #FFFFFF;
+}
+
+.featureDescription {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #FFFFFF;
+  font-weight: 300;
+}
+
+/* Community Section */
+.community {
+  padding: 2rem 0 3rem;
+  background: transparent;
+  position: relative;
+  z-index: 10;
+}
+
+.communityGrid {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.communityCard {
+  background: rgba(38, 38, 38, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 1.5rem;
+  text-decoration: none !important;
+  color: inherit !important;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  min-width: 200px;
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.communityCard:hover {
+  transform: translateY(-4px) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.8);
+  background: rgba(51, 51, 51, 0.7);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.communityIconWrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(152, 161, 192, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.communityCard:hover .communityIconWrapper {
+  background: rgba(152, 161, 192, 0.2);
+  transform: scale(1.1);
+}
+
+.communityIconWrapper svg {
+  color: #FFFFFF;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.communityContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.communityLabel {
+  font-weight: 535;
+  color: #FFFFFF;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.communityDescription {
+  font-weight: 300;
+  color: #FFFFFF;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  transition: color 0.3s ease;
+}
+
+.communityCard:hover .communityLabel {
+  color: #FFFFFF;
+}
+
+.communityCard:hover .communityDescription {
+  color: #FFFFFF;
+  opacity: 0.9;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero {
+    padding: 3rem 0 0;
+    min-height: auto;
+  }
+  
+  .heroTitle {
+    font-size: 2.5rem;
+  }
+  
+  .heroSubtitle {
+    font-size: 1.125rem;
+  }
+  
+  .featureGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .communityGrid {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .communityCard {
+    padding: 1rem 1.25rem;
+    min-width: 180px;
+  }
 }
