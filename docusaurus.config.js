@@ -155,7 +155,7 @@ const config = {
               },
               {
                 label: 'Protocol',
-                to: '/protocol/v2-protocol',
+                to: '/protocol/developer-v2-protocol',
               },
               {
                 label: 'Developer',

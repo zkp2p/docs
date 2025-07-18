@@ -59,7 +59,7 @@ function HomepageFeatures() {
     {
       title: 'The ZKP2P Protocol',
       description: 'Learn about the architecture of the ZKP2P Protocol.',
-      link: '/protocol/smart-contracts',
+      link: '/protocol/developer-v2-protocol',
       icon: (
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 2L2 7l10 5 10-5-10-5z"></path>

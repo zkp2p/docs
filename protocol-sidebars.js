@@ -2,7 +2,7 @@ module.exports = {
   defaultSidebar: [
     {
       type: 'doc',
-      id: 'v2-protocol',
+      id: 'developer-v2-protocol',
       label: 'The ZKP2P V2 Protocol',
     },
     {
