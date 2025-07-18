@@ -189,24 +189,47 @@ main::after {
 }
 
 .featureCard {
-  background: rgba(38, 38, 38, 0.6);
-  backdrop-filter: blur(10px);
+  background: rgba(38, 38, 38, 0.5);
+  backdrop-filter: blur(16px);
   border-radius: 20px;
   padding: var(--zkp2p-spacing-4) var(--zkp2p-spacing-6);
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.2s ease;
   text-decoration: none !important;
   color: inherit !important;
   display: block;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   position: relative;
   overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.featureCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 50%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
 }
 
 .featureCard:hover {
-  transform: translateY(-4px) scale(1.02);
-  border-color: rgba(255, 255, 255, 0.8);
-  background: rgba(51, 51, 51, 0.7);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(45, 45, 45, 0.6);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.featureCard:hover::before {
+  opacity: 1;
 }
 
 .featureIconWrapper {
@@ -218,12 +241,11 @@ main::after {
   align-items: center;
   justify-content: center;
   margin-bottom: 1rem;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .featureCard:hover .featureIconWrapper {
-  background: rgba(152, 161, 192, 0.2);
-  transform: scale(1.05);
+  background: rgba(152, 161, 192, 0.15);
 }
 
 .featureIcon {
@@ -237,7 +259,7 @@ main::after {
 }
 
 .featureCard:hover .featureIcon {
-  transform: rotate(2deg);
+  color: #FFFFFF;
 }
 
 .featureTitle {
@@ -278,8 +300,8 @@ main::after {
 }
 
 .communityCard {
-  background: rgba(38, 38, 38, 0.6);
-  backdrop-filter: blur(10px);
+  background: rgba(38, 38, 38, 0.5);
+  backdrop-filter: blur(16px);
   border-radius: 20px;
   padding: var(--zkp2p-spacing-4) var(--zkp2p-spacing-4);
   text-decoration: none !important;
@@ -287,19 +309,42 @@ main::after {
   display: flex;
   align-items: flex-start;
   gap: var(--zkp2p-spacing-4);
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: all 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   min-width: 200px;
   flex: 1;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.communityCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 50%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
 }
 
 .communityCard:hover {
-  transform: translateY(-4px) scale(1.02);
-  border-color: rgba(255, 255, 255, 0.8);
-  background: rgba(51, 51, 51, 0.7);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(45, 45, 45, 0.6);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.communityCard:hover::before {
+  opacity: 1;
 }
 
 .communityIconWrapper {
@@ -316,8 +361,7 @@ main::after {
 }
 
 .communityCard:hover .communityIconWrapper {
-  background: rgba(152, 161, 192, 0.2);
-  transform: scale(1.1);
+  background: rgba(152, 161, 192, 0.15);
 }
 
 .communityIconWrapper svg {
