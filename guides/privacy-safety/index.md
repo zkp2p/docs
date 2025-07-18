@@ -8,7 +8,7 @@ Privacy is at the heart of what we do, and in this section there is important in
 
 ## What's Covered
 
-- **[Privacy and Safety](./privacy-safety)**: Learn about how ZKP2P protects your data and maintains privacy during transactions
+- **[Privacy and Safety](./privacy)**: Learn about how ZKP2P protects your data and maintains privacy during transactions
 - **[Risks](./risks)**: Understand the potential risks associated with on-ramp and off-ramp transactions
 
 ## Our Commitment to Privacy
