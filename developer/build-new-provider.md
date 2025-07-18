@@ -24,7 +24,7 @@ To get started building a new provider:
 4. Create a new directory and JSON file and add the necessary provider data for your integration
 5. Test your integration by going to [developer.zkp2p.xyz](https://developer.zkp2p.xyz/)
 6. Click on Open Settings on the page and set Base URL to `http://localhost:8080/`. Any changes to your JSON will now be reflected in the extension and developer app
-7. Update the inputs with the right path to your integration `localhost:8080/{platform_name}/{provider_name}.json`
+7. Update `actionType` and `platform` with the right values. The path to your provider is `localhost:8080/{platform_name}/{provider_name}.json`
 8. Click Authenticate to extract metadata
 9. If successful, proceed to Prove a specific transaction
 
@@ -530,8 +530,6 @@ function validatePaymentDetails(
 ```
 
 ### Example Implementations
-
-Study these reference implementations:
 
 1. **[VenmoReclaimVerifier](https://github.com/zkp2p/zkp2p-v2-contracts/blob/main/contracts/verifiers/VenmoReclaimVerifier.sol)**
    - USD only
