@@ -155,7 +155,6 @@ a::before {
 .navbar {
   background: rgba(23, 23, 23, 0.9);
   border-bottom: 1px solid var(--zkp2p-border);
-  backdrop-filter: blur(10px);
 }
 
 .navbar__title {
