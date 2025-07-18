@@ -79,6 +79,8 @@ const config = {
         editUrl: 'https://github.com/zkp2p/docs/edit/main/',
       },
     ],
+
+
   ],
 
   themeConfig:
@@ -130,6 +132,11 @@ const config = {
             label: 'Brand Kit',
           },
           {
+            to: '/blogs',
+            label: 'Blogs',
+            position: 'right',
+          },
+          {
             href: 'https://github.com/zkp2p',
             label: 'GitHub',
             position: 'right',
@@ -157,6 +164,10 @@ const config = {
               {
                 label: 'Brand Kit',
                 to: '/brand-kit',
+              },
+              {
+                label: 'Blogs',
+                to: '/blogs',
               },
             ],
           },
