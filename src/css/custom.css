@@ -489,11 +489,14 @@ code,
    Footer
    =========================== */
 .footer {
-  background: var(--zkp2p-surface);
-  border-top: 1px solid var(--zkp2p-border);
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
   padding: var(--zkp2p-spacing-5) var(--zkp2p-spacing-0);
   position: relative;
   z-index: 10;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.03);
 }
 
 .footer__inner {
@@ -524,7 +527,7 @@ code,
 }
 
 .footer__items:not(:last-child) {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
   padding-bottom: var(--zkp2p-spacing-4);
 }
 
@@ -562,7 +565,7 @@ code,
   color: var(--zkp2p-text-muted);
   font-size: 0.75rem;
   padding-top: var(--zkp2p-spacing-3);
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
 }
 
 .footer__link {
