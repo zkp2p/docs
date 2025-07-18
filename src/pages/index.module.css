@@ -289,6 +289,23 @@ main::after {
   z-index: 10;
 }
 
+.community::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.08) 10%,
+    rgba(255, 255, 255, 0.08) 90%,
+    transparent
+  );
+}
+
 .communityGrid {
   display: flex;
   justify-content: center;
