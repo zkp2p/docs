@@ -1243,6 +1243,11 @@ input:focus, textarea:focus {
     width: 100%;
     max-width: 250px;
   }
+  
+  /* Hide footer on mobile */
+  .footer {
+    display: none;
+  }
 }
 
 /* ===========================
