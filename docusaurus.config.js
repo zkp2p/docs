@@ -34,20 +34,13 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          sidebarPath: require.resolve('./sidebars.js'),
+          id: 'guides',
+          path: 'guides',
+          routeBasePath: 'guides',
+          sidebarPath: require.resolve('./guides-sidebars.js'),
           editUrl: 'https://github.com/zkp2p/docs/edit/main/',
         },
-        blog: {
-          showReadingTime: true,
-          feedOptions: {
-            type: ['rss', 'atom'],
-            xslt: true,
-          },
-          editUrl: 'https://github.com/zkp2p/docs/edit/main/',
-          onInlineTags: 'warn',
-          onInlineAuthors: 'warn',
-          onUntruncatedBlogPosts: 'warn',
-        },
+        blog: false,
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
@@ -55,10 +48,49 @@ const config = {
     ],
   ],
 
+  plugins: [
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'protocol',
+        path: 'protocol',
+        routeBasePath: 'protocol',
+        sidebarPath: require.resolve('./protocol-sidebars.js'),
+        editUrl: 'https://github.com/zkp2p/docs/edit/main/',
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'developer',
+        path: 'developer',
+        routeBasePath: 'developer',
+        sidebarPath: require.resolve('./developer-sidebars.js'),
+        editUrl: 'https://github.com/zkp2p/docs/edit/main/',
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'brand-kit',
+        path: 'brand-kit',
+        routeBasePath: 'brand-kit',
+        sidebarPath: require.resolve('./brand-kit-sidebars.js'),
+        editUrl: 'https://github.com/zkp2p/docs/edit/main/',
+      },
+    ],
+
+
+  ],
+
   themeConfig:
-    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
+    /** @type {import('@docusaurus/types').ThemeConfig} */
     ({
-      image: 'img/social-preview.png', // Customize this
+      colorMode: {
+        defaultMode: 'dark',
+        disableSwitch: true,
+        respectPrefersColorScheme: false,
+      },
       navbar: {
         title: 'ZKP2P',
         logo: {
@@ -66,13 +98,44 @@ const config = {
           src: 'img/logo.svg',
         },
         items: [
+                    {
+            type: 'docSidebar',
+            sidebarId: 'defaultSidebar',
+            docsPluginId: 'guides',
+            position: 'left',
+            label: 'User',
+          },
           {
             type: 'docSidebar',
-            sidebarId: 'docsSidebar', // ✅ Matches sidebars.js
+            sidebarId: 'defaultSidebar',
+            docsPluginId: 'protocol',
             position: 'left',
-            label: 'Docs',
+            label: 'Protocol',
           },
-          {to: '/blog', label: 'Blog', position: 'left'},
+          {
+            type: 'docSidebar',
+            sidebarId: 'defaultSidebar',
+            docsPluginId: 'developer',
+            position: 'left',
+            label: 'Developer',
+          },
+          {
+            to: '/team',
+            label: 'Team',
+            position: 'right',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'defaultSidebar',
+            docsPluginId: 'brand-kit',
+            position: 'right',
+            label: 'Brand Kit',
+          },
+          {
+            to: '/blogs',
+            label: 'Blogs',
+            position: 'right',
+          },
           {
             href: 'https://github.com/zkp2p',
             label: 'GitHub',
@@ -84,15 +147,27 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Docs',
+            title: 'Documentation',
             items: [
               {
-                label: 'User Guides',
-                to: '/docs/user-guides/for-buyers/complete-guide-to-onboarding',
+                label: 'User',
+                to: '/guides/for-buyers/complete-guide-to-onboarding',
+              },
+              {
+                label: 'Protocol',
+                to: '/protocol/developer-v2-protocol',
               },
               {
                 label: 'Developer',
-                to: '/docs/developer/v2-protocol',
+                to: '/developer/integrate-zkp2p/integrate-redirect-onramp',
+              },
+              {
+                label: 'Brand Kit',
+                to: '/brand-kit',
+              },
+              {
+                label: 'Blogs',
+                to: '/blogs',
               },
             ],
           },
@@ -101,7 +176,7 @@ const config = {
             items: [
               {
                 label: 'Telegram',
-                href: 'https://t.me/zkp2p',
+                href: 'https://t.me/zk_p2p',
               },
               {
                 label: 'Twitter/X',
@@ -113,22 +188,27 @@ const config = {
             title: 'More',
             items: [
               {
-                label: 'Main Site',
+                label: 'ZKP2P',
                 href: 'https://zkp2p.xyz',
               },
               {
                 label: 'GitHub',
                 href: 'https://github.com/zkp2p',
               },
+              {
+                label: 'Support',
+                href: 'https://support.zkp2p.xyz',
+              },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} ZKP2P. Built with Docusaurus.`,
+        copyright: `© ${new Date().getFullYear()} P2P Labs Inc.`,
       },
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
       },
+      algolia: false,
     }),
 };
 
