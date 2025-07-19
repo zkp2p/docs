@@ -295,6 +295,136 @@ window.addEventListener('zktls#initialized', () => {
 });
 ```
 
+### TypeScript Types
+
+If you're using TypeScript, here are the type definitions for the window.zktls API:
+
+```typescript
+interface IProofResponse {
+  proofId: string;
+  platform: string;
+}
+
+interface IRequestHistoryItem {
+  notaryRequest: any;
+}
+
+interface IProofParams {
+  intentHash: string;
+  originalIndex: number;
+  platform: string;
+  proofIndex?: number;
+}
+
+interface INewTabParams {
+  actionType: string;
+  platform: string;
+}
+
+interface IMetadataMessage {
+  requestId: string;
+  metadata: any[];
+  platform: string;
+  expiresAt: number;
+}
+
+interface IZkTls {
+  // Connection methods
+  requestConnection(): Promise<boolean>;
+  checkConnectionStatus(): Promise<'connected' | 'disconnected' | 'pending'>;
+  
+  // Extension info methods
+  getVersion(): Promise<string>;
+  
+  // Proof methods
+  generateProof(params: IProofParams): Promise<IProofResponse>;
+  fetchProofById(proofId: string): Promise<{ notaryRequest: IRequestHistoryItem }>;
+  fetchProofs(): Promise<{ notaryRequests: IRequestHistoryItem[] }>;
+  
+  // UI methods
+  openSidebar(route: string): void;
+  authenticate(params: INewTabParams): void;
+  
+  // Event listeners
+  onMetadataMessage(callback: (data: IMetadataMessage) => void): () => void;
+  
+  // Logger
+  logger: {
+    enabled: boolean;
+    enable(): void;
+    disable(): void;
+    debug(message: string, data?: any): void;
+    error(message: string, error?: any): void;
+  };
+}
+
+declare global {
+  interface Window {
+    zktls: IZkTls;
+  }
+}
+```
+
+### Debugging
+
+#### Enable/Disable Logging
+
+```javascript
+// Enable logging
+window.zktls.logger.enable()
+
+// Disable logging  
+window.zktls.logger.disable()
+
+// Log additional debug messages you specify (only shown when logging is enabled)
+window.zktls.logger.debug('Processing payment', { amount: 100 })
+
+// Log additional errors (only shown when logging is enabled)
+window.zktls.logger.error('Failed to generate proof', error)
+```
+
+The logger provides two levels of logging:
+- `debug`: For general debugging information
+- `error`: For error messages and exceptions
+
+All log messages are prefixed with `[zktls:debug]` or `[zktls:error]` for easy filtering.
+
+### Event Listeners
+
+#### onMetadataMessage(callback)
+
+Subscribe to metadata messages from the extension. These messages are received after authenticating with a payment platform and contain platform-specific session information.
+
+```jsx
+// First, authenticate with a platform
+window.zktls.authenticate({
+  actionType: 'transfer_venmo',
+  platform: 'venmo'
+});
+
+// Subscribe to receive metadata after authentication
+const unsubscribe = window.zktls.onMetadataMessage((data) => {
+  console.log('Received platform metadata:', {
+    requestId: data.requestId,
+    platform: data.platform,
+    metadata: data.metadata,
+    expiresAt: data.expiresAt
+  });
+  
+  // Store or use the metadata for subsequent proof generation
+  // The metadata expires at the given timestamp
+});
+
+// Later, unsubscribe when done
+unsubscribe();
+```
+
+**Metadata Message Structure:**
+- `requestId`: The ID of the authentication request
+- `platform`: The payment platform that was authenticated (e.g., 'venmo', 'cashapp')
+- `metadata`: Array of platform-specific metadata objects needed for proof generation
+- `expiresAt`: Unix timestamp when the authentication session expires
+
 ### Connection Management
 
 #### requestConnection()
@@ -332,9 +462,18 @@ console.log(`PeerAuth version: ${version}`);
 
 #### authenticate(params)
 
-Authenticate into a provider opening a new tab with specific parameters.
+Authenticate into a provider by opening a new tab with specific parameters. After successful authentication, metadata will be sent via the `onMetadataMessage` listener.
 
 ```jsx
+// Set up metadata listener before authenticating
+const unsubscribe = window.zktls.onMetadataMessage((data) => {
+  if (data.platform === 'venmo') {
+    console.log('Venmo authentication successful');
+    // Use the metadata for proof generation
+  }
+});
+
+// Trigger authentication
 window.zktls.authenticate({
   actionType: 'transfer_venmo',
   platform: 'venmo'
@@ -455,11 +594,20 @@ Always wrap API calls in try-catch blocks for proper error handling.
             actionType: 'transfer_venmo',
             platform: 'venmo'
           });
+          
+          // After authentication, you'll receive metadata via onMetadataMessage
+          const unsubscribe = window.zktls.onMetadataMessage((data) => {
+            console.log('Received platform metadata:', data);
+            // Store platform-specific metadata for use in proof generation
+          });
+          
+          // Clean up listener when done
+          unsubscribe();
 
-          // Generate a proof
+          // Generate a proof (after authentication is complete)
           const proof = await window.zktls.generateProof({
             intentHash: '1234...', // NOTE: Intent hash is the decimal value of the hex intent hash
-            originalIndex: 0,
+            originalIndex: 0, // This is selected by user from looking at the metadata list
             platform: 'venmo'
           });
           console.log('Proof generated:', proof.proofId);
