@@ -35,7 +35,7 @@ const request = {
   recipient: "0xRecipientAddress", 
   destinationChainId: 8453,
   destinationToken: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", // USDC on Base
-  exactFiatAmount: "100",
+  exactFiatAmount: "100000000", // 100 USD (6 decimals)
   referrer: "YourApp" // Optional
 }
 
@@ -66,7 +66,7 @@ Response:
       chainId: 8453
     },
     quotes: [{
-      fiatAmount: "100",
+      fiatAmount: "100000000", // 100 USD (6 decimals, same as USDC)
       fiatAmountFormatted: "$100.00",
       tokenAmount: "98000000", // 98 USDC (6 decimals)
       tokenAmountFormatted: "98.00",
