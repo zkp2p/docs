@@ -92,6 +92,7 @@ Enter your username/account details for the selected platform:
 - Revolut Revtag  
 - Wise Wisetag  
 - Mercado Pago CVU  
+- Zelle Email Address
 
 > 🔍 **Double-check accuracy** — these details are how buyers send you money.
 

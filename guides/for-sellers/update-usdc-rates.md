@@ -21,7 +21,7 @@ Scroll to the **Conversion Rates** section. You'll see:
 
 - Your configured **payment platforms** (e.g., Revolut)  
 - The **currencies** you accept (e.g., GBP, SGD, EUR)  
-- The **current conversion rate** for each currency \
+- The **current conversion rate** for each currency
 
 ![CR Step 2](/img/conversion-rate/CRStep2.avif)  
 
