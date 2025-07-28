@@ -13,6 +13,8 @@ This page contains documentation and APIs for a headless integration with the ZK
 
 To get started integrating onramping, request an API key from the [ZKP2P team](mailto:team@zkp2p.xyz).
 
+If you are looking to interact only with the PeerAuth Extension to generate zkTLS proofs and not with the ZKP2P smart contract protocol, skip to the [section below](onramp-integration.md#extension-api). Additionally, we do have a React SDK for interacting with PeerAuth maintained by our commmunity: [React PeerAuth SDK](https://www.npmjs.com/package/@vitals/extension-react)
+
 ## Flow
 
 1. Fetch quote from `/quote/exact-fiat` or `/quote/exact-token`
