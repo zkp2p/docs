@@ -14,7 +14,7 @@ When a taker signals an intent to pay off-chain, they specify how many tokens th
 
 ---
 
-## [Constants](https://docs.zkp2p.xyz/developer/smart-contracts/escrow#constants)
+## Constants
 
 - `uint256 internal constant PRECISE_UNIT = 1e18;`
 - `uint256 constant CIRCOM_PRIME_FIELD = ...;`
@@ -22,7 +22,7 @@ When a taker signals an intent to pay off-chain, they specify how many tokens th
 
 ---
 
-## [State Variables](https://docs.zkp2p.xyz/developer/smart-contracts/escrow#state-variables)
+## State Variables
 
 - `uint256 public immutable chainId;`  
   The chain ID where this contract is deployed.
