@@ -67,9 +67,7 @@ To understand why we are building with TLSN and the Optimistic Notarization flow
 
 To understand TLSNotary, please go through their docs
 
-[![Logo](https://docs.zkp2p.xyz/~gitbook/image?url=https%3A%2F%2Fdocs.tlsnotary.org%2Ffavicon.svg&width=20&dpr=4&quality=100&sign=5161271d&sv=2)Introduction - tlsn-docs](https://docs.tlsnotary.org/)
-
-[](https://docs.zkp2p.xyz/developer/peerauth-extension/zktls#tlsproxy-reclaim)
+[TLSN Docs](https://docs.tlsnotary.org/)
 
 ### TLSProxy (Reclaim)
 
@@ -79,7 +77,7 @@ However, it is not as censorship resistant as the MPC-TLS approach due to the in
 
 Additionally, there is a possibility of a Prover MITM (man-in-the-middle) attack to change packets enroute if they are able to gain access to the port in the datacenter where the Notary (Proxy) is hosted. This is because the Prover holds the TLS keys.
 
-Despite this, we believe the proxy based approach is most production ready and can scale up to a certain dollar amount of value before we need to migrate to TLSNotary. Reclaim protocol has undergone multiple audits ([link](https://reclaimprotocol.org/blog/posts/chacha-circuit-audit)).
+Despite this, we believe the proxy based approach is most production ready and can scale up to a certain dollar amount of value before we need to migrate to TLSNotary. Reclaim protocol has undergone multiple audits.
 
 Additionally, ZKP2P is built to be generic so we can plug in any primitive as they become mature.
 
