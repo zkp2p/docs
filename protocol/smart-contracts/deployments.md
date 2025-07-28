@@ -53,6 +53,14 @@ title: Deployments
       <td>ZelleBaseVerifier</td>
       <td><a href="https://basescan.org/address/0x1783f040783C0827fB64d128ECE548d9B3613Ad5">0x1783f040783C0827fB64d128ECE548d9B3613Ad5</a></td>
     </tr>
+    <tr>
+      <td>PayPalVerifier</td>
+      <td><a href="https://basescan.org/address/0x03d17E9371C858072E171276979f6B44571C5DeA">0x03d17E9371C858072E171276979f6B44571C5DeA</a></td>
+    </tr>
+    <tr>
+      <td>MonzoVerifier</td>
+      <td><a href="https://basescan.org/address/0x0dE46433bD251027f73eD8f28E01eF05DA36a2E0">0x0dE46433bD251027f73eD8f28E01eF05DA36a2E0</a></td>
+    </tr>
   </tbody>
 </table>
 
