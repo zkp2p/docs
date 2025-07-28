@@ -5,7 +5,7 @@ title: Risks
 
 ## Off-ramp Risks
 
--   **Governance-Controlled Public Key:** The protocol's governance can update the public key of the witness associated with payment verifiers. If the new key is under their control, they could potentially forge proofs, sign them, and access the USDC deposited in the protocol. Initially governance will consist of a multisig and will be decentralized in the future.
+-   **Proxy or Notary centralization:** Currently, the proxy and notary is run by ZKP2P. This is similar to single sequencer L2s today. In the future this will become a network of notary operators.
 
 -   **Proxy or Notary collusion:** If there is collusion between the buyer and the Notary or Proxy then there is possibility of forging proofs to access seller liquidity
 
