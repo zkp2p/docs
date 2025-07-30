@@ -132,6 +132,14 @@ title: Deployments
       <td><code>0xfaaa9c7b2f09d6a1b0971574d43ca62c3e40723167c09830ec33f06cec921381</code></td>
     </tr>
     <tr>
+      <td>CZK</td>
+      <td><code>0xd783b199124f01e5d0dde2b7fc01b925e699caea84eae3ca92ed17377f498e97</code></td>
+    </tr>
+    <tr>
+      <td>DKK</td>
+      <td><code>0x5ce3aa5f4510edaea40373cbe83c091980b5c92179243fe926cb280ff07d403e</code></td>
+    </tr>
+    <tr>
       <td>EUR</td>
       <td><code>0xfff16d60be267153303bbfa66e593fb8d06e24ea5ef24b6acca5224c2ca6b907</code></td>
     </tr>
@@ -144,12 +152,20 @@ title: Deployments
       <td><code>0xa156dad863111eeb529c4b3a2a30ad40e6dcff3b27d8f282f82996e58eee7e7d</code></td>
     </tr>
     <tr>
+      <td>HUF</td>
+      <td><code>0x7766ee347dd7c4a6d5a55342d89e8848774567bcf7a5f59c3e82025dbde3babb</code></td>
+    </tr>
+    <tr>
       <td>IDR</td>
       <td><code>0xc681c4652bae8bd4b59bec1cdb90f868d93cc9896af9862b196843f54bf254b3</code></td>
     </tr>
     <tr>
       <td>ILS</td>
       <td><code>0x313eda7ae1b79890307d32a78ed869290aeb24cc0e8605157d7e7f5a69fea425</code></td>
+    </tr>
+    <tr>
+      <td>INR</td>
+      <td><code>0xaad766fbc07fb357bed9fd8b03b935f2f71fe29fc48f08274bc2a01d7f642afc</code></td>
     </tr>
     <tr>
       <td>JPY</td>
@@ -168,16 +184,32 @@ title: Deployments
       <td><code>0xf20379023279e1d79243d2c491be8632c07cfb116be9d8194013fb4739461b84</code></td>
     </tr>
     <tr>
+      <td>NOK</td>
+      <td><code>0x8fb505ed75d9d38475c70bac2c3ea62d45335173a71b2e4936bd9f05bf0ddfea</code></td>
+    </tr>
+    <tr>
       <td>NZD</td>
       <td><code>0xdbd9d34f382e9f6ae078447a655e0816927c7c3edec70bd107de1d34cb15172e</code></td>
+    </tr>
+    <tr>
+      <td>PHP</td>
+      <td><code>0xe6c11ead4ee5ff5174861adb55f3e8fb2841cca69bf2612a222d3e8317b6ae06</code></td>
     </tr>
     <tr>
       <td>PLN</td>
       <td><code>0x9a788fb083188ba1dfb938605bc4ce3579d2e085989490aca8f73b23214b7c1d</code></td>
     </tr>
     <tr>
+      <td>RON</td>
+      <td><code>0x2dd272ddce846149d92496b4c3e677504aec8d5e6aab5908b25c9fe0a797e25f</code></td>
+    </tr>
+    <tr>
       <td>SAR</td>
       <td><code>0xf998cbeba8b7a7e91d4c469e5fb370cdfa16bd50aea760435dc346008d78ed1f</code></td>
+    </tr>
+    <tr>
+      <td>SEK</td>
+      <td><code>0x8895743a31faedaa74150e89d06d281990a1909688b82906f0eb858b37f82190</code></td>
     </tr>
     <tr>
       <td>SGD</td>
@@ -198,10 +230,6 @@ title: Deployments
     <tr>
       <td>VND</td>
       <td><code>0xe85548baf0a6732cfcc7fc016ce4fd35ce0a1877057cfec6e166af4f106a3728</code></td>
-    </tr>
-    <tr>
-      <td>ZAR</td>
-      <td><code>0x53611f0b3535a2cfc4b8deb57fa961ca36c7b2c272dfe4cb239a29c48e549361</code></td>
     </tr>
   </tbody>
 </table>
