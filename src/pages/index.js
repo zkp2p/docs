@@ -165,7 +165,7 @@ export default function Home() {
         <meta property="og:url" content="https://docs.zkp2p.xyz" />
         <meta property="og:title" content="ZKP2P Documentation" />
         <meta property="og:description" content="The permissionless fiat ↔ crypto ramp" />
-        <meta property="og:image" content="https://docs.zkp2p.xyz/img/brand-kit/logo.png" />
+        <meta property="og:image" content="https://docs.zkp2p.xyz/img/banner.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:site_name" content="ZKP2P Docs" />
@@ -175,7 +175,7 @@ export default function Home() {
         <meta name="twitter:url" content="https://docs.zkp2p.xyz" />
         <meta name="twitter:title" content="ZKP2P Documentation" />
         <meta name="twitter:description" content="The permissionless fiat ↔ crypto ramp" />
-        <meta name="twitter:image" content="https://docs.zkp2p.xyz/img/brand-kit/logo.png" />
+        <meta name="twitter:image" content="https://docs.zkp2p.xyz/img/banner.png" />
         <meta name="twitter:site" content="@zkp2p" />
         <meta name="twitter:creator" content="@zkp2p" />
       </Head>
