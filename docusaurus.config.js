@@ -10,6 +10,8 @@ const config = {
   tagline: 'The permissionless fiat ↔ crypto ramp',
   favicon: 'img/favicon.ico',
 
+
+
   future: {
     v4: true,
   },
@@ -86,6 +88,7 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/types').ThemeConfig} */
     ({
+
       colorMode: {
         defaultMode: 'dark',
         disableSwitch: true,
