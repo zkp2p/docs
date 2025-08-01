@@ -4,6 +4,7 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import useBaseUrl from '@docusaurus/useBaseUrl';
+import Head from '@docusaurus/Head';
 import styles from './index.module.css';
 
 function HomepageHero() {
@@ -158,6 +159,26 @@ export default function Home() {
     <Layout
       title="Documentation"
       description="ZKP2P - The permissionless fiat ↔ crypto ramp">
+      <Head>
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://docs.zkp2p.xyz" />
+        <meta property="og:title" content="ZKP2P Documentation" />
+        <meta property="og:description" content="The permissionless fiat ↔ crypto ramp" />
+        <meta property="og:image" content="https://docs.zkp2p.xyz/img/brand-kit/logo.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:site_name" content="ZKP2P Docs" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://docs.zkp2p.xyz" />
+        <meta name="twitter:title" content="ZKP2P Documentation" />
+        <meta name="twitter:description" content="The permissionless fiat ↔ crypto ramp" />
+        <meta name="twitter:image" content="https://docs.zkp2p.xyz/img/brand-kit/logo.png" />
+        <meta name="twitter:site" content="@zkp2p" />
+        <meta name="twitter:creator" content="@zkp2p" />
+      </Head>
       <main>
         <section className={styles.hero}>
           <HomepageHero />
