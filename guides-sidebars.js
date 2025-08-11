@@ -13,6 +13,7 @@ module.exports = {
       items: [
         'for-buyers/complete-guide-to-onboarding',
         'for-buyers/handling-verification-issues',
+        'for-buyers/migrating-smart-account-buyer',
       ],
     },
     {
