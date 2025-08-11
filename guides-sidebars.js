@@ -26,6 +26,8 @@ module.exports = {
         'for-sellers/tradingview-links',
         'for-sellers/calculating-apr',
         'for-sellers/manual-releases',
+        'for-sellers/migrating-smart-account-seller'
+
       ],
     },
     {
