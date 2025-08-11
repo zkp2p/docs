@@ -37,4 +37,3 @@ Congratulations, you have successfully migrated to your new wallet address! Now 
 
 
 ![Migrate Step 5](/img/migration/MigrationEnd.png)
-![Migrate Step 6](/img/migration/BuyerMigrate5.png)
