@@ -27,7 +27,7 @@ export default function SpeedDoesntAlwaysNeedToCost() {
   
   const post = {
     title: "Speed Doesn't Always Need To Cost?",
-    date: '2024-12-01', // Update this to your desired date
+    date: '2025-08-06', 
     excerpt: 'After analysing 4,000+ trades: faster trades dont necessarily comes with high costs. Quick trades can be cheap and slow trades aren\'t always profitable.',
     content: `
 ### TL;DR
