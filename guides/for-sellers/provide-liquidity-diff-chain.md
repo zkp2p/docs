@@ -3,7 +3,7 @@ id: provide-liquidity-diff-chain
 title: How to Provide Liquidity from a Different Chain
 ---
 
-# How to Provide Liquidity and Sell USDC
+# How to Provide Liquidity from a Different Chain
 
 This guide will walk you through the process of providing liquidity on ZKP2P from a different chain than Base.
 
