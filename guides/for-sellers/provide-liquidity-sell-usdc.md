@@ -14,24 +14,28 @@ Visit [https://zkp2p.xyz](https://zkp2p.xyz) in your browser.
 ![Provide Step 1](/img/provide-liquidity/ProvideStep1.avif)
 
 
-
 ### Step 2: Check Current Market Rates
 
 - Click on the **Liquidity** tab in the main navigation bar  
 - Review current spreads and rates for the currencies you're interested in  
 - Pay attention to available liquidity and limits for each option  
 
-![Provide Step 2](/img/provide-liquidity/ProvideStep2.avif)
+![Provide Step 2](/img/provide-liquidity/ProvideStep2.png)
 
 
 ### Step 3: Add Liquidity
 
-- Click the **Add Liquidity** button underneath the graphs
+- Click the add liquidity button on the top right hand side of the Order Book
 
-![Provide Step 3](/img/provide-liquidity/ProvideStep3.avif)
+![Provide Step 3](/img/provide-liquidity/ProvideStep3.png)
 
 
-### Step 4: Connect Your Wallet
+You can also click the **Sell** button on the toolbar 
+
+![Provide Step 3](/img/provide-liquidity/ProvideStep3a.png)
+
+
+### Step 4: Connect
 
 - The platform will prompt you to connect your wallet  
 - Select your preferred wallet (Rabby, MetaMask, etc.) or log in via email, Twitter, or Google  
@@ -42,15 +46,15 @@ Visit [https://zkp2p.xyz](https://zkp2p.xyz) in your browser.
 
 ### Step 5: Fund Account with USDC on Base
 
-- Ensure you have sufficient **USDC tokens on the Base Network**  
+- Ensure you have sufficient **USDC tokens on the Base Network** by checking in the top right hand corner. 
 
 ![Provide Step 5](/img/provide-liquidity/ProvideStep5.png)
 
-- Click the account dropdown → **Receive** to check your balance  
+**- If you dont have enough USDC, check out the guide to depositing from any chain here!**
 
 ### Step 6: Create New Deposit
 
-- Click the **New Deposit** button  
+- Click the **New Deposit** button
 
 ![Provide Step 6](/img/provide-liquidity/ProvideStep6.avif)
 
@@ -77,10 +81,11 @@ Choose your preferred platform from the dropdown:
 - Zelle (USD Only)
 - Revolut (Multi Currency)  
 - Wise (Multi Currency)  
-- Mercado Pago (ARS Only)  
+- Mercado Pago (ARS Only)
+- PayPal (Multi Currency)
+- Monzo (GBP Only)
 
 ![Provide Step 9](/img/provide-liquidity/ProvideStep9.avif)
-
 
 
 ### Step 10: Enter Payee Details
@@ -95,67 +100,64 @@ Enter your username/account details for the selected platform:
 
 > 🔍 **Double-check accuracy** — these details are how buyers send you money.
 
-![Provide Step 10](/img/provide-liquidity/ProvideStep10.avif)
-
+![Provide Step 10](/img/provide-liquidity/ProvideStep10.png)
 
 
 ### Step 11: Set Exchange Rates
 
 - Enter how much you want to sell your USDC for in each currency  
-- Adjust based on what you observed in Step 2  
+- Adjust based on what you observed in Step 2
+- You can see your percentage spread in the middle column
+    - Green is above market rate, Grey is close to market rate, and Red is below market rate. 
 
 💡 **Consider**:
 - Market demand  
 - Competitive rates  
-- Desired profit margin  
+- Desired profit margin
 
 View the guide on optimal currency conversion rates for more tips.
 
-![Provide Step 11](/img/provide-liquidity/ProvideStep11.avif)
+![Provide Step 11](/img/provide-liquidity/ProvideStep11.png)
 
 
 ### Step 12: Add Secondary Payment Platform (Optional)
 
-- Click **Add Payment Platform** if you want to accept multiple payment methods  
+- Click **Add Payment** in the top right hand corner, if you want to accept multiple payment methods  
 - Repeat Steps 9–11 for the new platform  
 
-![Provide Step 12](/img/provide-liquidity/ProvideStep12.avif)
+![Provide Step 12](/img/provide-liquidity/ProvideStep12.png)
 
 
-### Step 13: Configure Advanced Settings (Optional)
+### Step 13: Configure Order Limits (Optional)
 
-- Click **Advanced Settings** to expand options  
-- Set **minimum** and **maximum** order sizes (e.g. 10 USDC → max: your total deposit) 
+- Click **Order Limits** to expand options  
+- Set **minimum** and **maximum** order sizes (e.g. 5 USDC → max: your total deposit) 
 
-![Provide Step 13](/img/provide-liquidity/ProvideStep13.avif)
+![Provide Step 13](/img/provide-liquidity/ProvideStep13.png)
+
+### Step 14: Review your details
+
+- Are my tags correct?
+- Are my spreads what I expected?
+- How what proceeds can I expect from providing liquidity? 
+
+If all details are correct you can continue with your transaction! 
+
+![Provide Step 14](/img/provide-liquidity/ProvideStep14.png)
 
 
-### Step 14: Validate Payee Details
-
-- The system will verify your payment info  
-- Wait for confirmation that details are valid  
-
-![Provide Step 14](/img/provide-liquidity/ProvideStep14.avif)
-
-
-### Step 15: Approve the Transaction
+### Step 15: Approve & Deposit into Vault
 
 - Click **Approve**  
-- Your wallet will prompt for approval — this lets the contract access your USDC  
-
-![Provide Step 15](/img/provide-liquidity/ProvideStep15.avif)
-
-
-### Step 16: Deposit into Vault
-
-- After approval, confirm the **deposit transaction**  
-- Gas fees apply (on Base)  
+- After approval, confirm the **deposit transaction**
+- Gas is sponsored if you sign in with Socials
 - Wait for confirmation (10–20 seconds)  
 
-![Provide Step 16](/img/provide-liquidity/ProvideStep16.avif)
+
+![Provide Step 15](/img/provide-liquidity/ProvideStep15.png)
 
 
-### Step 17: Monitor Your Deposit
+### Step 16: Monitor Your Deposit
 
 - Go to the **Sell** tab  
 - You’ll see your active deposit showing:
