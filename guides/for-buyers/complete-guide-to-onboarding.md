@@ -1,4 +1,4 @@
----
+<img width="1696" height="791" alt="Screenshot 2025-10-01 at 13 47 16" src="https://github.com/user-attachments/assets/a07cd5b7-9410-4ad2-88c6-c2e614127b4a" />---
 id: complete-guide-to-onboarding
 title: Complete Guide to Onboarding with ZKP2P
 ---
@@ -39,11 +39,17 @@ Click on the **Buy** tab in the main navigation bar.
 
 ![Onramp Step 4a](/img/onramping/OnrampStep4a.avif)
 
+- Choose your desired Chain and Token
+_ZKP2P currently supports most major chains, including Base, Arbitrum, HyperCore, HyperEVM, Mainnet, Plasma, Solana_
+
+![Onramp Step 4a1](/img/onramping/OnrampStep4a1.png)
+
+
 - Choose the amount of USD you want to send  
 
 ZKP2P will automatically calculate how much USDC you'll receive based on liquidity available.
 
-![Onramp Step 4b](/img/onramping/OnrampStep4b.avif)
+![Onramp Step 4b](/img/onramping/OnrampStep4b.png)
 
 
 ### Step 5: Review Order Details
@@ -55,7 +61,8 @@ ZKP2P will automatically calculate how much USDC you'll receive based on liquidi
 ### Step 6: Start Your Order
 
 - Click the **Start Order** button to proceed  
-- You will be prompted to sign a transaction  
+- You will be prompted to sign a transaction
+- If you logged in with socials, gas is sponsored and you will not have to sign anything. 
 
 ![Onramp Step 6](/img/onramping/OnrampStep6.avif)
 
@@ -75,7 +82,7 @@ For first-time users, you'll need to install the PeerAuth Extension that helps v
 - You'll see a QR code or payment instructions  
 - Send the exact amount to the specified recipient through your payment platform  
 - Make sure to use the correct currency (e.g., USD, EUR)  
-- **Do not perform cross-currency swaps** (e.g., in Revolut), as this can cause verification issues  
+- **Do not perform cross-currency swaps** (e.g., in Revolut), as this can cause verification issues and you may lose your money
 - Return to ZKP2P and click **I have completed payment**  
 
 ![Onramp Step 8](/img/onramping/OnrampStep8.avif)
@@ -95,16 +102,16 @@ If you have multiple payments in your payment platform:
 - Select the correct payment that matches your ZKP2P order  
 - Click **Verify Payment** to continue  
 
-![Onramp Step 10](/img/onramping/OnrampStep10.avif)
+![Onramp Step 10](/img/onramping/OnrampStep10.png)
 
 
 ### Step 11: Wait for Transaction Verification
 
 - The system generates a zero-knowledge proof of your payment  
-- This process is private and secure  
+- This process is private, secure, and done locally on your computer  
 - Wait for the verification to complete (usually around 30 seconds)  
 
-![Onramp Step 11](/img/onramping/OnrampStep11.avif)
+![Onramp Step 11](/img/onramping/OnrampStep11.png)
 
 
 ### Step 12: Receive Your USDC
