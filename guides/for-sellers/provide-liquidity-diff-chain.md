@@ -1,4 +1,3 @@
-
 ---
 id: provide-liquidity-diff-chain
 title: How to Provide Liquidity from a Different Chain
