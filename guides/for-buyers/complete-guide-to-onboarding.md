@@ -1,3 +1,4 @@
+---
 id: complete-guide-to-onboarding
 title: Complete Guide to Onboarding with ZKP2P
 ---
