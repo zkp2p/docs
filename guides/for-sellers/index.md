@@ -17,6 +17,7 @@ You don’t need to be online to manually release crypto. Simply **deposit USDC*
 Below are guides to get started as a seller of USDC on ZKP2P:
 
 - [How to Provide Liquidity and Sell USDC](provide-liquidity-sell-usdc.md)
+- [How to Provide Liquidity from another chain](provide-liquidity-diff-chain.md)
 - [How to Update USDC Conversion Rates](update-usdc-rates.md)
 - [TradingView Links for Setting Conversion Rates](tradingview-links.md)
 - [Calculating APR](calculating-apr.md)
