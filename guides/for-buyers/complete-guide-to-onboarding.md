@@ -1,4 +1,3 @@
-<img width="1696" height="791" alt="Screenshot 2025-10-01 at 13 47 16" src="https://github.com/user-attachments/assets/a07cd5b7-9410-4ad2-88c6-c2e614127b4a" />---
 id: complete-guide-to-onboarding
 title: Complete Guide to Onboarding with ZKP2P
 ---
@@ -118,11 +117,9 @@ If you have multiple payments in your payment platform:
 
 - Once verified, you will be able to complete your order  
 - Click **Complete Order** and sign the transaction to receive your USDC or cryptocurrency  
-![Onramp Step 12](/img/onramping/OnrampStep12.avif)
-
 - Wait for the transaction to finish and use your USDC or crypto on-chain!  
 
-![Onramp Step 12a](/img/onramping/OnrampStep12a.avif)
+![Onramp Step 12a](/img/onramping/OnrampStep12.png)
 
 
 ➡️ _Next: [Handling Verification Issues as a Buyer](handling-verification-issues.md)_
