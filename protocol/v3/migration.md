@@ -25,8 +25,8 @@ What stays the same
 - Currency/method hashing: still keccak256 bytes32 on-chain.
 
 API changes you’ll notice
-- Gating (Curator): use the v2 verify endpoint with the expanded request. See v3/v3-gating-service.
-- Quoter: response now includes deposit success metrics and optional filters (documented in developer API; unchanged in this guide).
+- Gating (Curator): use the v2 verify endpoint with the expanded request. See /protocol/gating-service.
+- Quoter: response now includes deposit success metrics and optional filters.
 
 On-chain calls (before/after)
 - Signal
@@ -46,3 +46,4 @@ Validation tips
 - If `UnifiedPaymentVerifier` rejects with snapshot mismatch errors, compare the attestation snapshot vs on-chain intent fields.
 - If `Nullifier has already been used`, you attempted to reuse the same provider `paymentId` for the same `paymentMethod`.
 - If `Data hash mismatch`, ensure the ABI-encoded `(PaymentDetails, IntentSnapshot)` matches the `dataHash` in the signature.
+

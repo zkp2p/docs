@@ -1,10 +1,9 @@
 ---
 id: v3-attestation-service
-slug: /protocol/v3/attestation-service
-title: Attestation Service (V3)
+title: Attestation Service
 ---
 
-# Attestation Service (V3)
+# Attestation Service
 
 The Attestation Service validates provider proofs off-chain and returns a standardized, signed EIP‑712 PaymentAttestation that the on-chain `UnifiedPaymentVerifier` can verify.
 
@@ -15,7 +14,7 @@ Endpoints
 - `GET /verify/supported` — list supported verifiers with their typed data spec.
 - `POST /verify/{platform}/{actionType}` — verify a provider proof and produce a PaymentAttestation.
 
-POST /verify/{platform}/{actionType}
+`POST /verify/\{platform\}/\{actionType\}`
 Request body (shape)
 ```
 {

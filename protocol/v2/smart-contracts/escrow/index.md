@@ -1,5 +1,5 @@
 ---
-title: Escrow (V2)
+title: Escrow
 ---
 
 ## Overview

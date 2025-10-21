@@ -1,6 +1,5 @@
 ---
 id: v3-architecture
-slug: /protocol/v3/architecture
 title: Architecture
 ---
 

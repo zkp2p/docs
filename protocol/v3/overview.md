@@ -1,6 +1,5 @@
 ---
 id: v3-overview
-slug: /protocol/v3/overview
 title: ZKP2P Protocol V3 — Overview
 ---
 
@@ -35,9 +34,9 @@ Trust model (at a glance)
 - Intent integrity: snapshot values in the attestation are checked against on-chain intent state; nullifiers prevent double-spend; release amount is capped to the signaled amount.
 
 Where to next
-- Architecture: v3/v3-architecture
-- Smart contracts: v3/v3-smart-contracts
-- Attestation Service API: v3/v3-attestation-service
-- Gating Service API (v3 intent): v3/v3-gating-service
-- PeerAuth usage: v3/v3-peerauth-extension
-- Migration guide (V2 → V3): v3/v3-migration
+- Architecture: /protocol/v3/architecture
+- Smart contracts: /protocol/v3/smart-contracts
+- Attestation Service API: /protocol/v3/attestation-service
+- Gating Service API: /protocol/gating-service
+- PeerAuth usage: /protocol/peerauth-extension
+- Migration guide (V2 → V3): /protocol/v3/migration

@@ -1,5 +1,5 @@
 ---
-title: Smart Contracts (V2)
+title: Smart Contracts
 ---
 
 # Smart Contracts

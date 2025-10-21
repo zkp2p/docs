@@ -1,5 +1,5 @@
 ---
-title: PeerAuth Extension (V2)
+title: PeerAuth Extension
 ---
 
 At the heart of ZKP2P, we use a cryptographic technology called zkTLS. zkTLS allows users to securely and privately export data similar to [OAuth](https://oauth.net/2/) but for any website even if there are no public APIs. This is powerful as users can now free their data from monopolies held by the the largest providers such as Google or Facebook.
