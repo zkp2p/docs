@@ -1,6 +1,6 @@
 ---
-id: iescrow
-title: IEscrow 
+id: v2-iescrow
+title: IEscrow (V2)
 ---
 
 The IEscrow interface defines the data structures and function signatures used by the Escrow contract. It helps external contracts and interfaces interact with the escrow in a standardized manner.

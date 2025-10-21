@@ -1,33 +1,51 @@
 module.exports = {
   defaultSidebar: [
     {
-      type: 'doc',
-      id: 'developer-v2-protocol',
-      label: 'The ZKP2P V2 Protocol',
-    },
-    {
       type: 'category',
-      label: 'Smart Contracts',
-      link: { type: 'doc', id: 'smart-contracts/index' },
+      label: 'Protocol V3',
       items: [
+        { type: 'doc', id: 'v3/v3-overview', label: 'Overview' },
+        { type: 'doc', id: 'v3/v3-architecture', label: 'Architecture' },
         {
           type: 'category',
-          label: 'Escrow',
-          link: { type: 'doc', id: 'smart-contracts/escrow/index' },
-          items: ['smart-contracts/escrow/iescrow'],
+          label: 'Smart Contracts',
+          link: { type: 'doc', id: 'v3/v3-smart-contracts' },
+          items: [],
         },
-        'smart-contracts/ipaymentverifier',
-        'smart-contracts/deployments',
+        { type: 'doc', id: 'v3/v3-attestation-service', label: 'Attestation Service' },
+        { type: 'doc', id: 'v3/v3-gating-service', label: 'Gating Service' },
+        { type: 'doc', id: 'v3/v3-peerauth-extension', label: 'PeerAuth Extension' },
+        { type: 'doc', id: 'v3/v3-migration', label: 'Migration (V2 → V3)' },
       ],
     },
     {
       type: 'category',
-      label: 'PeerAuth Extension',
-      link: { type: 'doc', id: 'peerauth-extension/index' },
+      label: 'Protocol V2 (Archived)',
       items: [
-        'peerauth-extension/zk-tls',
+        { type: 'doc', id: 'developer-v2-protocol', label: 'The ZKP2P V2 Protocol' },
+        {
+          type: 'category',
+          label: 'Smart Contracts',
+          link: { type: 'doc', id: 'v2/smart-contracts/index' },
+          items: [
+            {
+              type: 'category',
+              label: 'Escrow',
+              link: { type: 'doc', id: 'v2/smart-contracts/escrow/index' },
+              items: ['v2/smart-contracts/escrow/v2-iescrow'],
+            },
+            'v2/smart-contracts/v2-ipaymentverifier',
+            'v2/smart-contracts/v2-deployments',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'PeerAuth Extension',
+          link: { type: 'doc', id: 'v2/peerauth-extension/index' },
+          items: ['v2/peerauth-extension/zk-tls'],
+        },
+        'v2/gating-service',
       ],
     },
-    'gating-service'
   ],
 };

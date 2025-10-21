@@ -1,6 +1,6 @@
 ---
-id: ipaymentverifier
-title: IPaymentVerifier
+id: v2-ipaymentverifier
+title: IPaymentVerifier (V2)
 ---
 
 ### Overview

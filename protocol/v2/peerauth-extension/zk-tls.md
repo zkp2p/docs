@@ -1,6 +1,6 @@
 ---
 id: zk-tls
-title: zkTLS
+title: zkTLS (V2)
 ---
 
 # zkTLS

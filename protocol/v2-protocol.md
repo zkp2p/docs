@@ -1,6 +1,6 @@
 ---
 id: developer-v2-protocol
-title: The ZKP2P Protocol
+title: The ZKP2P V2 Protocol
 ---
 
 # The ZKP2P Protocol
@@ -72,4 +72,3 @@ ZKP2P utilizes [TLSNotary](https://tlsnotary.org/) for certain flows to enable T
 
 ### TLSProxy Libraries
 ZKP2P V2 utilizes Proxy based TLS protocols such as [Reclaim](https://reclaimprotocol.org/) to verify payments.
-

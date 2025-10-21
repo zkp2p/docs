@@ -1,6 +1,6 @@
 ---
-id: deployments
-title: Deployments
+id: v2-deployments
+title: Deployments (V2)
 ---
 
 ## Base
