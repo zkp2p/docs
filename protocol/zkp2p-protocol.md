@@ -1,6 +1,5 @@
 ---
 id: zkp2p-protocol
-slug: /protocol/zkp2p-protocol
 title: The ZKP2P Protocol
 ---
 

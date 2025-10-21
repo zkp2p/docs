@@ -1,6 +1,5 @@
 ---
 id: v3-migration
-slug: /protocol/v3/migration
 title: Migration Guide (V2 → V3)
 ---
 
@@ -46,4 +45,3 @@ Validation tips
 - If `UnifiedPaymentVerifier` rejects with snapshot mismatch errors, compare the attestation snapshot vs on-chain intent fields.
 - If `Nullifier has already been used`, you attempted to reuse the same provider `paymentId` for the same `paymentMethod`.
 - If `Data hash mismatch`, ensure the ABI-encoded `(PaymentDetails, IntentSnapshot)` matches the `dataHash` in the signature.
-

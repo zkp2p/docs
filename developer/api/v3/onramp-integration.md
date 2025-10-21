@@ -6,7 +6,7 @@ slug: /developer/api/v3/onramp
 # Onramp
 
 :::info
-This page contains documentation and APIs for a headless integration with the ZKP2P protocol. For a faster redirect flow integration, see [Redirect Integration](../integrate-zkp2p/integrate-redirect-onramp.md).
+This page contains documentation and APIs for a headless integration with the ZKP2P protocol. For a faster redirect flow integration, see [Redirect Integration](../../integrate-zkp2p/integrate-redirect-onramp.md).
 :::
 
 ## Getting Started
@@ -603,7 +603,7 @@ Always wrap API calls in try-catch blocks for proper error handling.
 </html>
 ```
 
-Once `fetchProofById` returns a `proof` with `status` of `"success"`, the proof is valid and can be used to call `fulfillIntent` on the Escrow contract. See [Escrow Calldata](#escrow-calldata) for more details.
+Once `fetchProofById` returns a `proof` with `status` of `"success"`, the proof is valid and can be used to call `fulfillIntent` on the Orchestrator. See [On-chain Calls](#on-chain-calls) for details.
 
 ## Help?
 
