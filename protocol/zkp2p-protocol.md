@@ -1,5 +1,5 @@
 ---
-id: developer-v2-protocol
+id: zkp2p-protocol
 title: The ZKP2P Protocol
 ---
 
@@ -21,13 +21,31 @@ With the current ZKP2P protocol, we are a doubling down of this vision to create
 4. No optional identity verification layer to unlock higher limits
 5. Proving speed
 
-## The Protocol
-ZKP2P is a set of generic escrow smart contracts, crypto primitives and supporting relayers and interfaces that enable seamless exchange between web2 and web3. The protocol now supports the following:
-1. Generic to any payment platform and fiat currency as long as the platform uses a server
+## The V2 Protocol
+
+The ZKP2P V2 protocol was designed from the ground up to make it more generic, capital efficient and composable. The protocol now supports the following:
+1. Generic to any payment platform and fiat currency as long as the platform uses a server to server API to generate proofs
 2. Offchain gating service to enable pre transaction optional identity verification and gate liquidity to specific users
 3. Capital efficiency for sellers. Sellers can specify all fiat and platforms they are willing to receive payment in supported in the protocol for their deposited liquidity. This is in contrast to providing liquidity for each pool by itself
 4. Supports any cryptographic primitives including TEEs. Cryptographic primitives have been evolving rapidly and will continue to do so, therefore, the protocol must adapt to be able to support any primitive in the future
 5. Non custodial. V2 moves all logic that is not associated with fund transfers or custody to supporting relayers which decreases latency and steps for parties transacting in the protocol. While leveraging the blockchain for decentralization, and the non custodial nature of smart contracts. No one has access to user funds except themselves. And that will always remain the case
+
+
+Below is an illustrative example of the V2 protoclol flow using TLSNotary as the cryptographic primitive.
+
+![Protocol Overview](/img/developer/ZKP2PProtocolOverview.jpeg)  
+
+# The V3 Protocol
+
+ZKP2P V3 enables permissionless, non‑custodial exchange between off‑chain payments and on‑chain tokens with faster attestations, a simpler on‑chain surface, and clearer integration points. It builds on V2 with an off‑chain Attestation Service and a unified on‑chain verifier, while keeping funds trustless in Escrow smart contracts.
+
+At a Glance
+- Off‑chain attestation: proofs (e.g., Reclaim/TLSNotary) are validated off‑chain and returned as an EIP‑712 PaymentAttestation.
+- Unified on‑chain verification: a single `UnifiedPaymentVerifier` checks the attestation and enforces protocol rules (snapshot match, nullifiers, capping).
+- Orchestrated intents: `Orchestrator` owns the intent lifecycle (signal, cancel, fulfill) and fee routing; `Escrow` focuses on deposits and token custody.
+- Typed methods: payment “methods” are bytes32 identifiers (e.g., keccak256("venmo")) resolved through a registry, decoupling on‑chain logic from provider addresses.
+- Cleaner APIs: gating/signing includes method, fiat, conversion rate, and addresses; quotes expose richer filters and deposit stats.
+
 
 ## User Flow
 **Signal Intent:** The buyer indicates an intention to on-ramp by creating an order and specifying the amount of the onchain asset they wish to receive. Once the order is created, the corresponding offramper's liquidity is locked in escrow the buyer a period of time to complete the offchain payment and generate a proof of transaction.
@@ -47,18 +65,19 @@ ZKP2P is a set of generic escrow smart contracts, crypto primitives and supporti
 - Adequacy of the payment amount
 - Timing of the payment post-intent
 
-Below is an illustrative example of a flow using MPC-TLS (TLSNotary) which can be extended to any crypto primitive.
-
-![Protocol Overview](/img/developer/ZKP2PProtocolOverview.png)  
 
 ## The Tech Stack
-**Escrow Protocol:** Smart contracts on the Ethereum blockchain enable trustless transactions and manage the logic of the protocol.
+**Smart Contract Protocol:** Smart contracts on the Ethereum blockchain enable trustless transactions and manage the logic of the protocol. They are responsible for managing the deposits and intents and the logic for unlocking the escrowed funds.
 
 **Circuits / zkTLS protocol:** Cryptographic primitives that enable generation of private, secure and verifiable credentials to validate payments were made properly in a web2 context. Under the hood, these are proxy-TLS (Reclaim), MPC-TLS (TLSNotary), zkEmail and TEEs
 
 **PeerAuth Extension / Appclip:**  Browser extension and mobile appclip that enables users to generate privacy preserving web proofs using any cryptographic primitive (zkTLS, TLSNotary, zkEmail etc) similar to OAuth
 
 **Gating Service:**  Backend service that curates validates intents enabling sellers to only offer liquidity to users who pass any optional additional verification. Sellers trust the Gating Service to prevent buyers from submitting an intent to their liquidity if they haven't satisfied certain requirements (e.g. user identity). The gating service does not custody or touch funds ever. Conforms to a standard gating service specification as defined by the ZKP2P protocol.
+
+**Attestation Service:** The attestation service is a backend service that validates proofs and returns an EIP-712 PaymentAttestation. It abstracts the complexity of zkTLS proof parsing and verification from the smart contracts. It also enables the protocol to support multiple zkTLS primitives going forward. It will be extended to support TEEs in the future.
+
+**Quoter Backend:** The quoter backend is a backend service that provides the best quotes for the protocol. It indexes all the liquidity in the protocol and provides a REST API for the front end to fetch quotes.
 
 **User Interface (UI):** The UI is the front-end through which users interact with the protocol.
 
@@ -72,4 +91,3 @@ ZKP2P utilizes [TLSNotary](https://tlsnotary.org/) for certain flows to enable T
 
 ### TLSProxy Libraries
 ZKP2P V2 utilizes Proxy based TLS protocols such as [Reclaim](https://reclaimprotocol.org/) to verify payments.
-

@@ -164,9 +164,7 @@ a[href^="http"]::after,
 a[href^="https"]::after,
 svg[aria-label*="external"],
 svg[title*="external"],
-svg[data-icon="external-link"],
-a::after,
-a::before {
+svg[data-icon="external-link"] {
   display: none;
   content: none;
 }
