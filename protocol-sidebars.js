@@ -11,7 +11,6 @@ module.exports = {
       collapsed: false,
       items: [
         { type: 'doc', id: 'v3/v3-overview', label: 'Overview' },
-        { type: 'doc', id: 'v3/v3-architecture', label: 'Architecture' },
         {
           type: 'category',
           label: 'Smart Contracts',
