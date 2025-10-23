@@ -22,8 +22,9 @@ With the current ZKP2P protocol, we are a doubling down of this vision to create
 5. Proving speed
 
 ## The V2 Protocol
-ZKP2P is a set of generic escrow smart contracts, crypto primitives and supporting relayers and interfaces that enable seamless exchange between web2 and web3. The protocol now supports the following:
-1. Generic to any payment platform and fiat currency as long as the platform uses a server
+
+The ZKP2P V2 protocol was designed from the ground up to make it more generic, capital efficient and composable. The protocol now supports the following:
+1. Generic to any payment platform and fiat currency as long as the platform uses a server to server API to generate proofs
 2. Offchain gating service to enable pre transaction optional identity verification and gate liquidity to specific users
 3. Capital efficiency for sellers. Sellers can specify all fiat and platforms they are willing to receive payment in supported in the protocol for their deposited liquidity. This is in contrast to providing liquidity for each pool by itself
 4. Supports any cryptographic primitives including TEEs. Cryptographic primitives have been evolving rapidly and will continue to do so, therefore, the protocol must adapt to be able to support any primitive in the future
