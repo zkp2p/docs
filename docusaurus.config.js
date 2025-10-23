@@ -2,7 +2,7 @@
 // `@type` JSDoc annotations allow editor autocompletion and type checking
 // (when paired with `@ts-check`).
 
-import {themes as prismThemes} from 'prism-react-renderer';
+import { themes as prismThemes } from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -101,7 +101,7 @@ const config = {
           src: 'img/logo.svg',
         },
         items: [
-                    {
+          {
             type: 'docSidebar',
             sidebarId: 'defaultSidebar',
             docsPluginId: 'guides',
@@ -158,7 +158,7 @@ const config = {
               },
               {
                 label: 'Protocol',
-                to: '/protocol/developer-v2-protocol',
+                to: '/protocol/zkp2p-protocol',
               },
               {
                 label: 'Developer',
