@@ -74,6 +74,8 @@ At a Glance
 
 **Gating Service:**  Backend service that curates validates intents enabling sellers to only offer liquidity to users who pass any optional additional verification. Sellers trust the Gating Service to prevent buyers from submitting an intent to their liquidity if they haven't satisfied certain requirements (e.g. user identity). The gating service does not custody or touch funds ever. Conforms to a standard gating service specification as defined by the ZKP2P protocol.
 
+**Attestation Service:** The attestation service is a backend service that validates proofs and returns an EIP-712 PaymentAttestation. It abstracts the complexity of zkTLS proof parsing and verification from the smart contracts. It also enables the protocol to support multiple zkTLS primitives going forward. It will be extended to support TEEs in the future.
+
 **Quoter Backend:** The quoter backend is a backend service that provides the best quotes for the protocol. It indexes all the liquidity in the protocol and provides a REST API for the front end to fetch quotes.
 
 **User Interface (UI):** The UI is the front-end through which users interact with the protocol.
