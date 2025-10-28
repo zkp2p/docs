@@ -10,7 +10,7 @@ export default function Team() {
       name: 'Richard',
       role: '',
       bio: '',
-      telegram: 'richard2015',
+      telegram: 'https://t.me/richard2015',
       twitter: 'https://x.com/richardzliang',
       github: 'https://github.com/richardliang',
       image: '/img/team/richard.jpg'
@@ -19,7 +19,7 @@ export default function Team() {
       name: 'Sachin',
       role: '',
       bio: '',
-      telegram: 'Sachin0x',
+      telegram: 'https://t.me/Sachin0x',
       twitter: 'https://x.com/0xSachinK',
       github: 'https://github.com/0xSachinK',
       image: '/img/team/sachin.jpg'
@@ -47,7 +47,7 @@ export default function Team() {
       bio: '',
       twitter: 'https://x.com/KeanZkp2p',
       github: '',
-      telegram: '@ZKP2P_0x',
+      telegram: 'https://t.me/ZKP2P_0x',
       image: '/img/team/kean.jpg'
     }
   ];
