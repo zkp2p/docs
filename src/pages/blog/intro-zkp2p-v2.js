@@ -34,6 +34,8 @@ Today, we're launching ZKP2P V2, the next version of our decentralized on/offram
 
 Get started at [zkp2p.xyz](https://www.zkp2p.xyz)
 
+![Onramp overview – Venmo to ETH in ~60 seconds](/img/v2/v2_venmo_to_eth.png)
+
 ZKP2P V1 was launched in November 2023 as a proof of concept demonstrating the first-ever onchain, trust-minimized and peer-to-peer on/off-ramp. Sellers could provide USDC liquidity to an escrow smart contract, while buyers used ZKEmail to prove they had sent Venmo payments to the seller to instantly unlock funds—no centralized intermediaries required for settlement or dispute resolution.
 
 Since then, our team has spent 2024 exploring applications using additional primitives such as zkEmail, zkTLS, TLSNotary to facilitate the creation of novel markets to trade digital goods onchain. These include:
@@ -65,6 +67,8 @@ V2 incorporates the latest in programmable cryptography systems, product and UX 
 
 4. Streamlined workflow. We've rewritten our entire stack to significantly reduce the number of steps required for onramping. This includes usage of a headless extension flow and appclips on mobile for verifying payments–no more popups or app downloads. Onramping fiat to crypto end-to-end now takes around 60 seconds.
 
+![Liquidity dashboard example](/img/v2/v2_liquidity_table.png)
+
 In V1, we supported 4 currencies (INR, USD, TRY, EUR). V2 now supports 23 currencies. In V1, we only supported Base and USDC as the only chain and asset. V2 initially supports 4 chains (Solana, Base, Ethereum, Polygon) and many more tokens including ETH, SOL, POL, TRUMP, AERO and more.
 
 ## Under the Hood
@@ -76,6 +80,8 @@ To recap, the ZKP2P V1 protocol was a simple construction:
 - Buyer unlocks onchain assets atomically by submitting a proof of payment generated using ZK or MPC to the escrow
 
 ZKP2P V2 supercharges this base V1 workflow with 2 new design considerations in mind: extensibility and separation of concerns.
+
+![High-level V2 flow](/img/v2/v2_flow_simple.png)
 
 ### Extensibility:
 V2 is designed to be maximally flexible, which means a generic escrow protocol that supports any ERC20 token and unlocking condition. These predicates can be defined using any programmable crypto primitive including zkEmail, zkTLS, MPCTLS, and TEEs (and anything in the future). For example, we can support:
@@ -89,6 +95,8 @@ V2 is designed to be maximally flexible, which means a generic escrow protocol t
 4. If a decentralized verifier committee resolves an attestation that $X was transferred correctly
 
 Our [PeerAuth extension](https://chromewebstore.google.com/detail/peerauth-authenticate-and/ijpgccednehjpeclfcllnjjcmiohdjih) is the interface to authenticating into and generating proofs for each of these primitives. Developers can integrate new payment platforms in days rather than months—no custom ZK circuits required.
+
+![PeerAuth stack and flows](/img/v2/v2_peerauth_stack.png)
 
 At launch, we currently support the proxy-TLS protocol, but will be quickly rolling out support for MPC-TLS, TEEs and zkEmail.
 
@@ -104,6 +112,8 @@ Today, anyone can run a relaying service fully customizable to how they want to 
 - Users can also opt to not use a relayer and choose to use the blockchain directly as a database (similar to ZKP2P V1)
 
 For more details on our tech stack, check out our [docs](https://docs.zkp2p.xyz).
+
+![Generic escrow architecture](/img/v2/v2_generic_escrow.png)
 
 ### Whats next
 Launch is just the beginning. We're committed to:
