@@ -51,6 +51,24 @@ const config = {
   ],
 
   plugins: [
+    function rawMdLoader() {
+      return {
+        name: 'raw-md-loader',
+        configureWebpack() {
+          return {
+            module: {
+              rules: [
+                {
+                  test: /\.md$/i,
+                  resourceQuery: /raw/,
+                  type: 'asset/source',
+                },
+              ],
+            },
+          };
+        },
+      };
+    },
     [
       '@docusaurus/plugin-content-docs',
       {
