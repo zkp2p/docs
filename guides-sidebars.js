@@ -13,8 +13,8 @@ module.exports = {
       items: [
         'for-buyers/complete-guide-to-onboarding',
         'for-buyers/handling-verification-issues',
-        'for-buyers/migrating-smart-account-buyer',
-      ],
+        'for-buyers/guide-to-partial-release'
+        ],
     },
     {
       type: 'category',
@@ -24,10 +24,8 @@ module.exports = {
         'for-sellers/provide-liquidity-sell-usdc',
         'for-sellers/provide-liquidity-diff-chain',
         'for-sellers/update-usdc-rates',
-        'for-sellers/tradingview-links',
         'for-sellers/calculating-apr',
-        'for-sellers/manual-releases',
-        'for-sellers/migrating-smart-account-seller'
+        'for-sellers/manual-releases'
 
       ],
     },

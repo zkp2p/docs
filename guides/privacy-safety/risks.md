@@ -35,3 +35,4 @@ title: Risks
 ### Audits
 -   Reclaim circuits that are used in our zkTLS flows are [audited by ZKSecurity](https://www.zksecurity.xyz/blog/posts/reclaim/)
 -   ZKP2P V2 Protocol has been audited by independent smart contract security engineers and Sherlock.
+-   ZKP2P V3 Protocol has been audited by independent smart contract security engineers, Sherlock, and Scroll.

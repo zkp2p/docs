@@ -29,7 +29,7 @@ export default function Blogs() {
       title: 'Introducing ZKP2P v3',
       excerpt: 'V3 scales the on/offramp: modular Escrow/Orchestrator contracts, flexible verification via TEEs with EIP-712 attestations, and better UX for buyers, LPs, and developers.',
       date: '2025-10-28',
-      image: '/img/v3/v3_protocol_diagram.png',
+      image: '/img/v3/v3-header.png',
       link: '/blog/intro-zkp2p-v3',
       content: `Since launching V2 in February, we’ve grown from $30k to $300k weekly volume and crossed $1M monthly. V3 separates Escrow (deposit configuration/locking) from Orchestrator (intent lifecycle, gating, fees, post-hooks) and moves verification to a TEE attestation service that emits EIP-712 payment attestations, verified onchain via a Unified Payment Verifier. Buyers get partial release and faster proving; LPs get easier deposit management and upcoming A.R.M.; developers get affiliate fees, post-settlement hooks, and faster provider onboarding.`
     },

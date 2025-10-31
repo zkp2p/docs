@@ -4,7 +4,7 @@ Since launching V2 in February, we’ve had exponential growth, going from $30k 
 
 ![ZKP2P V2 Volume](/img/zkp2p-v3/volume.png)
 
-We’d made onramping and offramping via web2 payment providers easier, faster, and cheaper than CEXs and traditional ramps, but there is still work to be done to improve the user and developer experience. Over the past 4 months, 1 in ~4 support tickets were from wrong currency payment errors. Liquidity Providers need to check rates constantly against rate fluctuations. Every new payment provider integration required a custom smart contract. 
+We’d made onramping and offramping via web2 payment providers easier, faster, and cheaper than CEXs and traditional ramps, but there is still work to be done to improve the user and developer experience. We've had a lot of feedback over wrong currency payment errors. Liquidity Providers need to check rates constantly against rate fluctuations. Every new payment provider integration required a custom smart contract. 
 
 V2 solved the first and last mile for stablecoin payments, V3 scales it. We’ve increased the flexibility of our verification allowing for partial release of payments, eliminating the need for manual intervention. Liquidity providers will soon be able to set spreads, not prices. New providers do not need a custom smart contract, speeding up the process and removing the reliance on our team. Protocols who integrate zkp2p can finally monetise and earn through affiliate fees, and include post-settlement hooks. 
 
