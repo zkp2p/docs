@@ -37,11 +37,11 @@ Since launching V2 in February, we've had exponential growth, going from $30k to
 
 We'd made onramping and offramping via web2 payment providers easier, faster, and cheaper than CEXs and traditional ramps, but there is still work to be done to improve the user and developer experience. Over the past 4 months, we've received a lot of feedback about wrong currency payment errors. Liquidity Providers need to check rates constantly against rate fluctuations. Every new payment provider integration required a custom smart contract.
 
-V2 solved the first and last mile for stablecoin payments, V3 scales it. We've increased the flexibility of our verification allowing for partial release of payments, eliminating the need for manual intervention. Liquidity providers will soon be able to set spreads, not prices. New providers do not need a custom smart contract, speeding up the process and removing the reliance on our team. Protocols who integrate zkp2p can finally monetise and earn through affiliate fees, and include post-settlement hooks.
+V2 solved the first and last mile for stablecoin payments, V3 scales it. We've increased the flexibility of our verification allowing for partial release of payments, eliminating the need for manual intervention. Liquidity providers will soon be able to set spreads, not prices. New providers do not need a custom smart contract, speeding up the process and removing the reliance on our team. Protocols who integrate ZKP2P can finally monetise and earn through affiliate fees, and include post-settlement hooks.
 
 We've kept the same product you love, and made it better.
 
-V3 is live at zkp2p.xyz.
+V3 is live at [zkp2p.xyz](https://zkp2p.xyz).
 
 ### Modular Smart Contracts
 
@@ -98,13 +98,18 @@ One vault, with total flexibility.
 
 ### Progressive Decentralization
 
-In V2, we relied on a single, centralised notary, which concentrated trust and made decentralisation more important as volume grew. V3's vendor-agnostic design sets the groundwork for what comes next.
+In V2, we relied on a single, centralized notary, concentrating trust and making decentralization increasingly important as our volume scaled.
 
-We're building zkp2p to be pluggable into any attestor network, from Primus and TLSNotary, to TEE based solutions like Phala, and even traditional ZK approaches like ZKEmail. Rotating attestors and onchain membership checks reduce reliance on any single operator whilst keeping proving fast. Over the coming months, we're going to progressively decentralise verification and distribute trust over these networks.
+The new attestation service is vendor-agnostic and supports any zkTLS proof provider, including TLSNotary, Primus, and Reclaim Protocol. It accommodates a range of attestation transformation techniques, such as TEEs, EigenLayer, or validators. This design enables ZKP2P to flexibly transition to decentralized notary networks as they mature.
 
-Beyond attestation, our new Unified Payment Verifiers lets us support 100x our current payment providers and expand what zkp2p can support. We can unlock global liquidity pools that were previously out of reach and support regions, like China through Alipay, where onramping and offramping is still a challenge. As well as this, we can speed up our integrations, enabling platforms to plug in faster and use our stack to serve their users.
+Our  Unified Payment Verifier lets us support more payment providers and slashes development time. We're able to unlock global liquidity pools that were previously out of reach and support regions like China (via Alipay) where onramping and offramping remain a challenge.
 
-This roadmap preserves the trust guarantees our users expect whilst scaling to meet demand. zkp2p V3 takes the first and last mile stablecoin foundation set by V2, and lets it scale.
+
+### What's next?
+
+Beyond attestation, our new Unified Payment Verifiers lets us support and expand our current payment providers. We can unlock global liquidity pools that were previously out of reach and support regions, like China through Alipay, where onramping and offramping is still a challenge. As well as this, we can speed up our integrations, enabling platforms to plug in faster and use our stack to serve their users.
+
+This roadmap preserves the trust guarantees our users expect whilst scaling to meet demand. ZKP2P V3 takes the first and last mile stablecoin foundation set by V2, and lets it scale.
 
 Buyers get automatic unlocks and need to create fewer support tickets.
 
@@ -112,13 +117,13 @@ Liquidity Providers manage one vault and set spreads instead of fixed rates.
 
 Developers integrate faster and earn fees.
 
-If you're building and want to integrate zkp2p, reach out on [Twitter](https://www.x.com/zkp2p) or [Telegram](https://www.t.me/zk_p2p).
+If you're building and want to integrate ZKP2P, reach out on [Twitter](https://www.x.com/zkp2p) or [Telegram](https://www.t.me/zk_p2p).
 
 CEXs had their moment. Traditional ramps are legacy infrastructure. ZKP2P V3 is P2P rails at scale, automated, composable, onchain.
 
 The future of on/offramps is permissionless, and it starts here.
 
-Try V3 today at zkp2p.xyz.
+Try V3 today at [zkp2p.xyz](https://zkp2p.xyz).
     `
   };
 
