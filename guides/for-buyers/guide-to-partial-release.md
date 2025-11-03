@@ -20,4 +20,8 @@ If you've created an order for €10 (EURO), to receive 11.6 USDC, but you've ac
 
 1. Create an order of €10 (EURO) for 11.6 USDC 
 2. Send $10 (USD) instead of €10 (EURO)
-3. 
+3. The system converts $10 (USD) to its EUR equivalent (approximately €9.25 at current rates)
+4. Calculate proportion: €9.25 / €10 = 92.5% of expected payment
+5. 11.6 USDC * 92.5% = 10.73 USDC (before penalty)
+6. Small penalty fee is applied to cover seller's conversion fees
+7. You receive your USDC and can continue onchain
