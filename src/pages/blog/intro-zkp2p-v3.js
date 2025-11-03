@@ -35,14 +35,14 @@ Since launching V2 in February, we've had exponential growth, going from $30k to
 ![ZKP2P V2 Volume](/img/v3/v2_volume.png)
 *Figure 1: ZKP2P V2 weekly and monthly volume growth*
 
-V2 made onramping and offramping with web2 payment providers dramatically easier, faster, and cheaper than CEXs or traditional ramps. But it still left some pain points for users and developers. Buyers often ran into issues with wrong-currency payments. Liquidity providers needed to constantly monitor and update their rates to account for market fluctuations. And every time we wanted to support a new payment provider, it required engineering a new custom smart contract—slowing down integrations and increasing maintenance overhead.
+V2 made onramping and offramping with web2 payment providers dramatically easier, faster, and cheaper than CEXs or traditional ramps. But it still left some pain points for users and developers. Buyers often ran into issues with wrong currency payments. Liquidity providers needed to constantly monitor and update their rates to account for market fluctuations. And every time we wanted to support a new payment provider, it required engineering a new custom smart contract, which slowed down integrations and increased maintenance overhead.
 
 V2 solved the first and last mile for stablecoin payments, V3 scales it. We’ve increased the flexibility of our verification allowing for partial release of payments, eliminating the need for manual intervention. Liquidity providers will soon be able to set spreads, not prices. New providers do not need a custom smart contract, speeding up the process and removing the reliance on our team. Protocols who integrate zkp2p can finally monetise and earn through affiliate fees, and include post-settlement hooks. 
 
 We’ve kept the same product you love, and made it better. 
 
 ## Modular Smart Contracts
-In V2, all core logic—including deposit setup, verification, and managing intent lifecycles—lived inside a single contract. This monolithic design made upgrades challenging and limited flexibility for liquidity providers. In V3, we've modularized the protocol with two main contracts: Escrow and Orchestrator.
+In V2, all core logic including deposit setup, verification, and managing intent lifecycles lived inside a single contract. This monolithic design made upgrades challenging and limited flexibility for liquidity providers. In V3, we have modularized the protocol with two main contracts: Escrow and Orchestrator.
 
 The Escrow contracts are responsible for managing deposits: they lock funds, enforce deposit configurations, and allow liquidity providers to manage their balances more flexibly. With Escrow, LPs can partially top up or withdraw, update payment providers, add or remove supported currencies, and adjust deposit limits—all without the need to deploy a new vault every time.
 
