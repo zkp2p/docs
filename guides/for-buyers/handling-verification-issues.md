@@ -11,10 +11,8 @@ When you buy USDC or crypto through ZKP2P, the platform tries to automatically v
 
 - The PeerAuth extension couldn't properly load your payment  
 - Technical issues with the payment platform  
-- Mistake when making payment (e.g. wrong payment currency, wrong amount sent)  
 
 ![Step 1](/img/verification/VerificationStep1.avif)
-
 
 
 ### Step-by-Step: What to Do When Verification Fails
@@ -24,16 +22,6 @@ When you buy USDC or crypto through ZKP2P, the platform tries to automatically v
 1. Click the **"Proof Gen Failed – Try again"** button  
 2. Wait 30 seconds for another verification attempt  
 3. Sometimes a simple retry solves the issue  
-
-#### Double-Check Your Payment
-
-1. Ensure you've sent the **exact amount requested** (e.g., €8.00)  
-2. Verify you sent in the **correct currency** (e.g., EUR not USD)  
-3. Confirm you sent to the **correct recipient** (e.g., `zkp2prevolut`)  
-4. Make sure you **didn't perform a cross-currency swap** (which can cause verification issues)
-
-![Step 2](/img/verification/VerificationStep2.avif)
-
 
 #### Check Your Extension
 

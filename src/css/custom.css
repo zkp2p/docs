@@ -1029,6 +1029,8 @@ input:focus, textarea:focus {
   color: #D1D5DB;
   line-height: 1.8;
   font-size: 1.1rem;
+  text-align: justify;  /* Add text justification */
+  text-justify: inter-word;  /* Better word spacing for justified text */
 }
 
 .blog-content h2 {
@@ -1050,6 +1052,7 @@ input:focus, textarea:focus {
 
 .blog-content p {
   margin-bottom: var(--zkp2p-spacing-4);
+  text-align: justify;  /* Ensure paragraphs are justified */
 }
 
 .blog-content ul,
@@ -1060,6 +1063,7 @@ input:focus, textarea:focus {
 
 .blog-content li {
   margin-bottom: var(--zkp2p-spacing-2);
+  text-align: justify;  /* Also justify list items */
 }
 
 .blog-content a {
@@ -1088,6 +1092,19 @@ input:focus, textarea:focus {
   max-width: 100%;
   height: auto;
   margin: var(--zkp2p-spacing-4) auto;
+}
+
+/* Image caption styling - italicized text after images */
+.blog-content img + em {
+  display: block;
+  text-align: center !important;  /* Override text-justify from parent */
+  color: #9CA3AA;
+  font-size: 0.85rem;  /* Smaller than normal text (1.1rem) */
+  margin-top: -0.5rem;  /* Bring caption closer to image */
+  margin-bottom: var(--zkp2p-spacing-5);
+  font-style: italic;
+  line-height: 1.4;
+  font-weight: 400;
 }
 
 .blogs-grid {
@@ -1284,6 +1301,7 @@ input:focus, textarea:focus {
 
 .blog-content p {
   margin-bottom: var(--zkp2p-spacing-4);
+  text-align: justify;  /* Ensure paragraphs are justified */
 }
 
 .blog-content ul,
@@ -1294,6 +1312,7 @@ input:focus, textarea:focus {
 
 .blog-content li {
   margin-bottom: var(--zkp2p-spacing-2);
+  text-align: justify;  /* Also justify list items */
 }
 
 .blog-content a {
