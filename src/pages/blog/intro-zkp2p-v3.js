@@ -102,12 +102,10 @@ In V2, we relied on a single, centralized notary, concentrating trust and making
 
 The new attestation service is vendor-agnostic and supports any zkTLS proof provider, including TLSNotary, Primus, and Reclaim Protocol. It accommodates a range of attestation transformation techniques, such as TEEs, EigenLayer, or validators. This design enables ZKP2P to flexibly transition to decentralized notary networks as they mature.
 
-Our  Unified Payment Verifier lets us support more payment providers and slashes development time. We're able to unlock global liquidity pools that were previously out of reach and support regions like China (via Alipay) where onramping and offramping remain a challenge.
-
 
 ### What's next?
 
-Beyond attestation, our new Unified Payment Verifiers lets us support and expand our current payment providers. We can unlock global liquidity pools that were previously out of reach and support regions, like China through Alipay, where onramping and offramping is still a challenge. As well as this, we can speed up our integrations, enabling platforms to plug in faster and use our stack to serve their users.
+Beyond attestation, our new Unified Payment Verifiers lets us support more payment providers while reducing development time. We can unlock global liquidity pools that were previously out of reach and support regions, like China through Alipay, where onramping and offramping is still a challenge.
 
 This roadmap preserves the trust guarantees our users expect whilst scaling to meet demand. ZKP2P V3 takes the first and last mile stablecoin foundation set by V2, and lets it scale.
 
