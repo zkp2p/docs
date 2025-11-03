@@ -107,7 +107,7 @@ This launch is just the beginning. We will be leveraging the ZKP2P V3 protocol a
 - Decentralizing the stack over time and making ZKP2P unstoppable and autonomous
 
 Reach out to us:
-- If you're interested in any of the above, our DMs are open! Reach out on Telegram https://t.me/zk_p2p.
+- If you're interested in any of the above, our DMs are open! Reach out on Telegram [@zk_p2p](https://t.me/zk_p2p).
 - If you’re building an app and want a fast, zero fee, and reliable onramping solution, let’s talk.
 - If you’re a dev wanting to integrate your local payment platform into V3, we’ll help you get started.
 
