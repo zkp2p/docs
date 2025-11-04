@@ -296,6 +296,8 @@ interface IProofParams {
 interface INewTabParams {
   actionType: string;
   platform: string;
+  // Optional engine override from the client
+  proofEngine?: 'legacy' | 'reclaim';
 }
 
 interface IMetadataMessage {
