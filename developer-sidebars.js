@@ -9,7 +9,6 @@ module.exports = {
       items: [
         { type: 'doc', id: 'api/v3/onramp-integration', label: 'Onramp Integration' },
         { type: 'doc', id: 'api/v3/offramp-integration', label: 'Offramp Integration' },
-        { type: 'doc', id: 'api/v3/post-intent-hooks', label: 'Post‑Intent Hooks' },
       ],
     },
     {
@@ -22,6 +21,7 @@ module.exports = {
         { type: 'doc', id: 'api/offramp-integration', label: 'Offramp Integration' },
       ],
     },
+    { type: 'doc', id: 'post-intent-hooks', label: 'Post‑Intent Hooks' },
     'build-new-provider',
   ],
 };
