@@ -18,6 +18,7 @@ module.exports = {
           items: [
             'v3/smart-contracts/escrow/index',
             'v3/smart-contracts/orchestrator',
+            'v3/smart-contracts/post-intent-hooks',
             'v3/smart-contracts/unified-payment-verifier',
           ],
         },
