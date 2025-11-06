@@ -21,6 +21,7 @@ module.exports = {
         { type: 'doc', id: 'api/offramp-integration', label: 'Offramp Integration' },
       ],
     },
+    { type: 'doc', id: 'post-intent-hooks', label: 'Post‑Intent Hooks' },
     'build-new-provider',
   ],
 };
