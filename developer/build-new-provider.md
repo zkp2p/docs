@@ -10,7 +10,7 @@ ZKP2P is an open and permissionless protocol. We've now made it very easy for an
 To build a new integration for your local payment platform, you will need to implement:
 
 1. A zkTLS provider template to generate a proof of payment
-2. A verifier contract in Solidity
+
 
 If you have any questions please do not hesitate to contact us on [Telegram](https://t.me/zk_p2p/4710)
 
@@ -24,8 +24,8 @@ To get started building a new provider:
 4. Create a new directory and JSON file and add the necessary provider data for your integration
 5. Test your integration by going to [developer.zkp2p.xyz](https://developer.zkp2p.xyz/)
 6. Click on Open Settings on the page and set Base URL to `http://localhost:8080/`. Any changes to your JSON will now be reflected in the extension and developer app
-7. Update `actionType` and `platform` with the right values. The path to your provider is `localhost:8080/{platform_name}/{provider_name}.json`
-8. Click Authenticate to extract metadata
+7. Update `actionType`, `platform`, and set `proofEngine` to `"reclaim"`. The path to your provider is `localhost:8080/{platform_name}/{provider_name}.json`
+8. Click Authenticate to extract metadata (if your template defines `userInput`, click a transaction when prompted)
 9. If successful, proceed to Prove a specific transaction
 
 ## 1. Build a zkTLS Provider Template
@@ -41,6 +41,7 @@ To get started building a new provider:
 ```json
 {
   "actionType": "transfer_venmo",
+  "proofEngine": "reclaim",
   "authLink": "https://account.venmo.com/?feed=mine",
   "url": "https://account.venmo.com/api/stories?feedType=me&externalId={{SENDER_ID}}",
   "method": "GET",
@@ -51,6 +52,10 @@ To get started building a new provider:
     "urlRegex": "https://account.venmo.com/api/stories\\?feedType=me&externalId=\\S+",
     "method": "GET",
     "shouldSkipCloseTab": false,
+    "userInput": {
+      "promptText": "Select a transaction on the page",
+      "transactionXpath": "//div[contains(@class,'transaction-row')]"
+    },
     "transactionsExtraction": {
       "transactionJsonPathListSelector": "$.stories"
     }
@@ -111,6 +116,11 @@ To get started building a new provider:
 - **Description**: Request body template (for POST/PUT requests)
 - **Example**: `"{\"amount\": \"{{AMOUNT}}\", \"recipient\": \"{{RECIPIENT}}\"}"`
 
+##### `proofEngine` (required for new templates)
+- **Type**: `string`
+- **Description**: Selects the proof/attestation engine. For all new providers, set this to `"reclaim"`.
+- **Values**: `"reclaim"` (required today). `"legacy"` remains for backward compatibility only. Additional vendors will be supported in future releases and documented here when available.
+
 #### Metadata Configuration
 
 ##### `metadata` (required)
@@ -127,18 +137,21 @@ To get started building a new provider:
   "fallbackUrlRegex": "https://api\\.venmo\\.com/v1/transactions",
   "fallbackMethod": "GET",
   "preprocessRegex": "window\\.__data\\s*=\\s*({.*?});",
+  "userInput": {
+    "promptText": "Select a transfer below to proceed with authentication",
+    "transactionXpath": "//section[@id='feed-pending-module']//div[contains(@class,'q1hbnk3w') and contains(@class,'q1hbnk5w')]"
+  },
   "transactionsExtraction": {
     "transactionJsonPathListSelector": "$.data.transactions",
-    "transactionRegexSelectors": {
-      "paymentId": "js_transactionItem-([A-Z0-9]+)"
-    },
     "transactionJsonPathSelectors": {
       "recipient": "$.target.username",
       "amount": "$.amount",
       "date": "$.created_time",
       "paymentId": "$.id",
       "currency": "$.currency"
-    }
+    },
+    "transactionXPathListSelector": "",
+    "transactionXPathSelectors": {}
   },
   "proofMetadataSelectors": [
     {
@@ -154,6 +167,26 @@ To get started building a new provider:
 - **`shouldSkipCloseTab`** (optional): When set to `true`, prevents the extension from automatically closing the authentication tab after successful authentication
 - **`shouldReplayRequestInPage`** (optional): When set to `true`, replays the request in the page context instead of making it from the extension
 
+##### `userInput` (optional)
+- **Type**: `object`
+- **Description**: Prompts the user to click a transaction element before interception. Useful for SPAs or feeds where a detail request is made after a click.
+
+Example:
+```json
+"userInput": {
+  "promptText": "Select a transfer below to proceed with authentication",
+  "transactionXpath": "//section[@id='feed-pending-module']//div[contains(@class,'q1hbnk3w') and contains(@class,'q1hbnk5w')]"
+}
+```
+
+Fields:
+- `promptText`: Short instruction shown in-page by the extension.
+- `transactionXpath`: XPath that selects the clickable transaction nodes. The clicked item determines `{{INDEX}}` for selectors and extraction.
+
+Notes:
+- Pair with `shouldReplayRequestInPage: true` for apps that require page context (e.g., N26).
+- Prefer stable attributes/ids over volatile CSS class names when possible.
+
 #### Parameter Extraction
 
 ##### `paramNames` (required)
@@ -167,7 +200,7 @@ To get started building a new provider:
 
 ```typescript
 interface ParamSelector {
-  type: 'jsonPath' | 'regex';
+  type: 'jsonPath' | 'regex' | 'xPath';
   value: string;
   source?: 'url' | 'responseBody' | 'responseHeaders' | 'requestHeaders' | 'requestBody';
 }
@@ -175,7 +208,7 @@ interface ParamSelector {
 
 ##### Parameter Source Options
 
-The `source` field in `paramSelectors` specifies where to extract the parameter from:
+The `source` field in `paramSelectors` specifies where to extract the parameter from.
 
 - **`responseBody`** (default): Extract from the response body
 - **`url`**: Extract from the request URL
@@ -196,6 +229,11 @@ Example:
     {
       "type": "jsonPath",
       "value": "$.data.transactions[{{INDEX}}].id",
+      "source": "responseBody"
+    },
+    {
+      "type": "xPath",
+      "value": "normalize-space(//div[@class='tx-amount'][{{INDEX}} + 1])",
       "source": "responseBody"
     },
     {
@@ -242,12 +280,10 @@ Example:
 ```json
 "responseRedactions": [
   {
-    "jsonPath": "$.data.user.email",
-    "xPath": ""
+    "jsonPath": "$.data.user.email"
   },
   {
-    "jsonPath": "$.data.ssn",
-    "xPath": ""
+    "xPath": "//span[@class='ssn']"
   }
 ]
 ```
@@ -293,15 +329,16 @@ Example:
 }
 ```
 
-#### Using Regex (for HTML/text responses)
+#### Using XPath (for HTML responses)
 ```json
 {
   "transactionsExtraction": {
-    "transactionRegexSelectors": {
-      "amount": "<td class=\"amount\">\\$([\\d,\\.]+)</td>",
-      "recipient": "<td class=\"recipient\">([^<]+)</td>",
-      "date": "<td class=\"date\">(\\d{2}/\\d{2}/\\d{4})</td>",
-      "paymentId": "data-payment-id=\"(\\d+)\""
+    "transactionXPathListSelector": "//table[@id='transactions']//tr[contains(@class,'row')]",
+    "transactionXPathSelectors": {
+      "amount": "normalize-space(.//td[contains(@class,'amount')])",
+      "recipient": "normalize-space(.//td[contains(@class,'recipient')])",
+      "date": "normalize-space(.//td[contains(@class,'date')])",
+      "paymentId": "normalize-space(.//@data-payment-id)"
     }
   }
 }
@@ -316,8 +353,8 @@ Example:
 
 2. **Parameter Extraction**
    - Use JSONPath for structured JSON data
-   - Use regex for HTML, text responses, or complex patterns
-   - Always specify capture groups `()` for regex extraction
+   - Use XPath for HTML responses
+   - For regex usage in `paramSelectors`/`responseMatches`, always specify capture groups `()`
    - Specify `source` when extracting from non-default locations
 
 3. **Security**
@@ -342,210 +379,6 @@ Example:
 - **Metadata returned to app, but Prove fails**: There is an issue with the response redactions or headers for the server call. Check your response redactions parameters and server headers
 - **Parameters not extracted correctly**: Check the `source` field in your `paramSelectors`. By default, parameters are extracted from responseBody
 
-## 2. Create a Verifier Contract
-
-The verifier contract extracts and validates the payment proof data. Every verifier must implement the `IPaymentVerifier` interface and extend appropriate base contracts for common functionality.
-
-### IPaymentVerifier Interface
-
-All payment verifiers must implement this interface:
-
-```solidity
-interface IPaymentVerifier {
-    struct VerifyPaymentData {
-        bytes paymentProof;         // Payment proof from zkTLS
-        address depositToken;       // Token locked in escrow
-        uint256 intentAmount;       // Amount of tokens the payer wants
-        uint256 intentTimestamp;    // When the intent was created
-        string payeeDetails;        // Payee ID (raw or hashed)
-        bytes32 fiatCurrency;       // Fiat currency code (e.g., "USD")
-        uint256 conversionRate;     // Token to fiat conversion rate
-        bytes data;                 // Additional verification data
-    }
-
-    function verifyPayment(
-        VerifyPaymentData calldata _verifyPaymentData
-    ) external returns(bool success, bytes32 intentHash);
-}
-```
-
-### Extending BasePaymentVerifier
-
-Most verifiers should extend `BasePaymentVerifier` which provides:
-
-#### Core Functionality
-- **Access Control**: Only the escrow contract can call `verifyPayment`
-- **Currency Management**: Add/remove supported fiat currencies
-- **Nullifier Protection**: Prevents double-spending of payment proofs
-- **Timestamp Buffer**: Handles L2 timestamp variations
-
-#### Key Methods to Use
-
-```solidity
-// In your constructor
-constructor(address _escrow, address _nullifierRegistry) {
-    escrow = _escrow;
-    nullifierRegistry = INullifierRegistry(_nullifierRegistry);
-    _addCurrency("USD"); // Add supported currencies
-}
-
-// In your verifyPayment implementation
-function verifyPayment(VerifyPaymentData calldata data) 
-    external 
-    onlyEscrow 
-    returns(bool, bytes32) 
-{
-    // 1. Decode and verify the proof
-    // 2. Extract payment details
-    // 3. Validate payment meets requirements
-    // 4. Add nullifier to prevent reuse
-    _validateAndAddNullifier(nullifier);
-    // 5. Return success and intent hash
-}
-```
-
-### Implementation Guide
-
-#### Step 1: Set Up Your Contract
-
-```solidity
-pragma solidity ^0.8.0;
-
-import "./interfaces/IPaymentVerifier.sol";
-import "./BasePaymentVerifier.sol";
-
-contract YourPlatformVerifier is BasePaymentVerifier {
-    constructor(
-        address _escrow,
-        address _nullifierRegistry
-    ) BasePaymentVerifier(_escrow, _nullifierRegistry) {
-        // Add supported currencies
-        _addCurrency("USD");
-        _addCurrency("EUR");
-    }
-}
-```
-
-#### Step 2: Implement Proof Verification
-
-For Reclaim-based proofs (most common):
-
-```solidity
-function verifyPayment(VerifyPaymentData calldata data) 
-    external 
-    onlyEscrow 
-    returns(bool success, bytes32 intentHash) 
-{
-    // Decode the proof
-    ReclaimProof memory proof = abi.decode(data.paymentProof, (ReclaimProof));
-    
-    // Extract witness addresses from additional data
-    address[] memory witnesses = abi.decode(data.data, (address[]));
-    
-    // Verify witness signatures
-    bool isValidProof = verifyReclaimProof(proof, witnesses);
-    require(isValidProof, "Invalid proof");
-    
-    // Extract and validate payment details
-    PaymentDetails memory details = extractPaymentDetails(proof.claimInfo.context);
-    
-    // Validate payment meets requirements
-    validatePaymentDetails(details, data);
-    
-    // Add nullifier
-    bytes32 nullifier = keccak256(proof.identifier);
-    _validateAndAddNullifier(nullifier);
-    
-    // Calculate and return intent hash
-    intentHash = calculateIntentHash(data, details);
-    
-    return (true, intentHash);
-}
-```
-
-#### Step 3: Extract Payment Details
-
-```solidity
-struct PaymentDetails {
-    uint256 amount;
-    string recipientId;
-    string paymentId;
-    uint256 timestamp;
-    string status;
-}
-
-function extractPaymentDetails(string memory context) 
-    internal 
-    pure 
-    returns (PaymentDetails memory) 
-{
-    // Use your provider template's extraction logic
-    // This matches the paramSelectors from your JSON template
-    
-    // Example for JSON extraction
-    uint256 amount = extractAmount(context);
-    string memory recipientId = extractRecipientId(context);
-    // ... extract other fields
-    
-    return PaymentDetails({
-        amount: amount,
-        recipientId: recipientId,
-        paymentId: paymentId,
-        timestamp: timestamp,
-        status: status
-    });
-}
-```
-
-#### Step 4: Validate Payment Requirements
-
-```solidity
-function validatePaymentDetails(
-    PaymentDetails memory details,
-    VerifyPaymentData calldata data
-) internal view {
-    // 1. Validate amount
-    uint256 expectedAmount = (data.intentAmount * data.conversionRate) / PRECISE_UNIT;
-    require(details.amount >= expectedAmount, "Insufficient payment amount");
-    
-    // 2. Validate recipient
-    bool isValidRecipient = validateRecipient(details.recipientId, data.payeeDetails);
-    require(isValidRecipient, "Invalid recipient");
-    
-    // 3. Validate timestamp (with buffer for L2s)
-    require(
-        details.timestamp >= data.intentTimestamp - timestampBuffer,
-        "Payment too old"
-    );
-    
-    // 4. Validate currency
-    require(isCurrency[data.fiatCurrency], "Unsupported currency");
-    
-    // 5. Validate payment status (if applicable)
-    require(
-        keccak256(bytes(details.status)) == keccak256(bytes("COMPLETE")),
-        "Payment not complete"
-    );
-}
-```
-
-### Example Implementations
-
-1. **[VenmoReclaimVerifier](https://github.com/zkp2p/zkp2p-v2-contracts/blob/main/contracts/verifiers/VenmoReclaimVerifier.sol)**
-   - USD only
-   - Extracts: amount, date, paymentId, recipientId
-   - Validates payment completeness
-
-2. **[CashappReclaimVerifier](https://github.com/zkp2p/zkp2p-v2-contracts/blob/main/contracts/verifiers/CashappReclaimVerifier.sol)**
-   - Multi-currency support
-   - Status validation ("COMPLETE")
-   - Different amount scaling (cents vs dollars)
-
-3. **[ZelleBaseVerifier](https://github.com/zkp2p/zkp2p-v2-contracts/blob/main/contracts/verifiers/ZelleBaseVerifier.sol)**
-   - Router pattern for multiple sub-verifiers
-   - Delegates to specific implementations based on payment method
-
-Get started in the [ZKP2P V2 contracts](https://github.com/zkp2p/zkp2p-v2-contracts) repo. Look at the example verifiers for detailed implementation patterns.
 
 ## Contributing
 
