@@ -1,5 +1,3 @@
----
-id: mobile-sdk-examples
 title: Examples
 ---
 
@@ -73,4 +71,3 @@ await zkp2pClient!.fulfillIntent({
   timestampBufferMs: '10000000',
 });
 ```
-

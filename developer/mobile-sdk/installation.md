@@ -1,5 +1,3 @@
----
-id: mobile-sdk-installation
 title: Install & Setup
 ---
 
@@ -31,4 +29,3 @@ Project setup notes
 Verifying native link
 - iOS: open the workspace in Xcode and confirm `Zkp2pReactNativeSdk` pod is present; build once.
 - Android: a clean Gradle sync/build will show the circuit copy step in logs.
-

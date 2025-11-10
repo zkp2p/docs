@@ -1,5 +1,3 @@
----
-id: mobile-sdk-overview
 title: Mobile SDK Integration (Beta)
 description: React Native SDK for ZKP2P — overview, modes, and quick start
 ---

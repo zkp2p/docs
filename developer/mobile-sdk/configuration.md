@@ -1,5 +1,3 @@
----
-id: mobile-sdk-configuration
 title: Configure the SDK
 ---
 
@@ -59,4 +57,3 @@ Provider JSON (SDK‑relevant fields)
   - `internal.actionLink` / `external.actionLink` (+ optional `appStoreLink`/`playStoreLink`)
   - `internal.actionCompletedUrlRegex`
   - `login`: `usernameSelector`, `passwordSelector`, `submitSelector`, `nextSelector`, `revealTimeoutMs`
-

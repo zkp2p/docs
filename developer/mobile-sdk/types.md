@@ -1,5 +1,3 @@
----
-id: mobile-sdk-types
 title: Key Types
 ---
 
@@ -23,4 +21,3 @@ Client params (selected)
 
 Errors
 - `ZKP2PError` base; specialized: `NetworkError`, `APIError`, `ContractError`, `ValidationError`, `ProofGenerationError`.
-

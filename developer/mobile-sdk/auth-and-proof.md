@@ -1,5 +1,3 @@
----
-id: mobile-sdk-auth-and-proof
 title: Authentication & Proof
 ---
 
@@ -58,4 +56,3 @@ Performance
 
 Errors
 - Errors are specialized (`NetworkError`, `APIError`, `ContractError`, `ValidationError`, `ProofGenerationError`), all extend `ZKP2PError` for consistent handling.
-

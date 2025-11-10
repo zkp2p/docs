@@ -1,5 +1,3 @@
----
-id: mobile-sdk-client-api
 title: Zkp2pClient (contracts & API)
 ---
 

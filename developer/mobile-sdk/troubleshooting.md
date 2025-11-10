@@ -1,5 +1,3 @@
----
-id: mobile-sdk-troubleshooting
 title: Troubleshooting
 ---
 
@@ -30,4 +28,3 @@ Missing API key or wallet client
 
 Custom user agent or cookies
 - Providers may specify `mobile.userAgent` and `mobile.includeAdditionalCookieDomains`; verify your chosen provider template.
-

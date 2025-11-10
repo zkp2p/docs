@@ -1,5 +1,3 @@
----
-id: mobile-sdk-credential-storage
 title: Credential Storage & Consent
 ---
 
@@ -49,4 +47,3 @@ Key formats (FYI)
 Notes
 - You don’t need to manage keys manually; use helpers.
 - If you pass `hideDefaultProofUI`, you can still use consent helpers and drive your own UI.
-
