@@ -44,4 +44,3 @@ Next steps
 - [Types](./types)
 - [Examples](./examples)
 - [Troubleshooting](./troubleshooting)
-- [Migration](./migration)

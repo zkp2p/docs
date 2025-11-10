@@ -37,7 +37,6 @@ module.exports = {
         { type: 'doc', id: 'mobile-sdk-types', label: 'Types' },
         { type: 'doc', id: 'mobile-sdk-examples', label: 'Examples' },
         { type: 'doc', id: 'mobile-sdk-troubleshooting', label: 'Troubleshooting' },
-        { type: 'doc', id: 'mobile-sdk-migration', label: 'Migration' },
       ],
     },
   ],
