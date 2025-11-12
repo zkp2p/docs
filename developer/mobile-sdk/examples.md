@@ -2,7 +2,7 @@
 title: Examples
 ---
 
-Proof‑Only app shell
+### Proof‑Only app shell
 ```tsx
 import { Zkp2pProvider, useZkp2p } from '@zkp2p/zkp2p-react-native-sdk';
 
@@ -28,7 +28,21 @@ function Flow() {
 }
 ```
 
-Full Mode: quote → intent → proof → fulfill
+### Check session at startup
+```ts
+const { isSessionActive, authenticate } = useZkp2p();
+const ok = await isSessionActive!('venmo', 'transfer_venmo');
+if (!ok) await authenticate!('venmo', 'transfer_venmo');
+```
+
+### Headless proof UI
+```tsx
+<Zkp2pProvider hideDefaultProofUI>
+  <App />
+</Zkp2pProvider>
+```
+
+### Full Mode: quote → intent → proof → fulfill
 ```ts
 const { zkp2pClient, initiate, generateProof, provider, interceptedPayload } = useZkp2p();
 
@@ -71,4 +85,11 @@ await zkp2pClient!.fulfillIntent({
   payeeDetails: '0x…' as any,
   timestampBufferMs: '10000000',
 });
+```
+
+### Reset and clean between runs
+```ts
+const { resetState, clearSession } = useZkp2p();
+await resetState();
+await clearSession({ iosAlsoClearWebKitStore: true });
 ```
