@@ -13,7 +13,7 @@ The ZKP2P Protocol enables permissionless and fully noncustodial buying and sell
 
 With ZKP2P V1, we launched the first ever trust minimized fiat to crypto on/offramp in production, enabling swaps between USD in Venmo, EUR in Revolut and INR in HDFC Bank for USDC. These swaps were powered by ZK proofs using the [zkEmail](https://prove.email/) library. V1 intended to be an alpha proof of concept which explored and pushed the edge of what could be done by bringing valuable web2 data for use onchain in a privacy preserving and verifiable way, while solving the biggest pain point that exists in crypto.
 
-With the current ZKP2P protocol, we are a doubling down of this vision to create a protocol that enables fast, cheap, low fraud and DeFi composable actions between offchain and onchain assets. V2 extends upon V1 and solves many of its limitations including:
+With the current ZKP2P protocol, we are a doubling down on this vision to create a protocol that enables fast, cheap, low fraud and DeFi composable actions between offchain and onchain assets. V2 extends upon V1 and solves many of its limitations including:
 
 1. Complex user flows
 2. Fragmentation of liquidity
