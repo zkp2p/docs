@@ -7,9 +7,9 @@ title: Reputation
 
 ## What are Taker Tiers?
 
-Taker Tiers are ZKP2P's onchain reputation system. Your tier determines your per-order limit when onramping through ZKP2P.
+Taker Tiers are ZKP2P's onchain reputation system. Your tier determines your per-intent cap and cooldown period when onramping through ZKP2P.
 
-The more orders you complete, the higher your tier, and the larger your order caps.
+The more orders you complete, the higher your tier, and the larger your order caps and shorter your cooldown periods.
 
 ## Why Taker Tiers?
 
@@ -25,13 +25,25 @@ Similar to other reputation system on other P2P platforms, except this is comput
 
 ## The Five Tiers
 
-| Tier | Name | Per-Order Limit |
-|------|------|-----------------|
-| T0 | Peer Peasant | $100 |
-| T1 | Peer | $500 |
-| T2 | Peer Plus | $1,000 |
-| T3 | Peer Pro | $5,000 |
-| T4 | Peer Platinum | $10,000 |
+| Tier | Volume Range | Per-Intent Cap | Cooldown |
+|------|--------------|----------------|----------|
+| Peer Peasant | $0 - $500 | $100 | 24 hours |
+| Peer | $500 - $2k | $250 | 12 hours |
+| Peer Plus | $2k - $10k | $1,000 | 6 hours |
+| Peer Pro | $10k - $25k | $2,500 | No cooldown |
+| Peer Platinum | $25k+ | $5,000 | No cooldown |
+
+## Cooldown Periods
+
+In addition to per-intent caps, each tier has a cooldown period between intents. Lower tiers have longer cooldowns to encourage progression and prevent abuse, while higher tiers enjoy unrestricted access.
+
+- **Peer Peasant**: 24-hour cooldown between intents
+- **Peer**: 12-hour cooldown between intents
+- **Peer Plus**: 6-hour cooldown between intents
+- **Peer Pro**: No cooldown restrictions
+- **Peer Platinum**: No cooldown restrictions
+
+If you attempt to create an intent while your cooldown is still active, you'll receive an error message indicating how much time remains before your next transaction is available.
 
 ## How Reputation is Calculated
 
@@ -45,8 +57,8 @@ Cancellations within 15 minutes don't count against you, we get that you might n
 
 ## Where to See Your Tier
 
-- **Profile Page** — Your tier, badge, and order limit are displayed in the sidebar
-- **Order Creation** — If you exceed your cap, you'll see an error with your current limit
+- **Profile Page** — Your tier, badge, order limit, and cooldown status are displayed in the sidebar
+- **Order Creation** — If you exceed your cap or cooldown is active, you'll see an error with your current limit or remaining cooldown time
 - **Discord** — Verify your wallet to receive your tier role
 
 ## Tier Benefits
@@ -61,4 +73,3 @@ Cancellations within 15 minutes don't count against you, we get that you might n
 
 - Private Discord channel
 - Early access to ZKP2P mobile app
-
