@@ -55,6 +55,8 @@ Your tier is determined by two factors:
 
 ### Lock Score Details
 
+The Lock Score is calculated starting from block 39294530 on Base.
+
 - New users start with no history and are placed in Peer Peasant ($100 cap)
 - Cancelling orders after 15 minutes increases your lock score
 - Completing orders dilutes your lock score over time
