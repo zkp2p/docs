@@ -47,7 +47,7 @@ If you attempt to create an intent while your cooldown is still active, you'll r
 
 ## How Reputation is Calculated
 
-Your tier is determined by your **lock score** — a penalty score where lower is better.
+Your tier is determined by your **lock score** — a penalty score where lower is better. The Lock Score is calculated after block 39294530 on Base. 
 
 - New users start with no history and are placed in Peer Peasant ($100 cap)
 - Cancelling orders after 15 minutes increases your lock score
