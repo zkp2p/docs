@@ -50,11 +50,10 @@ Different payment platforms have varying levels of buyer protection and reversal
 
 | Risk Level | Platforms | Cap Multiplier | Has Cooldown | Notes |
 |------------|-----------|----------------|--------------|-------|
-| **Low Risk** | Revolut, Wise, Monzo | 2x | No | Instant settlement, no chargebacks |
-| **Low Risk** | MercadoPago | 1.5x | No | Regional instant settlement |
-| **Medium Risk** | Zelle (all banks) | 0.75x | Yes | Bank-to-bank, harder to reverse |
-| **High Risk** | Venmo, CashApp | 0.5x | Yes | ACH-backed, 90-day reversal window |
-| **Highest Risk** | PayPal | 0.25x | Yes | Requires Peer Plus tier to access |
+| **Low Risk** | Revolut, Wise, Monzo, MercadoPago | 5x | No | Instant settlement, no chargebacks |
+| **Medium Risk** | Zelle (all banks) | 1.5x | Yes | Bank-to-bank, harder to reverse |
+| **High Risk** | Venmo, CashApp | 1x | Yes | ACH-backed, 90-day reversal window |
+| **Highest Risk** | PayPal | 0.75x | Yes | Requires Peer Plus tier to access |
 
 ### Effective Caps by Platform
 
@@ -64,13 +63,13 @@ Your effective cap = Base Tier Cap × Platform Multiplier
 
 | Platform | Multiplier | Effective Cap |
 |----------|------------|---------------|
-| Revolut | 2x | $500 |
-| Wise | 2x | $500 |
-| Monzo | 2x | $500 |
-| MercadoPago | 1.5x | $375 |
-| Zelle | 0.75x | $187.50 |
-| Venmo | 0.5x | $125 |
-| CashApp | 0.5x | $125 |
+| Revolut | 5x | $1,250 |
+| Wise | 5x | $1,250 |
+| Monzo | 5x | $1,250 |
+| MercadoPago | 5x | $1,250 |
+| Zelle | 1.5x | $375 |
+| Venmo | 1x | $250 |
+| CashApp | 1x | $250 |
 | PayPal | - | Locked (requires Peer Plus) |
 
 ### Platform Access Requirements
