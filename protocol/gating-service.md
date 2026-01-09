@@ -13,5 +13,4 @@ The Gating Service has 2 roles
 
 ### API Reference
 
-Our current gating service API is hosted at api.zkp2p.xyz. Check out the docs: [API](https://docs.zkp2p.xyz/developer/api/onramp-integration)
-
+Our current gating service API is hosted at api.zkp2p.xyz. Reach out to the [ZKP2P Team](mailto:team@zkp2p.xyz) for access details.
