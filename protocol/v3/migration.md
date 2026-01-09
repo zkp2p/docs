@@ -24,7 +24,7 @@ This guide helps integrators move from the V2 proof flow to the V3 attestation f
 - Currency/method hashing: still keccak256 bytes32 on-chain.
 
 ### API changes you’ll notice
-- Gating (Curator): use the v2 verify endpoint with the expanded request. See [Onramp Integration](https://docs.zkp2p.xyz/developer/api/onramp-integration).
+- Gating (Curator): use the v2 verify endpoint with the expanded request. Reach out to the [ZKP2P Team](mailto:team@zkp2p.xyz) for access details.
 - Quoter: response now includes deposit success metrics and optional filters.
 
 ### On-chain calls (before/after)

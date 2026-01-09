@@ -1,32 +1,80 @@
 ---
 id: build-new-provider
-title: Build a New Provider
+title: Build a Payment Integration
 ---
 
 ## Overview
 
-ZKP2P is an open and permissionless protocol. We've now made it very easy for any developer around the world to get started building a new payment integration on ZKP2P. This guide explains how to create provider templates for the ZKP2P PeerAuth extension and integrate new payment platforms.
+ZKP2P is an open and permissionless protocol. Provider templates are JSON configs used in the ZKP2P PeerAuth extension and the ZKP2P React Native SDK. This guide explains how to build a payment integration by authoring a zkTLS provider template to generate a proof of payment.
 
-To build a new integration for your local payment platform, you will need to implement:
+If you have any questions, reach out on [Telegram](https://t.me/zk_p2p/4710).
 
-1. A zkTLS provider template to generate a proof of payment
+## Package Usage (npm)
 
+The `@zkp2p/providers` package is data-only. Consumers import JSON templates directly via deep import paths or use the manifest.
 
-If you have any questions please do not hesitate to contact us on [Telegram](https://t.me/zk_p2p/4710)
+Install:
+
+```bash
+npm install @zkp2p/providers
+# or
+yarn add @zkp2p/providers
+```
+
+CommonJS:
+
+```js
+const zelle = require('@zkp2p/providers/citi/transfer_zelle.json');
+console.log(zelle.actionType);
+```
+
+ESM (import assertions):
+
+```js
+import zelle from '@zkp2p/providers/citi/transfer_zelle.json' assert { type: 'json' };
+console.log(zelle.actionType);
+```
+
+Manifest:
+
+```js
+const manifest = require('@zkp2p/providers/providers.json');
+for (const p of manifest.providers) console.log(p.id, p.files);
+```
+
+Notes:
+- No runtime code is shipped; only JSON and docs.
+- Deep imports like `@zkp2p/providers/<provider>/<file>.json` are stable entry points.
+- Bundlers (Webpack/Vite) support JSON imports by default.
 
 ## Developer Quickstart
 
+Note: The npm package is data-only. The local dev server described here is for development/testing and is not included in the published package.
+
 To get started building a new provider:
 
-1. Clone the [providers repo](https://github.com/zkp2p/providers)
-2. Run `yarn install` and `yarn start`. App is hosted on [http://localhost:8080](http://localhost:8080)
-3. Install the [PeerAuth extension](https://chromewebstore.google.com/detail/peerauth-authenticate-and/ijpgccednehjpeclfcllnjjcmiohdjih) in your browser
-4. Create a new directory and JSON file and add the necessary provider data for your integration
-5. Test your integration by going to [developer.zkp2p.xyz](https://developer.zkp2p.xyz/)
-6. Click on Open Settings on the page and set Base URL to `http://localhost:8080/`. Any changes to your JSON will now be reflected in the extension and developer app
-7. Update `actionType`, `platform`, and set `proofEngine` to `"reclaim"`. The path to your provider is `localhost:8080/{platform_name}/{provider_name}.json`
-8. Click Authenticate to extract metadata (if your template defines `userInput`, click a transaction when prompted)
-9. If successful, proceed to Prove a specific transaction
+1. Clone the [providers repo](https://github.com/zkp2p/providers).
+2. Run `yarn install` and `yarn start`. The app is hosted at [http://localhost:8080](http://localhost:8080).
+3. Install the [PeerAuth extension](https://chromewebstore.google.com/detail/peerauth-authenticate-and/ijpgccednehjpeclfcllnjjcmiohdjih) in your browser.
+4. Create a new directory and JSON file and add the necessary provider data for your integration.
+5. Test your integration by going to [developer.zkp2p.xyz](https://developer.zkp2p.xyz/).
+6. Click Open Settings and set Base URL to `http://localhost:8080/`. Any changes to your JSON will now be reflected in the extension and developer app.
+7. Update the inputs with the path to your integration: `localhost:8080/{platform_name}/{provider_name}.json`.
+8. Click Authenticate to extract metadata.
+9. If successful, proceed to Prove a specific transaction.
+
+### Optional: add a Claude Code or Codex skill
+
+The create-zkp2p-provider skill can guide request capture and template authoring. See the [zkills repo](https://github.com/zkp2p/zkills) for full docs.
+
+1. Install Chrome DevTools MCP (required for network capture), then restart your client:
+   - Codex: `codex mcp add chrome-devtools -- npx chrome-devtools-mcp@latest`
+   - Claude Code: `claude mcp add chrome-devtools -- npx chrome-devtools-mcp@latest`
+2. Install the skill:
+   - Codex: run `codex` then `$skill-installer https://github.com/zkp2p/zkills/tree/main/src/codex/create-zkp2p-provider`
+   - Claude Code: clone the repo and run `./scripts/install-claude.sh`
+
+Once installed, invoke the skill when you need help mapping network requests to template selectors.
 
 ## 1. Build a zkTLS Provider Template
 
@@ -41,7 +89,6 @@ To get started building a new provider:
 ```json
 {
   "actionType": "transfer_venmo",
-  "proofEngine": "reclaim",
   "authLink": "https://account.venmo.com/?feed=mine",
   "url": "https://account.venmo.com/api/stories?feedType=me&externalId={{SENDER_ID}}",
   "method": "GET",
@@ -52,10 +99,6 @@ To get started building a new provider:
     "urlRegex": "https://account.venmo.com/api/stories\\?feedType=me&externalId=\\S+",
     "method": "GET",
     "shouldSkipCloseTab": false,
-    "userInput": {
-      "promptText": "Select a transaction on the page",
-      "transactionXpath": "//div[contains(@class,'transaction-row')]"
-    },
     "transactionsExtraction": {
       "transactionJsonPathListSelector": "$.stories"
     }
@@ -76,7 +119,13 @@ To get started building a new provider:
     "xPath": ""
   }],
   "mobile": {
-    "actionLink": "venmo://paycharge?txn=pay&recipients={{RECEIVER_ID}}&note=cash&amount={{AMOUNT}}"
+    "includeAdditionalCookieDomains": [],
+    "useExternalAction": true,
+    "external": {
+      "actionLink": "venmo://paycharge?txn=pay&recipients={{RECEIVER_ID}}&note=cash&amount={{AMOUNT}}",
+      "appStoreLink": "https://apps.apple.com/us/app/venmo/id351727428",
+      "playStoreLink": "https://play.google.com/store/apps/details?id=com.venmo"
+    }
   }
 }
 ```
@@ -378,6 +427,11 @@ Example:
 - **Authenticated into your payment platform but not redirected back to developer.zkp2p.xyz**: There is an issue with the urlRegex for metadata extraction. Double check your regex is correct
 - **Metadata returned to app, but Prove fails**: There is an issue with the response redactions or headers for the server call. Check your response redactions parameters and server headers
 - **Parameters not extracted correctly**: Check the `source` field in your `paramSelectors`. By default, parameters are extracted from responseBody
+- **CSRF or one-time tokens fail on replay**: Re-trigger the request in-page to refresh tokens before capture
+- **List vs detail endpoints**: The list request may differ from the proof endpoint for a single transaction; capture both
+- **Missing/obfuscated response bodies**: Try a different request or navigate to another page that loads the same data
+- **Wrong selector type**: HTML responses require XPath selectors; JSON responses use JSONPath
+- **Unstable recipient IDs**: Prefer stable internal IDs or add additional proofs if handles can change
 
 
 ## Contributing
