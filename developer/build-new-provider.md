@@ -1,5 +1,5 @@
 ---
-id: build-new-provider
+id: build-payment-integration
 title: Build a Payment Integration
 ---
 
