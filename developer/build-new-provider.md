@@ -5,9 +5,9 @@ title: Build a Payment Integration
 
 ## Overview
 
-ZKP2P is an open and permissionless protocol. Provider templates are JSON configs used in the ZKP2P PeerAuth extension and the ZKP2P React Native SDK. This guide explains how to build a payment integration by authoring a zkTLS provider template to generate a proof of payment.
+ZKP2P is an open and permissionless protocol. Provider templates are JSON configs used in the ZKP2P PeerAuth extension and Peer mobile app to facilitate fast and cheap onchain onboarding. This guide explains how to build a payment integration by authoring a zkTLS provider template to generate a proof of payment.
 
-If you have any questions, reach out on [Telegram](https://t.me/zk_p2p/4710).
+If you have any questions, reach out on [Discord](https://discord.com/invite/zkp2p).
 
 ## Package Usage (npm)
 
@@ -164,11 +164,6 @@ Once installed, invoke the skill when you need help mapping network requests to 
 - **Type**: `string`
 - **Description**: Request body template (for POST/PUT requests)
 - **Example**: `"{\"amount\": \"{{AMOUNT}}\", \"recipient\": \"{{RECIPIENT}}\"}"`
-
-##### `proofEngine` (required for new templates)
-- **Type**: `string`
-- **Description**: Selects the proof/attestation engine. For all new providers, set this to `"reclaim"`.
-- **Values**: `"reclaim"` (required today). `"legacy"` remains for backward compatibility only. Additional vendors will be supported in future releases and documented here when available.
 
 #### Metadata Configuration
 
