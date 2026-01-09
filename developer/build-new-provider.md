@@ -7,7 +7,7 @@ title: Build a Payment Integration
 
 ZKP2P is an open and permissionless protocol. Provider templates are JSON configs used in the ZKP2P PeerAuth extension and Peer mobile app to facilitate fast and cheap onchain onboarding. This guide explains how to build a payment integration by authoring a zkTLS provider template to generate a proof of payment.
 
-If you have any questions, reach out on [Discord](https://discord.com/invite/zkp2p).
+If you have any questions, reach out on [Discord](https://discord.gg/4hNVTv2MbH).
 
 ## Package Usage (npm)
 
