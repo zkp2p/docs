@@ -141,11 +141,6 @@ const config = {
             label: 'Developer',
           },
           {
-            to: '/team',
-            label: 'Team',
-            position: 'right',
-          },
-          {
             type: 'docSidebar',
             sidebarId: 'defaultSidebar',
             docsPluginId: 'brand-kit',
@@ -188,8 +183,8 @@ const config = {
             title: 'Community',
             items: [
               {
-                label: 'Telegram',
-                href: 'https://t.me/zk_p2p',
+                label: 'Discord',
+                href: 'https://discord.gg/4hNVTv2MbH',
               },
               {
                 label: 'Twitter/X',
