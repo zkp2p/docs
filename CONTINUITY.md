@@ -10,22 +10,24 @@ Constraints/Assumptions:
 Key decisions:
 - Update both v2 and v3 onramp integration pages.
 - Keep the existing `window.zktls` proof API sections and add SDK usage above them.
+- Use branch `docs/sdk-extension-onramp`.
 
 State:
-- Onramp integration docs updated with SDK extension helper usage; changes not yet committed.
+- Changes committed and pushed to `origin/docs/sdk-extension-onramp`.
 
 Done:
 - Located onramp integration docs and SDK extension helpers in zkp2p-clients.
 - Added Peer Extension SDK usage sections and updated Getting Started copy in the onramp integration docs.
+- Created branch `docs/sdk-extension-onramp`, committed, and pushed.
 
 Now:
-- Create a docs branch, commit the changes, and push.
+- Share the branch details with the user.
 
 Next:
 - Create branch, commit, and push changes.
 
 Open questions (UNCONFIRMED if needed):
-- Preferred branch name for docs update? UNCONFIRMED.
+- None.
 
 Working set (files/ids/commands):
 - CONTINUITY.md
