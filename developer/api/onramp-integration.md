@@ -13,7 +13,7 @@ This page contains documentation and APIs for a headless integration with the ZK
 
 To get started integrating onramping, request an API key from the [ZKP2P team](mailto:team@zkp2p.xyz).
 
-If you are looking to interact only with the PeerAuth Extension to generate zkTLS proofs and not with the ZKP2P smart contract protocol, skip to the [section below](onramp-integration.md#extension-api). Additionally, we do have a React SDK for interacting with PeerAuth maintained by our commmunity: [React PeerAuth SDK](https://www.npmjs.com/package/@vitals/extension-react)
+If you are looking to interact only with the PeerAuth Extension to generate zkTLS proofs and not with the ZKP2P smart contract protocol, skip to the [section below](onramp-integration.md#extension-api). The official `@zkp2p/sdk` includes Peer Extension helpers (for example, `peerExtensionSdk`) to launch the onramp flow from the browser; see [Extension API](#extension-api). For React-only PeerAuth integration, we also have a community SDK: [React PeerAuth SDK](https://www.npmjs.com/package/@vitals/extension-react)
 
 ## Flow
 
@@ -280,6 +280,41 @@ We support the following currencies:
 
 ## Extension API
 
+### Peer Extension SDK (Recommended)
+
+Use the SDK helpers to open the extension onramp flow and handle connection state without touching the injected API directly. The lower-level proof APIs are still documented below.
+
+Install:
+
+```bash
+npm install @zkp2p/sdk
+# or
+yarn add @zkp2p/sdk
+# or
+pnpm add @zkp2p/sdk
+```
+
+```typescript
+import { peerExtensionSdk } from '@zkp2p/sdk';
+
+const queryString =
+  '?referrer=YourApp&inputCurrency=USD&inputAmount=25&paymentPlatform=venmo&amountUsdc=100000000&recipientAddress=0x...';
+
+const state = await peerExtensionSdk.getState();
+
+if (state === 'needs_install') {
+  peerExtensionSdk.openInstallPage();
+} else {
+  if (state === 'needs_connection') {
+    await peerExtensionSdk.requestConnection();
+  }
+
+  peerExtensionSdk.onramp(queryString);
+}
+```
+
+The query string uses the same parameters as the redirect integration flow. See [Redirect Integration](../integrate-zkp2p/integrate-redirect-onramp.md).
+
 The PeerAuth extension provides a global `window.zktls` API for interacting with the extension from web pages. This API is used to authenticate payments after the user has made a payment to the recipient ID.
 
 ### API Availability
@@ -368,4 +403,3 @@ declare global {
 ```
 
 // ...rest of original content remains unchanged
-
