@@ -14,7 +14,7 @@ Key decisions:
 - Use branch `docs/sdk-extension-onramp` unless user requests another. UNCONFIRMED.
 
 State:
-- Onramp SDK snippets updated for the new params-based API; changes not yet committed.
+- Changes committed and pushed to `origin/docs/sdk-extension-onramp`; PR opened.
 
 Done:
 - Located onramp integration docs and SDK extension helpers in zkp2p-clients.
@@ -22,12 +22,13 @@ Done:
 - Created branch `docs/sdk-extension-onramp`, committed, and pushed.
 - Reviewed updated extension interface in `/home/ubuntu/zkp2p/zkp2p-clients/packages/sdk/src/extension.ts`.
 - Updated onramp integration docs to use params object for `peerExtensionSdk.onramp`.
+- Opened PR: https://github.com/zkp2p/docs/pull/16
 
 Now:
-- Commit, push, and open a PR with the latest doc updates.
+- Await further instructions or review feedback.
 
 Next:
-- Commit, push, and open a PR.
+- None.
 
 Open questions (UNCONFIRMED if needed):
 - None.
