@@ -43,6 +43,9 @@ All payment methods resolve to the same verifier contract on Base: `UnifiedPayme
 | paypal | `0x3ccc3d4d5e769b1f82dc4988485551dc0cd3c7a3926d7d8a4dde91507199490f` | USD, EUR, GBP, SGD, NZD, AUD, CAD |
 | monzo | `0x62c7ed738ad3e7618111348af32691b5767777fbaf46a2d8943237625552645c` | GBP |
 | n26 | `0xd9ff4fd6b39a3e3dd43c41d05662a5547de4a878bc97a65bcb352ade493cdc6b` | EUR |
+| chime | `0x5908bb0c9b87763ac6171d4104847667e7f02b4c47b574fe890c1f439ed128bb` | USD |
+
+
 
 
 ### All Supported Currencies
