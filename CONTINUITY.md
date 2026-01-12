@@ -21,10 +21,10 @@ Done:
 - Created branch `docs/sdk-extension-onramp`, committed, and pushed.
 
 Now:
-- Share the branch details with the user.
+- Await further instructions or PR request.
 
 Next:
-- Create branch, commit, and push changes.
+- None.
 
 Open questions (UNCONFIRMED if needed):
 - None.
