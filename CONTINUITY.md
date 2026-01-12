@@ -1,5 +1,5 @@
 Goal (incl. success criteria):
-- Update the onramp integration docs to use SDK extension helpers (peerExtensionSdk) instead of direct window peer APIs, then create and push a docs branch.
+- Update the onramp integration docs to reflect the latest extension interface changes and push an updated PR branch.
 
 Constraints/Assumptions:
 - Maintain this ledger each turn; begin replies with a Ledger Snapshot.
@@ -10,21 +10,24 @@ Constraints/Assumptions:
 Key decisions:
 - Update both v2 and v3 onramp integration pages.
 - Keep the existing `window.zktls` proof API sections and add SDK usage above them.
-- Use branch `docs/sdk-extension-onramp`.
+- Update onramp SDK usage to pass a params object instead of a query string.
+- Use branch `docs/sdk-extension-onramp` unless user requests another. UNCONFIRMED.
 
 State:
-- Changes committed and pushed to `origin/docs/sdk-extension-onramp`.
+- Onramp SDK snippets updated for the new params-based API; changes not yet committed.
 
 Done:
 - Located onramp integration docs and SDK extension helpers in zkp2p-clients.
 - Added Peer Extension SDK usage sections and updated Getting Started copy in the onramp integration docs.
 - Created branch `docs/sdk-extension-onramp`, committed, and pushed.
+- Reviewed updated extension interface in `/home/ubuntu/zkp2p/zkp2p-clients/packages/sdk/src/extension.ts`.
+- Updated onramp integration docs to use params object for `peerExtensionSdk.onramp`.
 
 Now:
-- Await further instructions or PR request.
+- Commit, push, and open a PR with the latest doc updates.
 
 Next:
-- None.
+- Commit, push, and open a PR.
 
 Open questions (UNCONFIRMED if needed):
 - None.

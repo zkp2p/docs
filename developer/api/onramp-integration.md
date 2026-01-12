@@ -297,8 +297,14 @@ pnpm add @zkp2p/sdk
 ```typescript
 import { peerExtensionSdk } from '@zkp2p/sdk';
 
-const queryString =
-  '?referrer=YourApp&inputCurrency=USD&inputAmount=25&paymentPlatform=venmo&amountUsdc=100000000&recipientAddress=0x...';
+const onrampParams = {
+  referrer: 'YourApp',
+  inputCurrency: 'USD',
+  inputAmount: 25,
+  paymentPlatform: 'venmo',
+  amountUsdc: 100000000,
+  recipientAddress: '0x...',
+};
 
 const state = await peerExtensionSdk.getState();
 
@@ -309,11 +315,11 @@ if (state === 'needs_install') {
     await peerExtensionSdk.requestConnection();
   }
 
-  peerExtensionSdk.onramp(queryString);
+  peerExtensionSdk.onramp(onrampParams);
 }
 ```
 
-The query string uses the same parameters as the redirect integration flow. See [Redirect Integration](../integrate-zkp2p/integrate-redirect-onramp.md).
+The params object uses the same fields as the redirect integration flow. The SDK builds the query string for you (URL fields like `referrerLogo` and `callbackUrl` must be valid http/https URLs). See [Redirect Integration](../integrate-zkp2p/integrate-redirect-onramp.md).
 
 The PeerAuth extension provides a global `window.zktls` API for interacting with the extension from web pages. This API is used to authenticate payments after the user has made a payment to the recipient ID.
 
