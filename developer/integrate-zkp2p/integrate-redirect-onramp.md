@@ -9,7 +9,7 @@ title: Onramp Integration
 Try the demo at [https://demo.zkp2p.xyz](https://demo.zkp2p.xyz). This flow requires the Peer extension and is only available on desktop.
 :::
 
-Integrate the ZKP2P onramp directly into your application by using the Peer extension deeplink flow. Simply request a connection and open the onramp in the extension side panel with `window.peer.onramp()`. With a single call, you can offer your users fast onchain onboarding, complete with:
+Integrate the ZKP2P onramp directly into your application by using the Peer extension deeplink flow. Use the Peer extension SDK wrapper (`peerExtensionSdk.onramp()` from `@zkp2p/sdk`) to request a connection and open the onramp in the extension side panel. With a single call, you can offer your users fast onchain onboarding, complete with:
 
 - Multiple payment platforms (Venmo, Revolut, Wise, Cash App and many more)
 - Supported blockchains (Base, Solana, Ethereum, Polygon, Hyperliquid, Arbitrum and 20+ chains)
@@ -26,25 +26,28 @@ Integrate the ZKP2P onramp directly into your application by using the Peer exte
 Integration is simple:
 
 1. Open https://chromewebstore.google.com/detail/peerauth-authenticate-and/ijpgccednehjpeclfcllnjjcmiohdjih and install the Peer extension. After install, it will redirect back to the original tab.
-2. Ensure `window.peer` is available.
-3. Request a connection to the extension with `window.peer.requestConnection()`.
-4. Build your deeplink query params.
-5. Call `window.peer.onramp()` with the query string to open the side panel.
+2. Install `@zkp2p/sdk` and import `peerExtensionSdk`.
+3. Check extension state and request a connection if needed.
+4. Build your deeplink params object.
+5. Call `peerExtensionSdk.onramp()` to open the side panel.
 
 ```ts
-const waitForPeer = () =>
-  new Promise<void>((resolve) => {
-    if (window.peer) return resolve();
-    window.addEventListener('peer#initialized', () => resolve(), { once: true });
-  });
+import { peerExtensionSdk } from '@zkp2p/sdk';
 
-await waitForPeer();
-const approved = await window.peer.requestConnection();
-if (!approved) {
-  throw new Error('Peer connection not approved');
+const state = await peerExtensionSdk.getState();
+if (state === 'needs_install') {
+  peerExtensionSdk.openInstallPage();
+  throw new Error('Peer extension not installed');
 }
 
-const params = new URLSearchParams({
+if (state === 'needs_connection') {
+  const approved = await peerExtensionSdk.requestConnection();
+  if (!approved) {
+    throw new Error('Peer connection not approved');
+  }
+}
+
+peerExtensionSdk.onramp({
   referrer: 'Rampy Pay',
   referrerLogo: 'https://demo.zkp2p.xyz/Rampy_logo.svg',
   callbackUrl: 'https://demo.zkp2p.xyz',
@@ -54,13 +57,11 @@ const params = new URLSearchParams({
   toToken: '8453:0x0000000000000000000000000000000000000000',
   recipientAddress: '0x84e113087C97Cd80eA9D78983D4B8Ff61ECa1929',
 });
-
-window.peer.onramp(`?${params.toString()}`);
 ```
 
 ### Deeplink Query Parameters
 
-Pass these parameters as a query string to `window.peer.onramp()`. You can pass the string with or without a leading `?`.
+Pass these parameters as an object to `peerExtensionSdk.onramp()`. The SDK builds and validates the query string for you.
 
 | Parameter | Description | Type | Example |
 |-----------|-------------|------|---------| 
@@ -113,21 +114,19 @@ chainId:tokenAddress
 #### Onramp to Base ETH
 
 ```ts
-const params = new URLSearchParams({
+peerExtensionSdk.onramp({
   referrer: 'Rampy Pay',
   referrerLogo: 'https://demo.zkp2p.xyz/Rampy_logo.svg',
   callbackUrl: 'https://demo.zkp2p.xyz',
   toToken: '8453:0x0000000000000000000000000000000000000000',
   recipientAddress: '0x84e113087C97Cd80eA9D78983D4B8Ff61ECa1929',
 });
-
-window.peer.onramp(`?${params.toString()}`);
 ```
 
 #### Onramp 10 USD to Solana
 
 ```ts
-const params = new URLSearchParams({
+peerExtensionSdk.onramp({
   referrer: 'Rampy Pay',
   referrerLogo: 'https://demo.zkp2p.xyz/Rampy_logo.svg',
   callbackUrl: 'https://demo.zkp2p.xyz',
@@ -136,8 +135,6 @@ const params = new URLSearchParams({
   toToken: '792703809:11111111111111111111111111111111',
   recipientAddress: '<insert-sol-address>',
 });
-
-window.peer.onramp(`?${params.toString()}`);
 ```
 
 #### Onramp 10 EUR via Revolut to Mainnet ETH
@@ -147,7 +144,7 @@ Payment platform is not enforced. After opening the onramp in the side panel, th
 :::
 
 ```ts
-const params = new URLSearchParams({
+peerExtensionSdk.onramp({
   referrer: 'Rampy Pay',
   referrerLogo: 'https://demo.zkp2p.xyz/Rampy_logo.svg',
   callbackUrl: 'https://demo.zkp2p.xyz',
@@ -157,8 +154,6 @@ const params = new URLSearchParams({
   toToken: '1:0x0000000000000000000000000000000000000000',
   recipientAddress: '0x84e113087C97Cd80eA9D78983D4B8Ff61ECa1929',
 });
-
-window.peer.onramp(`?${params.toString()}`);
 ```
 
 #### Onramp Exact USDC Amount
@@ -172,15 +167,13 @@ Onramp exactly 1 USDC on Base to a recipient address. Users can choose their pre
 :::
 
 ```ts
-const params = new URLSearchParams({
+peerExtensionSdk.onramp({
   referrer: 'Rampy Pay',
   referrerLogo: 'https://demo.zkp2p.xyz/Rampy_logo.svg',
   callbackUrl: 'https://demo.zkp2p.xyz',
   amountUsdc: '1000000',
   recipientAddress: '0x84e113087C97Cd80eA9D78983D4B8Ff61ECa1929',
 });
-
-window.peer.onramp(`?${params.toString()}`);
 ```
 
 <div style={{textAlign: 'center'}}>
