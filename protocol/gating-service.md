@@ -13,4 +13,4 @@ The Gating Service has 2 roles
 
 ### API Reference
 
-Our current gating service API is hosted at api.zkp2p.xyz. Reach out to the [ZKP2P Team](mailto:team@zkp2p.xyz) for access details.
+Our current gating service API is hosted at api.zkp2p.xyz

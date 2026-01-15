@@ -25,9 +25,9 @@ Integrate the ZKP2P onramp directly into your application by using the Peer exte
 
 Integration is simple:
 
-1. Open https://chromewebstore.google.com/detail/peerauth-authenticate-and/ijpgccednehjpeclfcllnjjcmiohdjih and install the Peer extension. After install, it will redirect back to the original tab.
-2. Install `@zkp2p/sdk` and import `peerExtensionSdk`.
-3. Check extension state and request a connection if needed.
+1. Install `@zkp2p/sdk` and import `peerExtensionSdk`.
+2. Check extension state. If it is not installed, call `peerExtensionSdk.openInstallPage()` to open the Chrome Web Store.
+3. Then request a connection with `peerExtensionSdk.requestConnection()`.
 4. Build your deeplink params object.
 5. Call `peerExtensionSdk.onramp()` to open the side panel.
 
@@ -58,6 +58,45 @@ peerExtensionSdk.onramp({
   recipientAddress: '0x84e113087C97Cd80eA9D78983D4B8Ff61ECa1929',
 });
 ```
+
+### Peer Extension SDK API
+
+The extension wrapper exports a default instance plus helpers if you want to inject a custom window (useful for testing or iframes).
+
+```ts
+import {
+  peerExtensionSdk,
+  createPeerExtensionSdk,
+  isPeerExtensionAvailable,
+  getPeerExtensionState,
+  openPeerExtensionInstallPage,
+  PEER_EXTENSION_CHROME_URL,
+} from '@zkp2p/sdk';
+```
+
+#### Instances
+
+- `peerExtensionSdk`: Default SDK instance that uses the global `window`.
+- `createPeerExtensionSdk(options?: PeerExtensionSdkOptions)`: Create a scoped SDK instance (supports `options.window`).
+
+#### Methods on `PeerExtensionSdk`
+
+- `isAvailable(): boolean` - True if the extension is detected on the provided window.
+- `getState(): Promise<'needs_install' | 'needs_connection' | 'ready'>` - Convenience check for install/connection state.
+- `requestConnection(): Promise<boolean>` - Prompts the user to connect the extension.
+- `checkConnectionStatus(): Promise<'connected' | 'disconnected' | 'pending'>` - Reads the current connection status.
+- `openSidebar(route: string): void` - Opens the Peer side panel to a specific route.
+- `onramp(params?: PeerExtensionOnrampParams): void` - Opens the onramp flow with the provided params.
+- `onProofComplete(callback: PeerProofCompleteCallback): () => void` - Subscribe to proof completion events. Returns an unsubscribe function.
+- `getVersion(): Promise<string>` - Returns the extension version.
+- `openInstallPage(): void` - Opens the Chrome Web Store listing for the Peer extension.
+
+#### Helper functions and constants
+
+- `isPeerExtensionAvailable(options?: PeerExtensionSdkOptions): boolean` - Utility for availability checks.
+- `getPeerExtensionState(options?: PeerExtensionSdkOptions): Promise<PeerExtensionState>` - Utility for install/connection state.
+- `openPeerExtensionInstallPage(options?: PeerExtensionSdkOptions): void` - Opens the Chrome Web Store listing.
+- `PEER_EXTENSION_CHROME_URL` - The Chrome Web Store URL for the Peer extension.
 
 ### Deeplink Query Parameters
 
@@ -183,4 +222,4 @@ peerExtensionSdk.onramp({
 
 ### Help?
 
-For any issues or support, reach out to [ZKP2P Team](mailto:team@zkp2p.xyz).
+For any issues or support, please join our [Discord](https://discord.gg/4hNVTv2MbH).
