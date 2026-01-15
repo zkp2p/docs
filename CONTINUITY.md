@@ -1,5 +1,5 @@
 Goal (incl. success criteria):
-- Remove the team page from the docs site.
+- Fix Docusaurus build error by resolving invalid sidebar doc id and keep docs aligned with SDK wrapper usage.
 
 Constraints/Assumptions:
 - Follow workspace instructions; keep ASCII unless existing files require Unicode.
@@ -8,22 +8,23 @@ Key decisions:
 - None.
 
 State:
-- Team page removed; cleaning references.
+- Fixed sidebar reference for missing doc id `build-new-provider`.
 
 Done:
-- Removed `src/pages/team.js` and navbar link.
-- Removed team page styles from `src/css/custom.css`.
+- Read and refreshed continuity ledger.
+- Updated `developer/integrate-zkp2p/integrate-redirect-onramp.md` to use `peerExtensionSdk`.
+- Verified no other docs reference `window.peer`.
+- Updated `developer-sidebars.js` to use `build-payment-integration`.
 
 Now:
-- Verify no lingering references to `/team`.
+- Ready for user to rerun Docusaurus build.
 
 Next:
-- None.
+- Address any remaining build errors if they appear.
 
 Open questions (UNCONFIRMED if needed):
 - None.
 
 Working set (files/ids/commands):
 - CONTINUITY.md
-- docusaurus.config.js
-- src/css/custom.css
+- developer-sidebars.js
