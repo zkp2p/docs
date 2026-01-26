@@ -6,8 +6,8 @@ import { themes as prismThemes } from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'ZKP2P Docs',
-  tagline: 'The permissionless fiat ↔ crypto ramp',
+  title: 'Peer Docs',
+  tagline: 'Any currency. Any coin. Anywhere.',
   favicon: 'img/favicon.ico',
 
 
@@ -16,7 +16,7 @@ const config = {
     v4: true,
   },
 
-  url: 'https://zkp2p.xyz',
+  url: 'https://docs.peer.xyz',
   baseUrl: '/',
 
   organizationName: 'zkp2p', // GitHub org/user
@@ -113,9 +113,8 @@ const config = {
         respectPrefersColorScheme: false,
       },
       navbar: {
-        title: 'ZKP2P',
         logo: {
-          alt: 'ZKP2P Logo',
+          alt: 'Peer Logo',
           src: 'img/logo.svg',
         },
         items: [
@@ -188,7 +187,7 @@ const config = {
               },
               {
                 label: 'Twitter/X',
-                href: 'https://twitter.com/zkp2p',
+                href: 'https://x.com/peerxyz',
               },
             ],
           },
@@ -196,16 +195,16 @@ const config = {
             title: 'More',
             items: [
               {
-                label: 'ZKP2P',
-                href: 'https://zkp2p.xyz',
+                label: 'Peer',
+                href: 'https://peer.xyz',
               },
               {
                 label: 'GitHub',
                 href: 'https://github.com/zkp2p',
               },
               {
-                label: 'Support',
-                href: 'https://support.zkp2p.xyz',
+                label: 'Contact',
+                href: 'mailto:team@peer.xyz',
               },
               {
                 label: 'Brand Kit',

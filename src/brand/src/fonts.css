@@ -1,0 +1,90 @@
+/**
+ * Peer Brand Font Declarations
+ *
+ * @font-face rules for PP Valve and Inter fonts.
+ *
+ * Usage:
+ *   @import '@zkp2p/brand/src/fonts.css';
+ *
+ * Note: Font paths assume the fonts are copied to a /fonts/ directory
+ * or served from the brand package. Adjust paths based on your bundler.
+ *
+ * For Vite:
+ *   Fonts will be resolved from @zkp2p/brand/fonts/
+ *
+ * For Next.js:
+ *   Copy fonts to public/fonts/ and update paths accordingly
+ */
+
+/* ==========================================================================
+   PP VALVE - Headlines (UPPERCASE ONLY)
+   ========================================================================== */
+
+/**
+ * PP Valve Plain Semibold (Primary headline weight)
+ * Use for: Headlines, titles, hero text
+ * Always uppercase, line-height 0.9-1.02
+ */
+@font-face {
+  font-family: 'PP Valve';
+  src:
+    url('../fonts/PPValve-PlainSemibold.woff2') format('woff2'),
+    url('../fonts/PPValve-PlainSemibold.woff') format('woff'),
+    url('../fonts/PPValve-PlainSemibold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/**
+ * PP Valve Plain Extrabold
+ * Use for: Bold emphasis headlines (rare)
+ */
+@font-face {
+  font-family: 'PP Valve';
+  src: url('../fonts/PPValve-PlainExtrabold.otf') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ==========================================================================
+   INTER - Body Text and UI
+   ========================================================================== */
+
+/**
+ * Inter Medium
+ * Use for: Body text, paragraphs, descriptions
+ */
+@font-face {
+  font-family: 'Inter';
+  src: url('../fonts/Inter-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/**
+ * Inter Semi-Bold
+ * Use for: Buttons, emphasis, labels
+ */
+@font-face {
+  font-family: 'Inter';
+  src: url('../fonts/Inter-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ==========================================================================
+   FONT FALLBACK STACK
+   ========================================================================== */
+
+/**
+ * System font fallback for when custom fonts haven't loaded
+ * Matches the metrics of Inter fairly closely
+ */
+:root {
+  --peer-font-fallback: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+}

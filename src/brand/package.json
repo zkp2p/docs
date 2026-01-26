@@ -1,0 +1,74 @@
+{
+  "name": "@zkp2p/brand",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Peer brand design system - tokens, assets, logos, icons, videos, and fonts",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./tokens": {
+      "types": "./src/tokens.ts",
+      "import": "./src/tokens.ts",
+      "default": "./src/tokens.ts"
+    },
+    "./utils": {
+      "types": "./src/utils.ts",
+      "import": "./src/utils.ts",
+      "default": "./src/utils.ts"
+    },
+    "./tiers": {
+      "types": "./src/tiers.ts",
+      "import": "./src/tiers.ts",
+      "default": "./src/tiers.ts"
+    },
+    "./components": {
+      "types": "./src/components/index.ts",
+      "import": "./src/components/index.ts",
+      "default": "./src/components/index.ts"
+    },
+    "./tailwind": {
+      "types": "./src/tailwind/preset.ts",
+      "import": "./src/tailwind/preset.ts",
+      "default": "./src/tailwind/preset.ts"
+    },
+    "./variables.css": "./src/variables.css",
+    "./fonts.css": "./src/fonts.css",
+    "./logos/*": "./logos/*",
+    "./icons/*": "./icons/*",
+    "./videos/*": "./videos/*",
+    "./fonts/*": "./fonts/*",
+    "./tiers/*": "./tiers/*",
+    "./textures/*": "./src/textures/*"
+  },
+  "files": [
+    "src",
+    "logos",
+    "icons",
+    "videos",
+    "fonts",
+    "tiers"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit --skipLibCheck",
+    "lint": "echo 'No linting for brand package'",
+    "build": "echo 'No build step - source TypeScript consumed directly'"
+  },
+  "dependencies": {
+    "vite-plugin-node-polyfills": "^0.24.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "react": "^18.2.0",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0"
+  }
+}
