@@ -1,9 +1,6 @@
 import React from 'react';
-import clsx from 'clsx';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
-import useBaseUrl from '@docusaurus/useBaseUrl';
 import Head from '@docusaurus/Head';
 import styles from './index.module.css';
 
@@ -11,10 +8,10 @@ function HomepageHero() {
   return (
     <div className={styles.heroContainer}>
       <h1 className={styles.heroTitle}>
-        Welcome to ZKP2P Docs
+        Welcome to Peer Docs
       </h1>
       <p className={styles.heroSubtitle}>
-        Fast, permissionless fiat ↔ crypto on/offramp protocol powered by ZK
+        Any currency. Any coin. Anywhere. Build, integrate, and use Peer with confidence.
       </p>
     </div>
   );
@@ -35,22 +32,22 @@ function FeatureCard({ title, description, link, icon }) {
 function HomepageFeatures() {
   const features = [
     {
-      title: 'Use ZKP2P',
-      description: 'Learn more about ZKP2P and get started as a buyer or seller on the platform.',
+      title: 'Use Peer',
+      description: 'Get started as a buyer or seller and learn how Peer works end‑to‑end.',
       link: '/guides/introduction/zkp2p',
       icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="10"></circle>
           <path d="M12 6v6l4 2"></path>
         </svg>
       ),
     },
     {
-      title: 'Integrate ZKP2P',
-      description: 'Guide for integrating ZKP2P on/offramp into your application.',
+      title: 'Integrate Peer',
+      description: 'Bring Peer on/offramps into your product with SDKs, APIs, and guides.',
       link: '/developer/integrate-zkp2p/integrate-redirect-onramp',
       icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
           <line x1="8" y1="21" x2="16" y2="21"></line>
           <line x1="12" y1="17" x2="12" y2="21"></line>
@@ -58,11 +55,11 @@ function HomepageFeatures() {
       ),
     },
     {
-      title: 'The ZKP2P Protocol',
-      description: 'Learn about the architecture of the ZKP2P Protocol.',
+      title: 'The Protocol',
+      description: 'Dive into the architecture behind Peer and the ZKP2P protocol.',
       link: '/protocol/zkp2p-protocol',
       icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
           <path d="M2 17l10 5 10-5"></path>
           <path d="M2 12l10 5 10-5"></path>
@@ -74,6 +71,7 @@ function HomepageFeatures() {
   return (
     <div className={styles.features}>
       <div className={styles.container}>
+        <h2 className="sr-only">Documentation sections</h2>
         <div className={styles.featureGrid}>
           {features.map((feature, idx) => (
             <FeatureCard key={idx} {...feature} />
@@ -87,11 +85,11 @@ function HomepageFeatures() {
 function CommunitySection() {
   const communityLinks = [
     {
-      label: 'Twitter',
-      description: 'Follow us for updates and announcements',
-      href: 'https://twitter.com/zkp2p',
+      label: 'X',
+      description: 'Follow for updates and launch announcements',
+      href: 'https://x.com/peerxyz',
       icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
         </svg>
       )
@@ -99,7 +97,7 @@ function CommunitySection() {
     {
       label: 'Telegram',
       description: 'Join our community discussions',
-      href: 'https://t.me/zk_p2p',
+      href: 'https://t.me/+XDj9FNnW-xs5ODNl',
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -107,6 +105,8 @@ function CommunitySection() {
           height="24"
           viewBox="90 90 330 330"
           fill="currentColor"
+          aria-hidden="true"
+          focusable="false"
         >
           <path d="M109.5 250.5l283.4-117.7c11.2-4.7 21.7 2.7 18.1 19.7l-48.2 226.7c-2.9 13.5-11.2 16.8-22.7 10.5l-63-46.6-30.4 29.3c-3.4 3.4-6.2 6.2-12.7 6.2l4.5-63.3 115-104.1c5-4.5-1.1-7-7.8-2.5l-142 89.2-61.2-19.1c-13.3-4.1-13.5-13.3 2.8-19.7z" />
         </svg>
@@ -116,10 +116,10 @@ function CommunitySection() {
     },
     {
       label: 'GitHub',
-      description: 'View all ZKP2P repositories',
+      description: 'View the open‑source repos',
       href: 'https://github.com/zkp2p',
       icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
         </svg>
       )
@@ -129,6 +129,7 @@ function CommunitySection() {
   return (
     <section className={styles.community}>
       <div className={styles.container}>
+        <h2 className="sr-only">Community</h2>
         <div className={styles.communityGrid}>
           {communityLinks.map((link, idx) => (
             <a
@@ -154,32 +155,31 @@ function CommunitySection() {
 }
 
 export default function Home() {
-  const { siteConfig } = useDocusaurusContext();
   return (
     <Layout
       title="Documentation"
-      description="ZKP2P - The permissionless fiat ↔ crypto ramp">
+      description="Peer — Any currency. Any coin. Anywhere.">
       <Head>
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://docs.zkp2p.xyz" />
-        <meta property="og:title" content="ZKP2P Documentation" />
-        <meta property="og:description" content="The permissionless fiat ↔ crypto ramp" />
-        <meta property="og:image" content="https://docs.zkp2p.xyz/img/banner.png" />
+        <meta property="og:url" content="https://docs.peer.xyz" />
+        <meta property="og:title" content="Peer Documentation" />
+        <meta property="og:description" content="Any currency. Any coin. Anywhere." />
+        <meta property="og:image" content="https://docs.peer.xyz/img/banner.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:site_name" content="ZKP2P Docs" />
+        <meta property="og:site_name" content="Peer Docs" />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content="https://docs.zkp2p.xyz" />
-        <meta name="twitter:title" content="ZKP2P Documentation" />
-        <meta name="twitter:description" content="The permissionless fiat ↔ crypto ramp" />
-        <meta name="twitter:image" content="https://docs.zkp2p.xyz/img/banner.png" />
-        <meta name="twitter:site" content="@zkp2p" />
-        <meta name="twitter:creator" content="@zkp2p" />
+        <meta name="twitter:url" content="https://docs.peer.xyz" />
+        <meta name="twitter:title" content="Peer Documentation" />
+        <meta name="twitter:description" content="Any currency. Any coin. Anywhere." />
+        <meta name="twitter:image" content="https://docs.peer.xyz/img/banner.png" />
+        <meta name="twitter:site" content="@peerxyz" />
+        <meta name="twitter:creator" content="@peerxyz" />
       </Head>
-      <main>
+      <main className={styles.homeMain}>
         <section className={styles.hero}>
           <HomepageHero />
           <HomepageFeatures />

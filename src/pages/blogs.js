@@ -86,14 +86,14 @@ export default function Blogs() {
   return (
     <Layout
       title="Blogs"
-      description="Latest insights, updates, and stories from the ZKP2P team - building the permissionless fiat ↔ crypto ramp">
+      description="Latest insights, updates, and stories from the Peer team building the permissionless fiat ↔ crypto exchange.">
       <main className="blogs-page">
         <div className="container">
           <div className="hero-section">
-            <h1>ZKP2P Blog</h1>
+            <h1>Peer Blog</h1>
             <p className="hero-description">
-              Stay updated with the latest insights, technical deep dives, and community stories 
-              from the team building the permissionless fiat ↔ crypto ramp.
+              Stay updated with insights, technical deep dives, and community stories 
+              from the team building Peer.
             </p>
           </div>
 
@@ -106,6 +106,10 @@ export default function Blogs() {
                       src={post.image} 
                       alt={`${post.title} header image`}
                       className="post-image"
+                      loading="lazy"
+                      decoding="async"
+                      width="1200"
+                      height="630"
                       onError={(e) => {
                         e.target.style.display = 'none';
                         e.target.nextSibling.style.display = 'flex';
@@ -113,7 +117,7 @@ export default function Blogs() {
                     />
                   )}
                   <div className={`image-placeholder ${post.image ? 'fallback' : ''}`}>
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
+                    <svg aria-hidden="true" focusable="false" width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
                     </svg>
                   </div>
