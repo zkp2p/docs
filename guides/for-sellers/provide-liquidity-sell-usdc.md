@@ -9,7 +9,7 @@ This guide will walk you through the process of providing liquidity on ZKP2P.
 
 ### Step 1: Navigate to ZKP2P
 
-Visit [https://zkp2p.xyz](https://zkp2p.xyz) in your browser.
+Visit [https://peer.xyz](https://peer.xyz) in your browser.
 
 ![Provide Step 1](/img/provide-liquidity/ProvideStep1.avif)
 
