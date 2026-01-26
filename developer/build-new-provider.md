@@ -57,7 +57,7 @@ To get started building a new provider:
 2. Run `yarn install` and `yarn start`. The app is hosted at [http://localhost:8080](http://localhost:8080).
 3. Install the [PeerAuth extension](https://chromewebstore.google.com/detail/peerauth-authenticate-and/ijpgccednehjpeclfcllnjjcmiohdjih) in your browser.
 4. Create a new directory and JSON file and add the necessary provider data for your integration.
-5. Test your integration by going to [developer.zkp2p.xyz](https://developer.zkp2p.xyz/).
+5. Test your integration by going to [developer.peer.xyz](https://developer.peer.xyz/).
 6. Click Open Settings and set Base URL to `http://localhost:8080/`. Any changes to your JSON will now be reflected in the extension and developer app.
 7. Update the inputs with the path to your integration: `localhost:8080/{platform_name}/{provider_name}.json`.
 8. Click Authenticate to extract metadata.
@@ -419,7 +419,7 @@ Example:
 ### Common Issues
 
 - **Authenticate does not open desired auth link**: Check the Base URL you have set in the extension. Ensure you are running the server which is hosted in port 8080
-- **Authenticated into your payment platform but not redirected back to developer.zkp2p.xyz**: There is an issue with the urlRegex for metadata extraction. Double check your regex is correct
+- **Authenticated into your payment platform but not redirected back to developer.peer.xyz**: There is an issue with the urlRegex for metadata extraction. Double check your regex is correct
 - **Metadata returned to app, but Prove fails**: There is an issue with the response redactions or headers for the server call. Check your response redactions parameters and server headers
 - **Parameters not extracted correctly**: Check the `source` field in your `paramSelectors`. By default, parameters are extracted from responseBody
 - **CSRF or one-time tokens fail on replay**: Re-trigger the request in-page to refresh tokens before capture

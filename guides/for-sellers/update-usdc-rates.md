@@ -9,7 +9,7 @@ After creating your deposit in ZKP2P, you may need to adjust your conversion rat
 
 ### Step 1: Navigate to Your Deposit Details
 
-- Go to [https://zkp2p.xyz](https://zkp2p.xyz)  
+- Go to [https://peer.xyz](https://peer.xyz)  
 - Click on the **Sell** tab in the main navigation bar  
 - Find your active deposit in the list and click to view details  
 

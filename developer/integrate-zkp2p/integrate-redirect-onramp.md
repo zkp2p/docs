@@ -6,7 +6,7 @@ title: Onramp Integration
 # Onramp Integration
 
 :::info Try the demo
-Try the demo at [https://demo.zkp2p.xyz](https://demo.zkp2p.xyz). This flow requires the Peer extension and is only available on desktop.
+Try the demo at [https://demo.peer.xyz](https://demo.peer.xyz). This flow requires the Peer extension and is only available on desktop.
 :::
 
 Integrate the ZKP2P onramp directly into your application by using the Peer extension deeplink flow. Use the Peer extension SDK wrapper (`peerExtensionSdk.onramp()` from `@zkp2p/sdk`) to request a connection and open the onramp in the extension side panel. With a single call, you can offer your users fast onchain onboarding, complete with:
@@ -49,8 +49,8 @@ if (state === 'needs_connection') {
 
 peerExtensionSdk.onramp({
   referrer: 'Rampy Pay',
-  referrerLogo: 'https://demo.zkp2p.xyz/Rampy_logo.svg',
-  callbackUrl: 'https://demo.zkp2p.xyz',
+  referrerLogo: 'https://demo.peer.xyz/Rampy_logo.svg',
+  callbackUrl: 'https://demo.peer.xyz',
   inputCurrency: 'USD',
   inputAmount: '10',
   paymentPlatform: 'venmo',
@@ -155,8 +155,8 @@ chainId:tokenAddress
 ```ts
 peerExtensionSdk.onramp({
   referrer: 'Rampy Pay',
-  referrerLogo: 'https://demo.zkp2p.xyz/Rampy_logo.svg',
-  callbackUrl: 'https://demo.zkp2p.xyz',
+  referrerLogo: 'https://demo.peer.xyz/Rampy_logo.svg',
+  callbackUrl: 'https://demo.peer.xyz',
   toToken: '8453:0x0000000000000000000000000000000000000000',
   recipientAddress: '0x84e113087C97Cd80eA9D78983D4B8Ff61ECa1929',
 });
@@ -167,8 +167,8 @@ peerExtensionSdk.onramp({
 ```ts
 peerExtensionSdk.onramp({
   referrer: 'Rampy Pay',
-  referrerLogo: 'https://demo.zkp2p.xyz/Rampy_logo.svg',
-  callbackUrl: 'https://demo.zkp2p.xyz',
+  referrerLogo: 'https://demo.peer.xyz/Rampy_logo.svg',
+  callbackUrl: 'https://demo.peer.xyz',
   inputCurrency: 'USD',
   inputAmount: '10',
   toToken: '792703809:11111111111111111111111111111111',
@@ -185,8 +185,8 @@ Payment platform is not enforced. After opening the onramp in the side panel, th
 ```ts
 peerExtensionSdk.onramp({
   referrer: 'Rampy Pay',
-  referrerLogo: 'https://demo.zkp2p.xyz/Rampy_logo.svg',
-  callbackUrl: 'https://demo.zkp2p.xyz',
+  referrerLogo: 'https://demo.peer.xyz/Rampy_logo.svg',
+  callbackUrl: 'https://demo.peer.xyz',
   inputCurrency: 'EUR',
   inputAmount: '10',
   paymentPlatform: 'Revolut',
@@ -208,8 +208,8 @@ Onramp exactly 1 USDC on Base to a recipient address. Users can choose their pre
 ```ts
 peerExtensionSdk.onramp({
   referrer: 'Rampy Pay',
-  referrerLogo: 'https://demo.zkp2p.xyz/Rampy_logo.svg',
-  callbackUrl: 'https://demo.zkp2p.xyz',
+  referrerLogo: 'https://demo.peer.xyz/Rampy_logo.svg',
+  callbackUrl: 'https://demo.peer.xyz',
   amountUsdc: '1000000',
   recipientAddress: '0x84e113087C97Cd80eA9D78983D4B8Ff61ECa1929',
 });
