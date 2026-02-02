@@ -1,7 +1,7 @@
 import React from 'react';
 import Layout from '@theme/Layout';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 // Simple read time calculation
 const calculateReadTime = (content) => {
@@ -14,17 +14,16 @@ const calculateReadTime = (content) => {
 
 // Simple date formatting
 const formatDate = (dateString) => {
-  const date = new Date(dateString);
+  const date = new Date(`${dateString}T00:00:00Z`);
   return date.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
+    timeZone: 'UTC'
   });
 };
 
 export default function IntroZKP2PV2() {
-  const {siteConfig} = useDocusaurusContext();
-  
   const post = {
     title: 'Introducing ZKP2P V2',
     date: '2024-02-05',
@@ -32,7 +31,7 @@ export default function IntroZKP2PV2() {
     content: `
 Today, we're launching ZKP2P V2, the next version of our decentralized on/offramp protocol. Swap to ETH, USDC, Solana, memecoins and more using Venmo, Cashapp, Wise or Revolut–with no fees, no intrusive identity verification and near-instant settlement.
 
-Get started at [zkp2p.xyz](https://www.zkp2p.xyz)
+Get started at [peer.xyz](https://peer.xyz)
 
 ![Onramp overview – Venmo to ETH in ~60 seconds](/img/v2/v2_venmo_to_eth.png)
 
@@ -111,7 +110,7 @@ Today, anyone can run a relaying service fully customizable to how they want to 
 
 - Users can also opt to not use a relayer and choose to use the blockchain directly as a database (similar to ZKP2P V1)
 
-For more details on our tech stack, check out our [docs](https://docs.zkp2p.xyz).
+For more details on our tech stack, check out our [docs](https://docs.peer.xyz).
 
 ![Generic escrow architecture](/img/v2/v2_generic_escrow.png)
 
@@ -129,7 +128,7 @@ Launch is just the beginning. We're committed to:
 - Decentralizing the stack over time and making ZKP2P unstoppable and autonomous
 
 ## Reach out
-DMs are open! Email us at team@zkp2p.xyz or ping us on Telegram @zk_p2p.
+DMs are open! Email us at team@peer.xyz or ping us on [Telegram](https://t.me/+XDj9FNnW-xs5ODNl).
 
 Liquidity Providers: We're looking for LPs to power on/off-ramps across the globe. If you post liquidity / ads on existing P2P platforms like Binance P2P, we would love to chat about how ZKP2P plugs into your existing workflow.
 
@@ -139,13 +138,13 @@ Developers: Want to integrate a new payment platform (or your local bank) into Z
 
 To get involved and stay up to date:
 
-- Email: team@zkp2p.xyz
+- Email: team@peer.xyz
 
-- Telegram: @zk_p2p
+- Telegram: [t.me/+XDj9FNnW-xs5ODNl](https://t.me/+XDj9FNnW-xs5ODNl)
 
-- Twitter/X: @zkp2p
+- X: @peerxyz
 
-- Documentation: docs.zkp2p.xyz
+- Documentation: docs.peer.xyz
 
 - Analytics: [Dune](https://dune.com/zkp2p)
     `
@@ -166,7 +165,7 @@ To get involved and stay up to date:
           </div>
           
           <div className="blog-content">
-            <ReactMarkdown>{post.content}</ReactMarkdown>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
           </div>
         </div>
       </main>

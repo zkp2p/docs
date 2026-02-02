@@ -1,7 +1,7 @@
 import React from 'react';
 import Layout from '@theme/Layout';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 // Simple read time calculation
 const calculateReadTime = (content) => {
@@ -14,17 +14,16 @@ const calculateReadTime = (content) => {
 
 // Simple date formatting
 const formatDate = (dateString) => {
-  const date = new Date(dateString);
+  const date = new Date(`${dateString}T00:00:00Z`);
   return date.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
+    timeZone: 'UTC'
   });
 };
 
 export default function IntroZKP2PV3() {
-  const { siteConfig } = useDocusaurusContext();
-
   const post = {
     title: 'Introducing ZKP2P V3',
     date: '2025-11-03',
@@ -41,7 +40,7 @@ V2 solved the first and last mile for stablecoin payments, V3 scales it. We've i
 
 We've kept the same product you love, and made it better.
 
-V3 is live at [zkp2p.xyz](https://zkp2p.xyz).
+V3 is live at [peer.xyz](https://peer.xyz).
 
 ### Modular Smart Contracts
 
@@ -115,13 +114,13 @@ Liquidity Providers manage one vault and set spreads instead of fixed rates.
 
 Developers integrate faster and earn fees.
 
-If you're building and want to integrate ZKP2P, reach out on [Twitter](https://www.x.com/zkp2p) or [Telegram](https://www.t.me/zk_p2p).
+If you're building and want to integrate ZKP2P, reach out on [X](https://x.com/peerxyz) or [Telegram](https://t.me/+XDj9FNnW-xs5ODNl).
 
 CEXs had their moment. Traditional ramps are legacy infrastructure. ZKP2P V3 is P2P rails at scale, automated, composable, onchain.
 
 The future of on/offramps is permissionless, and it starts here.
 
-Try V3 today at [zkp2p.xyz](https://zkp2p.xyz).
+Try V3 today at [peer.xyz](https://peer.xyz).
     `
   };
 
@@ -140,11 +139,10 @@ Try V3 today at [zkp2p.xyz](https://zkp2p.xyz).
           </div>
 
           <div className="blog-content">
-            <ReactMarkdown>{post.content}</ReactMarkdown>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
           </div>
         </div>
       </main>
     </Layout>
   );
 }
-

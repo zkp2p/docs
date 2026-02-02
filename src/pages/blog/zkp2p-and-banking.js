@@ -1,7 +1,7 @@
 import React from 'react';
 import Layout from '@theme/Layout';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 // Simple read time calculation
 const calculateReadTime = (content) => {
@@ -14,17 +14,16 @@ const calculateReadTime = (content) => {
 
 // Simple date formatting
 const formatDate = (dateString) => {
-  const date = new Date(dateString);
+  const date = new Date(`${dateString}T00:00:00Z`);
   return date.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
+    timeZone: 'UTC'
   });
 };
 
 export default function ZKP2PAndBanking() {
-  const {siteConfig} = useDocusaurusContext();
-  
   const post = {
     title: 'ZKP2P and Banking',
     date: '2024-06-05',
@@ -120,7 +119,7 @@ Got questions or feedback? Drop a question below or send us a DM.
           </div>
           
           <div className="blog-content">
-            <ReactMarkdown>{post.content}</ReactMarkdown>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
           </div>
         </div>
       </main>

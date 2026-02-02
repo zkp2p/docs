@@ -1,7 +1,7 @@
 import React from 'react';
 import Layout from '@theme/Layout';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 // Simple read time calculation
 const calculateReadTime = (content) => {
@@ -14,17 +14,16 @@ const calculateReadTime = (content) => {
 
 // Simple date formatting
 const formatDate = (dateString) => {
-  const date = new Date(dateString);
+  const date = new Date(`${dateString}T00:00:00Z`);
   return date.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
+    timeZone: 'UTC'
   });
 };
 
 export default function SpeedDoesntAlwaysNeedToCost() {
-  const {siteConfig} = useDocusaurusContext();
-  
   const post = {
     title: "Speed Doesn't Always Need To Cost?",
     date: '2025-08-06', 
@@ -118,7 +117,7 @@ Bigger trades, on the other hand, get better spreads. LPs want to fill large ord
 
 Unlike AMMs, there is no price curve, just users selecting their onramps based on what's available. Both small and big orders pay for convenience, just in different ways.
 
-![Order Size Distribution](/img/spreadvspread/spread5.png)
+![Order Size Distribution](/img/spreadvspread/spread5.jpeg)
 
 ### Do Buyers Have a Favourite Time?
 
@@ -130,7 +129,7 @@ The volatility fluctuates by hour, with significant intraday differences dependi
 
 Surprise to no one, not all fiat currencies behave equally. The majority of our volume and platform is centred around the USA, making USD liquidity fairly deep, cheap, and for LPs quick to offramp. EUR and GBP fall into the middle ground, with less liquidity, slightly slower offramp speeds, and middle spreads. AUD is a longer term play for LPs, with higher spreads and slower fulfillment time, where buyers have no choice but to pay these *convenience fees*. 
 
-![Currency Spread Comparison](/img/spreadvspread/spread7.png)
+![Currency Spread Comparison](/img/spreadvspread/spread7.jpeg)
 
 There is also platform specific behaviour; CashApp and Revolut have the highest average spreads, Wise and Venmo is 50bps lower, but a similar speed for offramping. Zelle has a comparable spread to Venmo but takes triple the time for deposits to be taken. 
 
@@ -175,7 +174,7 @@ We're combining data and automation to support our users and create the ultimate
           </div>
           
           <div className="blog-content">
-            <ReactMarkdown>{post.content}</ReactMarkdown>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
           </div>
         </div>
       </main>
