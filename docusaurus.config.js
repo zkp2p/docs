@@ -115,7 +115,7 @@ const config = {
       navbar: {
         logo: {
           alt: 'Peer Logo',
-          src: 'img/logo.svg',
+          src: 'img/brand-kit/logos/peer-logo-white.svg',
         },
         items: [
           {

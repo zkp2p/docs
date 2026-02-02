@@ -1,7 +1,7 @@
 import React from 'react';
 import Layout from '@theme/Layout';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 // Simple read time calculation
 const calculateReadTime = (content) => {
@@ -14,17 +14,16 @@ const calculateReadTime = (content) => {
 
 // Simple date formatting
 const formatDate = (dateString) => {
-  const date = new Date(dateString);
+  const date = new Date(`${dateString}T00:00:00Z`);
   return date.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
+    timeZone: 'UTC'
   });
 };
 
 export default function ZKP2PXHyperliquid() {
-  const {siteConfig} = useDocusaurusContext();
-  
   const post = {
     title: 'ZKP2P x Hyperliquid',
     date: '2024-07-15',
@@ -74,7 +73,8 @@ Hyperliquid and ZKP2P are both starting to become more composable within DeFi ec
 
 Getting started with trading on Hyperliquid with ZKP2P is as much easier than getting started with Binance. You can go from your fiat payment app to the casino within 5 minutes:
 
-- Go to zkp2p.xyz and signal your intentChoose your amount, currency, and payment provider
+- Go to peer.xyz and signal your intent
+- Choose your amount, currency, and payment provider
 - Send your fiat to the counterparty through your payment app
 - Generate the proof using the PeerAuth extension (mobile soon™)
 - Complete your order and bridge to Hypercore
@@ -115,7 +115,7 @@ The CEX-free stack is already live, and can only get better.
           </div>
           
           <div className="blog-content">
-            <ReactMarkdown>{post.content}</ReactMarkdown>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
           </div>
         </div>
       </main>
