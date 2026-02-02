@@ -25,3 +25,4 @@ title: Brand Kit
 ## Downloads
 
 - [Download all logos (ZIP)](/brand-kit/peer-logos.zip)
+- [Download full brand kit (Google Drive)](https://drive.google.com/drive/folders/1tztk4ikZGSVZTQWryuM-gKiQjiyIzLix?usp=sharing)
