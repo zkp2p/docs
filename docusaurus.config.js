@@ -140,9 +140,7 @@ const config = {
             label: 'Developer',
           },
           {
-            type: 'docSidebar',
-            sidebarId: 'defaultSidebar',
-            docsPluginId: 'brand-kit',
+            to: '/brand-kit',
             position: 'right',
             label: 'Brand Kit',
           },
