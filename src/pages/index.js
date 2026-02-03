@@ -11,7 +11,8 @@ function HomepageHero() {
         Welcome to Peer Docs
       </h1>
       <p className={styles.heroSubtitle}>
-        Any currency. Any coin. Anywhere. Build, integrate, and use Peer with confidence.
+        Any currency. Any coin. Anywhere.<br />
+        Build, integrate, and use Peer with confidence.
       </p>
     </div>
   );
