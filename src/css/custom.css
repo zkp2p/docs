@@ -503,10 +503,7 @@ svg[data-icon="external-link"] {
 }
 
 .menu__link--active {
-  color: var(--peer-black);
   font-weight: var(--peer-font-weight-semibold);
-  background: var(--peer-white);
-  border-radius: var(--zkp2p-radius-medium);
 }
 
 .menu__list-item-collapsible--active {
@@ -514,21 +511,38 @@ svg[data-icon="external-link"] {
 }
 
 .menu__list-item-collapsible--active > .menu__link {
-  color: var(--peer-black);
-  background: var(--peer-white);
+  color: var(--peer-white);
+  background: transparent;
 }
 
-.menu__list-item-collapsible .menu__link--active {
+.menu__link--active:not(.menu__link--sublist) {
+  color: var(--peer-black);
+  background: var(--peer-white);
+  border-radius: var(--zkp2p-radius-medium);
+}
+
+.menu__list-item-collapsible .menu__link--active:not(.menu__link--sublist) {
   background: var(--peer-white) !important;
   color: var(--peer-black) !important;
 }
 
-.menu__link--active:hover,
-.menu__link--active:focus,
-.menu__list-item-collapsible--active > .menu__link:hover,
-.menu__list-item-collapsible--active > .menu__link:focus {
+.menu__link--active.menu__link--sublist {
+  color: var(--peer-white) !important;
+  background: transparent !important;
+}
+
+.menu__link--active:not(.menu__link--sublist):hover,
+.menu__link--active:not(.menu__link--sublist):focus {
   color: var(--peer-black);
   background: var(--peer-white);
+}
+
+.menu__link--active.menu__link--sublist:hover,
+.menu__link--active.menu__link--sublist:focus,
+.menu__list-item-collapsible--active > .menu__link:hover,
+.menu__list-item-collapsible--active > .menu__link:focus {
+  color: var(--peer-white);
+  background: transparent;
 }
 
 /* Docusaurus sidebar items */
@@ -545,8 +559,8 @@ svg[data-icon="external-link"] {
 
 .theme-doc-sidebar-item-link--active,
 .theme-doc-sidebar-item-category--active {
-  color: var(--peer-black);
-  background: var(--peer-white);
+  color: inherit;
+  background: transparent;
 }
 
 /* ===========================
