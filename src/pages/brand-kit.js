@@ -485,11 +485,11 @@ export default function BrandKit() {
         <meta property="og:url" content="https://docs.peer.xyz/brand-kit" />
         <meta property="og:title" content="Peer Brand Kit" />
         <meta property="og:description" content="Download Peer logos, colors, and brand guidelines." />
-        <meta property="og:image" content="https://docs.peer.xyz/img/banner.png" />
+        <meta property="og:image" content="https://docs.peer.xyz/img/link-preview.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Peer Brand Kit" />
         <meta name="twitter:description" content="Download Peer logos, colors, and brand guidelines." />
-        <meta name="twitter:image" content="https://docs.peer.xyz/img/banner.png" />
+        <meta name="twitter:image" content="https://docs.peer.xyz/img/link-preview.png" />
       </Head>
       <main className={styles.brandKit}>
         <HeroSection />
