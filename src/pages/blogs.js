@@ -16,6 +16,38 @@ const formatDate = (dateString) => {
 export default function Blogs() {
   const blogPosts = [
     {
+      title: 'A Year of Privacy',
+      excerpt: 'Over the last three years, I\'ve purchased a house and got married, all using proceeds from crypto. This is the privacy stack I use. The one I wish existed in 2023.',
+      date: '2026-01-30',
+      readTime: 7,
+      image: '/img/a-year-of-privacy/yoptitle.jpeg',
+      link: '/blog/a-year-of-privacy'
+    },
+    {
+      title: 'How You Can Make 152% APY on Stablecoins',
+      excerpt: 'I pulled six weeks of data to find the best providers, optimal spreads, and times to deposit to maximise your yield.',
+      date: '2026-01-22',
+      readTime: 8,
+      image: '/img/how-you-can-make-152-apy/title.jpeg',
+      link: '/blog/how-you-can-make-152-apy'
+    },
+    {
+      title: 'How I Made 152% APY on Stablecoins',
+      excerpt: 'I generated $12.7K yield over 9 months, on an average deposit size of $6.3K; that\'s 152% APY on USDC. No ponzinomics, degen farming, leverage, or token farming. Just a loop.',
+      date: '2026-01-08',
+      readTime: 4,
+      image: '/img/how-i-made-152-apy/title.jpeg',
+      link: '/blog/how-i-made-152-apy'
+    },
+    {
+      title: 'Do Not Fear, Peer to Peer: How P2P Money Always Finds a Way',
+      excerpt: 'A ~1,200 year journey from trusting your friend to trusting the tech. From hawala to the Knights Templar to ZKP2P.',
+      date: '2025-12-31',
+      readTime: 8,
+      image: '/img/do-not-fear-peer-to-peer/title.jpeg',
+      link: '/blog/do-not-fear-peer-to-peer'
+    },
+    {
       title: 'Introducing ZKP2P V3',
       excerpt: 'Since launching V2 in February, we\'ve grown from $30k to $300k weekly volume and hit $1M+ monthly. V3 scales the protocol with modular smart contracts, flexible verification, and better UX for buyers, liquidity providers, and developers.',
       date: '2025-11-03',
