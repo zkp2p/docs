@@ -65,6 +65,9 @@ const config = {
                 },
               ],
             },
+            devServer: {
+              allowedHosts: ['ts.net', '.ts.net'],
+            },
           };
         },
       };
