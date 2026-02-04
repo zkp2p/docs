@@ -957,7 +957,7 @@ input:focus-visible, textarea:focus-visible {
 }
 
 .table-of-contents__link--active {
-  color: var(--zkp2p-accent);
+  color: var(--peer-white);
   font-weight: var(--zkp2p-font-weight-medium);
 }
 
