@@ -166,7 +166,7 @@ export default function Home() {
         <meta property="og:url" content="https://docs.peer.xyz" />
         <meta property="og:title" content="Peer Documentation" />
         <meta property="og:description" content="Any currency. Any coin. Anywhere." />
-        <meta property="og:image" content="https://docs.peer.xyz/img/banner.png" />
+        <meta property="og:image" content="https://docs.peer.xyz/img/link-preview.png" />
         <meta property="og:image:width" content="2000" />
         <meta property="og:image:height" content="2000" />
         <meta property="og:site_name" content="Peer Docs" />
@@ -176,7 +176,7 @@ export default function Home() {
         <meta name="twitter:url" content="https://docs.peer.xyz" />
         <meta name="twitter:title" content="Peer Documentation" />
         <meta name="twitter:description" content="Any currency. Any coin. Anywhere." />
-        <meta name="twitter:image" content="https://docs.peer.xyz/img/twitter_card.png" />
+        <meta name="twitter:image" content="https://docs.peer.xyz/img/link-preview.png" />
         <meta name="twitter:site" content="@peerxyz" />
         <meta name="twitter:creator" content="@peerxyz" />
       </Head>
