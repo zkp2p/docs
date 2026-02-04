@@ -1075,7 +1075,7 @@ input:focus-visible, textarea:focus-visible {
   height: auto;
   border-radius: var(--peer-radius-lg);
   border: 1px solid var(--peer-border-dark);
-  background: var(--peer-rich-black);
+  background: var(--peer-black);
 }
 
 .sr-only {
