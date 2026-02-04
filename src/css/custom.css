@@ -1096,19 +1096,13 @@ input:focus-visible, textarea:focus-visible {
 /* ===========================
    Breadcrumbs
    =========================== */
-.breadcrumbs {
-  background: var(--peer-white);
-  border-radius: var(--zkp2p-radius-medium);
-  padding: var(--zkp2p-spacing-2) var(--zkp2p-spacing-3);
-}
-
 .breadcrumbs__link {
-  color: var(--peer-black);
+  color: var(--zkp2p-text-secondary);
   text-decoration: none;
 }
 
 .breadcrumbs__link:hover {
-  color: var(--peer-black);
+  color: var(--zkp2p-text-primary);
   text-decoration: none;
 }
 
@@ -1119,10 +1113,11 @@ input:focus-visible, textarea:focus-visible {
 
 .breadcrumbs__item--active .breadcrumbs__link {
   color: var(--peer-black);
+  background: var(--peer-white);
 }
 
 .breadcrumbs__item:not(:last-child)::after {
-  color: rgba(0, 0, 0, 0.5);
+  color: var(--zkp2p-text-muted);
 }
 
 /* ===========================
