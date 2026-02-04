@@ -79,6 +79,9 @@
   --ifm-navbar-background-color: var(--peer-black);
   --ifm-footer-background-color: var(--peer-black);
 
+  --ifm-menu-color-background-active: var(--peer-white);
+  --ifm-menu-color-active: var(--peer-black);
+
   --ifm-font-family-base: var(--peer-font-body), var(--peer-font-fallback);
   --ifm-heading-font-family: var(--peer-font-headline);
   --ifm-heading-font-weight: var(--peer-font-weight-semibold);
@@ -478,6 +481,18 @@ svg[data-icon="external-link"] {
   font-weight: var(--peer-font-weight-semibold);
   background: var(--peer-white);
   border-radius: var(--zkp2p-radius-medium);
+}
+
+.menu__list-item-collapsible--active {
+  background: var(--peer-white);
+}
+
+.menu__list-item-collapsible--active > .menu__link {
+  color: var(--peer-black);
+}
+
+.menu__list-item-collapsible .menu__link--active {
+  background: var(--peer-white) !important;
 }
 
 /* Docusaurus sidebar items */
