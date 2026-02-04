@@ -361,6 +361,25 @@ svg[data-icon="external-link"] {
   background: var(--peer-gradient-ignite);
 }
 
+/* Navbar dropdown tweaks */
+.navbar__item.dropdown > .navbar__link--active {
+  background: transparent;
+  color: var(--peer-white);
+}
+
+.navbar__item.dropdown > .navbar__link--active::after {
+  display: none;
+}
+
+.navbar__item.dropdown .dropdown__menu {
+  background: var(--peer-white);
+}
+
+.navbar__item.dropdown .dropdown__link:hover,
+.navbar__item.dropdown .dropdown__link:focus {
+  background: var(--peer-white);
+}
+
 /* Search bar styling */
 .navbar__search-input {
   border-radius: var(--zkp2p-radius-xlarge);
