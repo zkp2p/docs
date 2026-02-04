@@ -79,6 +79,9 @@
   --ifm-navbar-background-color: var(--peer-black);
   --ifm-footer-background-color: var(--peer-black);
 
+  --ifm-menu-color-background-active: var(--peer-white);
+  --ifm-menu-color-active: var(--peer-black);
+
   --ifm-font-family-base: var(--peer-font-body), var(--peer-font-fallback);
   --ifm-heading-font-family: var(--peer-font-headline);
   --ifm-heading-font-weight: var(--peer-font-weight-semibold);
@@ -358,6 +361,25 @@ svg[data-icon="external-link"] {
   background: var(--peer-gradient-ignite);
 }
 
+/* Navbar dropdown tweaks */
+.navbar__item.dropdown > .navbar__link--active {
+  background: transparent;
+  color: var(--peer-white);
+}
+
+.navbar__item.dropdown > .navbar__link--active::after {
+  display: none;
+}
+
+.navbar__item.dropdown .dropdown__menu {
+  background: var(--peer-white);
+}
+
+.navbar__item.dropdown .dropdown__link:hover,
+.navbar__item.dropdown .dropdown__link:focus {
+  background: var(--peer-white);
+}
+
 /* Search bar styling */
 .navbar__search-input {
   border-radius: var(--zkp2p-radius-xlarge);
@@ -465,19 +487,62 @@ svg[data-icon="external-link"] {
   color: var(--peer-light-grey);
   font-weight: var(--peer-font-weight-medium);
   font-size: var(--peer-font-size-body);
-  transition: color 0.2s ease;
+  border-radius: var(--zkp2p-radius-medium);
+  transition: color 0.2s ease, background-color 0.2s ease;
 }
 
 .menu__link:hover {
-  color: var(--zkp2p-text-primary);
+  color: var(--peer-white);
+  background: rgba(255, 255, 255, 0.08);
   text-decoration: none;
 }
 
+.menu__link:focus-visible {
+  outline: 2px solid var(--peer-ignite-yellow);
+  outline-offset: 2px;
+}
+
 .menu__link--active {
-  color: var(--peer-white);
   font-weight: var(--peer-font-weight-semibold);
-  background: var(--peer-docs-accent-soft);
+}
+
+.menu__list-item-collapsible--active {
+  background: transparent;
+}
+
+.menu__list-item-collapsible--active > .menu__link {
+  color: var(--peer-white);
+  background: transparent;
+}
+
+.menu__link--active:not(.menu__link--sublist) {
+  color: var(--peer-black);
+  background: var(--peer-white);
   border-radius: var(--zkp2p-radius-medium);
+}
+
+.menu__list-item-collapsible .menu__link--active:not(.menu__link--sublist) {
+  background: var(--peer-white) !important;
+  color: var(--peer-black) !important;
+}
+
+.menu__link--active.menu__link--sublist {
+  color: var(--peer-white) !important;
+  background: transparent !important;
+}
+
+.menu__link--active:not(.menu__link--sublist):hover,
+.menu__link--active:not(.menu__link--sublist):focus {
+  color: var(--peer-black);
+  background: var(--peer-white);
+}
+
+.menu__link--active.menu__link--sublist:hover,
+.menu__link--active.menu__link--sublist:focus,
+.menu__list-item-collapsible--active > .menu__link:hover,
+.menu__list-item-collapsible--active > .menu__link:focus {
+  color: var(--peer-white);
+  background: transparent;
 }
 
 /* Docusaurus sidebar items */
@@ -494,8 +559,8 @@ svg[data-icon="external-link"] {
 
 .theme-doc-sidebar-item-link--active,
 .theme-doc-sidebar-item-category--active {
-  color: var(--peer-white);
-  background: var(--peer-docs-accent-soft);
+  color: inherit;
+  background: transparent;
 }
 
 /* ===========================
@@ -613,7 +678,6 @@ table {
   width: 100%;
   border: none;
   box-shadow: none;
-  outline: none;
   border-collapse: collapse;
 }
 
@@ -638,7 +702,6 @@ table,
 table * {
   border: none;
   box-shadow: none;
-  outline: none;
 }
 
 /* Code blocks */
@@ -957,7 +1020,7 @@ input:focus-visible, textarea:focus-visible {
 }
 
 .table-of-contents__link--active {
-  color: var(--zkp2p-accent);
+  color: var(--peer-white);
   font-weight: var(--zkp2p-font-weight-medium);
 }
 
@@ -1008,6 +1071,11 @@ input:focus-visible, textarea:focus-visible {
   cursor: pointer;
 }
 
+.headerSearchInput:focus-visible {
+  outline: 2px solid var(--peer-ignite-yellow);
+  outline-offset: 2px;
+}
+
 .headerSearchInput::placeholder {
   color: var(--zkp2p-text-secondary);
 }
@@ -1038,8 +1106,14 @@ input:focus-visible, textarea:focus-visible {
   text-decoration: none;
 }
 
+.breadcrumbs__link:focus-visible {
+  outline: 2px solid var(--peer-ignite-yellow);
+  outline-offset: 2px;
+}
+
 .breadcrumbs__item--active .breadcrumbs__link {
-  color: var(--zkp2p-text-secondary);
+  color: var(--peer-black);
+  background: var(--peer-white);
 }
 
 .breadcrumbs__item:not(:last-child)::after {
@@ -1075,7 +1149,7 @@ input:focus-visible, textarea:focus-visible {
   height: auto;
   border-radius: var(--peer-radius-lg);
   border: 1px solid var(--peer-border-dark);
-  background: var(--peer-rich-black);
+  background: var(--peer-black);
 }
 
 .sr-only {
