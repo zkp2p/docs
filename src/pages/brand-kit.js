@@ -452,7 +452,7 @@ function DownloadSection() {
         </a>
 
         <a
-          href="https://drive.google.com/drive/folders/1ejYBILtBY10tNVrIySfcUC-mI07iFRUW"
+          href="https://drive.google.com/drive/folders/1ejYBILtBY10tNVrIySfcUC-mI07iFRUW?usp=sharing"
           target="_blank"
           rel="noopener noreferrer"
           className={styles.downloadCard}
