@@ -148,8 +148,8 @@ const config = {
             label: 'Brand Kit',
           },
           {
-            to: '/blogs',
-            label: 'Blogs',
+            to: '/blog',
+            label: 'Blog',
             position: 'right',
           },
           {
@@ -213,7 +213,7 @@ const config = {
               },
               {
                 label: 'Blogs',
-                to: '/blogs',
+                to: '/blog',
               },
             ],
           },

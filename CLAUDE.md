@@ -19,7 +19,7 @@ Four separate documentation plugins with independent sidebars:
 
 ### Custom Implementations
 
-- **Blog system**: Disabled in preset, custom implementation via `src/pages/blogs.js`
+- **Blog system**: Disabled in preset, custom implementation via `src/pages/blog.js`
 - **Dark mode only**: Light theme disabled (`colorMode.disableSwitch: true`)
 - **Raw markdown loader**: Webpack plugin for importing `.md` files as source strings
 
@@ -39,7 +39,7 @@ docs/
 ├── developer/                 # Integration documentation
 │   └── integrate-zkp2p/
 ├── brand-kit/                 # Brand asset downloads
-├── blogs/                     # Blog markdown (SEO/fallback)
+├── blog/                      # Blog markdown (SEO/fallback)
 ├── src/
 │   ├── brand/                 # Design system package (@zkp2p/brand)
 │   ├── css/                   # Global styles

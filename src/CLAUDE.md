@@ -13,7 +13,7 @@ src/
 └── pages/
     ├── index.js     # Homepage
     ├── index.module.css
-    ├── blogs.js     # Blog listing page
+    ├── blog.js      # Blog listing page
     └── blog/        # Individual blog post pages
 ```
 
@@ -62,16 +62,16 @@ Components:
 
 Uses CSS Modules with brand CSS variables.
 
-### Blog System (`pages/blogs.js` + `pages/blog/`)
+### Blog System (`pages/blog.js` + `pages/blog/`)
 
 Custom blog implementation (Docusaurus blog disabled):
-- `blogs.js` - Listing page with all posts defined inline
+- `blog.js` - Listing page with all posts defined inline
 - `blog/*.js` - Individual post pages using ReactMarkdown
 
 **To add a blog post:**
 1. Create `pages/blog/new-post.js` following existing pattern
-2. Add post metadata and content to `blogs.js` array
-3. Optionally add markdown file to `/blogs/` for SEO
+2. Add post metadata and content to `blog.js` array
+3. Optionally add markdown file to `/blog/` for SEO
 
 ## Adding New Pages
 
