@@ -16,6 +16,14 @@ const formatDate = (dateString) => {
 export default function Blogs() {
   const blogPosts = [
     {
+      title: 'ZKP2P is now Peer: Finance for Humans',
+      excerpt: 'ZKP2P started as a proof of concept during ZKHack in 2023. As zero-knowledge technology has matured, our focus has expanded from the technology to the people using it. Today, we become Peer.',
+      date: '2026-02-05',
+      readTime: 2,
+      image: '/img/zkp2p-is-now-peer/header.png',
+      link: '/blog/zkp2p-is-now-peer'
+    },
+    {
       title: 'A Year of Privacy',
       excerpt: 'Over the last three years, I\'ve purchased a house and got married, all using proceeds from crypto. This is the privacy stack I use. The one I wish existed in 2023.',
       date: '2026-01-30',
