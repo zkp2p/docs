@@ -11,7 +11,7 @@ This guide will walk you through the process of providing liquidity on ZKP2P.
 
 Visit [https://peer.xyz](https://peer.xyz) in your browser.
 
-![Provide Step 1](/img/provide-liquidity/ProvideStep1.avif)
+![Provide Step 1](/img/onramping/OnrampStep1.png)
 
 
 ### Step 2: Check Current Market Rates
@@ -27,7 +27,7 @@ Visit [https://peer.xyz](https://peer.xyz) in your browser.
 
 - Click the add liquidity button on the top right hand side of the Order Book
 
-![Provide Step 3](/img/provide-liquidity/ProvideStep3.png)
+![Provide Step 3](/img/provide-liquidity/ProvideStep2.png)
 
 
 You can also click the **Sell** button on the toolbar 
@@ -39,10 +39,7 @@ You can also click the **Sell** button on the toolbar
 
 - The platform will prompt you to connect your wallet  
 - Select your preferred wallet (Rabby, MetaMask, etc.) or log in via email, Twitter, or Google  
-- Approve the connection request in your wallet 
-
-![Provide Step 4](/img/provide-liquidity/ProvideStep4.avif)
-
+- Approve the connection request in your wallet
 
 ### Step 5: Fund Account with USDC on Base
 
@@ -56,21 +53,21 @@ You can also click the **Sell** button on the toolbar
 
 - Click the **New Deposit** button
 
-![Provide Step 6](/img/provide-liquidity/ProvideStep6.avif)
+![Provide Step 6](/img/provide-liquidity/ProvideStep3a.png)
 
 
 ### Step 7: Deposit USDC to Sell
 
 - Click **Max** to deposit your full USDC balance or type a custom amount  
 
-![Provide Step 7](/img/provide-liquidity/ProvideStep7.avif)
+![Provide Step 7](/img/provide-liquidity/ProvideStep7.png)
 
 
 ### Step 8: Add Telegram Username (Optional)
 
 - Enter your Telegram username so buyers can contact you if any issues arise  
 
-![Provide Step 8](/img/provide-liquidity/ProvideStep8.avif)
+![Provide Step 8](/img/provide-liquidity/ProvideStep7.png)
 
 ### Step 9: Select Primary Payment Platform
 
@@ -85,7 +82,7 @@ Choose your preferred platform from the dropdown:
 - PayPal (Multi Currency)
 - Monzo (GBP Only)
 
-![Provide Step 9](/img/provide-liquidity/ProvideStep9.avif)
+![Provide Step 9](/img/provide-liquidity/ProvideStep9a.png)
 
 
 ### Step 10: Enter Payee Details
@@ -100,7 +97,7 @@ Enter your username/account details for the selected platform:
 
 > 🔍 **Double-check accuracy** — these details are how buyers send you money.
 
-![Provide Step 10](/img/provide-liquidity/ProvideStep10.png)
+![Provide Step 10](/img/provide-liquidity/ProvideStep9.png)
 
 
 ### Step 11: Set Exchange Rates
@@ -166,8 +163,8 @@ If all details are correct you can continue with your transaction!
   - Accepted currencies/platforms
   - Current status  
 
-![Provide Step 17](/img/provide-liquidity/ProvideStep17.avif)
-![Provide Step 17a](/img/provide-liquidity/ProvideStep17a.avif)
+![Provide Step 17](/img/provide-liquidity/ProvideStep17.png)
+![Provide Step 17a](/img/provide-liquidity/ProvideStep17a.png)
 
 
 ---

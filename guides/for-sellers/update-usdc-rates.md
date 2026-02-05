@@ -13,7 +13,7 @@ After creating your deposit in ZKP2P, you may need to adjust your conversion rat
 - Click on the **Sell** tab in the main navigation bar  
 - Find your active deposit in the list and click to view details  
 
-![CR Step 1](/img/conversion-rate/CRStep1.avif)  
+![CR Step 1](/img/provide-liquidity/ProvideStep17.png)  
 
 ### Step 2: Locate the Conversion Rates Section
 
@@ -23,7 +23,7 @@ Scroll to the **Conversion Rates** section. You'll see:
 - The **currencies** you accept (e.g., GBP, SGD, EUR)  
 - The **current conversion rate** for each currency \
 
-![CR Step 2](/img/conversion-rate/CRStep2.avif)  
+![CR Step 2](/img/provide-liquidity/ProvideStep17a.png)  
 
 
 ### Step 3: Select the Rate to Update
@@ -32,7 +32,7 @@ Scroll to the **Conversion Rates** section. You'll see:
 - Click the **edit icon (pencil)** next to the current rate  
 - The "Update Conversion Rate" screen will appear  
 
-![CR Step 3](/img/conversion-rate/CRStep3.avif)  
+![CR Step 3](/img/conversion-rate/CRStep3.png)  
 
 
 ### Step 4: Enter Your New Rate
@@ -46,7 +46,7 @@ In the modal, you'll see:
 
 Enter your new rate — e.g., changing **0.8 → 0.795** for GBP.
 
-![CR Step 4](/img/conversion-rate/CRStep4.avif)  
+![CR Step 4](/img/conversion-rate/CRStep4.png)  
 
 
 
@@ -56,15 +56,13 @@ Enter your new rate — e.g., changing **0.8 → 0.795** for GBP.
 - Your wallet will prompt you to sign the transaction  
 - This updates your rate on-chain in the smart contract  
 
-![CR Step 5](/img/conversion-rate/CRStep5.avif)  
-
 ### Step 6: Wait for Confirmation
 
 - Wait for the transaction to confirm on the Base Network
 - Once confirmed, your updated rate will show in the Conversion Rates section  
 - The new rate will apply to all future orders
 
-![CR Step 6](/img/conversion-rate/CRStep6.avif)
+![CR Step 6](/img/conversion-rate/CRStep6.png)
 
 
 
