@@ -11,7 +11,7 @@ This guide will walk you through the process of buying USDC and cryptocurrency o
 
 Visit [https://peer.xyz](https://peer.xyz) in your browser.
 
-![Onramp Step 1](/img/onramping/OnrampStep1.avif)
+![Onramp Step 1](/img/onramping/OnrampStep1.png)
 
 ### Step 2: Connect Your Wallet
 
@@ -25,19 +25,19 @@ You'll need to connect a wallet like Rabby, MetaMask, or sign in with Twitter, G
 
 Click on the **Buy** tab in the main navigation bar.
 
-![Onramp Step 3](/img/onramping/OnrampStep3.avif)
+![Onramp Step 3](/img/onramping/OnrampStep3.png)
 
 
 ### Step 4: Configure Your Purchase
 
 - Select your currency from the dropdown menu (USD, EUR, GBP, etc.)  
 
-![Onramp Step 4](/img/onramping/OnrampStep4.avif)
+![Onramp Step 4](/img/onramping/OnrampStep4.png)
 
 - Enter the amount you want to send in your local currency (e.g., 1 USD)  
 - Choose your payment method (Revolut, Venmo, Cash App, Wise)  
 
-![Onramp Step 4a](/img/onramping/OnrampStep4a.avif)
+![Onramp Step 4a](/img/onramping/OnrampStep4.png)
 
 - Choose your desired Chain and Token
 _ZKP2P currently supports most major chains, including Base, Arbitrum, HyperCore, HyperEVM, Mainnet, Plasma, Solana_
@@ -64,7 +64,7 @@ ZKP2P will automatically calculate how much USDC you'll receive based on liquidi
 - You will be prompted to sign a transaction
 - If you logged in with socials, gas is sponsored and you will not have to sign anything. 
 
-![Onramp Step 6](/img/onramping/OnrampStep6.avif)
+![Onramp Step 6](/img/onramping/OnrampStep6.png)
 
 
 ### Step 7: Install the PeerAuth Chrome Extension
@@ -74,9 +74,6 @@ For first-time users, you'll need to install the PeerAuth Extension that helps v
 - You'll see the **Install PeerAuth Extension** screen  
 - Click **Add to Chrome** to install the extension
 
-![Onramp Step 7](/img/onramping/OnrampStep7.avif)
-
-
 ### Step 8: Make and Confirm the Payment
 
 - You'll see a QR code or payment instructions  
@@ -85,7 +82,7 @@ For first-time users, you'll need to install the PeerAuth Extension that helps v
 - **Do not perform cross-currency swaps** (e.g., in Revolut), as this can cause verification issues and you may lose your money
 - Return to ZKP2P and click **I have completed payment**  
 
-![Onramp Step 8](/img/onramping/OnrampStep8.avif)
+![Onramp Step 8](/img/onramping/OnrampStep8.png)
 
 
 ### Step 9: Payment Verification Process

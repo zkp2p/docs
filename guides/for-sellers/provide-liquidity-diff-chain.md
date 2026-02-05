@@ -11,14 +11,14 @@ This guide will walk you through the process of providing liquidity on ZKP2P fro
 
 Visit [https://peer.xyz](https://peer.xyz) in your browser.
 
-![Provide Step 1](/img/provide-liquidity/ProvideStep1.avif)
+![Provide Step 1](/img/onramping/OnrampStep1.png)
 
 
 ### Step 2: Add Liquidity
 
 - Click the add liquidity button on the top right hand side of the Order Book
 
-![Provide Step 3](/img/provide-liquidity/ProvideStep3.png)
+![Provide Step 3](/img/provide-liquidity/ProvideStep2.png)
 
 
 You can also click the **Sell** button on the toolbar 
@@ -30,9 +30,7 @@ You can also click the **Sell** button on the toolbar
 
 - The platform will prompt you to connect your wallet  
 - Select your preferred wallet (Rabby, MetaMask, etc.) or log in via email, Twitter, or Google  
-- Approve the connection request in your wallet 
-
-![Provide Step 4](/img/provide-liquidity/ProvideStep4.avif)
+- Approve the connection request in your wallet
 
 ### Step 4: Get USDC
 
