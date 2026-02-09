@@ -474,6 +474,20 @@ svg[data-icon="external-link"] {
 /* ===========================
    Sidebar
    =========================== */
+
+/* Fix: backdrop-filter on .navbar creates a containing block, causing
+   .navbar-sidebar (position:fixed) to resolve height:100% against the
+   navbar (~60px) instead of the viewport. Use viewport units instead. */
+.navbar-sidebar {
+  height: 100vh;
+  height: 100dvh;
+}
+
+.navbar-sidebar__items {
+  height: calc(100vh - var(--ifm-navbar-height));
+  height: calc(100dvh - var(--ifm-navbar-height));
+}
+
 .theme-doc-sidebar-container {
   background: var(--zkp2p-background);
   border-right: 1px solid rgba(255, 255, 255, 0.06);
