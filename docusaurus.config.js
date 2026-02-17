@@ -153,6 +153,11 @@ const config = {
             position: 'right',
           },
           {
+            to: '/ecosystem',
+            label: 'Ecosystem',
+            position: 'right',
+          },
+          {
             href: 'https://github.com/zkp2p',
             label: 'GitHub',
             position: 'right',
@@ -214,6 +219,10 @@ const config = {
               {
                 label: 'Blogs',
                 to: '/blog',
+              },
+              {
+                label: 'Ecosystem',
+                to: '/ecosystem',
               },
             ],
           },
