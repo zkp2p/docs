@@ -1623,3 +1623,173 @@ input:focus-visible, textarea:focus-visible {
 .communityCard svg:not(.communityIconWrapper svg) {
   display: none;
 }
+
+/* ===========================
+   Ecosystem Page
+   =========================== */
+.ecosystem-page {
+  padding: var(--zkp2p-spacing-6) var(--zkp2p-spacing-0);
+  min-height: 100vh;
+}
+
+.ecosystem-page .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--zkp2p-spacing-0) var(--zkp2p-spacing-6);
+}
+
+.ecosystem-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: var(--zkp2p-spacing-5);
+  margin-bottom: var(--zkp2p-spacing-8);
+}
+
+.ecosystem-card {
+  background: rgba(24, 24, 24, 0.9);
+  border: 1px solid var(--peer-border-dark);
+  border-radius: var(--peer-radius-xl);
+  padding: var(--zkp2p-spacing-5) var(--zkp2p-spacing-6);
+  text-decoration: none !important;
+  color: inherit !important;
+  display: flex;
+  flex-direction: column;
+  gap: var(--zkp2p-spacing-4);
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease,
+    box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+}
+
+.ecosystem-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 50%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.ecosystem-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--peer-docs-border-hover);
+  background: rgba(32, 32, 32, 0.95);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+              0 12px 36px rgba(0, 0, 0, 0.35);
+}
+
+.ecosystem-card:focus-visible {
+  transform: translateY(-4px);
+  border-color: var(--peer-docs-border-hover);
+  background: rgba(32, 32, 32, 0.95);
+  outline: 2px solid var(--peer-ignite-yellow);
+  outline-offset: 3px;
+}
+
+.ecosystem-card:hover::before {
+  opacity: 1;
+}
+
+.ecosystem-card__tag {
+  position: absolute;
+  top: var(--zkp2p-spacing-3);
+  right: var(--zkp2p-spacing-3);
+  font-size: 0.65rem;
+  font-weight: var(--peer-font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--peer-light-grey);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--peer-radius-xs);
+  padding: 2px 8px;
+  line-height: 1.6;
+  pointer-events: none;
+}
+
+.ecosystem-card__logo-wrapper {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ecosystem-card__logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: var(--peer-radius-xs);
+}
+
+.ecosystem-card__content {
+  flex: 1;
+}
+
+.ecosystem-card__name {
+  font-size: clamp(1.1rem, 1.5vw + 0.6rem, 1.4rem);
+  font-family: var(--peer-font-headline);
+  font-weight: var(--peer-font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--peer-letter-spacing-snug);
+  color: var(--peer-white);
+  margin-bottom: var(--zkp2p-spacing-2);
+  line-height: var(--peer-line-height-headline);
+}
+
+.ecosystem-card__description {
+  color: var(--peer-light-grey);
+  font-size: var(--peer-font-size-body-sm);
+  font-weight: var(--peer-font-weight-medium);
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+
+.ecosystem-card__link {
+  display: flex;
+  align-items: center;
+  gap: var(--zkp2p-spacing-2);
+  color: var(--peer-link);
+  font-size: var(--peer-font-size-body-sm);
+  font-weight: var(--peer-font-weight-medium);
+  transition: color 0.2s ease;
+  margin-top: auto;
+}
+
+.ecosystem-card:hover .ecosystem-card__link {
+  color: var(--peer-white);
+}
+
+.ecosystem-card__link svg {
+  transition: transform 0.2s ease;
+}
+
+.ecosystem-card:hover .ecosystem-card__link svg {
+  transform: translate(2px, -2px);
+}
+
+@media (max-width: 768px) {
+  .ecosystem-page .container {
+    padding: var(--zkp2p-spacing-0) var(--zkp2p-spacing-4);
+  }
+
+  .ecosystem-grid {
+    grid-template-columns: 1fr;
+    gap: var(--zkp2p-spacing-4);
+  }
+
+  .ecosystem-card {
+    padding: var(--zkp2p-spacing-4) var(--zkp2p-spacing-5);
+  }
+}
