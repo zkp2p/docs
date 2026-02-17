@@ -1700,6 +1700,23 @@ input:focus-visible, textarea:focus-visible {
   opacity: 1;
 }
 
+.ecosystem-card__tag {
+  position: absolute;
+  top: var(--zkp2p-spacing-3);
+  right: var(--zkp2p-spacing-3);
+  font-size: 0.65rem;
+  font-weight: var(--peer-font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--peer-light-grey);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--peer-radius-xs);
+  padding: 2px 8px;
+  line-height: 1.6;
+  pointer-events: none;
+}
+
 .ecosystem-card__logo-wrapper {
   width: 40px;
   height: 40px;

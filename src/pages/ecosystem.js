@@ -8,34 +8,39 @@ const projects = [
     description: 'Convert USDC to fiat currencies through non-custodial smart contracts on Base. Supports USD, EUR, and GBP via Venmo, PayPal, Revolut, Wise, Zelle, and CashApp.',
     href: 'https://usdctofiat.xyz',
     logo: '/img/ecosystem/usdctofiat.png',
+    category: 'Integration',
   },
   {
     name: 'Peerlytics',
     description: 'Analytics dashboard and explorer for the ZKP2P protocol. Search addresses, transactions, and deposit IDs. Track volume, active traders, liquidity depth, and currency breakdowns.',
     href: 'https://peerlytics.xyz',
     logo: '/img/ecosystem/peerlytics.svg',
+    category: 'Analytics',
   },
   {
     name: 'Peer Domains',
     description: 'Register .peer domain names on Ethereum. Mint Peer Cards, customizable NFT identity cards with transaction history, social links, and Peerlytics integration.',
     href: 'https://peer.domains',
     logo: '/img/ecosystem/peerdomains.svg',
+    category: 'Domains',
   },
   {
     name: 'Bread',
     description: 'A worker-owned cooperative building financial solidarity tools. Bake $BREAD, a stablecoin pegged 1:1 to USD, to fund community projects, group savings, and mutual aid.',
     href: 'https://bread.coop',
     logo: '/img/ecosystem/bread.svg',
+    category: 'Integration',
   },
   {
     name: 'Zagnu',
     description: 'Airbnb, but for your Venmo account. Provide liquidity and earn yield from verified buyers, built on Peer contracts.',
     href: 'https://zagnu.com',
     logo: '/img/ecosystem/zagnu.png',
+    category: 'Integration',
   },
 ];
 
-function EcosystemCard({ name, description, href, logo }) {
+function EcosystemCard({ name, description, href, logo, category }) {
   return (
     <a
       href={href}
@@ -43,6 +48,9 @@ function EcosystemCard({ name, description, href, logo }) {
       target="_blank"
       rel="noopener noreferrer"
     >
+      {category && (
+        <span className="ecosystem-card__tag">{category}</span>
+      )}
       <div className="ecosystem-card__logo-wrapper">
         <img
           src={logo}
