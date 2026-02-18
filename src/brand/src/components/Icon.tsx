@@ -1,6 +1,5 @@
 import {
-  useEffect,
-  useState,
+  useSyncExternalStore,
   type CSSProperties,
   type HTMLAttributes,
 } from "react";
@@ -70,6 +69,9 @@ const supportsMasking = () => {
   );
 };
 
+const subscribeMasking = () => () => {};
+const serverSnapshot = () => true;
+
 /**
  * Peer Icon Component
  *
@@ -112,11 +114,7 @@ export function Icon({
     restProps.role ?? (hasAccessibleName ? "img" : "presentation");
   const resolvedAriaHidden =
     restProps["aria-hidden"] ?? (hasAccessibleName ? undefined : true);
-  const [useMask, setUseMask] = useState(true);
-
-  useEffect(() => {
-    setUseMask(supportsMasking());
-  }, []);
+  const useMask = useSyncExternalStore(subscribeMasking, supportsMasking, serverSnapshot);
 
   if (!useMask) {
     return (
