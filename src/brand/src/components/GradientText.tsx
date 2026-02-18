@@ -98,6 +98,8 @@ const ensureGradientShiftKeyframes = () => {
   hasInjectedGradientShift = true;
 };
 
+ensureGradientShiftKeyframes();
+
 const usePrefersReducedMotion = () => {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
@@ -159,12 +161,6 @@ export function GradientText({
   const gradient = gradientMap[variant];
   const prefersReducedMotion = usePrefersReducedMotion();
   const shouldAnimate = animate && !prefersReducedMotion;
-
-  useEffect(() => {
-    if (shouldAnimate) {
-      ensureGradientShiftKeyframes();
-    }
-  }, [shouldAnimate]);
 
   const combinedStyles: CSSProperties = {
     ...baseStyles,
