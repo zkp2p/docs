@@ -220,6 +220,12 @@ peerExtensionSdk.onramp({
   <p><em>Request instructions shown in the Peer side panel</em></p>
 </div>
 
+### LLM Integration Prompt
+
+Download a ready-to-paste prompt for AI coding assistants (Claude, Cursor, Copilot, etc.) that adds a Peer onramp button to your site's payment flow:
+
+**<a href="/onramp-llm.md" download>Download onramp-llm.md</a>**
+
 ### Help?
 
 For any issues or support, please join our [Discord](https://discord.gg/4hNVTv2MbH).
