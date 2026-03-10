@@ -5,7 +5,12 @@ title: How to Update USDC Conversion Rates
 
 # How to Update USDC Conversion Rates
 
-After creating your deposit in ZKP2P, you may need to adjust your conversion rates to stay competitive or respond to market changes. This guide walks you through how to update your FX rates for existing deposits.
+After creating your deposit on Peer, you may want to update how each payment pair is priced. This guide covers both direct rate modes you control yourself:
+
+- **Fixed Rate**: you set the exact price.
+- **Market Tracking**: you set a spread above live FX and can keep an optional floor.
+
+If your deposit is **Delegated**, the active rate comes from the vault. You can still update your floor, but you cannot edit the vault-managed rate from the deposit itself.
 
 ### Step 1: Navigate to Your Deposit Details
 
@@ -41,10 +46,22 @@ In the modal, you'll see:
 
 - Platform (e.g., Revolut)  
 - Currency (e.g., GBP)  
-- Current Rate (e.g., 0.8)  
-- **New Conversion Rate** input  
+- A rate mode selector: **Fixed Rate** or **Market Tracking**
+- Current rate state for the pair
 
-Enter your new rate — e.g., changing **0.8 → 0.795** for GBP.
+If you choose **Fixed Rate**:
+
+- Enter a new direct rate such as `0.795`
+
+If you choose **Market Tracking**:
+
+- Enter a spread percentage such as `1.00%`
+- Optionally enter a floor if you want downside protection
+- Peer resolves the active rate as the higher of your floor and the live market rate plus spread
+
+:::info
+For oracle-backed pairs, a stale or invalid oracle quote halts that pair until fresh market data is available. Your deposit remains intact, but that payment-method and currency pair stops quoting until the oracle recovers.
+:::
 
 ![CR Step 4](/img/conversion-rate/CRStep4.png)  
 
@@ -78,6 +95,7 @@ Enter your new rate — e.g., changing **0.8 → 0.795** for GBP.
 - **Lower spreads** (0.5–1%) = faster sales, lower margin  
 - **Higher spreads** (1–3%) = higher margin, slower sales  
 - Balance depends on your strategy  
+- Market Tracking is better when you want to stay close to live FX without constant manual edits.
 
 ### Monitor Performance
 
@@ -93,4 +111,4 @@ After updating rates:
 - Rare currencies might require more competitive rates  
 - Optimize for each currency independently  
 
-➡️ _Next: [Handling Manual Releases as a Seller](manual-releases.md)_
+➡️ _Next: [How to Delegate a Deposit to a Vault](delegate-to-a-vault.md)_

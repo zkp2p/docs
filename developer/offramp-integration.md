@@ -6,15 +6,16 @@ slug: /developer/offramp
 
 # Offramp Integration
 
-The ZKP2P Client SDK is a TypeScript SDK for liquidity providers who want to offer fiat off-ramp services on Base. Use it to create and manage USDC deposits, configure payment methods and currencies, and query on-chain state with RPC-first reads.
+Use `@zkp2p/sdk` to create and manage seller deposits, configure automated rate management, delegate pricing to vaults, and read deposit state from RPC or the indexer.
 
-## Who is this for?
+The current public client is `Zkp2pClient`.
 
-This SDK is designed for liquidity providers (peers) who want to:
-- Create and manage USDC deposits that accept fiat payments
-- Configure payment methods, currencies, and conversion rates
-- Monitor deposit utilization and manage liquidity
-- Earn fees by providing off-ramp services
+## What you can build
+
+- Seller dashboards that create and manage deposits
+- Backends that rebalance rates or toggle deposit state
+- Vault tooling for delegated rate management
+- Analytics surfaces that read deposit, intent, and manager state from `client.indexer.*`
 
 ## Installation
 
@@ -31,7 +32,7 @@ pnpm add @zkp2p/sdk viem
 ### Initialize the client
 
 ```ts
-import { OfframpClient } from '@zkp2p/sdk';
+import { Zkp2pClient } from '@zkp2p/sdk';
 import { createWalletClient, custom } from 'viem';
 import { base } from 'viem/chains';
 
@@ -40,50 +41,62 @@ const walletClient = createWalletClient({
   transport: custom(window.ethereum),
 });
 
-const client = new OfframpClient({
+const client = new Zkp2pClient({
   walletClient,
   chainId: base.id,
-  apiKey: 'YOUR_API_KEY', // Optional for API operations
+  runtimeEnv: 'production',
+  apiKey: 'YOUR_CURATOR_API_KEY',
+  indexerApiKey: 'YOUR_INDEXER_API_KEY',
 });
 ```
 
-## Core operations
+## Rate modes
 
-### Create a deposit
+Each deposit pair can run in one of three pricing modes:
+
+- `Fixed`: you set `minConversionRate` directly on the deposit.
+- `Automated Rate Management`: EscrowV2 applies an oracle-backed spread and enforces the higher of your fixed floor and the oracle-backed floor.
+- `Delegated`: a vault manager sets the active rate, but EscrowV2 still enforces the deposit floor.
+
+See [Automated Rate Management](automated-rate-management.md) and [Delegated Rate Management](delegated-rate-management.md) for the full behavior and edge cases.
+
+## Create a deposit
+
+`createDeposit` accepts product-friendly payment method names plus deposit metadata. It resolves the onchain payment method hashes for you.
 
 ```ts
 import { Currency } from '@zkp2p/sdk';
 
 await client.createDeposit({
   token: '0xUSDC_ADDRESS',
-  amount: 10000000000n, // 10,000 USDC (6 decimals)
+  amount: 10_000_000n,
   intentAmountRange: { min: 100000n, max: 1000000000n },
   processorNames: ['wise', 'revolut'],
   depositData: [
-    { email: 'maker@example.com' }, // Wise payment details
-    { tag: '@maker' },              // Revolut payment details
+    { email: 'maker@example.com' },
+    { tag: '@maker' },
   ],
   conversionRates: [
-    [{ currency: Currency.USD, conversionRate: '1020000000000000000' }], // 1.02 (18 decimals)
-    [{ currency: Currency.EUR, conversionRate: '950000000000000000' }],  // 0.95 (18 decimals)
+    [{ currency: Currency.USD, conversionRate: '1020000000000000000' }],
+    [{ currency: Currency.EUR, conversionRate: '950000000000000000' }],
   ],
-  onSuccess: ({ hash }) => console.log('Deposit created:', hash),
+  retainOnEmpty: true,
 });
 ```
 
-### Manage deposit settings
+`createDeposit` requires either:
+
+- `apiKey` or `authorizationToken`, so the SDK can register payee details through the curator API, or
+- `payeeDetailsHashes`, if your app already registered payee details separately.
+
+## Manage deposit settings
 
 ```ts
 await client.setAcceptingIntents({ depositId: 1n, accepting: true });
 
 await client.setIntentRange({ depositId: 1n, min: 50000n, max: 5000000n });
-
-await client.setCurrencyMinRate({
-  depositId: 1n,
-  paymentMethod: '0x...',
-  fiatCurrency: '0x...',
-  minConversionRate: 1020000n,
-});
+await client.setRetainOnEmpty({ depositId: 1n, retain: true });
+await client.setDelegate({ depositId: 1n, delegate: '0xDelegateAddress' });
 ```
 
 ### Fund management
@@ -94,7 +107,84 @@ await client.removeFunds({ depositId: 1n, amount: 1000000n });
 await client.withdrawDeposit({ depositId: 1n });
 ```
 
-## Querying on-chain data (RPC-first)
+## Direct rate updates
+
+For fixed-rate or floor updates, resolve the payment method and currency keys and call EscrowV2 helpers directly:
+
+```ts
+import {
+  resolveFiatCurrencyBytes32,
+  resolvePaymentMethodHash,
+} from '@zkp2p/sdk';
+
+const paymentMethod = resolvePaymentMethodHash('wise', { env: 'production' });
+const fiatCurrency = resolveFiatCurrencyBytes32('USD');
+
+await client.setCurrencyMinRate({
+  depositId: 42n,
+  paymentMethod,
+  fiatCurrency,
+  minConversionRate: 1_020_000_000_000_000_000n,
+});
+```
+
+For oracle-backed pricing, configure the tuple on EscrowV2:
+
+```ts
+await client.setOracleRateConfig({
+  depositId: 42n,
+  paymentMethodHash: paymentMethod,
+  currencyHash: fiatCurrency,
+  config: {
+    adapter: '0xOracleAdapter',
+    adapterConfig: '0x',
+    spreadBps: 75,
+    maxStaleness: 180,
+  },
+});
+```
+
+If you want to stop using the oracle for a pair, call `removeOracleRateConfig`. That restores pricing to the fixed floor only.
+
+## Vault / delegated pricing
+
+The SDK exposes both deposit-side delegation and manager-side vault administration.
+
+```ts
+await client.createRateManager({
+  config: {
+    manager: '0xManager',
+    feeRecipient: '0xFeeRecipient',
+    maxFee: 50_000_000_000_000_000n,
+    fee: 10_000_000_000_000_000n,
+    minLiquidity: 1_000_000n,
+    name: 'USD Vault',
+    uri: 'ipfs://vault-metadata',
+  },
+});
+
+await client.setRateManager({
+  depositId: 42n,
+  rateManagerAddress: '0xRateManagerRegistry',
+  rateManagerId: '0xRateManagerId',
+});
+
+await client.setVaultMinRate({
+  rateManagerId: '0xRateManagerId',
+  paymentMethodHash: paymentMethod,
+  currencyHash: fiatCurrency,
+  rate: 1_035_000_000_000_000_000n,
+});
+
+await client.setVaultFee({
+  rateManagerId: '0xRateManagerId',
+  newFee: 20_000_000_000_000_000n,
+});
+```
+
+If your environment routes delegation through a controller contract, the SDK also exposes `setDepositRateManager` and `clearDepositRateManager`.
+
+## Query on-chain state (RPC-first)
 
 ```ts
 const deposits = await client.getDeposits();
@@ -109,24 +199,56 @@ const intent = await client.getIntent('0xIntentHash...');
 
 ## Indexer queries
 
+Use RPC for immediate contract reads and `client.indexer` for richer ARM/DRM state.
+
 ```ts
 const deposits = await client.indexer.getDeposits(
-  { status: 'ACTIVE', minLiquidity: '1000000', depositor: '0xYourAddress' },
-  { limit: 50, orderBy: 'remainingDeposits', orderDirection: 'desc' }
+  { status: 'ACTIVE', depositor: '0xYourAddress' },
+  { limit: 50, orderBy: 'remainingDeposits', orderDirection: 'desc' },
 );
 
 const depositsWithRelations = await client.indexer.getDepositsWithRelations(
   { status: 'ACTIVE' },
   { limit: 50 },
-  { includeIntents: true, intentStatuses: ['SIGNALED'] }
+  { includeIntents: true, intentStatuses: ['SIGNALED'] },
 );
 
-const fulfillments = await client.indexer.getFulfilledIntentEvents(['0x...']);
+const vaults = await client.indexer.getRateManagers({ limit: 25 });
+const vaultDetail = await client.indexer.getRateManagerDetail('0xRateManagerId');
+const delegation = await client.indexer.getDelegationForDeposit('42', {
+  escrowAddress: '0xEscrowAddress',
+});
 ```
 
-## Payment methods
+For ARM and DRM, the most useful indexer entity is `MethodCurrency`. It includes:
 
-Supported payment platforms and keys:
+- `minConversionRate`: the depositor-set fixed floor
+- `managerRate`: the delegated manager quote before floor enforcement
+- `conversionRate`: the final resolved gross rate
+- `takerConversionRate`: the buyer-facing all-in rate after manager fee
+- `rateSource`: `MANAGER`, `ORACLE`, `ESCROW_FLOOR`, `MANAGER_DISABLED`, `ORACLE_HALTED`, or `NO_FLOOR`
+
+`Deposit` also carries `rateManagerId`, `rateManagerAddress`, and `delegatedAt`.
+
+## Payment methods and contract helpers
+
+The SDK exports helpers for payment method catalogs, bytes32 resolution, and deployments:
+
+```ts
+import {
+  getContracts,
+  getPaymentMethodsCatalog,
+  resolveFiatCurrencyBytes32,
+  resolvePaymentMethodHash,
+} from '@zkp2p/sdk';
+
+const { addresses } = getContracts(8453, 'production');
+const catalog = getPaymentMethodsCatalog(8453, 'production');
+const wiseHash = resolvePaymentMethodHash('wise', { env: 'production' });
+const usdHash = resolveFiatCurrencyBytes32('USD');
+```
+
+Supported payment platforms include:
 
 | Platform | Key |
 |----------|-----|
@@ -138,42 +260,6 @@ Supported payment platforms and keys:
 | Zelle | `zelle` |
 | Monzo | `monzo` |
 | MercadoPago | `mercadopago` |
-
-```ts
-import { getPaymentMethodsCatalog, PLATFORM_METADATA, PAYMENT_PLATFORMS } from '@zkp2p/sdk';
-
-console.log(PAYMENT_PLATFORMS);
-
-const methods = getPaymentMethodsCatalog(8453, 'production');
-const wiseHash = methods['wise'].paymentMethodHash;
-
-const wiseInfo = PLATFORM_METADATA['wise'];
-console.log(wiseInfo.displayName);
-```
-
-## Currency utilities
-
-```ts
-import {
-  Currency,
-  currencyInfo,
-  getCurrencyInfoFromHash,
-  resolveFiatCurrencyBytes32,
-} from '@zkp2p/sdk';
-
-const usd = Currency.USD;
-const info = currencyInfo[Currency.USD];
-const usdBytes = resolveFiatCurrencyBytes32('USD');
-```
-
-## Contract helpers
-
-```ts
-import { getContracts, getPaymentMethodsCatalog } from '@zkp2p/sdk';
-
-const { addresses, abis } = getContracts(8453, 'production');
-const catalog = getPaymentMethodsCatalog(8453, 'production');
-```
 
 ## Supported networks
 
@@ -203,6 +289,12 @@ if (result.hadAllowance) {
 }
 ```
 
+## Next pages
+
+- [Automated Rate Management](automated-rate-management.md)
+- [Delegated Rate Management](delegated-rate-management.md)
+- [Post-Intent Hooks](post-intent-hooks.md)
+
 ## Error handling
 
 ```ts
@@ -218,6 +310,12 @@ try {
   } else if (error instanceof ContractError) {
     console.error('Contract error:', error.message);
   }
+}
+```
+
+:::note
+`deposit.delegate` and delegated rate management solve different problems. A deposit delegate can update deposit config on behalf of the owner. A rate manager controls the active quote for delegated tuples.
+:::
 }
 ```
 

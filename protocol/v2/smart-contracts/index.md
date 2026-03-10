@@ -2,24 +2,47 @@
 title: Smart Contracts
 ---
 
-# Smart Contracts
+# V2 Smart Contracts
 
-[](https://docs.peer.xyz/developer/smart-contracts#escrow)
+Protocol V2 off-ramping is built around EscrowV2 custody, Orchestrator-mediated intent execution, payment verifier contracts, and optional delegated rate managers.
 
-## Escrow
+## Main components
 
-The `Escrow` contract is designed to orchestrate the interaction between different actors in the ecosystem. It manages user registrations, deposits, and transaction intents, and employs Zero-Knowledge Proofs for validation purposes. Additionally, it provides mechanisms for dispute resolution, instant verification, and governance controls to maintain system integrity and ensure a secure and trustless environment for P2P transactions.
+### EscrowV2
 
-[](https://docs.peer.xyz/developer/smart-contracts#verifiers)
+EscrowV2 is the core liquidity contract. It:
 
-## Verifiers
+- holds maker funds
+- stores payment-method and currency tuples
+- enforces fixed floors and oracle-backed ARM floors
+- optionally delegates tuple pricing to a rate manager
+- locks and unlocks funds for intents
 
-The Verifiers are contracts designed to verify and process on-chain proof of off-chain transactions, ensuring they conform to specified protocols. It validates various elements of the transactions including transaction amount, timestamp, recipient ID and intent hash. Through these validations, it facilitates secure transaction processing in the system.
+Start with [Escrow](escrow/index.md).
 
-Verifiers conform to a `BasePaymentVerifier` [specification](https://github.com/zkp2p/zkp2p-v2-contracts/tree/main/contracts/verifiers/BaseVerifiers).
+### RateManagerV1
 
-[](https://docs.peer.xyz/developer/smart-contracts#nullifier-registry)
+`RateManagerV1` is the reference delegated rate management contract on `main`.
 
-## Nullifier Registry
+It is a pure rate registry. It does not custody funds and it does not enforce deposit floors. EscrowV2 does that when resolving the effective rate.
 
-The `NullifierRegistry` is a smart contract that records unique identifiers (nullifiers) to prevent duplication in actions like user registrations. It controls writer permissions for adding nullifiers and offers transparent logging of these actions through emitted events.
+See [RateManagerV1](rate-manager-v1.md).
+
+### Payment verifiers
+
+Payment verifiers validate offchain payment proofs during fulfillment.
+
+See [IPaymentVerifier](ipaymentverifier.md).
+
+### Deployments
+
+Contract addresses for supported environments are listed in [Deployments](deployments.md).
+
+## ARM and DRM in the V2 stack
+
+V2 rate management has two layers:
+
+- `Automated Rate Management`: tuple-level fixed floors plus optional oracle-backed spread config inside EscrowV2
+- `Delegated Rate Management`: deposit-level assignment to an external `IRateManager`
+
+The detailed resolution rules are documented in [Escrow Rate Management](escrow/rate-management.md).

@@ -5,7 +5,7 @@ title: How to Provide Liquidity and Sell USDC
 
 # How to Provide Liquidity and Sell USDC
 
-This guide will walk you through the process of providing liquidity on ZKP2P.
+This guide walks through creating a seller deposit on Peer. It also shows where rate management fits in: you can run your deposit with a fixed rate, turn on market tracking, or later delegate pricing to a vault.
 
 ### Step 1: Navigate to ZKP2P
 
@@ -100,19 +100,26 @@ Enter your username/account details for the selected platform:
 ![Provide Step 10](/img/provide-liquidity/ProvideStep9.png)
 
 
-### Step 11: Set Exchange Rates
+### Step 11: Choose a Rate Mode and Set Rates
 
-- Enter how much you want to sell your USDC for in each currency  
-- Adjust based on what you observed in Step 2
-- You can see your percentage spread in the middle column
-    - Green is above market rate, Grey is close to market rate, and Red is below market rate. 
+- Choose **Fixed Rate** if you want to enter an exact price for each currency yourself.
+- Choose **Market Tracking** if you want Peer to follow live FX and apply your spread automatically.
+- If you use market tracking, you can also set an optional **floor** to protect your minimum payout.
+- You can see your spread in the middle column:
+  - Green is above market rate
+  - Grey is close to market rate
+  - Red is below market rate
 
 💡 **Consider**:
 - Market demand  
 - Competitive rates  
 - Desired profit margin
 
-View the guide on optimal currency conversion rates for more tips.
+:::info
+Market Tracking is the user-facing name for automated rate management.
+:::
+
+For a deeper walkthrough, see [Automated Rate Management (Market Tracking)](market-tracking-arm.md).
 
 ![Provide Step 11](/img/provide-liquidity/ProvideStep11.png)
 
@@ -161,7 +168,8 @@ If all details are correct you can continue with your transaction!
   - Total amount
   - Remaining balance
   - Accepted currencies/platforms
-  - Current status  
+  - Current status
+  - Whether the deposit is using **Fixed**, **Market Tracking**, or **Delegated** rate management
 
 ![Provide Step 17](/img/provide-liquidity/ProvideStep17.png)
 ![Provide Step 17a](/img/provide-liquidity/ProvideStep17a.png)
@@ -176,6 +184,8 @@ If all details are correct you can continue with your transaction!
 - Check the **Spread** column in the Liquidity tab  
 - Lower spreads (0.5–1%) = faster fills, less profit  
 - Higher spreads (1–3%) = slower fills, more profit  
+- In Market Tracking mode, the spread is applied on top of the live market rate.
+- In Delegated mode, the vault sets the active rate but your floor still protects you.
 
 ### Security Best Practices
 
@@ -190,4 +200,4 @@ If all details are correct you can continue with your transaction!
 - Deposit not appearing? Refresh or reconnect wallet  
 - Still stuck? Join [Peer Telegram](https://t.me/+XDj9FNnW-xs5ODNl) for help  
 
-➡️ _Next: [How to Update USDC Conversion Rates](update-usdc-rates.md)_
+➡️ _Next: [Automated Rate Management (Market Tracking)](market-tracking-arm.md)_

@@ -55,8 +55,12 @@ module.exports = {
               type: 'category',
               label: 'Escrow',
               link: { type: 'doc', id: 'v2/smart-contracts/escrow/index' },
-              items: ['v2/smart-contracts/escrow/v2-iescrow'],
+              items: [
+                'v2/smart-contracts/escrow/v2-iescrow',
+                'v2/smart-contracts/escrow/rate-management',
+              ],
             },
+            'v2/smart-contracts/rate-manager-v1',
             'v2/smart-contracts/v2-ipaymentverifier',
             'v2/smart-contracts/v2-deployments',
           ],
