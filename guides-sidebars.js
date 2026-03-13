@@ -23,6 +23,7 @@ module.exports = {
       link: { type: 'doc', id: 'for-sellers/index' },
       items: [
         'for-sellers/provide-liquidity-sell-usdc',
+        'for-sellers/market-tracking-arm',
         'for-sellers/provide-liquidity-diff-chain',
         'for-sellers/update-usdc-rates',
         'for-sellers/calculating-apr',

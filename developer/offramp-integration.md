@@ -6,19 +6,27 @@ slug: /developer/offramp
 
 # Offramp Integration
 
-The ZKP2P Client SDK is a TypeScript SDK for liquidity providers who want to offer fiat off-ramp services on Base. Use it to create and manage USDC deposits, configure payment methods and currencies, and query on-chain state with RPC-first reads.
+`@zkp2p/sdk` gives liquidity providers a single `Zkp2pClient` for deposit creation, deposit management, and ARM tuple configuration.
+
+This page focuses on:
+
+- Creating and managing deposits
+- Managing tuple pricing with Fixed Rate and ARM (Market Tracking)
 
 ## Who is this for?
 
-This SDK is designed for liquidity providers (peers) who want to:
-- Create and manage USDC deposits that accept fiat payments
-- Configure payment methods, currencies, and conversion rates
-- Monitor deposit utilization and manage liquidity
-- Earn fees by providing off-ramp services
+This guide is for integrators building seller/offramp workflows that need to:
+
+- Create deposits
+- Configure payment methods and currencies
+- Manage fixed and oracle-backed tuple pricing
+- Query deposit state
 
 ## Installation
 
 ```bash
+bun add @zkp2p/sdk viem
+# or
 npm install @zkp2p/sdk viem
 # or
 yarn add @zkp2p/sdk viem
@@ -28,10 +36,8 @@ pnpm add @zkp2p/sdk viem
 
 ## Quick start
 
-### Initialize the client
-
 ```ts
-import { OfframpClient } from '@zkp2p/sdk';
+import { Zkp2pClient } from '@zkp2p/sdk';
 import { createWalletClient, custom } from 'viem';
 import { base } from 'viem/chains';
 
@@ -40,230 +46,261 @@ const walletClient = createWalletClient({
   transport: custom(window.ethereum),
 });
 
-const client = new OfframpClient({
+const client = new Zkp2pClient({
   walletClient,
   chainId: base.id,
-  apiKey: 'YOUR_API_KEY', // Optional for API operations
+  runtimeEnv: 'production', // 'production' | 'preproduction' | 'staging'
+  apiKey: 'YOUR_CURATOR_API_KEY', // optional if you pass payeeDetailsHashes directly
+  indexerApiKey: 'YOUR_INDEXER_API_KEY', // optional, for indexer proxy auth
 });
 ```
 
-## Core operations
+`OfframpClient` is still exported as a backward-compatible alias, but `Zkp2pClient` is the canonical name.
+
+## Core deposit operations
 
 ### Create a deposit
 
 ```ts
 import { Currency } from '@zkp2p/sdk';
 
-await client.createDeposit({
+const { hashedOnchainIds } = await client.registerPayeeDetails({
+  processorNames: ['wise'],
+  depositData: [{ email: 'maker@example.com' }],
+});
+
+const { hash } = await client.createDeposit({
   token: '0xUSDC_ADDRESS',
-  amount: 10000000000n, // 10,000 USDC (6 decimals)
-  intentAmountRange: { min: 100000n, max: 1000000000n },
-  processorNames: ['wise', 'revolut'],
-  depositData: [
-    { email: 'maker@example.com' }, // Wise payment details
-    { tag: '@maker' },              // Revolut payment details
-  ],
-  conversionRates: [
-    [{ currency: Currency.USD, conversionRate: '1020000000000000000' }], // 1.02 (18 decimals)
-    [{ currency: Currency.EUR, conversionRate: '950000000000000000' }],  // 0.95 (18 decimals)
-  ],
-  onSuccess: ({ hash }) => console.log('Deposit created:', hash),
+  amount: 10_000_000000n, // 10,000 USDC (6 decimals)
+  intentAmountRange: { min: 10_000000n, max: 1_000_000000n },
+  processorNames: ['wise'],
+  depositData: [{ email: 'maker@example.com' }],
+  conversionRates: [[
+    { currency: Currency.USD, conversionRate: '1020000000000000000' },
+    { currency: Currency.EUR, conversionRate: '950000000000000000' },
+  ]],
+  payeeDetailsHashes: hashedOnchainIds,
+  delegate: '0xDELEGATE_ADDRESS', // optional intent-ops delegate
+  intentGuardian: '0xGUARDIAN_ADDRESS', // optional
+  retainOnEmpty: true, // optional
 });
 ```
 
-### Manage deposit settings
+### Update deposit settings
 
 ```ts
 await client.setAcceptingIntents({ depositId: 1n, accepting: true });
 
-await client.setIntentRange({ depositId: 1n, min: 50000n, max: 5000000n });
+await client.setIntentRange({
+  depositId: 1n,
+  min: 25_000000n,
+  max: 500_000000n,
+});
 
 await client.setCurrencyMinRate({
   depositId: 1n,
-  paymentMethod: '0x...',
-  fiatCurrency: '0x...',
-  minConversionRate: 1020000n,
+  paymentMethod: '0xPAYMENT_METHOD_HASH',
+  fiatCurrency: '0xFIAT_CURRENCY_HASH',
+  minConversionRate: 1_020_000_000_000_000_000n, // 1.02 (18 decimals)
 });
 ```
 
-### Fund management
+### Manage funds
 
 ```ts
-await client.addFunds({ depositId: 1n, amount: 5000000n });
-await client.removeFunds({ depositId: 1n, amount: 1000000n });
+await client.addFunds({ depositId: 1n, amount: 500_000000n });
+await client.removeFunds({ depositId: 1n, amount: 100_000000n });
 await client.withdrawDeposit({ depositId: 1n });
 ```
 
-## Querying on-chain data (RPC-first)
+### Prepared transaction flow
+
+Every `PrepareableMethod` supports `.prepare()` if you want to separate build/send:
 
 ```ts
-const deposits = await client.getDeposits();
-const ownerDeposits = await client.getAccountDeposits('0xOwnerAddress');
-const deposit = await client.getDeposit(42n);
-const batch = await client.getDepositsById([1n, 2n, 3n]);
+const prepared = await client.setOracleRateConfig.prepare({
+  depositId: 1n,
+  paymentMethodHash: '0xPAYMENT_METHOD_HASH',
+  currencyHash: '0xCURRENCY_HASH',
+  config: {
+    adapter: '0xADAPTER',
+    adapterConfig: '0x...',
+    spreadBps: 50,
+    maxStaleness: 86_400,
+  },
+});
 
-const intents = await client.getIntents();
-const ownerIntents = await client.getAccountIntents('0xOwnerAddress');
-const intent = await client.getIntent('0xIntentHash...');
+// send prepared.to + prepared.data with your own transaction pipeline
 ```
 
-## Indexer queries
+## Rate modes
 
-```ts
-const deposits = await client.indexer.getDeposits(
-  { status: 'ACTIVE', minLiquidity: '1000000', depositor: '0xYourAddress' },
-  { limit: 50, orderBy: 'remainingDeposits', orderDirection: 'desc' }
-);
+Each payment-method/currency tuple can run one of these pricing strategies:
 
-const depositsWithRelations = await client.indexer.getDepositsWithRelations(
-  { status: 'ACTIVE' },
-  { limit: 50 },
-  { includeIntents: true, intentStatuses: ['SIGNALED'] }
-);
+1. Fixed Rate: depositor sets `minConversionRate` manually.
+2. Market Tracking (ARM): depositor sets oracle + spread config (`setOracleRateConfig`).
 
-const fulfillments = await client.indexer.getFulfilledIntentEvents(['0x...']);
-```
+Precision and units:
 
-## Payment methods
+- USDC amounts: 6 decimals
+- Rates and fees: 18-decimal bigint units
+- ARM spread: signed basis points (`50 = +0.50%`, `-50 = -0.50%`)
 
-Supported payment platforms and keys:
+## ARM (Automated Rate Management)
 
-| Platform | Key |
-|----------|-----|
-| Wise | `wise` |
-| Venmo | `venmo` |
-| Revolut | `revolut` |
-| CashApp | `cashapp` |
-| PayPal | `paypal` |
-| Zelle | `zelle` |
-| Monzo | `monzo` |
-| MercadoPago | `mercadopago` |
+Use ARM to track oracle prices with a configurable spread.
 
-```ts
-import { getPaymentMethodsCatalog, PLATFORM_METADATA, PAYMENT_PLATFORMS } from '@zkp2p/sdk';
-
-console.log(PAYMENT_PLATFORMS);
-
-const methods = getPaymentMethodsCatalog(8453, 'production');
-const wiseHash = methods['wise'].paymentMethodHash;
-
-const wiseInfo = PLATFORM_METADATA['wise'];
-console.log(wiseInfo.displayName);
-```
-
-## Currency utilities
+### Configure oracle pricing for a tuple
 
 ```ts
 import {
   Currency,
-  currencyInfo,
-  getCurrencyInfoFromHash,
   resolveFiatCurrencyBytes32,
+  getPaymentMethodsCatalog,
+  getSpreadOracleConfig,
 } from '@zkp2p/sdk';
 
-const usd = Currency.USD;
-const info = currencyInfo[Currency.USD];
-const usdBytes = resolveFiatCurrencyBytes32('USD');
-```
+const paymentMethods = getPaymentMethodsCatalog(client.chainId, client.runtimeEnv);
+const paymentMethodHash = paymentMethods.wise.paymentMethodHash;
+const currencyHash = resolveFiatCurrencyBytes32(Currency.EUR);
 
-## Contract helpers
+const oracle = getSpreadOracleConfig(Currency.EUR);
+if (!oracle) throw new Error('No oracle feed configured for EUR');
 
-```ts
-import { getContracts, getPaymentMethodsCatalog } from '@zkp2p/sdk';
-
-const { addresses, abis } = getContracts(8453, 'production');
-const catalog = getPaymentMethodsCatalog(8453, 'production');
-```
-
-## Supported networks
-
-| Network | Chain ID | Environment |
-|---------|----------|-------------|
-| Base Mainnet | 8453 | `production` |
-| Base Sepolia | 84532 | `staging` |
-
-## Token allowance management
-
-```ts
-import { getContracts } from '@zkp2p/sdk';
-
-const { addresses } = getContracts(8453, 'production');
-
-const result = await client.ensureAllowance({
-  token: '0xUSDC_ADDRESS',
-  amount: 10000000000n,
-  spender: addresses.escrow,
-  maxApprove: false,
+await client.setOracleRateConfig({
+  depositId: 1n,
+  paymentMethodHash,
+  currencyHash,
+  config: {
+    adapter: oracle.adapter,
+    adapterConfig: oracle.adapterConfig,
+    spreadBps: 75,
+    maxStaleness: oracle.maxStaleness,
+  },
 });
-
-if (result.hadAllowance) {
-  console.log('Already had sufficient allowance');
-} else {
-  console.log('Approval transaction:', result.hash);
-}
 ```
 
-## Error handling
+### Remove oracle pricing for a tuple
 
 ```ts
-import { ValidationError, NetworkError, ContractError } from '@zkp2p/sdk';
-
-try {
-  await client.createDeposit({ /* ... */ });
-} catch (error) {
-  if (error instanceof ValidationError) {
-    console.error('Invalid parameters:', error.message);
-  } else if (error instanceof NetworkError) {
-    console.error('Network issue:', error.message);
-  } else if (error instanceof ContractError) {
-    console.error('Contract error:', error.message);
-  }
-}
+await client.removeOracleRateConfig({
+  depositId: 1n,
+  paymentMethodHash,
+  currencyHash,
+});
 ```
 
-## Logging
+### Batch ARM updates
 
 ```ts
-import { setLogLevel } from '@zkp2p/sdk';
-
-setLogLevel('debug'); // 'debug' | 'info' | 'warn' | 'error' | 'none'
+await client.setOracleRateConfigBatch({
+  depositId: 1n,
+  paymentMethods: [paymentMethodHash],
+  currencies: [[currencyHash]],
+  configs: [[{
+    adapter: oracle.adapter,
+    adapterConfig: oracle.adapterConfig,
+    spreadBps: 25,
+    maxStaleness: 86_400,
+  }]],
+});
 ```
+
+### ARM at deposit creation (overrides)
+
+`createDeposit` supports on-chain override arrays when you need tuple-level control.
+If you use overrides, provide these together:
+
+- `paymentMethodsOverride`
+- `paymentMethodDataOverride`
+- `currenciesOverride`
+
+```ts
+import {
+  Currency,
+  resolveFiatCurrencyBytes32,
+  getSpreadOracleConfig,
+} from '@zkp2p/sdk';
+
+const eurOracle = getSpreadOracleConfig(Currency.EUR);
+if (!eurOracle) throw new Error('EUR oracle not configured');
+
+await client.createDeposit({
+  token: '0xUSDC_ADDRESS',
+  amount: 1_000_000000n,
+  intentAmountRange: { min: 10_000000n, max: 100_000000n },
+  processorNames: ['wise'],
+  depositData: [{ email: 'maker@example.com' }],
+  conversionRates: [[{ currency: Currency.EUR, conversionRate: '900000000000000000' }]],
+  paymentMethodsOverride: ['0xPAYMENT_METHOD_HASH'],
+  paymentMethodDataOverride: [{
+    intentGatingService: '0xGATING_SERVICE',
+    payeeDetails: '0xPAYEE_HASH',
+    data: '0x',
+  }],
+  currenciesOverride: [[{
+    code: resolveFiatCurrencyBytes32(Currency.EUR),
+    minConversionRate: 900_000_000_000_000_000n,
+    oracleRateConfig: {
+      adapter: eurOracle.adapter,
+      adapterConfig: eurOracle.adapterConfig,
+      spreadBps: 60,
+      maxStaleness: eurOracle.maxStaleness,
+    },
+  }]],
+});
+```
+
+Useful ARM constants/utilities exported by the SDK:
+
+- `CHAINLINK_ORACLE_ADAPTER`
+- `PYTH_ORACLE_ADAPTER`
+- `DEFAULT_ORACLE_MAX_STALENESS_SECONDS`
+- `CHAINLINK_ORACLE_FEEDS`
+- `PYTH_ORACLE_FEEDS`
+- `encodeSpreadOracleAdapterConfig(...)`
+- `getSpreadOracleConfig(...)`
+
+## Indexer queries for deposits
+
+```ts
+const deposits = await client.indexer.getDeposits(
+  { status: 'ACTIVE', depositor: '0xYOUR_ADDRESS' },
+  { limit: 25, orderBy: 'updatedAt', orderDirection: 'desc' },
+);
+
+const deposit = await client.indexer.getDepositById('8453_0xESCROW_ADDRESS_1');
+const firstTuple = deposit?.currencies?.[0];
+console.log(firstTuple?.rateSource);
+```
+
+`MethodCurrency.rateSource` indicates why a tuple's current rate is active:
+
+- `ORACLE`: market tracking rate active
+- `ESCROW_FLOOR`: floor rate is active
+- `ORACLE_HALTED`: oracle configured but stale/invalid; tuple halted
+- `NO_FLOOR`: no active floor/rate configured
 
 ## React hooks
 
 ```tsx
 import {
   useCreateDeposit,
-  useAddFunds,
-  useRemoveFunds,
-  useWithdrawDeposit,
   useSetAcceptingIntents,
   useSetIntentRange,
   useSetCurrencyMinRate,
+  useAddFunds,
+  useRemoveFunds,
+  useWithdrawDeposit,
 } from '@zkp2p/sdk/react';
-
-function DepositManager({ client }) {
-  const { createDeposit, isLoading, error } = useCreateDeposit({ client });
-
-  const handleCreate = async () => {
-    const result = await createDeposit({
-      token: '0xUSDC_ADDRESS',
-      amount: 10000000000n,
-      intentAmountRange: { min: 100000n, max: 1000000000n },
-      processorNames: ['wise'],
-      depositData: [{ email: 'maker@example.com' }],
-      conversionRates: [[{ currency: 'USD', conversionRate: '1020000000000000000' }]],
-    });
-    console.log('Created deposit:', result.hash);
-  };
-
-  return (
-    <div>
-      <button disabled={isLoading} onClick={handleCreate}>
-        {isLoading ? 'Creating...' : 'Create Deposit'}
-      </button>
-      {error && <p>Error: {error.message}</p>}
-    </div>
-  );
-}
 ```
+
+- `useCreateDeposit`: creates deposits
+- `useSetAcceptingIntents`: toggles intent acceptance
+- `useSetIntentRange`: updates per-order min/max
+- `useSetCurrencyMinRate`: updates fixed floor rate per tuple
+- `useAddFunds` / `useRemoveFunds` / `useWithdrawDeposit`: manages liquidity
+
+## Next pages
+
+- [Automated Rate Management](automated-rate-management.md)
