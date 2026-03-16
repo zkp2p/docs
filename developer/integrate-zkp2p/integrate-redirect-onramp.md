@@ -16,6 +16,14 @@ Integrate the ZKP2P onramp directly into your application by using the Peer exte
 - Supported assets (USDC, SOL, ETH, USDT, etc.)
 - Gasless transactions
 
+:::warning Peer Extension `0.4.9+` breaking change
+These docs target Peer extension manifest version `0.4.9` and later.
+
+- `callbackUrl` was removed from `peerExtensionSdk.onramp()`
+- `onProofComplete()` was removed from the extension SDK
+- `onIntentFulfilled()` is now the page callback to listen for completed onramp fulfillment
+:::
+
 <div style={{textAlign: 'center'}}>
   <img src="/img/developer/Integration1.png" alt="Onramp modal shown in the Peer side panel" width="400" />
   <p><em>Onramp modal shown in the Peer side panel</em></p>
@@ -28,8 +36,9 @@ Integration is simple:
 1. Install `@zkp2p/sdk` and import `peerExtensionSdk`.
 2. Check extension state. If it is not installed, call `peerExtensionSdk.openInstallPage()` to open the Chrome Web Store.
 3. Then request a connection with `peerExtensionSdk.requestConnection()`.
-4. Build your deeplink params object.
-5. Call `peerExtensionSdk.onramp()` to open the side panel.
+4. Register `peerExtensionSdk.onIntentFulfilled()` before opening the flow.
+5. Build your deeplink params object.
+6. Call `peerExtensionSdk.onramp()` to open the side panel.
 
 ```ts
 import { peerExtensionSdk } from '@zkp2p/sdk';
@@ -47,16 +56,21 @@ if (state === 'needs_connection') {
   }
 }
 
+const unsubscribe = peerExtensionSdk.onIntentFulfilled((result) => {
+  console.log('Peer order fulfilled:', result.intentHash, result.bridge.status);
+});
+
 peerExtensionSdk.onramp({
   referrer: 'Rampy Pay',
   referrerLogo: 'https://demo.peer.xyz/Rampy_logo.svg',
-  callbackUrl: 'https://demo.peer.xyz',
   inputCurrency: 'USD',
   inputAmount: '10',
   paymentPlatform: 'venmo',
   toToken: '8453:0x0000000000000000000000000000000000000000',
   recipientAddress: '0x84e113087C97Cd80eA9D78983D4B8Ff61ECa1929',
 });
+
+// Call unsubscribe() when your page no longer needs the listener.
 ```
 
 ### Peer Extension SDK API
@@ -87,7 +101,7 @@ import {
 - `checkConnectionStatus(): Promise<'connected' | 'disconnected' | 'pending'>` - Reads the current connection status.
 - `openSidebar(route: string): void` - Opens the Peer side panel to a specific route.
 - `onramp(params?: PeerExtensionOnrampParams): void` - Opens the onramp flow with the provided params.
-- `onProofComplete(callback: PeerProofCompleteCallback): () => void` - Subscribe to proof completion events. Returns an unsubscribe function.
+- `onIntentFulfilled(callback: PeerIntentFulfilledCallback): () => void` - Subscribe to onramp fulfillment events. Returns an unsubscribe function.
 - `getVersion(): Promise<string>` - Returns the extension version.
 - `openInstallPage(): void` - Opens the Chrome Web Store listing for the Peer extension.
 
@@ -98,21 +112,63 @@ import {
 - `openPeerExtensionInstallPage(options?: PeerExtensionSdkOptions): void` - Opens the Chrome Web Store listing.
 - `PEER_EXTENSION_CHROME_URL` - The Chrome Web Store URL for the Peer extension.
 
-### Deeplink Query Parameters
+### Onramp Parameters
 
 Pass these parameters as an object to `peerExtensionSdk.onramp()`. The SDK builds and validates the query string for you.
 
 | Parameter | Description | Type | Example |
 |-----------|-------------|------|---------| 
-| `referrer` | (Required) Your application name | String | `referrer=Rampy` |
+| `referrer` | (Recommended) Your application name shown in the extension | String | `referrer=Rampy` |
 | `referrerLogo` | (Recommended) Your application logo | String | `referrerLogo=https://<logo-link>` |
-| `callbackUrl` | (Recommended) URL to which users are redirected after successful onramp | String | `callbackUrl=https://<your-app>/<success>` |
-| `inputCurrency` | (Optional) Input currency user wants to swap. Defaults to users's national currency or USD. | String | `inputCurrency=USD` |
-| `inputAmount` | (Optional) Amount of input currency the user wants to swap | Number (upto 2 decimal places) | `inputAmount=12.34` |
-| `paymentPlatform` | (Optional) Payment platform user will onramp from | String | `paymentPlatform=venmo` |
-| `amountUsdc` | (Optional) Amount of output USDC the user wants to ramp to. Include 6 decimal places. | String | `amountUsdc=1000000` |
+| `inputCurrency` | (Optional) Input currency user wants to swap. Defaults to the user's local currency when available, otherwise USD. | String | `inputCurrency=USD` |
+| `inputAmount` | (Optional) Amount of input currency the user wants to swap | String or number (up to 6 decimal places) | `inputAmount=12.34` |
+| `paymentPlatform` | (Optional) Preferred payment platform for the initial quote. The user can still choose a different one in the extension. | String | `paymentPlatform=venmo` |
+| `amountUsdc` | (Optional) Exact USDC output amount in base units (`1000000` = `1` USDC). Requires `recipientAddress`. | String, number, or bigint | `amountUsdc=1000000` |
 | `toToken` | (Optional) Output token the user will onramp to | String (Has to be in the format explained below) | `toToken=8453:0x0000000000000000000000000000000000000000` |
 | `recipientAddress` | (Optional) Address to which the output tokens will be sent. | String | `recipientAddress=0xf39...66` |
+| `intentHash` | (Optional) Existing intent hash to reopen directly in the send-payment step. Must be a `0x`-prefixed 32-byte hex string. | String | `intentHash=0xabc...123` |
+
+### Completion Callback
+
+Register `peerExtensionSdk.onIntentFulfilled()` before calling `peerExtensionSdk.onramp()`.
+
+```ts
+const unsubscribe = peerExtensionSdk.onIntentFulfilled((result) => {
+  if (result.bridge.status === 'not_required') {
+    console.log('Funds delivered to destination wallet');
+    return;
+  }
+
+  console.log('Fulfill complete, bridge pending:', result.bridge.trackingUrl);
+});
+```
+
+The callback payload looks like this:
+
+```ts
+type PeerIntentFulfilledResult = {
+  intentHash: `0x${string}`;
+  status: 'fulfilled';
+  fulfillTxHash: `0x${string}`;
+  recipientAddress: string | null;
+  destinationToken: string | null;
+  bridge: {
+    required: boolean;
+    status: 'not_required' | 'pending';
+    trackingUrl?: string | null;
+    txHashes?: Array<{ txHash: `0x${string}`; chainId: number }>;
+    outputAmount?: string | null;
+    expectedOutputAmount?: string | null;
+  };
+};
+```
+
+Current callback semantics in extension `0.4.9`:
+
+- Non-bridge orders emit once with `bridge.status = 'not_required'`
+- Bridge orders emit once after fulfill succeeds with `bridge.status = 'pending'`
+- Bridge completion is not emitted as a second callback today; use `bridge.trackingUrl` or `bridge.txHashes` to continue tracking
+- The callback is delivered only to the tab that originally called `onramp()`
 
 ### To Token
 
@@ -156,7 +212,6 @@ chainId:tokenAddress
 peerExtensionSdk.onramp({
   referrer: 'Rampy Pay',
   referrerLogo: 'https://demo.peer.xyz/Rampy_logo.svg',
-  callbackUrl: 'https://demo.peer.xyz',
   toToken: '8453:0x0000000000000000000000000000000000000000',
   recipientAddress: '0x84e113087C97Cd80eA9D78983D4B8Ff61ECa1929',
 });
@@ -168,7 +223,6 @@ peerExtensionSdk.onramp({
 peerExtensionSdk.onramp({
   referrer: 'Rampy Pay',
   referrerLogo: 'https://demo.peer.xyz/Rampy_logo.svg',
-  callbackUrl: 'https://demo.peer.xyz',
   inputCurrency: 'USD',
   inputAmount: '10',
   toToken: '792703809:11111111111111111111111111111111',
@@ -186,10 +240,9 @@ Payment platform is not enforced. After opening the onramp in the side panel, th
 peerExtensionSdk.onramp({
   referrer: 'Rampy Pay',
   referrerLogo: 'https://demo.peer.xyz/Rampy_logo.svg',
-  callbackUrl: 'https://demo.peer.xyz',
   inputCurrency: 'EUR',
   inputAmount: '10',
-  paymentPlatform: 'Revolut',
+  paymentPlatform: 'revolut',
   toToken: '1:0x0000000000000000000000000000000000000000',
   recipientAddress: '0x84e113087C97Cd80eA9D78983D4B8Ff61ECa1929',
 });
@@ -209,11 +262,19 @@ Onramp exactly 1 USDC on Base to a recipient address. Users can choose their pre
 peerExtensionSdk.onramp({
   referrer: 'Rampy Pay',
   referrerLogo: 'https://demo.peer.xyz/Rampy_logo.svg',
-  callbackUrl: 'https://demo.peer.xyz',
   amountUsdc: '1000000',
   recipientAddress: '0x84e113087C97Cd80eA9D78983D4B8Ff61ECa1929',
 });
 ```
+
+### Migrating From Pre-`0.4.9`
+
+If your integration was built against the older extension contract:
+
+- Remove `callbackUrl` from every `peerExtensionSdk.onramp({...})` call
+- Replace `onProofComplete(...)` with `onIntentFulfilled(...)`
+- Register the callback before calling `onramp()`
+- If you were waiting for a redirect back to your page, keep the user on-page and update state from `onIntentFulfilled(...)` instead
 
 <div style={{textAlign: 'center'}}>
   <img src="/img/developer/Integration2.png" alt="Request instructions shown in the Peer side panel" width="400" />
