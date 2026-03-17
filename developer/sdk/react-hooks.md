@@ -1,0 +1,243 @@
+---
+id: sdk-react-hooks
+title: React Hooks
+slug: /sdk/react-hooks
+---
+
+# React Hooks
+
+## What this does
+
+`@zkp2p/sdk/react` wraps the write-heavy parts of `Zkp2pClient` in React-friendly hooks. The hooks manage loading state, errors, and transaction hashes for you, and a subset of them also expose prepared transactions for relayers or smart accounts.
+
+## Installation
+
+Install the core SDK, `viem`, and React:
+
+```bash
+npm install @zkp2p/sdk viem react
+# or
+yarn add @zkp2p/sdk viem react
+# or
+pnpm add @zkp2p/sdk viem react
+# or
+bun add @zkp2p/sdk viem react
+```
+
+`react >= 16.8.0` is an optional peer dependency of `@zkp2p/sdk`.
+
+## Hook pattern
+
+All hooks take an options object with `client` first. Most hooks also accept optional `onSuccess` and `onError` callbacks.
+
+```tsx
+import { useSignalIntent } from '@zkp2p/sdk/react';
+
+function SignalIntentButton({ client, params }) {
+  const {
+    signalIntent,
+    prepareSignalIntent,
+    isLoading,
+    error,
+    txHash,
+    prepared,
+  } = useSignalIntent({ client });
+
+  return (
+    <button
+      disabled={isLoading}
+      onClick={() => signalIntent(params)}
+    >
+      {txHash ?? 'Signal intent'}
+    </button>
+  );
+}
+```
+
+Hooks that expose `prepare...()` return a `PreparedTransaction` in addition to the normal transaction hash flow.
+
+## Deposit hooks
+
+Unless otherwise noted, these hooks use:
+
+```ts
+{ client, onSuccess?, onError? }
+```
+
+| Hook | What it does | Main action(s) | State returned |
+| --- | --- | --- | --- |
+| `useCreateDeposit` | Wraps `client.createDeposit()` | `createDeposit(params)` | `isLoading`, `error`, `txHash`, `depositDetails` |
+| `useAddFunds` | Wraps `client.addFunds()` | `addFunds(params)` | `isLoading`, `error`, `txHash` |
+| `useRemoveFunds` | Wraps `client.removeFunds()` | `removeFunds(params)` | `isLoading`, `error`, `txHash` |
+| `useWithdrawDeposit` | Wraps `client.withdrawDeposit()` | `withdrawDeposit(params)` | `isLoading`, `error`, `txHash` |
+| `useSetAcceptingIntents` | Wraps `client.setAcceptingIntents()` | `setAcceptingIntents(params)` | `isLoading`, `error`, `txHash` |
+| `useSetIntentRange` | Wraps `client.setIntentRange()` | `setIntentRange(params)` | `isLoading`, `error`, `txHash` |
+| `useSetCurrencyMinRate` | Wraps `client.setCurrencyMinRate()` | `setCurrencyMinRate(params)` | `isLoading`, `error`, `txHash` |
+| `useSetRetainOnEmpty` | Wraps `client.setRetainOnEmpty()` | `setRetainOnEmpty(params)` | `isLoading`, `error`, `txHash` |
+| `useSetDelegate` | Wraps `client.setDelegate()` | `setDelegate(params)` | `isLoading`, `error`, `txHash` |
+| `useRemoveDelegate` | Wraps `client.removeDelegate()` | `removeDelegate(params)` | `isLoading`, `error`, `txHash` |
+
+## Intent hooks
+
+| Hook | What it does | Main action(s) | State returned |
+| --- | --- | --- | --- |
+| `useSignalIntent` | Wraps `client.signalIntent()` | `signalIntent(params)`, `prepareSignalIntent(params)` | `isLoading`, `error`, `txHash`, `prepared` |
+| `useFulfillIntent` | Wraps `client.fulfillIntent()` | `fulfillIntent(params)`, `prepareFulfillIntent(params)` | `isLoading`, `error`, `txHash`, `prepared` |
+| `useReleaseFundsToPayer` | Wraps `client.releaseFundsToPayer()` | `releaseFundsToPayer(params)` | `isLoading`, `error`, `txHash` |
+| `usePruneExpiredIntents` | Wraps `client.pruneExpiredIntents()` | `pruneExpiredIntents(params)` | `isLoading`, `error`, `txHash` |
+
+:::note
+The hooks package does not currently export `useCancelIntent`. If you need cancel flows in React, call `client.cancelIntent()` or `client.cancelIntent.prepare()` directly.
+:::
+
+## Vault hooks
+
+### `useCreateVault`
+
+This hook provides a vault-friendly wrapper around `client.createRateManager()`.
+
+**Options**
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `client` | Yes | `Zkp2pClient` instance |
+| `sendTransaction` | Yes | Callback that sends a prepared transaction and returns a hash |
+| `referrer` | No | Single referrer code or list of referrer codes for attribution |
+| `onSuccess` | No | Success callback |
+| `onError` | No | Error callback |
+
+**Call signature**
+
+```ts
+createVault({
+  config: {
+    manager,
+    feeRecipient,
+    maxFee,
+    fee,
+    depositHook?,
+    minLiquidity?,
+    name,
+    uri,
+  },
+})
+```
+
+**Returns**
+
+`useCreateVault()` returns `createVault`, `prepareCreateVault`, `isLoading`, `error`, and `txHash`.
+
+### `useVaultDelegation`
+
+This hook chooses the correct delegation path for you and supports optional batching.
+
+**Options**
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `client` | Yes | `Zkp2pClient` instance |
+| `sendTransaction` | Yes | Single-transaction sender |
+| `sendBatch` | No | Batch sender for smart-account or user-op flows |
+| `referrer` | No | Single referrer code or list of referrer codes |
+| `onSuccess` | No | Success callback |
+| `onError` | No | Error callback |
+
+**Main actions**
+
+| Action | Use it for |
+| --- | --- |
+| `delegateDeposit({ escrow, depositId, registry, rateManagerId, currentRateManagerId?, currentRateManagerRegistry?, preflightHook? })` | Delegate one deposit |
+| `delegateDeposits({ registry, rateManagerId, deposits, preflightHook? })` | Delegate many deposits |
+| `clearDelegation({ escrow, depositId })` | Clear one delegation |
+| `clearDelegations({ deposits })` | Clear many delegations |
+
+**Returns**
+
+`useVaultDelegation()` returns the four actions above plus `isLoading` and `error`.
+
+### Vault settings hooks
+
+| Hook | What it does | Main action(s) | State returned |
+| --- | --- | --- | --- |
+| `useSetVaultFee` | Wraps `client.setVaultFee()` | `setVaultFee(params)`, `prepareSetVaultFee(params)` | `isLoading`, `error`, `txHash`, `prepared` |
+| `useSetVaultMinRate` | Wraps `client.setVaultMinRate()` | `setVaultMinRate(params)`, `prepareSetVaultMinRate(params)` | `isLoading`, `error`, `txHash`, `prepared` |
+| `useSetVaultConfig` | Wraps `client.setVaultConfig()` | `setVaultConfig(params)`, `prepareSetVaultConfig(params)` | `isLoading`, `error`, `txHash`, `prepared` |
+
+## Payment method hooks
+
+| Hook | What it does | Main action(s) | State returned |
+| --- | --- | --- | --- |
+| `useAddPaymentMethods` | Wraps `client.addPaymentMethods()` | `addPaymentMethods(params)` | `isLoading`, `error`, `txHash` |
+| `useSetPaymentMethodActive` | Wraps `client.setPaymentMethodActive()` | `setPaymentMethodActive(params)` | `isLoading`, `error`, `txHash` |
+| `useRemovePaymentMethod` | Wraps `client.removePaymentMethod()` | `removePaymentMethod(params)` | `isLoading`, `error`, `txHash` |
+
+## Currency hooks
+
+| Hook | What it does | Main action(s) | State returned |
+| --- | --- | --- | --- |
+| `useAddCurrencies` | Wraps `client.addCurrencies()` | `addCurrencies(params)` | `isLoading`, `error`, `txHash` |
+| `useDeactivateCurrency` | Wraps `client.deactivateCurrency()` | `deactivateCurrency(params)` | `isLoading`, `error`, `txHash` |
+| `useRemoveCurrency` | Wraps `client.removeCurrency()` | `removeCurrency(params)` | `isLoading`, `error`, `txHash` |
+
+## Query hooks
+
+The hooks package currently exposes one read-oriented hook.
+
+### `useGetTakerTier`
+
+**Options**
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `client` | Yes | `Zkp2pClient` instance |
+| `owner` | No | Address to auto-fetch for |
+| `chainId` | No | Chain ID to auto-fetch for |
+| `autoFetch` | No | Automatically fetch when `owner` and `chainId` are present |
+| `onSuccess` | No | Success callback |
+| `onError` | No | Error callback |
+
+**Returns**
+
+`useGetTakerTier()` returns `getTakerTier(params?)`, `takerTier`, `isLoading`, and `error`.
+
+### Tier helper utilities
+
+| Utility | Purpose |
+| --- | --- |
+| `getTierDisplayInfo(tier)` | Maps a raw tier response to UI-friendly labels and cap display |
+| `getNextTierCap(currentTier)` | Returns the next cap threshold for the supplied tier |
+
+## Vault utilities
+
+The hooks package re-exports several delegation helpers and types.
+
+| Export | Purpose |
+| --- | --- |
+| `ZERO_RATE_MANAGER_ID` | Canonical zero vault ID |
+| `isZeroRateManagerId(value)` | Checks whether a vault ID is the zero ID |
+| `normalizeRateManagerId(value)` | Normalizes a vault ID string |
+| `normalizeRegistry(value)` | Normalizes a registry address string |
+| `getDelegationRoute(client, escrow)` | Returns whether the deposit should use the `legacy` or `v2` delegation path |
+| `classifyDelegationState(currentRateManagerId, currentRegistry, targetRateManagerId, targetRegistry)` | Classifies whether a deposit is delegated here, elsewhere, or not delegated |
+
+Useful exported types:
+
+- `DelegationRoute`
+- `DelegationState`
+- `DelegationDepositTarget`
+- `BatchResult`
+- `SendTransactionFn`
+- `SendBatchFn`
+
+## When to use hooks vs the core client
+
+Use hooks when you want component-local transaction state. Use the core client directly when you need:
+
+- quote lookups with `getQuote()`
+- RPC-first reads such as `getDeposits()` and `getIntent()`
+- indexer queries through `client.indexer`
+- client methods that do not have a React wrapper yet
+
+## Help?
+
+If you run into issues, join our [Discord](https://discord.gg/4hNVTv2MbH).
