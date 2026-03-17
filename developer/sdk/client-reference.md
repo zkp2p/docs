@@ -10,7 +10,7 @@ slug: /sdk/client-reference
 
 This page documents the published `Zkp2pClient` API surface for `@zkp2p/sdk`. Use it as the reference layer for custom integrations after you have read the higher-level walkthroughs:
 
-- [Offramp Integration](/developer/developer/offramp)
+- [Offramp Integration](/developer/offramp-integration)
 - [Onramp Integration](/developer/integrate-zkp2p/integrate-redirect-onramp)
 
 ## Constructor
@@ -332,7 +332,7 @@ For common read flows, start with the RPC-first methods:
 - `getDeployedAddresses()`
 - `getUsdcAddress()`
 
-For copy-paste examples around deposits and intents, see [Offramp Integration](/developer/developer/offramp).
+For copy-paste examples around deposits and intents, see [Offramp Integration](/developer/offramp-integration).
 
 ## Indexer
 
