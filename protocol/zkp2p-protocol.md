@@ -13,15 +13,11 @@ The ZKP2P Protocol enables permissionless and fully noncustodial buying and sell
 
 With ZKP2P V1, we launched the first ever trust minimized fiat to crypto on/offramp in production, enabling swaps between USD in Venmo, EUR in Revolut and INR in HDFC Bank for USDC. These swaps were powered by ZK proofs using the [zkEmail](https://prove.email/) library. V1 intended to be an alpha proof of concept which explored and pushed the edge of what could be done by bringing valuable web2 data for use onchain in a privacy preserving and verifiable way, while solving the biggest pain point that exists in crypto.
 
-With the current ZKP2P protocol, we are a doubling down of this vision to create a protocol that enables fast, cheap, low fraud and DeFi composable actions between offchain and onchain assets. V2 extends upon V1 and solves many of its limitations including:
-
-1. Complex user flows
-2. Fragmentation of liquidity
-3. Difficulty for external integrations directly at the protocol layer
-4. No optional identity verification layer to unlock higher limits
-5. Proving speed
-
 ## The V2 Protocol
+
+:::note
+V2 is now legacy. The V2 contracts are deployed on Sepolia testnet only and are no longer receiving updates. See the V3 Protocol section below for the current production system.
+:::
 
 The ZKP2P V2 protocol was designed from the ground up to make it more generic, capital efficient and composable. The protocol now supports the following:
 1. Generic to any payment platform and fiat currency as long as the platform uses a server to server API to generate proofs
@@ -33,17 +29,21 @@ The ZKP2P V2 protocol was designed from the ground up to make it more generic, c
 
 Below is an illustrative example of the V2 protoclol flow using TLSNotary as the cryptographic primitive.
 
-![Protocol Overview](/img/developer/ZKP2PProtocolOverview.jpeg)  
+![Protocol Overview](/img/developer/ZKP2PProtocolOverview.jpeg)
 
 # The V3 Protocol
 
-ZKP2P V3 enables permissionless, non‑custodial exchange between off‑chain payments and on‑chain tokens with faster attestations, a simpler on‑chain surface, and clearer integration points. It builds on V2 with an off‑chain Attestation Service and a unified on‑chain verifier, while keeping funds trustless in Escrow smart contracts.
+ZKP2P V3 is the current production protocol deployed on Base mainnet. It enables permissionless, non‑custodial exchange between off‑chain payments and on‑chain tokens with faster attestations, a simpler on‑chain surface, and clearer integration points.
 
 At a Glance
 - Off‑chain attestation: proofs (e.g., Reclaim/TLSNotary) are validated off‑chain and returned as an EIP‑712 PaymentAttestation.
-- Unified on‑chain verification: a single `UnifiedPaymentVerifier` checks the attestation and enforces protocol rules (snapshot match, nullifiers, capping).
-- Orchestrated intents: `Orchestrator` owns the intent lifecycle (signal, cancel, fulfill) and fee routing; `Escrow` focuses on deposits and token custody.
-- Typed methods: payment “methods” are bytes32 identifiers (e.g., keccak256("venmo")) resolved through a registry, decoupling on‑chain logic from provider addresses.
+- Unified on‑chain verification: a single `UnifiedPaymentVerifierV2` checks the attestation and enforces protocol rules (snapshot match, nullifiers, capping).
+- Orchestrated intents: `OrchestratorV2` owns the intent lifecycle (signal, cancel, fulfill) and fee routing; `EscrowV2` focuses on deposits and token custody.
+- Oracle rate management: depositors can configure oracle adapters (Chainlink) per currency to auto-adjust minimum conversion rates based on market prices.
+- Delegated rate management: depositors can opt into external rate managers (RateManagerV1) that set rates on their behalf with fee sharing.
+- Pre-intent hooks: on-chain deposit-level access control (signature gating, address whitelists) that runs before fund locking.
+- Multi-orchestrator support: `OrchestratorRegistry` authorizes multiple orchestrator contracts on EscrowV2.
+- Typed methods: payment "methods" are bytes32 identifiers (e.g., keccak256("venmo")) resolved through a registry, decoupling on‑chain logic from provider addresses.
 - Cleaner APIs: gating/signing includes method, fiat, conversion rate, and addresses; quotes expose richer filters and deposit stats.
 
 
@@ -53,14 +53,14 @@ At a Glance
 **Perform Off-chain Payment.** Execute an offchain payment in fiat currency through the payment service to the designated seller
 
 **Proof of Payment:** After payment, the buyer generates a proof of payment data and it's authenticity along with also extracting the following from the payment data:
-- Off-ramper’s Off-chain payment ID
+- Off-ramper's Off-chain payment ID
 - Payment amount
 - Payment timestamp
 - Payment currency
 - Other optional state (e.g. transaction status) to be handled by the Verifier
 
 **Unlocking Escrow.** The smart contract checks the proof of payment along with the following to unlock the escrowed funds:
-- Verification of the on-ramper’s intent
+- Verification of the on-ramper's intent
 - Correspondence of the deposit to the correct off-ramper
 - Adequacy of the payment amount
 - Timing of the payment post-intent

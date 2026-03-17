@@ -11,6 +11,15 @@ The Gating Service has 2 roles
 
 2.  Store offchain payment identifiers (e.g. Venmo User ID) in the deposit flow for sellers to introduce a layer of privacy to the blockchain
 
+### On-Chain Pre-Intent Hooks
+
+V3 also supports on-chain deposit-level access control via pre-intent hooks on OrchestratorV2. These provide an alternative or complement to the off-chain gating service:
+
+- **SignatureGatingPreIntentHook**: Requires an EIP-191 signature from a configurable signer per deposit — similar to the off-chain gating service but enforced on-chain.
+- **WhitelistPreIntentHook**: Restricts intents to a whitelisted set of taker addresses per deposit and payment method.
+
+See [Pre-Intent Hooks](/protocol/v3/smart-contracts/pre-intent-hooks) for details.
+
 ### API Reference
 
 Our current gating service API is hosted at api.peer.xyz

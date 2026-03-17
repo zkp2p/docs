@@ -13,22 +13,62 @@ Note: We do not have a Sepolia deployment for V3.
 
 ### Contracts
 
+V3 contracts (EscrowV2, OrchestratorV2) are the production system. Legacy contracts still hold active deposits but are deprecated and will be wound down.
+
+#### V3 Core
+
+| Contract | Address |
+| --- | --- |
+| EscrowV2 | `0x777777779d229cdF3110e9de47943791c26300Ef` |
+| OrchestratorV2 | `0x888888359E981B5225CA48fbCdCeff702FC3b888` |
+| RateManagerV1 | `0xeEd7Db23e724aC4590D6dB6F78fDa6DB203535F3` |
+| ProtocolViewerV2 | `0xC8A622e1614BB58141E72e1D6023B16f08677d6c` |
+
+#### Registries
+
+| Contract | Address |
+| --- | --- |
+| EscrowRegistry | `0xeD0e847B101abc96E796260AC358e12BAa2f5B21` |
+| OrchestratorRegistry | `0xBe9fED15ED7A4B915C03EFcEcb9662739C3382A9` |
+| PaymentVerifierRegistry | `0x2b82D24437ff66Fb173eabDfD67ee2ACeb8bEb1e` |
+| NullifierRegistry | `0x8d8e1A0e5345a5cc9AA206c3ca76D6d28c514608` |
+| RelayerRegistry | `0xEbA979889a9c97382A92472fF3703786fF180083` |
+
+#### Verification
+
+| Contract | Address |
+| --- | --- |
+| UnifiedPaymentVerifierV2 | `0x46A58Dc65587D4D7B8198C6A25eEdf5b2535Da94` |
+| SimpleAttestationVerifier | `0xED6C0C34c3964D239e7a315C55E620fafE5Ae3AC` |
+
+#### Hooks
+
+| Contract | Address |
+| --- | --- |
+| SignatureGatingPreIntentHook | `0x62D410a3d6FC766dd2192be2a67a5fc79c5c2e1F` |
+| WhitelistPreIntentHook | `0xd793369b11357cdd076A9c631F6c44ff8e6353eA` |
+| AcrossBridgeHookV2 | `0xCcC9163451DE31a625D48e417e0fD1a329c7f7cf` |
+
+#### Oracles
+
+| Contract | Address |
+| --- | --- |
+| ChainlinkOracleAdapter | `0x53881a928abD61C095e5f30b63bc554872C3b2f1` |
+
+#### Legacy (Deprecated)
+
 | Contract | Address |
 | --- | --- |
 | Escrow | `0x2f121CDDCA6d652f35e8B3E560f9760898888888` |
 | Orchestrator | `0x88888883Ed048FF0a415271B28b2F52d431810D0` |
-| EscrowRegistry | `0xeD0e847B101abc96E796260AC358e12BAa2f5B21` |
-| NullifierRegistry | `0x8d8e1A0e5345a5cc9AA206c3ca76D6d28c514608` |
-| PaymentVerifierRegistry | `0x2b82D24437ff66Fb173eabDfD67ee2ACeb8bEb1e` |
-| PostIntentHookRegistry | `0x9B128EBAD4d874199A2Dc57E93186796c5EcAdE9` |
-| ProtocolViewer | `0x30B03De22328074Fbe8447C425ae988797146606` |
-| RelayerRegistry | `0xEbA979889a9c97382A92472fF3703786fF180083` |
-| SimpleAttestationVerifier | `0xED6C0C34c3964D239e7a315C55E620fafE5Ae3AC` |
 | UnifiedPaymentVerifier | `0x16b3e4a3CA36D3A4bCA281767f15C7ADeF4ab163` |
+| PostIntentHookRegistry | `0x9B128EBAD4d874199A2Dc57E93186796c5EcAdE9` |
+| AcrossBridgeHook | `0x72C10b838Cf46649691949c285E0b468b363b9f0` |
+| ProtocolViewer | `0x30B03De22328074Fbe8447C425ae988797146606` |
 
 ### Payment Methods
 
-All payment methods resolve to the same verifier contract on Base: `UnifiedPaymentVerifier` at `0x16b3e4a3CA36D3A4bCA281767f15C7ADeF4ab163`.
+All payment methods resolve to the same verifier contract on Base: `UnifiedPaymentVerifierV2` at `0x46A58Dc65587D4D7B8198C6A25eEdf5b2535Da94`.
 
 | Payment Method | Payment Method ID (bytes32) | Supported Currencies |
 | --- | --- | --- |
@@ -43,10 +83,9 @@ All payment methods resolve to the same verifier contract on Base: `UnifiedPayme
 | paypal | `0x3ccc3d4d5e769b1f82dc4988485551dc0cd3c7a3926d7d8a4dde91507199490f` | USD, EUR, GBP, SGD, NZD, AUD, CAD |
 | monzo | `0x62c7ed738ad3e7618111348af32691b5767777fbaf46a2d8943237625552645c` | GBP |
 | n26 | `0xd9ff4fd6b39a3e3dd43c41d05662a5547de4a878bc97a65bcb352ade493cdc6b` | EUR |
+| alipay | `0xcac9daea62d7b89d75ac73af4ee14dcf25721012ae82b568c2ea5c808eaa04ff` | CNY |
 | chime | `0x5908bb0c9b87763ac6171d4104847667e7f02b4c47b574fe890c1f439ed128bb` | USD |
-
-
-
+| luxon | `0xaea63ef983458674f54ee50cdaa7b09d80a5c6c03ed505f51c90b0f2b54abb01` | USD, EUR, GBP |
 
 ### All Supported Currencies
 
@@ -90,6 +129,6 @@ Currency codes are ISO 4217 (uppercase). The on-chain representation is the byte
 
 ### Notes
 
-- All payment methods are registered in `PaymentVerifierRegistry` and resolve to the same `UnifiedPaymentVerifier` address on Base.
+- All payment methods are registered in `PaymentVerifierRegistry` and resolve to the same `UnifiedPaymentVerifierV2` address on Base.
 - Currencies per method are derived from the latest snapshots under `deployments/outputs/platforms/snapshots/base`. If these change, update this document by re-reading those files.
-- Last refresh: 2025-10-27 (UTC)
+- Last refresh: 2026-03-17 (UTC)
