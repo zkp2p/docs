@@ -1,101 +1,165 @@
 ---
-title: Post‑Intent Hooks (V3)
+title: Intent Hooks (V3)
 slug: /developer/api/v3/post-intent-hooks
 ---
 
-# Build a Post‑Intent Hook
+# Intent Hooks
 
-This guide shows how to write, deploy, whitelist, and use a post‑intent hook with the V3 Orchestrator.
+V3 supports two types of hooks that let you add custom logic to the intent lifecycle:
 
-## What a hook does
+- **Pre-intent hooks** — run during `signalIntent` *before* funds are locked. Used for access control (signature gating, whitelists).
+- **Post-intent hooks** — run during `fulfillIntent` *after* verification. Used for custom fund routing (bridging, splitting, swapping).
 
-After `fulfillIntent`, the Orchestrator approves your hook to pull the net token amount (`_amountNetFees`) and calls:
+Both hook types are set per-deposit by the depositor or their delegate. No governance whitelisting is required.
 
-```
-function execute(IOrchestrator.Intent memory _intent, uint256 _amountNetFees, bytes calldata _fulfillIntentData) external;
-```
+:::info
+For the full protocol-level specification of these hooks, see:
+- [Pre-Intent Hooks](/protocol/v3/smart-contracts/pre-intent-hooks) — interface details, built-in implementations, trust model
+- [Post-Intent Hooks](/protocol/v3/smart-contracts/post-intent-hooks) — execution model, invariants, security considerations
+:::
 
-Your contract must `transferFrom(orchestrator, …)` exactly `_amountNetFees` and route funds. If it doesn’t pull the full amount, or if it pushes tokens into the Orchestrator, fulfillment reverts.
+---
 
-## Minimal template
+## Post-Intent Hooks
 
-```
+### Interface
+
+Post-intent hooks implement `IPostIntentHookV2`. The Orchestrator builds a `HookExecutionContext` with everything the hook needs:
+
+```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
-import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import { IPostIntentHook } from "zkp2p-v2-contracts/contracts/interfaces/IPostIntentHook.sol";
-import { IOrchestrator } from "zkp2p-v2-contracts/contracts/interfaces/IOrchestrator.sol";
 
-contract MyHook is IPostIntentHook {
-  IERC20 public immutable token;     // deposit token; or fetch via IEscrow on each call
-  address public immutable orchestrator;
+interface IPostIntentHookV2 {
+    struct HookIntentContext {
+        address owner;
+        address to;
+        address escrow;
+        uint256 depositId;
+        uint256 amount;
+        uint256 timestamp;
+        bytes32 paymentMethod;
+        bytes32 fiatCurrency;
+        uint256 conversionRate;
+        bytes32 payeeId;
+        bytes signalHookData;    // from SignalIntentParams.data
+    }
 
-  constructor(address _token, address _orchestrator) {
-    token = IERC20(_token);
-    orchestrator = _orchestrator;
-  }
+    struct HookExecutionContext {
+        bytes32 intentHash;
+        address token;           // deposit token address
+        uint256 executableAmount;// amount after all fees
+        HookIntentContext intent;
+    }
 
-  function execute(IOrchestrator.Intent memory intent, uint256 amount, bytes calldata data) external override {
-    require(msg.sender == orchestrator, "only orchestrator");
-    // Example: forward everything to the `to` address
-    token.transferFrom(msg.sender, intent.to, amount);
-  }
+    function execute(
+        HookExecutionContext calldata _ctx,
+        bytes calldata _fulfillHookData
+    ) external;
 }
 ```
 
-Alternative: fetch the token dynamically
+Source: `zkp2p-v2-contracts/contracts/interfaces/IPostIntentHookV2.sol`
 
+### How it works
+
+After `fulfillIntent`, the Orchestrator:
+1. Deducts protocol, manager, and referral fees from the release amount to get `executableAmount`.
+2. Approves your hook to pull exactly `executableAmount` of the deposit token.
+3. Calls `hook.execute(ctx, fulfillHookData)`.
+4. Verifies your hook pulled exactly `executableAmount` and didn't send tokens back. Resets allowance to 0.
+
+If any check fails, the entire fulfillment reverts.
+
+### Minimal template
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.18;
+
+import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import { IPostIntentHookV2 } from "zkp2p-v2-contracts/contracts/interfaces/IPostIntentHookV2.sol";
+
+contract MyHook is IPostIntentHookV2 {
+    address public immutable orchestrator;
+
+    constructor(address _orchestrator) {
+        orchestrator = _orchestrator;
+    }
+
+    function execute(
+        HookExecutionContext calldata ctx,
+        bytes calldata /* fulfillHookData */
+    ) external override {
+        require(msg.sender == orchestrator, "only orchestrator");
+
+        // Token address and amount are in the context — no need to query Escrow
+        IERC20(ctx.token).transferFrom(msg.sender, ctx.intent.to, ctx.executableAmount);
+    }
+}
 ```
-import { IEscrow } from "zkp2p-v2-contracts/contracts/interfaces/IEscrow.sol";
-IERC20 token = IEscrow(intent.escrow).getDeposit(intent.depositId).token;
-token.transferFrom(msg.sender, intent.to, amount);
+
+### Passing data to hooks
+
+- **At signal time** → `SignalIntentParams.data` — persisted in the intent, delivered as `ctx.intent.signalHookData`. Use for static config (target address, split ratios, destination chain).
+- **At fulfill time** → `FulfillIntentParams.postIntentHookData` — delivered as `_fulfillHookData`. Use for dynamic inputs (bridge quote, memo, execution flags).
+
+### Example: 95/5 split
+
+```solidity
+function execute(HookExecutionContext calldata ctx, bytes calldata) external override {
+    require(msg.sender == orchestrator, "only orchestrator");
+    uint256 fee = ctx.executableAmount * 5 / 100;
+    uint256 toAmt = ctx.executableAmount - fee;
+    IERC20(ctx.token).transferFrom(msg.sender, ctx.intent.to, toAmt);
+    IERC20(ctx.token).transferFrom(msg.sender, builder, fee);
+}
 ```
 
-## Encode inputs
+### Example: pull-then-act pattern
 
-- Static config at signal time → `SignalIntentParams.data`.
-- Dynamic inputs at fulfill time → `FulfillIntentParams.postIntentHookData`.
-
-Both fields are delivered to `execute` (`intent.data` and `data`).
-
-## Whitelist your hook
-
-Governance must add your hook to `PostIntentHookRegistry` before users can set it on intents.
-
-- Base mainnet addresses are listed in Protocol → V3 → Deployments.
-
-Example (pseudo‑script)
-
-```
-registry.addPostIntentHook(myHookAddress) // owner‑only
+```solidity
+function execute(HookExecutionContext calldata ctx, bytes calldata) external override {
+    require(msg.sender == orchestrator, "only orchestrator");
+    IERC20(ctx.token).transferFrom(msg.sender, address(this), ctx.executableAmount);
+    // Now you hold the tokens — approve a router, bridge, stake, swap, etc.
+    // Forward remainder to ctx.intent.to
+}
 ```
 
-## Use the hook from a client
+### What will revert
 
-Signal an intent with a hook:
+- Pulling less than `executableAmount` → revert.
+- Sending tokens into the Orchestrator during execution → revert.
+- Hook reverting for any reason → entire fulfillment reverts.
 
-```
+### Deploy and use
+
+1. Deploy your hook contract with the OrchestratorV2 address (`0x888888359E981B5225CA48fbCdCeff702FC3b888` on Base).
+2. Signal an intent with your hook:
+
+```ts
 const params = {
   escrow,
   depositId,
   amount,
   to,
-  paymentMethod,           // bytes32 keccak256("venmo") etc.
-  fiatCurrency,            // bytes32 keccak256("USD") etc.
+  paymentMethod,           // bytes32
+  fiatCurrency,            // bytes32
   conversionRate,          // 1e18 scale
-  referrer: ethers.ZeroAddress,
-  referrerFee: 0n,
+  referralFees: [],        // IReferralFee.ReferralFee[]
   gatingServiceSignature,
   signatureExpiration,
   postIntentHook: myHookAddress,
-  data: abi.encode(targetAddress)
+  preIntentHookData: "0x",
+  data: abi.encode(targetAddress)  // static config for the hook
 };
 await orchestrator.signalIntent(params);
 ```
 
-Fulfill with optional hook data:
+3. Fulfill with optional hook data:
 
-```
+```ts
 await orchestrator.fulfillIntent({
   paymentProof: encodedPaymentAttestation,
   intentHash,
@@ -104,39 +168,120 @@ await orchestrator.fulfillIntent({
 });
 ```
 
-## Example hooks
+---
 
-1) Forward to a target from `intent.data`
+## Pre-Intent Hooks
 
+### Interface
+
+Pre-intent hooks implement `IPreIntentHook`. They run during `signalIntent` before any state changes and can only revert to reject:
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.18;
+
+import { IReferralFee } from "./IReferralFee.sol";
+
+interface IPreIntentHook {
+    struct PreIntentContext {
+        address taker;
+        address escrow;
+        uint256 depositId;
+        uint256 amount;
+        address to;
+        bytes32 paymentMethod;
+        bytes32 fiatCurrency;
+        uint256 conversionRate;
+        IReferralFee.ReferralFee[] referralFees;
+        bytes preIntentHookData;  // from SignalIntentParams.preIntentHookData
+    }
+
+    function validateSignalIntent(PreIntentContext calldata _ctx) external;
+}
 ```
-address target = abi.decode(intent.data, (address));
-token.transferFrom(msg.sender, target, amount);
+
+Source: `zkp2p-v2-contracts/contracts/interfaces/IPreIntentHook.sol`
+
+### How it works
+
+Each deposit has two hook slots on OrchestratorV2:
+1. **Generic pre-intent hook** — general-purpose validation.
+2. **Whitelist hook** — address-based access control.
+
+Both run sequentially during `signalIntent`. If either reverts, the intent is rejected.
+
+### Built-in implementations
+
+ZKP2P ships two ready-to-use pre-intent hooks:
+
+| Hook | Address (Base) | Purpose |
+| --- | --- | --- |
+| SignatureGatingPreIntentHook | `0x62D410a3d6FC766dd2192be2a67a5fc79c5c2e1F` | Require an EIP-191 signature from a configurable signer |
+| WhitelistPreIntentHook | `0xd793369b11357cdd076A9c631F6c44ff8e6353eA` | Restrict to whitelisted taker addresses per payment method |
+
+### Setup
+
+Set a hook on your deposit (depositor or delegate only):
+
+```ts
+// Set a generic pre-intent hook
+await orchestrator.setDepositPreIntentHook(escrowAddress, depositId, hookAddress);
+
+// Set a whitelist hook
+await orchestrator.setDepositWhitelistHook(escrowAddress, depositId, hookAddress);
+
+// Remove a hook (set to zero address)
+await orchestrator.setDepositPreIntentHook(escrowAddress, depositId, ethers.ZeroAddress);
 ```
 
-2) Split 95/5 between taker and builder
+For the whitelist hook, add addresses after setting:
 
-```
-uint256 fee = amount * 5 / 100; uint256 toAmt = amount - fee;
-token.transferFrom(msg.sender, intent.to, toAmt);
-token.transferFrom(msg.sender, builder, fee);
-```
-
-3) Multi‑call pattern (pull to self, then act)
-
-```
-token.transferFrom(msg.sender, address(this), amount);
-// approve router, stake, swap, etc., then forward remainder to intent.to
+```ts
+const hook = WhitelistPreIntentHook__factory.connect(hookAddress, signer);
+await hook.addToWhitelist(escrowAddress, depositId, paymentMethod, [addr1, addr2]);
 ```
 
-## What will fail
+### Writing a custom pre-intent hook
 
-- Pulling less than `amount` → revert (must pull exactly the approved amount).
-- Sending tokens into the Orchestrator during execution → revert.
-- Unwhitelisted hook on `signalIntent` → revert.
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.18;
+
+import { IPreIntentHook } from "zkp2p-v2-contracts/contracts/interfaces/IPreIntentHook.sol";
+
+contract MyGatingHook is IPreIntentHook {
+    function validateSignalIntent(PreIntentContext calldata ctx) external override {
+        // Example: only allow intents above 100 USDC (6 decimals)
+        require(ctx.amount >= 100e6, "amount too low");
+
+        // Example: only allow specific payment methods
+        require(ctx.paymentMethod == keccak256("venmo"), "method not allowed");
+
+        // Returning without reverting = intent approved
+    }
+}
+```
+
+Deploy and set it on your deposit — no governance approval needed.
+
+---
 
 ## Tips
 
-- Keep execution short and deterministic; reverts undo the whole `fulfillIntent`.
-- Use `SafeERC20` for non‑standard tokens.
-- Consider storing the Orchestrator immutable and checking `msg.sender` to restrict execution.
+- Keep hook execution short and deterministic — reverts undo the entire transaction.
+- Use `SafeERC20` for tokens that don't return `bool` on `transfer`.
+- Store the Orchestrator address as `immutable` and check `msg.sender` to prevent unauthorized calls.
+- Post-intent hooks receive the token address in `ctx.token` — no need to query the Escrow contract.
+- Pre-intent hooks are validation-only — they should not modify state.
 
+## Addresses
+
+| Contract | Address (Base) | Basescan |
+| --- | --- | --- |
+| OrchestratorV2 | `0x888888359E981B5225CA48fbCdCeff702FC3b888` | [View](https://basescan.org/address/0x888888359E981B5225CA48fbCdCeff702FC3b888) |
+| EscrowV2 | `0x777777779d229cdF3110e9de47943791c26300Ef` | [View](https://basescan.org/address/0x777777779d229cdF3110e9de47943791c26300Ef) |
+| SignatureGatingPreIntentHook | `0x62D410a3d6FC766dd2192be2a67a5fc79c5c2e1F` | [View](https://basescan.org/address/0x62D410a3d6FC766dd2192be2a67a5fc79c5c2e1F) |
+| WhitelistPreIntentHook | `0xd793369b11357cdd076A9c631F6c44ff8e6353eA` | [View](https://basescan.org/address/0xd793369b11357cdd076A9c631F6c44ff8e6353eA) |
+| AcrossBridgeHookV2 | `0xCcC9163451DE31a625D48e417e0fD1a329c7f7cf` | [View](https://basescan.org/address/0xCcC9163451DE31a625D48e417e0fD1a329c7f7cf) |
+
+See [V3 Deployments](/protocol/v3/v3-deployments) for the full contract address list.
