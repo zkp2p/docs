@@ -7,7 +7,8 @@ Integration guides for developers building on ZKP2P.
 | Document | Audience | Integration Type |
 |----------|----------|------------------|
 | `integrate-zkp2p/integrate-redirect-onramp.md` | App developers | Embed fiat onramp in web apps |
-| `offramp-integration.md` | Liquidity providers | Manage USDC deposits for offramp |
+| `offramp-integration.md` | Liquidity providers | Manage USDC deposits with Zkp2pClient |
+| `automated-rate-management.md` | SDK integrators | Configure oracle-backed market tracking |
 | `post-intent-hooks.md` | Protocol developers | Custom fulfillment logic (Solidity) |
 | `build-new-provider.md` | Protocol developers | zkTLS provider templates (JSON) |
 
@@ -17,7 +18,8 @@ Integration guides for developers building on ZKP2P.
 developer/
 ├── integrate-zkp2p/
 │   └── integrate-redirect-onramp.md    # @zkp2p/sdk onramp
-├── offramp-integration.md              # OfframpClient SDK
+├── offramp-integration.md              # Zkp2pClient SDK
+├── automated-rate-management.md        # ARM tuple configuration
 ├── post-intent-hooks.md                # IPostIntentHook Solidity
 └── build-new-provider.md               # Provider JSON templates
 ```
@@ -26,7 +28,7 @@ developer/
 
 | Package | Purpose |
 |---------|---------|
-| `@zkp2p/sdk` | Main SDK (peerExtensionSdk, OfframpClient) |
+| `@zkp2p/sdk` | Main SDK (peerExtensionSdk, Zkp2pClient) |
 | `@zkp2p/providers` | Payment provider template definitions |
 
 ## Documentation Patterns

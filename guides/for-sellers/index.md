@@ -4,19 +4,18 @@ title: For Sellers
 
 # For Sellers
 
-### Why Sell on ZKP2P?
+### Why sell on ZKP2P?
 
-In ZKP2P, all transactions are fully peer-to-peer, meaning onrampers are buying crypto directly from offrampers.
+In ZKP2P, all transactions are peer-to-peer, so buyers purchase crypto directly from sellers.
 
-Sellers receive payments on **Revolut, Cash App, Venmo, Wise**, and **Mercado Pago**, and buyers receive **USDC automatically**. Unlike other P2P marketplaces, the ZKP2P protocol **automatically verifies proof of payment** from the buyer using cryptography.
+Sellers receive payments on **Revolut, Cash App, Venmo, Wise**, and **Mercado Pago**, while buyers receive **USDC automatically**. ZKP2P verifies payment proofs cryptographically, so sellers do not need to manually release in normal flows.
 
-You don’t need to be online to manually release crypto. Simply **deposit USDC** and passively wait for fiat to arrive in your payment account. Charge a spread to earn yield (often **>50% APR**) and rebalance your fiat back into crypto every few days.
+You can deposit USDC, earn spread yield, and rebalance on your own cadence.
 
-### Get Started
-
-Below are guides to get started as a seller of USDC on ZKP2P:
+### Get started
 
 - [How to Provide Liquidity and Sell USDC](provide-liquidity-sell-usdc.md)
+- [Market Tracking (Automated Rate Management)](market-tracking-arm.md)
 - [How to Provide Liquidity from another chain](provide-liquidity-diff-chain.md)
 - [How to Update USDC Conversion Rates](update-usdc-rates.md)
 - [Calculating APR](calculating-apr.md)

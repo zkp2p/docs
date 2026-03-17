@@ -5,92 +5,89 @@ title: How to Update USDC Conversion Rates
 
 # How to Update USDC Conversion Rates
 
-After creating your deposit in ZKP2P, you may need to adjust your conversion rates to stay competitive or respond to market changes. This guide walks you through how to update your FX rates for existing deposits.
+After creating a deposit, you can manage tuple pricing in two modes:
 
-### Step 1: Navigate to Your Deposit Details
+- **Fixed Rate**: update the rate manually.
+- **Market Tracking**: set spread and floor while rates follow market data.
 
-- Go to [https://peer.xyz](https://peer.xyz)  
-- Click on the **Sell** tab in the main navigation bar  
-- Find your active deposit in the list and click to view details  
+### Step 1: Navigate to your deposit details
 
-![CR Step 1](/img/provide-liquidity/ProvideStep17.png)  
+- Go to [https://peer.xyz](https://peer.xyz)
+- Open the **Sell** tab
+- Select your deposit
 
-### Step 2: Locate the Conversion Rates Section
+![CR Step 1](/img/provide-liquidity/ProvideStep17.png)
 
-Scroll to the **Conversion Rates** section. You'll see:
+### Step 2: Locate the Conversion Rates section
 
-- Your configured **payment platforms** (e.g., Revolut)  
-- The **currencies** you accept (e.g., GBP, SGD, EUR)  
-- The **current conversion rate** for each currency \
+You will see:
 
-![CR Step 2](/img/provide-liquidity/ProvideStep17a.png)  
+- Payment platforms
+- Enabled currencies
+- Current rates and source
 
+![CR Step 2](/img/provide-liquidity/ProvideStep17a.png)
 
-### Step 3: Select the Rate to Update
+### Step 3: Select the tuple to update
 
-- Find the currency you'd like to update  
-- Click the **edit icon (pencil)** next to the current rate  
-- The "Update Conversion Rate" screen will appear  
+- Find the currency row
+- Click the edit icon
+- The update modal opens
 
-![CR Step 3](/img/conversion-rate/CRStep3.png)  
+![CR Step 3](/img/conversion-rate/CRStep3.png)
 
+### Step 4: Choose mode and update settings
 
-### Step 4: Enter Your New Rate
+The modal includes a rate strategy selector.
 
-In the modal, you'll see:
+For **Fixed Rate**:
 
-- Platform (e.g., Revolut)  
-- Currency (e.g., GBP)  
-- Current Rate (e.g., 0.8)  
-- **New Conversion Rate** input  
+- Enter a new direct conversion rate.
 
-Enter your new rate — e.g., changing **0.8 → 0.795** for GBP.
+For **Market Tracking**:
 
-![CR Step 4](/img/conversion-rate/CRStep4.png)  
+- Switch to **Market Tracking**.
+- Set your spread percentage.
+- Set/update your floor rate.
 
+![CR Step 4](/img/conversion-rate/CRStep4.png)
 
+:::info
+If an oracle feed becomes stale, that tuple halts instead of falling back automatically. This protects against outdated market pricing.
+:::
 
-### Step 5: Confirm Rate Update
+### Step 5: Confirm the update
 
-- Click the Update Rate button  
-- Your wallet will prompt you to sign the transaction  
-- This updates your rate on-chain in the smart contract  
+- Click **Save Rate Settings** (or equivalent update button)
+- Sign the wallet transaction
 
-### Step 6: Wait for Confirmation
+### Step 6: Wait for confirmation
 
-- Wait for the transaction to confirm on the Base Network
-- Once confirmed, your updated rate will show in the Conversion Rates section  
-- The new rate will apply to all future orders
+- Wait for Base confirmation
+- Refresh deposit details if needed
+- Verify updated settings in Conversion Rates
 
 ![CR Step 6](/img/conversion-rate/CRStep6.png)
 
+## Tips for better rate management
 
+### Stay competitive
 
-## Tips for Setting Optimal Rates
+- Check market and liquidity tab pricing regularly.
+- Compare per-currency opportunities.
 
-### Research Current Market Rates
+### Use the right mode
 
-- Check the Liquidity tab to see what other providers offer  
-- Look at external exchanges for reference FX rates  
+- Fixed Rate is best for strict manual control.
+- Market Tracking is best when you want less manual maintenance.
 
-### Consider Spread and Competitiveness
+### Tune spread over time
 
-- **Lower spreads** (0.5–1%) = faster sales, lower margin  
-- **Higher spreads** (1–3%) = higher margin, slower sales  
-- Balance depends on your strategy  
+- Slow fills: reduce spread.
+- Instant fills: consider widening spread slightly.
 
-### Monitor Performance
+### Watch by currency
 
-After updating rates:
+- Different currencies usually need different spread targets.
 
-- Monitor how quickly your orders are filled  
-- If they're slow to fill → lower your spread  
-- If they're filling instantly → raise your spread slightly  
-
-### Currency-Specific Strategies
-
-- Popular currencies like EUR may allow higher spreads  
-- Rare currencies might require more competitive rates  
-- Optimize for each currency independently  
-
-➡️ _Next: [Handling Manual Releases as a Seller](manual-releases.md)_
+➡️ _Next: [Market Tracking (Automated Rates)](market-tracking-arm.md)_
