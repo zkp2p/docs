@@ -17,54 +17,54 @@ V3 contracts (EscrowV2, OrchestratorV2) are the production system. Legacy contra
 
 #### V3 Core
 
-| Contract | Address |
-| --- | --- |
-| EscrowV2 | `0x777777779d229cdF3110e9de47943791c26300Ef` |
-| OrchestratorV2 | `0x888888359E981B5225CA48fbCdCeff702FC3b888` |
-| RateManagerV1 | `0xeEd7Db23e724aC4590D6dB6F78fDa6DB203535F3` |
-| ProtocolViewerV2 | `0xC8A622e1614BB58141E72e1D6023B16f08677d6c` |
+| Contract | Address | Basescan |
+| --- | --- | --- |
+| EscrowV2 | `0x777777779d229cdF3110e9de47943791c26300Ef` | [View](https://basescan.org/address/0x777777779d229cdF3110e9de47943791c26300Ef) |
+| OrchestratorV2 | `0x888888359E981B5225CA48fbCdCeff702FC3b888` | [View](https://basescan.org/address/0x888888359E981B5225CA48fbCdCeff702FC3b888) |
+| RateManagerV1 | `0xeEd7Db23e724aC4590D6dB6F78fDa6DB203535F3` | [View](https://basescan.org/address/0xeEd7Db23e724aC4590D6dB6F78fDa6DB203535F3) |
+| ProtocolViewerV2 | `0xC8A622e1614BB58141E72e1D6023B16f08677d6c` | [View](https://basescan.org/address/0xC8A622e1614BB58141E72e1D6023B16f08677d6c) |
 
 #### Registries
 
-| Contract | Address |
-| --- | --- |
-| EscrowRegistry | `0xeD0e847B101abc96E796260AC358e12BAa2f5B21` |
-| OrchestratorRegistry | `0xBe9fED15ED7A4B915C03EFcEcb9662739C3382A9` |
-| PaymentVerifierRegistry | `0x2b82D24437ff66Fb173eabDfD67ee2ACeb8bEb1e` |
-| NullifierRegistry | `0x8d8e1A0e5345a5cc9AA206c3ca76D6d28c514608` |
-| RelayerRegistry | `0xEbA979889a9c97382A92472fF3703786fF180083` |
+| Contract | Address | Basescan |
+| --- | --- | --- |
+| EscrowRegistry | `0xeD0e847B101abc96E796260AC358e12BAa2f5B21` | [View](https://basescan.org/address/0xeD0e847B101abc96E796260AC358e12BAa2f5B21) |
+| OrchestratorRegistry | `0xBe9fED15ED7A4B915C03EFcEcb9662739C3382A9` | [View](https://basescan.org/address/0xBe9fED15ED7A4B915C03EFcEcb9662739C3382A9) |
+| PaymentVerifierRegistry | `0x2b82D24437ff66Fb173eabDfD67ee2ACeb8bEb1e` | [View](https://basescan.org/address/0x2b82D24437ff66Fb173eabDfD67ee2ACeb8bEb1e) |
+| NullifierRegistry | `0x8d8e1A0e5345a5cc9AA206c3ca76D6d28c514608` | [View](https://basescan.org/address/0x8d8e1A0e5345a5cc9AA206c3ca76D6d28c514608) |
+| RelayerRegistry | `0xEbA979889a9c97382A92472fF3703786fF180083` | [View](https://basescan.org/address/0xEbA979889a9c97382A92472fF3703786fF180083) |
 
 #### Verification
 
-| Contract | Address |
-| --- | --- |
-| UnifiedPaymentVerifierV2 | `0x46A58Dc65587D4D7B8198C6A25eEdf5b2535Da94` |
-| SimpleAttestationVerifier | `0xED6C0C34c3964D239e7a315C55E620fafE5Ae3AC` |
+| Contract | Address | Basescan |
+| --- | --- | --- |
+| UnifiedPaymentVerifierV2 | `0x46A58Dc65587D4D7B8198C6A25eEdf5b2535Da94` | [View](https://basescan.org/address/0x46A58Dc65587D4D7B8198C6A25eEdf5b2535Da94) |
+| SimpleAttestationVerifier | `0xED6C0C34c3964D239e7a315C55E620fafE5Ae3AC` | [View](https://basescan.org/address/0xED6C0C34c3964D239e7a315C55E620fafE5Ae3AC) |
 
 #### Hooks
 
-| Contract | Address |
-| --- | --- |
-| SignatureGatingPreIntentHook | `0x62D410a3d6FC766dd2192be2a67a5fc79c5c2e1F` |
-| WhitelistPreIntentHook | `0xd793369b11357cdd076A9c631F6c44ff8e6353eA` |
-| AcrossBridgeHookV2 | `0xCcC9163451DE31a625D48e417e0fD1a329c7f7cf` |
+| Contract | Address | Basescan |
+| --- | --- | --- |
+| SignatureGatingPreIntentHook | `0x62D410a3d6FC766dd2192be2a67a5fc79c5c2e1F` | [View](https://basescan.org/address/0x62D410a3d6FC766dd2192be2a67a5fc79c5c2e1F) |
+| WhitelistPreIntentHook | `0xd793369b11357cdd076A9c631F6c44ff8e6353eA` | [View](https://basescan.org/address/0xd793369b11357cdd076A9c631F6c44ff8e6353eA) |
+| AcrossBridgeHookV2 | `0xCcC9163451DE31a625D48e417e0fD1a329c7f7cf` | [View](https://basescan.org/address/0xCcC9163451DE31a625D48e417e0fD1a329c7f7cf) |
 
 #### Oracles
 
-| Contract | Address |
-| --- | --- |
-| ChainlinkOracleAdapter | `0x53881a928abD61C095e5f30b63bc554872C3b2f1` |
+| Contract | Address | Basescan |
+| --- | --- | --- |
+| ChainlinkOracleAdapter | `0x53881a928abD61C095e5f30b63bc554872C3b2f1` | [View](https://basescan.org/address/0x53881a928abD61C095e5f30b63bc554872C3b2f1) |
 
 #### Legacy (Deprecated)
 
-| Contract | Address |
-| --- | --- |
-| Escrow | `0x2f121CDDCA6d652f35e8B3E560f9760898888888` |
-| Orchestrator | `0x88888883Ed048FF0a415271B28b2F52d431810D0` |
-| UnifiedPaymentVerifier | `0x16b3e4a3CA36D3A4bCA281767f15C7ADeF4ab163` |
-| PostIntentHookRegistry | `0x9B128EBAD4d874199A2Dc57E93186796c5EcAdE9` |
-| AcrossBridgeHook | `0x72C10b838Cf46649691949c285E0b468b363b9f0` |
-| ProtocolViewer | `0x30B03De22328074Fbe8447C425ae988797146606` |
+| Contract | Address | Basescan |
+| --- | --- | --- |
+| Escrow | `0x2f121CDDCA6d652f35e8B3E560f9760898888888` | [View](https://basescan.org/address/0x2f121CDDCA6d652f35e8B3E560f9760898888888) |
+| Orchestrator | `0x88888883Ed048FF0a415271B28b2F52d431810D0` | [View](https://basescan.org/address/0x88888883Ed048FF0a415271B28b2F52d431810D0) |
+| UnifiedPaymentVerifier | `0x16b3e4a3CA36D3A4bCA281767f15C7ADeF4ab163` | [View](https://basescan.org/address/0x16b3e4a3CA36D3A4bCA281767f15C7ADeF4ab163) |
+| PostIntentHookRegistry | `0x9B128EBAD4d874199A2Dc57E93186796c5EcAdE9` | [View](https://basescan.org/address/0x9B128EBAD4d874199A2Dc57E93186796c5EcAdE9) |
+| AcrossBridgeHook | `0x72C10b838Cf46649691949c285E0b468b363b9f0` | [View](https://basescan.org/address/0x72C10b838Cf46649691949c285E0b468b363b9f0) |
+| ProtocolViewer | `0x30B03De22328074Fbe8447C425ae988797146606` | [View](https://basescan.org/address/0x30B03De22328074Fbe8447C425ae988797146606) |
 
 ### Payment Methods
 
