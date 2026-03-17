@@ -4,7 +4,7 @@ title: Orchestrator
 
 ## Overview
 
-The Orchestrator manages the lifecycle of intents and fee distribution. It verifies gating signatures, locks liquidity in Escrow on signal, routes attestation verification to the `UnifiedPaymentVerifier` on fulfillment, and transfers funds net of protocol/referrer fees. It also supports optional post‑intent hooks.
+The Orchestrator (OrchestratorV2) manages the lifecycle of intents and fee distribution. It verifies gating signatures, runs pre-intent hooks, locks liquidity in Escrow on signal, routes attestation verification to the `UnifiedPaymentVerifierV2` on fulfillment, and transfers funds net of protocol/referral/manager fees. It also supports optional post-intent hooks via the V2 hook interface.
 
 ---
 
@@ -13,15 +13,20 @@ The Orchestrator manages the lifecycle of intents and fee distribution. It verif
 - `uint256 internal constant PRECISE_UNIT = 1e18;`
 - `uint256 constant MAX_REFERRER_FEE = 5e16; // 5%`
 - `uint256 constant MAX_PROTOCOL_FEE = 5e16; // 5%`
+- `uint256 constant MAX_MANAGER_FEE = 5e16; // 5%`
 
 ---
 
 ## Key State
 
-- `uint256 immutable chainId` — deployment chain id.
-- `mapping(bytes32 => Intent) intents` — active intents by hash; `mapping(address => bytes32[]) accountIntents` — per-user list.
-- `mapping(bytes32 => uint256) intentMinAtSignal` — snapshot of deposit min amount at signal for partial-release protection.
-- Registries: `EscrowRegistry`, `PaymentVerifierRegistry`, `PostIntentHookRegistry`, `RelayerRegistry`.
+- `uint256 immutable chainId` — Deployment chain id.
+- `mapping(bytes32 => Intent) intents` — Active intents by hash; `mapping(address => bytes32[]) accountIntents` — per-user list.
+- `mapping(bytes32 => uint256) intentMinAtSignal` — Snapshot of deposit min amount at signal time for partial-release protection.
+- `mapping(bytes32 => address) intentManagerFeeRecipient` — Snapshotted manager fee recipient per intent.
+- `mapping(bytes32 => uint256) intentManagerFee` — Snapshotted manager fee per intent.
+- `mapping(address => mapping(uint256 => IPreIntentHook)) depositPreIntentHooks` — Per-deposit generic pre-intent hook (keyed by escrow + depositId).
+- `mapping(address => mapping(uint256 => IPreIntentHook)) depositWhitelistHooks` — Per-deposit whitelist hook (keyed by escrow + depositId).
+- Registries: `EscrowRegistry`, `PaymentVerifierRegistry`, `RelayerRegistry`.
 - Fees: `protocolFee` (1e18), `protocolFeeRecipient`, `allowMultipleIntents` flag, `intentCounter`.
 
 ---
@@ -39,21 +44,32 @@ struct SignalIntentParams {
   address to;                // Recipient of released funds
   bytes32 paymentMethod;     // keccak256("venmo"), etc.
   bytes32 fiatCurrency;      // keccak256("USD"), etc.
-  uint256 conversionRate;    // taker-proposed rate (>= deposit min), 1e18
-  address referrer;          // optional
-  uint256 referrerFee;       // optional (<= MAX_REFERRER_FEE)
+  uint256 conversionRate;    // taker-proposed rate (>= deposit effective rate), 1e18
+  IReferralFee.ReferralFee[] referralFees;  // multi-recipient referral fees
   bytes gatingServiceSignature; // signature from deposit's gating service
-  uint256 signatureExpiration;  // ms/seconds epoch depending on off-chain convention
-  IPostIntentHook postIntentHook; // optional hook
-  bytes data;                // hook data
+  uint256 signatureExpiration;  // epoch timestamp
+  IPostIntentHookV2 postIntentHook; // optional V2 hook
+  bytes preIntentHookData;   // ephemeral data for pre-intent hooks only
+  bytes data;                // persisted in intent, forwarded as signalHookData to post-intent hook
+}
+```
+
+`ReferralFee` struct (from `IReferralFee`):
+```
+struct ReferralFee {
+  address recipient;
+  uint256 fee;   // 1e18 precision, total across all referrals <= MAX_REFERRER_FEE (5%)
 }
 ```
 
 Behavior
-- Validates the deposit and method/currency support via registries.
-- Verifies `gatingServiceSignature` binds `(orchestrator, escrow, depositId, amount, to, paymentMethod, fiatCurrency, conversionRate, expiration, chainId)`.
-- Locks funds on Escrow with `lockFunds(depositId, intentHash, amount)`.
-- Emits `IntentSignaled` with snapshot values.
+1. Validates the deposit and method/currency support via registries.
+2. Executes pre-intent hooks (both generic and whitelist slots) before any state changes. Hooks can only revert to reject.
+3. Verifies `gatingServiceSignature` binds `(orchestrator, escrow, depositId, amount, to, paymentMethod, fiatCurrency, conversionRate, referralFeesHash, expiration, chainId)`.
+4. Snapshots `intentMinAtSignal` from the deposit's min intent amount.
+5. Snapshots manager fee from `EscrowV2.getManagerFee(depositId)` if a rate manager is set.
+6. Locks funds on Escrow with `lockFunds(depositId, intentHash, amount)`.
+7. Emits `IntentSignaled` with snapshot values.
 
 ---
 
@@ -72,18 +88,31 @@ struct FulfillIntentParams {
 ```
 
 Behavior
-- Decodes `paymentProof` and forwards to the `IPaymentVerifier` (UnifiedPaymentVerifier) resolved via the registry/payment method.
+- Decodes `paymentProof` and forwards to the `IPaymentVerifier` (UnifiedPaymentVerifierV2) resolved via the registry/payment method.
 - Requires attestation validity and snapshot match; receives `releaseAmount`.
-- Instructs Escrow to `unlockAndTransferFunds` to Orchestrator, then applies protocol/referrer fees and sends net to `to` (or to the post‑intent hook).
+- Enforces `intentMinAtSignal`: if `releaseAmount < intentMinAtSignal`, the fulfillment reverts. This prevents sub-minimum partial fulfillments.
+- Instructs Escrow to `unlockAndTransferFunds` to Orchestrator, then applies fees in order:
+  1. Protocol fee
+  2. Manager fee (snapshotted at signal time)
+  3. Referral fees (distributed to each recipient)
+  4. Net remainder sent to `to` (or to the post-intent hook if set)
 - Supports partial releases: if the attestation indicates less than the signaled amount, only that portion is released; remaining lock is returned to deposit liquidity.
 
 ---
 
 ## Other Operations
 
-- `cancelIntent(bytes32 intentHash)` — prune and unlock.
-- `releaseFundsToPayer(bytes32 intentHash)` — manual release path for the depositor under configured rules.
-- `pruneIntents(bytes32[] intentIds)` — called by Escrow to prune expired intents.
+- `cancelIntent(bytes32 intentHash)` — Prune and unlock.
+- `releaseFundsToPayer(bytes32 intentHash)` — Manual release path for the depositor under configured rules. Manager fees are also distributed on manual release.
+- `pruneIntents(bytes32[] intentIds)` — Called by Escrow to prune expired intents.
+- `cleanupOrphanedIntents(bytes32[] intentHashes)` — Remove intents that reference deposits no longer in the escrow (e.g., after deposit closure). Callable by anyone.
+
+### Pre-Intent Hook Management
+
+- `setDepositPreIntentHook(escrow, depositId, hook)` — Set the generic pre-intent hook for a deposit. Only callable by depositor or delegate.
+- `setDepositWhitelistHook(escrow, depositId, hook)` — Set the whitelist hook for a deposit. Only callable by depositor or delegate.
+
+Both hooks run during `signalIntent` before state changes. See [Pre-Intent Hooks](./pre-intent-hooks.md) for details.
 
 ---
 
@@ -91,4 +120,11 @@ Behavior
 
 - `IntentSignaled(intentHash, escrow, depositId, paymentMethod, owner, to, amount, fiatCurrency, conversionRate, timestamp)`
 - `IntentFulfilled(intentHash, fundsTransferredTo, amount, isManualRelease)`
+- `IntentPruned(intentHash)`
+- `IntentReferralFeeDistributed(intentHash, feeRecipient, feeAmount)`
+- `IntentManagerFeeSnapshotted(intentHash, feeRecipient, fee)`
+- `DepositPreIntentHookSet(escrow, depositId, hook, setter)`
+- `DepositWhitelistHookSet(escrow, depositId, hook, setter)`
 - `ProtocolFeeUpdated(protocolFee)` / `ProtocolFeeRecipientUpdated(addr)`
+
+Reference: `zkp2p-v2-contracts/contracts/OrchestratorV2.sol`

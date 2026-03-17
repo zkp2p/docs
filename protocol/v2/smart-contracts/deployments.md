@@ -64,39 +64,6 @@ title: Deployments
   </tbody>
 </table>
 
-## Sepolia Testnet 
-
-<table>
-  <thead>
-    <tr>
-      <th>Contract Name</th>
-      <th>Address</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Escrow</td>
-      <td><a href="https://sepolia.etherscan.io/address/0xFF0149799631D7A5bdE2e7eA9b306c42b3d9a9ca">0xFF0149799631D7A5bdE2e7eA9b306c42b3d9a9ca</a></td>
-    </tr>
-    <tr>
-      <td>NullifierRegistry</td>
-      <td><a href="https://sepolia.etherscan.io/address/0x9cF61278C2Cc9C41578fE3a0ED375E9870D514F1">0x9cF61278C2Cc9C41578fE3a0ED375E9870D514F1</a></td>
-    </tr>
-    <tr>
-      <td>VenmoReclaimVerifier</td>
-      <td><a href="https://sepolia.etherscan.io/address/0x3Fa6C4135696fBD99F7D55B552B860f5df770710">0x3Fa6C4135696fBD99F7D55B552B860f5df770710</a></td>
-    </tr>
-    <tr>
-      <td>RevolutReclaimVerifier</td>
-      <td><a href="https://sepolia.etherscan.io/address/0x79820f039942501F412910C083aDA6dCc419B67c">0x79820f039942501F412910C083aDA6dCc419B67c</a></td>
-    </tr>
-    <tr>
-      <td>CashappReclaimVerifier</td>
-      <td><a href="https://sepolia.etherscan.io/address/0x3997dd7B691E11D45E8898601F5bc7B016b0d38B">0x3997dd7B691E11D45E8898601F5bc7B016b0d38B</a></td>
-    </tr>
-  </tbody>
-</table>
-
 ## Supported Currencies
 
 <table>

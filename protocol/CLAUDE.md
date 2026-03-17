@@ -20,7 +20,7 @@ Two protocol versions are documented:
 | Version | Status | Deployment | Key Difference |
 |---------|--------|------------|----------------|
 | **V3** | Current | Base mainnet | Off-chain attestation service, unified verifier |
-| **V2** | Legacy | Sepolia testnet | On-chain per-platform verifiers |
+| **V2** | Legacy | Base mainnet | On-chain per-platform verifiers |
 
 ### V3 Architecture (Current)
 

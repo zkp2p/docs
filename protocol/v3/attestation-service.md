@@ -121,5 +121,5 @@ const paymentProof = ethers.AbiCoder.defaultAbiCoder().encode([
 2) Call `fulfillIntent` with `paymentProof` and the on-chain `intentHash`.
 
 Choosing `chainId` and `verifyingContract`
-- `chainId` must match the destination chain where `UnifiedPaymentVerifier` lives.
-- `verifyingContract` is the on-chain `UnifiedPaymentVerifier` address; it is part of the EIP‑712 domain and must match exactly.
+- `chainId` must match the destination chain where `UnifiedPaymentVerifierV2` lives.
+- `verifyingContract` is the on-chain `UnifiedPaymentVerifierV2` address (`0x46A58Dc65587D4D7B8198C6A25eEdf5b2535Da94` on Base); it is part of the EIP‑712 domain and must match exactly.
