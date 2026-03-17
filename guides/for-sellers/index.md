@@ -20,3 +20,14 @@ Below are guides to get started as a seller of USDC on ZKP2P:
 - [How to Provide Liquidity from another chain](provide-liquidity-diff-chain.md)
 - [How to Update USDC Conversion Rates](update-usdc-rates.md)
 - [Calculating APR](calculating-apr.md)
+
+### Automated Rate Management (ARM)
+
+ARM keeps your conversion rates in sync with the market automatically. Just set a spread and let the protocol handle pricing.
+
+- [ARM Overview](automated-rate-management.md)
+- [How to Choose Your Spread](arm-choosing-a-spread.md)
+- [Set Your Spread: Express Flow](arm-spread-express.md)
+- [Set Your Spread: Advanced Flow](arm-spread-advanced.md)
+- [How to Set a Floor Rate](arm-floor-rates.md)
+- [How to Monitor Your ARM Rates](arm-monitoring.md)
