@@ -16,7 +16,7 @@ With ZKP2P V1, we launched the first ever trust minimized fiat to crypto on/offr
 ## The V2 Protocol
 
 :::note
-V2 is now legacy. The V2 contracts are deployed on Sepolia testnet only and are no longer receiving updates. See the V3 Protocol section below for the current production system.
+V2 is now legacy. The V2 contracts remain deployed on Base mainnet but are no longer receiving updates. See the V3 Protocol section below for the current production system.
 :::
 
 The ZKP2P V2 protocol was designed from the ground up to make it more generic, capital efficient and composable. The protocol now supports the following:
