@@ -7,33 +7,33 @@ title: Set Your Spread - Express Flow
 
 The express flow is the quickest way to create a deposit and set your spread. One currency, one platform, done.
 
-### Step 1: Open the Sell USDC Screen
+1. **Open the Sell USDC Screen**
 
-Go to [peer.xyz](https://peer.xyz) and click **Sell**. Make sure the **Advanced** toggle in the top right is **off**.
+   Go to [peer.xyz](https://peer.xyz) and click **Sell**. Make sure the **Advanced** toggle in the top right is **off**.
 
-### Step 2: Enter Your Deposit Amount
+2. **Enter Your Deposit Amount**
 
-Type how much USDC you want to deposit, or click **Max** to use your full balance.
+   Type how much USDC you want to deposit, or click **Max** to use your full balance.
 
-### Step 3: Choose Your Platform and Currency
+3. **Choose Your Platform and Currency**
 
-Select your payment platform (Revolut, Wise, Cash App, etc.) and currency from the dropdowns.
+   Select your payment platform (Revolut, Wise, Cash App, etc.) and currency from the dropdowns.
 
-### Step 4: Enter Your Payee Details
+4. **Enter Your Payee Details**
 
-Enter your account details for the selected platform (e.g. your Revtag for Revolut).
+   Enter your account details for the selected platform (e.g. your Revtag for Revolut).
 
-### Step 5: Set Your Spread
+5. **Set Your Spread**
 
-At the bottom of the screen, you'll see your current rate (e.g. "1 USDC = 1 USD") with **SPREAD** +/- buttons.
+   At the bottom of the screen, you'll see your current rate (e.g. "1 USDC = 1 USD") with **SPREAD** +/- buttons.
 
-- Tap **+** to increase your spread above market
-- Tap **-** to go below market
-- The rate updates as you adjust
+   - Tap **+** to increase your spread above market
+   - Tap **-** to go below market
+   - The rate updates as you adjust
 
-### Step 6: Create Deposit
+6. **Create Deposit**
 
-Click **Create Deposit**, approve the transaction in your wallet, and you're live.
+   Click **Create Deposit**, approve the transaction in your wallet, and you're live.
 
 ![Express flow](/img/arm/arm-express-flow.png)
 

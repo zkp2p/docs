@@ -29,32 +29,32 @@ The floor protects you from the rate going too low. It does **not** kick in duri
 
 Floor rates are available in the **Advanced** flow (toggle Advanced on in the top right).
 
-### Step 1: Enable the Floor Toggle
+1. **Enable the Floor Toggle**
 
-At the bottom of the rate configuration panel, you'll see the **Floor** section:
+   At the bottom of the rate configuration panel, you'll see the **Floor** section:
 
-> "Orders below this rate are not accepted, even if market prices drop. This protects you during volatility."
+   > "Orders below this rate are not accepted, even if market prices drop. This protects you during volatility."
 
-Toggle the floor **on**.
+   Toggle the floor **on**.
 
-### Step 2: Enter Your Floor Rate
+2. **Enter Your Floor Rate**
 
-Type in the minimum rate you're willing to accept in the currency's units. For example, if you're selling USDC for USD and never want to go below 1.01 USD per USDC, enter **1.01**.
+   Type in the minimum rate you're willing to accept in the currency's units. For example, if you're selling USDC for USD and never want to go below 1.01 USD per USDC, enter **1.01**.
 
-### Step 3: Check the Orderbook
+3. **Check the Orderbook**
 
-When the floor is active, a red **"Min"** line appears on the orderbook chart showing exactly where your floor sits relative to the market and your current rate. Your rate (yellow "You" line) will never drop below this red line.
+   When the floor is active, a red **"Min"** line appears on the orderbook chart showing exactly where your floor sits relative to the market and your current rate. Your rate (yellow "You" line) will never drop below this red line.
 
-![Spread and floor configured](/img/arm/arm-advanced-spread-floor.png)
+   ![Spread and floor configured](/img/arm/arm-advanced-spread-floor.png)
 
-### Step 4: Review and Confirm
+4. **Review and Confirm**
 
-The **Configured Rates** summary on the left will show both your spread and floor:
+   The **Configured Rates** summary on the left will show both your spread and floor:
 
-- "Spread vs market +1.25%"
-- "Floor: 1.01 USD / USDC"
+   - "Spread vs market +1.25%"
+   - "Floor: 1.01 USD / USDC"
 
-Click **Review Deposit** to confirm.
+   Click **Review Deposit** to confirm.
 
 ## Using Floor Rates to Lock In Fixed Pricing
 
