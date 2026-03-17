@@ -4,7 +4,11 @@ title: Unified Payment Verifier
 
 ## Overview
 
-`UnifiedPaymentVerifier` verifies standardized off‑chain attestations produced by the Attestation Service. It validates EIP‑712 signatures via a pluggable `AttestationVerifier`, enforces snapshot consistency with on‑chain intent state, prevents replay via nullifiers, and caps the release amount to the signaled intent amount.
+`UnifiedPaymentVerifierV2` (`0x46A58Dc65587D4D7B8198C6A25eEdf5b2535Da94` on Base) is the production verifier for V3 contracts. It verifies standardized off‑chain attestations produced by the Attestation Service. It validates EIP‑712 signatures via a pluggable `AttestationVerifier`, enforces snapshot consistency with on‑chain intent state, prevents replay via nullifiers, and caps the release amount to the signaled intent amount.
+
+:::note
+The legacy `UnifiedPaymentVerifier` (`0x16b3e4a3CA36D3A4bCA281767f15C7ADeF4ab163`) is used only by the deprecated V3 Orchestrator. New intents use `UnifiedPaymentVerifierV2` exclusively.
+:::
 
 ---
 
