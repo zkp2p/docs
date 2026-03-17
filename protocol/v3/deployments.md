@@ -3,7 +3,7 @@ id: v3-deployments
 title: V3 Deployments
 ---
 
-Note: We do not have a Sepolia deployment for V3.
+Note: All deployments are on Base mainnet. Staging uses a separate deployer on the same chain.
 
 ## Base (Mainnet)
 
