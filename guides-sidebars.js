@@ -26,8 +26,19 @@ module.exports = {
         'for-sellers/provide-liquidity-diff-chain',
         'for-sellers/update-usdc-rates',
         'for-sellers/calculating-apr',
-        'for-sellers/manual-releases'
-
+        'for-sellers/manual-releases',
+        {
+          type: 'category',
+          label: 'Automated Rate Management (ARM)',
+          link: { type: 'doc', id: 'for-sellers/automated-rate-management' },
+          items: [
+            'for-sellers/arm-choosing-a-spread',
+            'for-sellers/arm-spread-express',
+            'for-sellers/arm-spread-advanced',
+            'for-sellers/arm-floor-rates',
+            'for-sellers/arm-monitoring',
+          ],
+        },
       ],
     },
     {
