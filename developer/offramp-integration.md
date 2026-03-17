@@ -1,7 +1,7 @@
 ---
 id: offramp-integration
 title: Offramp Integration
-slug: /developer/offramp
+slug: /offramp
 ---
 
 # Offramp Integration

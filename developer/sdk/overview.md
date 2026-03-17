@@ -14,7 +14,7 @@ slug: /sdk
 
 | You are building... | Start here | Why |
 | --- | --- | --- |
-| A liquidity provider or off-ramp dashboard | [Offramp Integration](/developer/offramp-integration) | Covers deposit creation, funding, and deposit management end to end |
+| A liquidity provider or off-ramp dashboard | [Offramp Integration](/developer/offramp) | Covers deposit creation, funding, and deposit management end to end |
 | An app that wants to open the Peer extension onramp | [Onramp Integration](/developer/integrate-zkp2p/integrate-redirect-onramp) | Covers `peerExtensionSdk` and the extension deeplink flow |
 | A custom taker flow, backend, or internal tool | [Client Reference](/developer/sdk/client-reference) | Covers `Zkp2pClient`, intents, quotes, vaults, helpers, and API-backed flows |
 | A React app | [React Hooks](/developer/sdk/react-hooks) | Covers the `@zkp2p/sdk/react` hook layer for transaction UX |
@@ -115,7 +115,7 @@ The current SDK docs assume Base. Deployment selection is controlled by `chainId
 
 If you are new to the SDK, use this order:
 
-1. Read [Offramp Integration](/developer/offramp-integration) or [Onramp Integration](/developer/integrate-zkp2p/integrate-redirect-onramp) for an end-to-end flow.
+1. Read [Offramp Integration](/developer/offramp) or [Onramp Integration](/developer/integrate-zkp2p/integrate-redirect-onramp) for an end-to-end flow.
 2. Use [Client Reference](/developer/sdk/client-reference) to look up concrete methods, request shapes, and helper exports.
 3. Use [React Hooks](/developer/sdk/react-hooks) if you want component-level loading, error, and transaction state.
 
