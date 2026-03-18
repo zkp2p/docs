@@ -27,14 +27,17 @@ You can optionally charge a fee on every intent fulfilled through deposits deleg
 
 Vault creation is done directly on the `RateManagerV1` contract. The [@zkp2p/sdk](https://www.npmjs.com/package/@zkp2p/sdk) has full support for all vault operations if you prefer to integrate programmatically.
 
-Call `createRateManager()` on `RateManagerV1` with:
+Call `createRateManager()` on `RateManagerV1` with a `RateManagerConfig` struct:
 
 | Parameter | What it does | Can you change it later? |
 |---|---|---|
+| `manager` | Address that controls this vault (rate setting, fee changes) | Yes |
 | `name` | Display name for your vault | Yes |
-| `fee` | Fee percentage charged on each fill | Yes (up to maxFee) |
+| `uri` | Metadata URI for your vault | Yes |
+| `fee` | Fee charged on each fill (1e18 precision, e.g. 2e16 = 2%) | Yes (up to maxFee) |
 | `feeRecipient` | Address that receives your fees | Yes |
-| `maxFee` | Hard cap on your fee, ever | **No. Immutable.** |
+| `maxFee` | Hard cap on your fee, ever (1e18 precision) | **No. Immutable.** |
+| `minLiquidity` | Minimum deposit size to delegate to your vault (0 = no minimum) | Yes |
 
 :::warning
 `maxFee` is permanent. If you set it to 2%, you can never charge more than 2% on this vault, even if you lower your fee and want to raise it later. The global protocol cap is 5%.
@@ -55,8 +58,10 @@ setRate(rateManagerId, paymentMethod, currencyCode, rate)
 
 **Multiple pairs at once:**
 ```solidity
-setRateBatch(rateManagerId, paymentMethods[], currencyCodes[], rates[])
+setRateBatch(rateManagerId, paymentMethods[], currencyCodes[][], rates[][])
 ```
+
+Currency codes and rates are nested arrays grouped by payment method index — each payment method maps to its own array of currencies and rates.
 
 The `paymentMethod` and `currencyCode` values are bytes32 identifiers. You can find the full list of supported payment methods and currency codes in the [V3 deployments reference](/protocol/v3/v3-deployments).
 
@@ -191,9 +196,9 @@ There's a live vault on prod you can use as a reference:
 
 | Action | Contract | Function |
 |---|---|---|
-| Create vault | RateManagerV1 | `createRateManager(name, fee, feeRecipient, maxFee)` |
-| Set rate (single) | RateManagerV1 | `setRate(rateManagerId, paymentMethod, currency, rate)` |
-| Set rates (batch) | RateManagerV1 | `setRateBatch(rateManagerId, paymentMethods[], currencies[], rates[])` |
+| Create vault | RateManagerV1 | `createRateManager(config)` where config is a `RateManagerConfig` struct |
+| Set rate (single) | RateManagerV1 | `setRate(rateManagerId, paymentMethod, currencyCode, rate)` |
+| Set rates (batch) | RateManagerV1 | `setRateBatch(rateManagerId, paymentMethods[], currencyCodes[][], rates[][])` |
 | Change fee | RateManagerV1 | `setFee(rateManagerId, newFee)` |
 | Change fee recipient | RateManagerV1 | `setFeeRecipient(rateManagerId, newRecipient)` |
 | Depositor delegates | EscrowV2 | `setRateManager(depositId, rateManager, rateManagerId)` |
