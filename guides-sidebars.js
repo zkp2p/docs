@@ -43,6 +43,14 @@ module.exports = {
     },
     {
       type: 'category',
+      label: 'For Vault Managers',
+      link: { type: 'doc', id: 'for-vault-managers/index' },
+      items: [
+        'for-vault-managers/run-a-vault',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Privacy & Safety',
       link: { type: 'doc', id: 'privacy-safety/index' },
       items: [
