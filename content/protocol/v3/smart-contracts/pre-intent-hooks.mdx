@@ -1,0 +1,102 @@
+---
+title: "Pre-Intent Hooks"
+---
+
+## Overview
+
+Pre-intent hooks run during `signalIntent` on OrchestratorV2, **before** any state changes (fund locking, intent creation). They provide deposit-level access control — a hook can only revert to reject an incoming intent. If the hook does not revert, the intent proceeds normally.
+
+Each deposit has **two dedicated hook slots** on OrchestratorV2:
+1. **Generic pre-intent hook** — General-purpose validation (e.g., signature gating).
+2. **Whitelist hook** — Address-based access control (e.g., private orderbook).
+
+Both hooks run sequentially. If either reverts, the entire `signalIntent` call reverts.
+
+---
+
+## Interface
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.18;
+
+import { IReferralFee } from "./IReferralFee.sol";
+
+interface IPreIntentHook {
+    struct PreIntentContext {
+        address taker;
+        address escrow;
+        uint256 depositId;
+        uint256 amount;
+        address to;
+        bytes32 paymentMethod;
+        bytes32 fiatCurrency;
+        uint256 conversionRate;
+        IReferralFee.ReferralFee[] referralFees;
+        bytes preIntentHookData;  // ephemeral data from SignalIntentParams.preIntentHookData
+    }
+
+    /// @notice Called by the Orchestrator during signalIntent before state changes.
+    /// @dev Revert to reject the incoming intent.
+    function validateSignalIntent(PreIntentContext calldata _ctx) external;
+}
+```
+
+Source: `zkp2p-v2-contracts/contracts/interfaces/IPreIntentHook.sol`
+
+---
+
+## Built-in Implementations
+
+### SignatureGatingPreIntentHook
+
+EIP-191 signature validation per deposit. A configurable signer must produce a valid signature over the intent parameters for the intent to proceed.
+
+The signed message binds: `orchestrator`, `escrow`, `depositId`, `amount`, `taker`, `to`, `paymentMethod`, `fiatCurrency`, `conversionRate`, `keccak256(abi.encode(referralFees))`, `expiration`, `chainId`.
+
+**Setup:**
+1. Set the hook: `orchestrator.setDepositPreIntentHook(escrow, depositId, signatureGatingHookAddress)`
+2. Configure the signer: `signatureGatingHook.setDepositSigner(escrow, depositId, signerAddress)`
+
+**Usage:** The taker passes the signature and expiration in `SignalIntentParams.preIntentHookData` (ABI-encoded).
+
+Address: `0x62D410a3d6FC766dd2192be2a67a5fc79c5c2e1F` (Base mainnet)
+
+Source: `zkp2p-v2-contracts/contracts/hooks/SignatureGatingPreIntentHook.sol`
+
+### WhitelistPreIntentHook
+
+Address whitelist per deposit and payment method. Only whitelisted taker addresses can signal intents on the deposit for a given payment method. Enables private orderbook patterns.
+
+**Setup:**
+1. Set the hook: `orchestrator.setDepositWhitelistHook(escrow, depositId, whitelistHookAddress)`
+2. Add addresses: `whitelistHook.addToWhitelist(escrow, depositId, paymentMethod, addresses[])`
+
+**Management:**
+- `removeFromWhitelist(escrow, depositId, paymentMethod, addresses[])` — Remove addresses.
+- `isWhitelisted(escrow, depositId, paymentMethod, taker)` — Check if an address is whitelisted.
+
+Address: `0xd793369b11357cdd076A9c631F6c44ff8e6353eA` (Base mainnet)
+
+Source: `zkp2p-v2-contracts/contracts/hooks/WhitelistPreIntentHook.sol`
+
+---
+
+## Access Control
+
+- Only the depositor or their delegate can set hooks on a deposit via `orchestrator.setDepositPreIntentHook(...)` or `orchestrator.setDepositWhitelistHook(...)`.
+- Setting a hook to `address(0)` disables it.
+- Hooks are set per (escrow, depositId) pair and apply to all intents on that deposit.
+
+---
+
+## Writing a Custom Pre-Intent Hook
+
+1. Implement `IPreIntentHook.validateSignalIntent(PreIntentContext calldata _ctx)`.
+2. Revert with a descriptive error to reject intents. Return normally to approve.
+3. The hook receives the full intent context including `preIntentHookData` for custom validation logic.
+4. Deploy and have the depositor set it via `setDepositPreIntentHook` or `setDepositWhitelistHook`.
+
+:::note
+Pre-intent hooks are **view-like** in intent — they should only validate, not modify state. However, the interface does not enforce `view` to allow hooks that read external state.
+:::

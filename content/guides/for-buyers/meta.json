@@ -1,0 +1,11 @@
+{
+  "title": "For Buyers",
+  "defaultOpen": true,
+  "pages": [
+    "index",
+    "complete-guide-to-onboarding",
+    "handling-verification-issues",
+    "guide-to-partial-release",
+    "reputation"
+  ]
+}

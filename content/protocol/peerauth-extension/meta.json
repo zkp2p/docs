@@ -1,0 +1,8 @@
+{
+  "title": "PeerAuth Extension",
+  "defaultOpen": true,
+  "pages": [
+    "index",
+    "zk-tls"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "title": "Privacy & Safety",
+  "defaultOpen": true,
+  "pages": [
+    "index",
+    "privacy",
+    "risks"
+  ]
+}
