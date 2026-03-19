@@ -1,0 +1,11 @@
+{
+  "title": "Protocol V3",
+  "defaultOpen": true,
+  "pages": [
+    "v3-overview",
+    "v3-smart-contracts",
+    "v3-attestation-service",
+    "v3-deployments",
+    "v3-migration"
+  ]
+}

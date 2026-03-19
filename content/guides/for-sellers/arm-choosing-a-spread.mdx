@@ -1,0 +1,55 @@
+---
+title: "How to Choose Your Spread"
+---
+
+# How to Choose Your Spread
+
+Your spread is the single most important setting as an ARM seller. It controls how much above (or below) the market rate you price your USDC.
+
+## Understanding Spreads
+
+Your spread is shown as a **percentage** relative to the market rate. You can adjust it from **-5% to +5%**.
+
+| Spread | What It Means | Trade-off |
+|--------|---------------|-----------|
+| +0.5% | Slightly above market | Very competitive, fast fills, lower margin |
+| +1% | 1% above market | Good balance of volume and profit |
+| +2% | 2% above market | Higher margin, slower fills |
+| +3% | 3% above market | High margin, may sit unfilled |
+| 0% (Market rate) | Exactly at market | Maximum competitiveness, no spread profit |
+| -0.5% | Below market | Aggressive pricing to attract volume |
+
+### Choosing the Right Spread
+
+There's no single correct spread. It depends on the currency, competition, and your goals.
+
+**Major currencies (EUR, GBP, USD-adjacent pairs):**
+- These are high volume and competitive. Other sellers are pricing tightly.
+- Typical range: **+0.5% to +1%**
+
+**Emerging market currencies (BRL, TRY, ZAR, IDR, PHP, MXN):**
+- Less competition, higher volatility, buyers expect to pay more.
+- Typical range: **+1% to +3%**
+
+:::info
+Check the **Liquidity** tab on [peer.xyz](https://peer.xyz) to see what other sellers are charging. The orderbook visualization in Advanced mode also shows you exactly where your rate sits relative to other deposits.
+:::
+
+### Use the Orderbook
+
+The Advanced flow shows you the full orderbook so you can see exactly where your rate lands relative to other sellers. If you're way out to the right of everyone else, you're too expensive. If you're at the far left, you might be leaving money on the table.
+
+### Watch Your Fill Rate
+
+- Orders filling instantly? You might be priced too low. Try widening your spread slightly.
+- Deposit sitting idle? Your spread is probably too wide. Tighten it or check the Liquidity tab for competitive rates.
+
+### Different Spreads for Different Currencies
+
+You can add multiple currencies to a single deposit, each with its own spread. Don't set the same spread across EUR, BRL, and JPY. Each market has different dynamics.
+
+:::warning
+If the market moves sharply and your rate drops below your cost basis, consider setting a floor rate to protect yourself. See [How to Set a Floor Rate](arm-floor-rates).
+:::
+
+➡️ _Next: Set your spread using the [Express Flow](arm-spread-express) or [Advanced Flow](arm-spread-advanced)_

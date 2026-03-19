@@ -1,0 +1,8 @@
+{
+  "title": "Smart Contracts",
+  "pages": [
+    "escrow",
+    "v2-ipaymentverifier",
+    "v2-deployments"
+  ]
+}

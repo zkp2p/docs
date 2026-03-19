@@ -1,0 +1,9 @@
+{
+  "title": "SDK Reference",
+  "defaultOpen": true,
+  "pages": [
+    "sdk-overview",
+    "sdk-client-reference",
+    "sdk-react-hooks"
+  ]
+}

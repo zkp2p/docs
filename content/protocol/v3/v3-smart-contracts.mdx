@@ -1,0 +1,96 @@
+---
+title: "Smart Contracts"
+---
+
+# Smart Contracts (V3)
+
+This page summarizes the V3 on-chain contracts and links to detailed pages for each component.
+
+### Orchestrator
+
+- Purpose: lifecycle for intents (signal, fulfill), protocol/referral/manager fees, routing to verifiers, pre-intent hooks, and post-intent hooks.
+- Key entry points
+  - `signalIntent(SignalIntentParams)`
+    - Inputs: `escrow`, `depositId`, `amount`, `to`, `paymentMethod` (bytes32), `fiatCurrency` (bytes32), `conversionRate` (1e18 fixed), `referralFees[]` (multi-recipient), `gatingServiceSignature`, `signatureExpiration`, optional `postIntentHook` (IPostIntentHookV2), `preIntentHookData`, `data`.
+    - Pre-intent hooks (generic + whitelist) execute before state changes.
+    - Manager fee is snapshotted from `EscrowV2.getManagerFee(depositId)`.
+    - `intentMinAtSignal` is snapshotted from the deposit's min intent amount.
+    - Emits `IntentSignaled(intentHash, escrow, depositId, paymentMethod, owner, to, amount, fiatCurrency, conversionRate, timestamp)`.
+  - `fulfillIntent(FulfillIntentParams)`
+    - Inputs: `paymentProof` (ABI-encoded `PaymentAttestation`), `intentHash`, optional `verificationData`, optional `postIntentHookData`.
+    - Routes to the configured `IPaymentVerifier`, unlocks funds, distributes fees (protocol → manager → referral), and transfers net to `to` or post-intent hook.
+    - Enforces `intentMinAtSignal` — prevents sub-minimum partial fulfillments.
+    - Emits `IntentFulfilled`.
+
+### UnifiedPaymentVerifier
+- Purpose: canonical on-chain verifier for off-chain attestations.
+- V3 uses `UnifiedPaymentVerifierV2` (`0x46A58Dc65587D4D7B8198C6A25eEdf5b2535Da94`).
+- Typed data
+  - Type: `PaymentAttestation(bytes32 intentHash,uint256 releaseAmount,bytes32 dataHash)`
+  - Domain: name `UnifiedPaymentVerifier`, version `1`, chainId, verifyingContract.
+- Attestation payload
+  - `intentHash`: binds the attestation to an on-chain intent.
+  - `releaseAmount`: token amount to release on-chain (after FX, before fees). Capped to `intent.amount` during verification.
+  - `dataHash`: hash of the `data` blob.
+  - `signatures[]`: witness signatures checked by `AttestationVerifier`.
+  - `data`: ABI-encoded `(PaymentDetails, IntentSnapshot)`.
+    - `PaymentDetails`:
+      - `method`: bytes32 (payment method, e.g., keccak256("venmo"))
+      - `payeeId`: bytes32 (hashed off-chain recipient id)
+      - `amount`: uint256 (smallest fiat unit, e.g., cents)
+      - `currency`: bytes32 (fiat currency code hash)
+      - `timestamp`: uint256 (ms)
+      - `paymentId`: bytes32 (hashed provider transaction id)
+    - `IntentSnapshot`:
+      - `intentHash`, `amount`, `paymentMethod`, `fiatCurrency`, `payeeDetails`, `conversionRate`, `signalTimestamp`, `timestampBuffer`
+
+### Verification rules (key checks)
+- EIP-712 signature validates over `(intentHash, releaseAmount, dataHash)` and the domain separator.
+- `keccak256(data) == dataHash` to prevent tampering.
+- Snapshot must match on-chain intent fields at fulfillment time.
+- Nullifier: `keccak256(paymentMethod || paymentId)` must be unused; it is recorded to prevent reuse.
+- Release capping: if `releaseAmount > intent.amount`, the verifier reduces to `intent.amount`.
+
+### SimpleAttestationVerifier
+- Purpose: witness management and threshold signature verification for the attestation digest.
+- Governance can update the witness set; threshold defaults to 1 in `SimpleAttestationVerifier`.
+
+### Escrow
+- EscrowV2 holds deposits and tracks payment methods + currencies per deposit.
+- Supports oracle-driven rate floors, delegated rate management (RateManagerV1), dust sweeping, and third-party funded deposits (`depositTo`).
+- Authorized Orchestrators (via OrchestratorRegistry) call into Escrow to lock/unlock and transfer funds.
+
+### OrchestratorRegistry
+- Simple allowlist authorizing orchestrator contracts on EscrowV2.
+- `addOrchestrator(address)` / `removeOrchestrator(address)` — Owner-only.
+- `isOrchestrator(address)` — Returns whether an address is authorized.
+- Replaces the single `orchestrator` address used in the legacy Escrow.
+
+### RateManagerV1
+- Pure rate registry for delegated rate management.
+- Managers create configs (`createRateManager`), set rates per deposit/method/currency.
+- Exposes `getRate(rateManagerId, escrow, depositId, paymentMethod, currencyCode)` and `getFee(rateManagerId)`.
+- EscrowV2 enforces the effective rate floor as `max(fixedRate, oracleRate, delegatedRate)`.
+- Manager fee (capped at 5%) is snapshotted at intent signal time and distributed at fulfillment.
+
+### ChainlinkOracleAdapter
+- Wraps Chainlink price feeds implementing `IOracleAdapter`.
+- `getRate(normalizedConfig)` → `(isValid, marketRate, updatedAt)`.
+- `validateConfig(rawConfig)` — Validates and normalizes adapter-specific config for storage.
+- Adapters are view-only (no state mutation) and normalize rates to 1e18 preciseUnits.
+- Spread is applied by EscrowV2, not the adapter: `oracleRate = marketRate * (10_000 + spreadBps) / 10_000`.
+
+### Pre-Intent Hooks
+- Two dedicated hook slots per deposit on OrchestratorV2: generic pre-intent hook + whitelist hook.
+- Run during `signalIntent` before state changes. Can only revert to reject.
+- Built-in implementations: `SignatureGatingPreIntentHook` (EIP-191 signature gating), `WhitelistPreIntentHook` (address whitelist).
+- See [Pre-Intent Hooks](./smart-contracts/pre-intent-hooks) for details.
+
+### Events (selected)
+- `IntentSignaled`, `IntentFulfilled`, `IntentPruned`, `IntentReferralFeeDistributed`, `IntentManagerFeeSnapshotted`
+- `DepositPreIntentHookSet`, `DepositWhitelistHookSet`
+- `PaymentMethodAdded/Removed`, `AttestationVerifierUpdated`.
+
+Notes
+- All string-like identifiers (payment method, currency code, payee id, payment id) are keccak256-hashed to bytes32 on-chain.
+- `conversionRate` uses 1e18 precision (same as PRECISE_UNIT).
