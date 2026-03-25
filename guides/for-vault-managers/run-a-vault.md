@@ -180,15 +180,102 @@ You can filter rates by platform or currency to quickly check specific pairs.
 
 ---
 
-## 7. Reference vault
+## 7. Register your vault
 
-There's a live vault on prod you can use as a reference:
+Once your vault is deployed and running, add it to the [vault-list registry](https://github.com/zkp2p/vault-list) so it appears on peer.xyz/vaults and is visible to depositors.
+
+### Steps
+
+1. Fork [zkp2p/vault-list](https://github.com/zkp2p/vault-list)
+2. Add your vault entry to the `vaults` array in `vault-list.json`
+3. (Optional) Add a 256x256 PNG logo to `logos/<rateManagerId>/vault.png`
+4. Run validation: `npm install && npm run validate`
+5. Open a PR
+
+### Required fields
+
+| Field | Description |
+|---|---|
+| `rateManagerId` | bytes32 ID from the RateManagerV1 contract |
+| `chainId` | `8453` (Base) |
+| `rateManagerAddress` | RateManagerV1 contract address |
+| `name` | Display name for your vault |
+| `slug` | URL-safe identifier (lowercase, hyphens) |
+| `description` | Short description, max 500 characters |
+| `strategyShort` | One-line strategy summary |
+| `manager.address` | Your manager wallet address |
+| `manager.name` | Your display name |
+| `paymentMethods` | Array of supported payment method identifiers |
+| `currencies` | Array of supported fiat currencies (ISO 4217) |
+
+### Optional fields
+
+| Field | Description |
+|---|---|
+| `strategyLong` | Detailed strategy description (markdown supported) |
+| `manager.twitter` | Your Twitter/X handle |
+| `fee` | Current fee (e.g. `"0.10%"`) |
+| `maxFee` | Maximum fee (e.g. `"2.0%"`) |
+| `riskLevel` | `low`, `medium`, or `high` |
+| `tags` | Filterable tags, max 10 (e.g. `["automated", "ai-managed"]`) |
+| `links` | Object with `website`, `docs`, `twitter`, `discord`, `telegram` URLs |
+| `logoURI` | URL to a 256x256 vault logo |
+
+### Example entry
+
+```json
+{
+  "rateManagerId": "0x...",
+  "chainId": 8453,
+  "rateManagerAddress": "0xeEd7Db23e724aC4590D6dB6F78fDa6DB203535F3",
+  "name": "My Vault",
+  "slug": "my-vault",
+  "description": "USDC liquidity vault for European payment rails.",
+  "strategyShort": "Automated rate management for EUR and GBP",
+  "manager": {
+    "address": "0x...",
+    "name": "Your Name",
+    "twitter": "yourhandle"
+  },
+  "fee": "0.50%",
+  "maxFee": "2.0%",
+  "paymentMethods": ["revolut", "wise"],
+  "currencies": ["EUR", "GBP"],
+  "riskLevel": "low",
+  "tags": ["automated", "european"],
+  "links": {
+    "website": "https://yourvault.xyz",
+    "twitter": "https://x.com/yourhandle"
+  }
+}
+```
+
+:::info
+Dynamic data like TVL, volume, fill rate, and APY is not stored in the vault-list. This data is fetched at runtime from on-chain or the [ZKP2P indexer](https://indexer.zkp2p.xyz).
+:::
+
+Full schema and validation details: [github.com/zkp2p/vault-list](https://github.com/zkp2p/vault-list)
+
+---
+
+## 8. Reference vaults
+
+Two live vaults on prod you can use as reference:
 
 **Delegate by USDCtoFiat**
 - ID: `0x8666d6...fc41c` on RateManagerV1
-- Fee: 0.1% (max 2%)
-- Rates: Monzo/GBP @ 0.7505, Revolut/GBP @ 0.7545
-- UI: [delegate.usdctofiat.xyz](http://delegate.usdctofiat.xyz/)
+- Fee: 0.10% (max 2%)
+- 14 payment methods, 34 currencies
+- Strategy: AI-powered rate engine, fully automated
+- UI: [delegate.usdctofiat.xyz](https://delegate.usdctofiat.xyz/)
+- Twitter: [@usdctofiat](https://x.com/usdctofiat)
+
+**J.A.R.V.I.S Fund**
+- ID: `0x65b105...fc6e` on RateManagerV1
+- Fee: 0.10% (max 2%)
+- 14 payment methods, 33 currencies
+- Strategy: Autonomous multi-strategy management with competitive analysis and fill-rate feedback loops
+- Twitter: [@paboracle](https://x.com/paboracle)
 
 ---
 
