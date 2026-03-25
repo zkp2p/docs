@@ -1,4 +1,6 @@
 {
-  "setup": [],
+  "setup": [
+    "yarn install"
+  ],
   "teardown": []
 }
