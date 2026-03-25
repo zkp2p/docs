@@ -277,7 +277,8 @@ Two live vaults on prod you can use as reference:
 - Fee: 0.10% (max 2%)
 - 14 payment methods, 33 currencies
 - Strategy: Autonomous multi-strategy management with competitive analysis and fill-rate feedback loops
-- Twitter: [@paboracle](https://x.com/paboracle)
+- UI: [jarvis.payhumans.ai](https://jarvis.payhumans.ai)
+- Twitter: [@0xSachinK](https://x.com/0xSachinK)
 
 ---
 
