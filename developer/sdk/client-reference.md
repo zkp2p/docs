@@ -23,10 +23,9 @@ Create a client with `new Zkp2pClient(opts)`.
 | `chainId` | Yes | Chain ID used for contract and API routing |
 | `rpcUrl` | No | Optional RPC override; otherwise the SDK uses the wallet client's chain transport |
 | `runtimeEnv` | No | Runtime environment: `production`, `preproduction`, or `staging`. Defaults to `production` |
-| `preferV2ByDefault` | No | Controls whether V2 contracts are preferred when both legacy and V2 are deployed |
 | `indexerUrl` | No | Override for the indexer GraphQL endpoint |
 | `baseApiUrl` | No | Override for ZKP2P service APIs |
-| `apiKey` | No | Curator API key used by authenticated endpoints such as `registerPayeeDetails()` and auto-signing for `signalIntent()` |
+| `apiKey` | No | Optional curator API key — not required for any method. When provided, some responses are enriched (e.g. `getQuote` returns maker `depositData`) |
 | `authorizationToken` | No | Optional bearer token for hybrid authentication |
 | `getAuthorizationToken` | No | Async token provider for long-lived clients |
 | `indexerApiKey` | No | Optional `x-api-key` header for indexer proxy authentication |
@@ -38,14 +37,11 @@ import { Zkp2pClient } from '@zkp2p/sdk';
 const client = new Zkp2pClient({
   walletClient,
   chainId: 8453,
-  runtimeEnv: 'production',
-  apiKey: 'YOUR_API_KEY',
-  indexerApiKey: 'YOUR_INDEXER_API_KEY',
 });
 ```
 
-:::warning API-backed methods
-`registerPayeeDetails()` requires curator API access. `signalIntent()` can auto-fetch its gating signature when you provide `apiKey` or `authorizationToken`; if you do not want the SDK to make that request, pass `gatingServiceSignature` and `signatureExpiration` yourself.
+:::info No API key required
+All SDK methods work without `apiKey` or `authorizationToken`. Auth credentials are optional and only affect response richness. `signalIntent()` can auto-fetch its gating signature when you provide `apiKey` or `authorizationToken`; if you do not want the SDK to make that request, pass `gatingServiceSignature` and `signatureExpiration` yourself.
 :::
 
 ## Prepared transactions
@@ -336,31 +332,51 @@ For copy-paste examples around deposits and intents, see [Offramp Integration](/
 
 ## Indexer
 
-Use `client.indexer` when you need historical data, richer filtering, or pagination across all deposits and intents.
+Use `client.indexer` when you need historical data, richer filtering, or pagination across all deposits and intents. All methods live on a flat namespace.
 
-Common methods on `client.indexer`:
+### Deposit queries
 
 - `getDeposits(filter?, pagination?)`
 - `getDepositsWithRelations(filter?, pagination?, options?)`
-- `getDepositById(id, options?)`
+- `getDepositById(compositeId, options?)`
+- `getDepositsByIds(ids)`
+- `getDepositsByIdsWithRelations(ids, options?)`
+- `getDepositsByPayeeHash(payeeHash, options?)`
+
+### Intent queries
+
+- `getIntentsForDeposits(depositIds, statuses?)`
 - `getOwnerIntents(owner, statuses?)`
+- `getIntentsByRateManager(rateManagerId, statuses?)`
 - `getIntentByHash(intentHash)`
 - `getExpiredIntents({ now, depositIds, limit? })`
 - `getFulfilledIntentEvents(intentHashes)`
 - `getIntentFulfillmentAmounts(intentHash)`
 - `getFulfillmentAndPayment(intentHash)`
-- `getDepositsByPayeeHash(payeeHash, options?)`
 
-For rate-manager analytics, the package also exports `IndexerRateManagerService`, which you can construct from `client.indexer.client`.
+### Fund activity and snapshots
 
-```ts
-import { IndexerRateManagerService } from '@zkp2p/sdk';
+- `getDepositFundActivities(depositId)`
+- `getMakerFundActivities(depositor, limit?)`
+- `getDepositDailySnapshots(depositId, limit?)`
+- `getProfitSnapshotsByDeposits(depositIds)`
 
-const rateManagers = new IndexerRateManagerService(client.indexer.client);
-const list = await rateManagers.fetchRateManagers({ limit: 20 });
-```
+### Rate manager (vault) queries
 
-The package also exports the standalone helper `fetchFulfillmentAndPayment(client.indexer.client, intentHash)`.
+- `getRateManagers(pagination?, filter?)`
+- `getRateManagerDetail(managerId, options?)`
+- `getRateManagerDelegations(managerId, pagination?)`
+- `getDelegationForDeposit(depositId, options?)`
+- `getManagerDailySnapshots(managerId, options?)`
+- `getManualRateUpdates(managerId, options?)`
+- `getOracleConfigUpdates(managerId, options?)`
+
+### Raw access
+
+- `query<T>({ query, variables? })` — raw GraphQL
+- `client` — raw `IndexerClient` instance
+
+The package also exports `IndexerRateManagerService` and the standalone helper `fetchFulfillmentAndPayment(client.indexer.client, intentHash)`.
 
 ## Referrer fees
 
@@ -398,7 +414,6 @@ Useful constants:
 | `getRateManagerContracts(chainId, env?)` | Returns rate-manager registry/controller addresses and ABIs |
 | `getPaymentMethodsCatalog(chainId, env?)` | Returns the platform-to-hash catalog used for payment-method resolution |
 | `getGatingServiceAddress(chainId, env?)` | Returns the signer used for intent gating |
-| `HISTORICAL_ESCROW_ADDRESSES` | Historical escrow addresses keyed by runtime deployment |
 
 Common companion helpers:
 

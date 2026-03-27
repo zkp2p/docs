@@ -43,7 +43,6 @@ const walletClient = createWalletClient({
 const client = new OfframpClient({
   walletClient,
   chainId: base.id,
-  apiKey: 'YOUR_API_KEY', // Optional for API operations
 });
 ```
 
@@ -138,6 +137,9 @@ Supported payment platforms and keys:
 | Zelle | `zelle` |
 | Monzo | `monzo` |
 | MercadoPago | `mercadopago` |
+| Chime | `chime` |
+| Luxon | `luxon` |
+| N26 | `n26` |
 
 ```ts
 import { getPaymentMethodsCatalog, PLATFORM_METADATA, PAYMENT_PLATFORMS } from '@zkp2p/sdk';
@@ -180,7 +182,8 @@ const catalog = getPaymentMethodsCatalog(8453, 'production');
 | Network | Chain ID | Environment |
 |---------|----------|-------------|
 | Base Mainnet | 8453 | `production` |
-| Base Sepolia | 84532 | `staging` |
+| Base Mainnet | 8453 | `preproduction` |
+| Base Mainnet | 8453 | `staging` |
 
 ## Token allowance management
 
@@ -226,7 +229,7 @@ try {
 ```ts
 import { setLogLevel } from '@zkp2p/sdk';
 
-setLogLevel('debug'); // 'debug' | 'info' | 'warn' | 'error' | 'none'
+setLogLevel('debug'); // 'debug' | 'info' | 'error'
 ```
 
 ## React hooks

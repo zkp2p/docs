@@ -8,7 +8,7 @@ slug: /sdk
 
 ## What this does
 
-`@zkp2p/sdk` is the TypeScript SDK for building with Peer. Use it to manage deposits, signal and fulfill intents, access quote and taker-tier APIs, work with vault and rate-manager flows, and embed the Peer extension onramp. The current npm release is `0.1.0` and is published under the MIT license.
+`@zkp2p/sdk` is the TypeScript SDK for building with Peer. Use it to manage deposits, signal and fulfill intents, access quote and taker-tier APIs, work with vault and rate-manager flows, and embed the Peer extension onramp. The current npm release is `0.2.3` and is published under the MIT license.
 
 ## Who is this for?
 
@@ -93,8 +93,6 @@ const walletClient = createWalletClient({
 const client = new Zkp2pClient({
   walletClient,
   chainId: base.id,
-  runtimeEnv: 'production',
-  apiKey: 'YOUR_API_KEY',
 });
 
 const deposits = await client.getDeposits();
