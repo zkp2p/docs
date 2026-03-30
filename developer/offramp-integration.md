@@ -59,8 +59,8 @@ await client.createDeposit({
   intentAmountRange: { min: 100000n, max: 1000000000n },
   processorNames: ['wise', 'revolut'],
   depositData: [
-    { email: 'maker@example.com' }, // Wise payment details
-    { tag: '@maker' },              // Revolut payment details
+    { wisetag: 'maker' },           // Wise payee details
+    { revolutUsername: 'maker' },   // Revolut payee details
   ],
   conversionRates: [
     [{ currency: Currency.USD, conversionRate: '1020000000000000000' }], // 1.02 (18 decimals)
@@ -140,6 +140,26 @@ Supported payment platforms and keys:
 | Chime | `chime` |
 | Luxon | `luxon` |
 | N26 | `n26` |
+
+Each item in `depositData` must line up by index with `processorNames`. The SDK forwards those objects directly to curator's `/v1/makers/create` endpoint, so the key names need to match the processor exactly.
+
+The expected `depositData` shape for each platform is:
+
+| Platform | Key | `depositData` shape | Notes |
+|----------|-----|---------------------|-------|
+| Wise | `wise` | `{ wisetag: 'your-wisetag' }` | Pass the Wisetag without `@`. Wise uses a manual approval flow in curator. |
+| Venmo | `venmo` | `{ venmoUsername: 'YourVenmoUsername' }` | Do not include `@`. Curator validates the exact Venmo username casing. |
+| Revolut | `revolut` | `{ revolutUsername: 'your-revtag' }` | Do not include `@`. |
+| Cash App | `cashapp` | `{ cashtag: 'yourcashtag' }` | Do not include `$`. |
+| PayPal | `paypal` | `{ paypalEmail: 'maker@example.com' }` | Use the payee's PayPal email address. |
+| Zelle | `zelle` | `{ zelleEmail: 'maker@example.com' }` | Curator expects a lowercase email address. |
+| Monzo | `monzo` | `{ monzoMeUsername: 'your-monzo-me-name' }` | Use the Monzo.me username only. |
+| Mercado Pago | `mercadopago` | `{ cvu: '0000003100064367123868' }` | CVU must be a valid 22-digit Mercado Pago / bank CVU. |
+| Chime | `chime` | `{ chimesign: '$yourchimesign' }` | Include the leading `$`. Curator expects the value in lowercase. |
+| Luxon | `luxon` | `{ luxonUsername: 'maker@example.com' }` | Use a lowercase Luxon email address. |
+| N26 | `n26` | `{ iban: 'DE89370400440532013000' }` | Pass a valid IBAN with spaces removed. |
+
+If you want to mirror the web app's posting flow exactly, you can also include `telegramUsername` alongside the required platform-specific field, but the processor-specific key above is the part curator actually validates.
 
 ```ts
 import { getPaymentMethodsCatalog, PLATFORM_METADATA, PAYMENT_PLATFORMS } from '@zkp2p/sdk';
