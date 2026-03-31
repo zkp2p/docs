@@ -35,7 +35,7 @@ If your rate is higher than the depositor's floor, yours applies. If yours is lo
 
 **Chain:** Base (8453)
 **RateManagerV1:** `0xeEd7Db23e724aC4590D6dB6F78fDa6DB203535F3`
-**Escrow (EscrowV3):** `0x777777779d229cdF3110e9de47943791c26300Ef`
+**Escrow (EscrowV2):** `0x777777779d229cdF3110e9de47943791c26300Ef`
 **USDC (Base):** `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`
 
 ### createRateManager(config)

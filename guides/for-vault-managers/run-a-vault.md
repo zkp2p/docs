@@ -295,8 +295,8 @@ Two live vaults on prod you can use as reference:
 | Change fee recipient | RateManagerV1 | `setFeeRecipient(rateManagerId, newRecipient)` |
 | Depositor delegates | EscrowV2 | `setRateManager(depositId, rateManager, rateManagerId)` |
 | Depositor exits | EscrowV2 | `clearRateManager(depositId)` |
-| Depositor sets floor | EscrowV2 | `setDepositCurrencyMinRate(depositId, paymentMethod, currency, rate)` |
-| Depositor sets oracle | EscrowV2 | `setDepositOracleRateConfig(depositId, paymentMethod, currency, ...)` |
+| Depositor sets floor | EscrowV2 | `setCurrencyMinRate(depositId, paymentMethod, currency, rate)` |
+| Depositor sets oracle | EscrowV2 | `setOracleRateConfig(depositId, paymentMethod, currency, ...)` |
 
 ---
 
