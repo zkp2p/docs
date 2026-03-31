@@ -5,6 +5,10 @@ title: Run a Vault
 
 # Run a Vault
 
+:::info[Quickstart: give your LLM this markdown]
+Download [`create-a-vault-llm.md`](pathname:///create-a-vault-llm.md) and pass it to Claude, ChatGPT, or any LLM. It has everything an AI needs to build and deploy a vault for you: contracts, SDK methods, Peerlytics API, strategies, and a working rate engine example.
+:::
+
 This guide covers everything you need to create and operate a vault on Peer. A vault lets you manage conversion rates on behalf of depositors (liquidity providers) and earn a fee on every fulfilled order.
 
 Vaults use the `RateManagerV1` contract. All rate floor enforcement happens on `EscrowV2`.
