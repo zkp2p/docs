@@ -73,9 +73,9 @@ The `paymentMethod` and `currencyCode` values are bytes32 identifiers. You can f
 
 Rates are **fiat per USDC**. A rate of `0.7505` on GBP means 1 USDC costs 0.7505 GBP. Higher rate = more fiat per USDC = better for the depositor.
 
-### Disabling a pair
+### Setting rate to 0
 
-Set the rate to `0`. This tells the protocol no new intents should be signaled for that pair. The pair re-enables when you set a non-zero rate.
+Setting your rate to `0` means you are not actively pricing that pair. The protocol computes `effectiveRate = max(managerRate, escrowFloor)`, so if the depositor has a non-zero floor, the floor still applies and the pair remains tradable. To fully disable a pair, the depositor must also have no floor set.
 
 ### Example
 
@@ -85,9 +85,10 @@ You manage a vault with Revolut/GBP and Revolut/EUR.
 |---|---|---|---|
 | Revolut/GBP | 0.7505 | 0.7400 | 0.7505 (your rate wins) |
 | Revolut/EUR | 0.8300 | 0.8450 | 0.8450 (floor wins) |
-| Revolut/USD | 0 | 1.0100 | 0 (pair disabled) |
+| Revolut/USD | 0 | 0 | 0 (pair inactive — no rate or floor) |
+| Revolut/JPY | 0 | 152.00 | 152.00 (floor still applies) |
 
-The protocol always takes `max(yourRate, depositorFloor)`. You can't undercut a depositor's floor. If your rate is higher, yours is used. If theirs is higher, theirs is used. If you set 0, the pair is off.
+The protocol always takes `max(yourRate, depositorFloor)`. You can't undercut a depositor's floor. If your rate is higher, yours is used. If theirs is higher, theirs is used.
 
 ---
 
@@ -106,12 +107,13 @@ effectiveRate = max(managerRate, escrowFloor)
 |---|---|
 | Your rate > escrow floor | Your rate is used. You're actively pricing the pair. |
 | Your rate < escrow floor | Escrow floor is used. Depositor is protected. |
-| Your rate = 0 | Pair is disabled. No new intents. |
+| Your rate = 0, floor > 0 | Escrow floor is used. Pair remains tradable at the depositor's floor. |
+| Your rate = 0, floor = 0 | Pair is inactive. No new intents. |
 | Your contract reverts | Escrow falls back to the depositor's floor. |
-| Oracle configured but stale | Pair halts (returns 0) regardless of your rate or the fixed floor. |
+| Oracle configured but stale | Oracle rate treated as 0. Fixed floor still applies (`escrowFloor = max(fixedFloor, 0) = fixedFloor`). Pair only halts if the fixed floor is also 0. |
 
 :::info
-If a depositor configured an oracle adapter and that oracle goes stale, the pair stops trading entirely until the oracle recovers. This is true even if there's a valid fixed floor set. It's a safety property, not a bug.
+If a depositor configured an oracle adapter and that oracle goes stale, the oracle rate is treated as 0. The fixed rate floor (if set) still applies. The pair only halts entirely if both the oracle rate and fixed floor are 0.
 :::
 
 ---
@@ -156,11 +158,11 @@ Depositors set a fixed floor. You set rates above it. No oracle dependency, no h
 
 ### Market-tracking: oracle floor + your rate
 
-Depositors configure an oracle adapter with a spread. The floor tracks the market automatically. You set rates on top. If the oracle goes stale, the pair halts. This is the right setup for non-USD currency pairs where FX moves matter.
+Depositors configure an oracle adapter with a spread. The floor tracks the market automatically. You set rates on top. If the oracle goes stale, the oracle component drops to 0 but the fixed floor (if set) still applies. This is the right setup for non-USD currency pairs where FX moves matter.
 
 ### Recommended: fixed floor + oracle + your rate
 
-Depositors set both a fixed floor and an oracle config. The escrow floor is `max(fixedFloor, oracleSpreadRate)`, and the effective rate is `max(yourRate, escrowFloor)`. Three layers of protection. Pair still halts on stale oracle.
+Depositors set both a fixed floor and an oracle config. The escrow floor is `max(fixedFloor, oracleSpreadRate)`, and the effective rate is `max(yourRate, escrowFloor)`. Three layers of protection. If the oracle goes stale, the fixed floor ensures the pair remains tradable at a minimum rate.
 
 ### Full trust: no depositor floor
 
@@ -295,8 +297,8 @@ Two live vaults on prod you can use as reference:
 | Change fee recipient | RateManagerV1 | `setFeeRecipient(rateManagerId, newRecipient)` |
 | Depositor delegates | EscrowV2 | `setRateManager(depositId, rateManager, rateManagerId)` |
 | Depositor exits | EscrowV2 | `clearRateManager(depositId)` |
-| Depositor sets floor | EscrowV2 | `setCurrencyMinRate(depositId, paymentMethod, currency, rate)` |
-| Depositor sets oracle | EscrowV2 | `setOracleRateConfig(depositId, paymentMethod, currency, ...)` |
+| Depositor sets floor | EscrowV2 | `setCurrencyMinRate(depositId, paymentMethod, currencyCode, rate)` |
+| Depositor sets oracle | EscrowV2 | `setOracleRateConfig(depositId, paymentMethod, currencyCode, config)` |
 
 ---
 
@@ -304,7 +306,7 @@ Two live vaults on prod you can use as reference:
 
 - **Depositor funds never leave escrow.** Delegation only controls rate management.
 - **Depositor floor is always enforced.** `max(managerRate, escrowFloor)` is computed by Escrow, not by your contract.
-- **Oracle stale = halt.** If a depositor configured an oracle and it goes stale, the pair stops. No silent fallback.
+- **Oracle stale = fixed floor fallback.** If a depositor configured an oracle and it goes stale, the oracle rate is treated as 0. The fixed floor still applies. The pair only halts if the fixed floor is also 0.
 - **Manager revert = fallback.** If your contract reverts, Escrow uses the depositor's floor. No downtime.
 - **Settlement is independent.** The attestation service determines actual amounts based on real payment. Rate management only controls whether intents can be signaled, not how much is released.
 - **Depositors can exit anytime.** No lock-up, no delay, no approval needed from you.
