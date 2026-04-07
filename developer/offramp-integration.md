@@ -141,7 +141,7 @@ Supported payment platforms and keys:
 | Luxon | `luxon` |
 | N26 | `n26` |
 
-Each item in `depositData` must line up by index with `processorNames`. The SDK forwards those objects directly to curator's `/v1/makers/create` endpoint, so the key names need to match the processor exactly.
+Each item in `depositData` must line up by index with `processorNames`. If you pass `payeeDetailsHashes` to `createDeposit()`, the SDK uses those hashes directly and no API key is needed. If you do not have hashes yet, call `registerPayeeDetails()` first with an `apiKey` or `authorizationToken`, then pass the returned hashes to `createDeposit()`.
 
 The expected `depositData` shape for each platform is:
 
