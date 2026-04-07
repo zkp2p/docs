@@ -296,6 +296,48 @@ const quote = await client.getQuote({
 });
 ```
 
+### `getQuotesBestByPlatform()`
+
+Use `getQuotesBestByPlatform(req, opts?)` when you want the single best quote per supported payment platform instead of a flat list. The SDK calls `/v2/quote/best-by-platform` (or `/v2/quote/best-by-platform-exact-token` when `isExactFiat` is `false`) and returns one entry per platform with maker `payeeData` enriched into each `bestQuote`.
+
+| Request field | Required | Description |
+| --- | --- | --- |
+| `fiatCurrency` | Yes | Fiat currency code |
+| `user` | Yes | Taker address |
+| `recipient` | Yes | Asset recipient address |
+| `destinationChainId` | Yes | Destination chain ID |
+| `destinationToken` | Yes | Destination token address |
+| `amount` | Yes | Amount as a string |
+| `isExactFiat` | No | Treat `amount` as fiat instead of token amount. Defaults to `true` |
+| `referrer` | No | Referrer code for quote attribution |
+| `referrerFeeConfig` | No | Referrer fee recipient and BPS |
+| `escrowAddresses` | No | Limit search to specific escrows. Defaults to the client's configured escrows |
+| `minDepositSuccessRateBps` | No | Minimum maker success rate in basis points (0-10000) |
+| `supportBusinessAccounts` | No | Allow quotes from business accounts |
+| `intentGatingService` | No | Filter by a specific intent gating service address |
+| `includePrivateOrderbooks` | No | Include whitelist-gated private orderbook deposits. Defaults to `false` |
+
+The response shape mirrors `getQuote` but is keyed by platform:
+
+- `responseObject.platformQuotes`: array of `{ platform, bestQuote }` entries
+- Each `bestQuote` carries the same `referrerFeeAmount` / display fields as `getQuote` when a `referrerFeeConfig` is supplied
+
+```ts
+const best = await client.getQuotesBestByPlatform({
+  fiatCurrency: 'USD',
+  user: '0xYourAddress',
+  recipient: '0xRecipientAddress',
+  destinationChainId: 8453,
+  destinationToken: '0x833589fcd6edb6e08f4c7c32d4f71b54bda02913',
+  amount: '100',
+  isExactFiat: true,
+});
+
+for (const { platform, bestQuote } of best.responseObject?.platformQuotes ?? []) {
+  console.log(platform, bestQuote?.intent?.depositId, bestQuote?.payeeData);
+}
+```
+
 ## Taker tiers
 
 Use `getTakerTier(req, opts?)` to fetch tiering, cooldown, and platform-limit data for a taker address.
@@ -377,6 +419,16 @@ Use `client.indexer` when you need historical data, richer filtering, or paginat
 - `client` — raw `IndexerClient` instance
 
 The package also exports `IndexerRateManagerService` and the standalone helper `fetchFulfillmentAndPayment(client.indexer.client, intentHash)`.
+
+### Indexer converters
+
+The SDK exports converter helpers for turning indexer payloads into the same `EscrowDepositView` shape produced by RPC reads.
+
+| Helper | Purpose |
+| --- | --- |
+| `convertIndexerDepositToEscrowView(deposit, chainId, escrowAddress)` | Converts a single indexer deposit (with relations) into an `EscrowDepositView` |
+| `convertDepositsForLiquidity(deposits, chainId, escrowAddress, options?)` | Filters and converts indexer deposits into the active liquidity set used by takers. Pass `{ includePrivateOrderbooks: true }` to also include deposits gated by a non-zero whitelist hook (defaults to `false`, public orderbooks only) |
+| `convertIndexerIntentsToEscrowViews(intents)` | Converts indexer intents into `EscrowIntentView[]` |
 
 ## Referrer fees
 
