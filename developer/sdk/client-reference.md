@@ -25,7 +25,7 @@ Create a client with `new Zkp2pClient(opts)`.
 | `runtimeEnv` | No | Runtime environment: `production`, `preproduction`, or `staging`. Defaults to `production` |
 | `indexerUrl` | No | Override for the indexer GraphQL endpoint |
 | `baseApiUrl` | No | Override for ZKP2P service APIs |
-| `apiKey` | No | Optional curator API key — required for `registerPayeeDetails()`. When provided, it also enriches responses for other methods (e.g. `getQuote` returns maker `depositData`) |
+| `apiKey` | No | Optional curator API key — not required for any method. When provided, some responses are enriched (e.g. `getQuote` returns maker `depositData`) |
 | `authorizationToken` | No | Optional bearer token for hybrid authentication |
 | `getAuthorizationToken` | No | Async token provider for long-lived clients |
 | `indexerApiKey` | No | Optional `x-api-key` header for indexer proxy authentication |
@@ -40,8 +40,8 @@ const client = new Zkp2pClient({
 });
 ```
 
-:::info API key usage
-`registerPayeeDetails()` requires `apiKey` or `authorizationToken`. All other SDK methods work without auth credentials; when provided, they enrich responses. `signalIntent()` can auto-fetch its gating signature when you provide `apiKey` or `authorizationToken`; if you do not want the SDK to make that request, pass `gatingServiceSignature` and `signatureExpiration` yourself.
+:::info No API key required
+All SDK methods work without `apiKey` or `authorizationToken`. Auth credentials are optional and only affect response richness. `signalIntent()` can auto-fetch its gating signature when you provide `apiKey` or `authorizationToken`; if you do not want the SDK to make that request, pass `gatingServiceSignature` and `signatureExpiration` yourself.
 :::
 
 ## Prepared transactions
