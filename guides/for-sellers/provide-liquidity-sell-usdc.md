@@ -100,11 +100,11 @@ Enter your username/account details for the selected platform:
 - Wise Wisetag  
 - Mercado Pago CVU  
 - PayPal Email  
-- Monzo Sort Code + Account Number  
+- Monzo.me Username  
 - N26 IBAN  
 - Alipay ID  
-- Chime $Cashtag  
-- Luxon Account ID  
+- Chime $ChimeSign  
+- Luxon Email  
 
 > 🔍 **Double-check accuracy** — these details are how buyers send you money.
 
