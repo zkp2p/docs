@@ -477,6 +477,139 @@ Common companion helpers:
 - `resolvePaymentMethodHashFromCatalog()`
 - `resolvePaymentMethodNameFromHash()`
 
+## Seller Automated Release
+
+Sellers can upload encrypted payment credentials so that intents are verified and released automatically, without manual intervention. Three methods support this flow.
+
+:::info Auth required
+`uploadSellerCredential` and `getSellerCredentialStatus` require either `apiKey` or `authorizationToken` on the client. `verifySellerPayment` requires an internal `x-api-key` and is not intended for public SDK consumers.
+:::
+
+### Supported platforms
+
+```ts
+type SellerPlatform = 'venmo' | 'cashapp' | 'wise';
+```
+
+### `uploadSellerCredential(params, opts?)`
+
+Creates a signed credential bundle via attestation-service and stores it on the maker via curator.
+
+| Parameter | Required | Description |
+| --- | --- | --- |
+| `makerId` | Yes | Numeric maker ID |
+| `platform` | Yes | `'venmo'` \| `'cashapp'` \| `'wise'` |
+| `payeeId` | Yes | Platform-specific payee identifier |
+| `sessionMaterial` | Yes | Platform-specific session data (see below) |
+
+**Options:**
+
+| Option | Default | Description |
+| --- | --- | --- |
+| `baseApiUrl` | Client default | Override curator API URL |
+| `attestationServiceUrl` | Derived from `baseApiUrl` | Override attestation service URL |
+| `timeoutMs` | Client default | Request timeout |
+
+**Session material by platform:**
+
+| Platform | Fields |
+| --- | --- |
+| `venmo` | `recipientUsername`, `accountId`, `sessionCookie`, `requestHeaders?` |
+| `cashapp` | `recipientCashtag`, `customerId`, `sessionCookie`, `requestHeaders?`, `requestPayload` |
+| `wise` | `apiToken`, `profileId`, `balanceId`, `currency` |
+
+**Returns:** `CuratorSellerCredentialUploadResponse`
+
+```ts
+const result = await client.uploadSellerCredential({
+  makerId: 42,
+  platform: 'venmo',
+  payeeId: 'user@example.com',
+  sessionMaterial: {
+    recipientUsername: 'JohnDoe',
+    accountId: '123456789',
+    sessionCookie: 'v_session=...',
+  },
+});
+
+console.log(result.responseObject.status); // 'active'
+```
+
+### `getSellerCredentialStatus(params, opts?)`
+
+Fetches seller credential status from curator. Status is a coarse signal — `active`, `inactive`, or `missing`.
+
+| Parameter | Required | Description |
+| --- | --- | --- |
+| `makerId` | Yes | Numeric maker ID |
+
+**Returns:** `CuratorSellerCredentialStatusResponse`
+
+```ts
+const status = await client.getSellerCredentialStatus({ makerId: 42 });
+
+if (status.responseObject.status === 'active') {
+  // Automated release is enabled
+}
+```
+
+**Response shape:**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `makerId` | `number` | Maker ID |
+| `platform` | `string` | Platform the credential is for |
+| `payeeIdHash` | `Hash` | Hashed payee identifier |
+| `status` | `'active'` \| `'inactive'` \| `'missing'` | Current credential state |
+| `credentialType` | `string \| null` | Credential type identifier |
+
+### `verifySellerPayment(params, opts?)`
+
+:::warning Internal use only
+This endpoint requires an internal `x-api-key`. Standard SDK consumer API keys will be rejected with 401. Returns 410 GONE when the credential is inactive or fails its synchronous re-probe.
+:::
+
+Verifies a seller payment via curator's seller-credential proxy.
+
+| Parameter | Required | Description |
+| --- | --- | --- |
+| `platform` | Yes | `'venmo'` \| `'cashapp'` \| `'wise'` |
+| `txId` | Yes | Transaction identifier |
+| `chainId` | Yes | Chain ID (e.g. `8453`) |
+| `intent` | Yes | Intent details object (see below) |
+
+**Intent details:**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `intentHash` | `Hash` | `0x`-prefixed 32-byte intent hash |
+| `amount` | `string` | Intent amount |
+| `timestampMs` | `string` | Intent timestamp in milliseconds |
+| `paymentMethod` | `Hash` | Payment method hash |
+| `fiatCurrency` | `Hash` | Fiat currency hash |
+| `conversionRate` | `string` | Conversion rate (1e18 precision) |
+| `payeeDetails` | `Hash` | Hashed payee details |
+| `timestampBufferMs` | `string?` | Optional timestamp variance buffer |
+
+**Returns:** `CuratorSellerVerifyResponse`
+
+```ts
+const verification = await client.verifySellerPayment({
+  platform: 'venmo',
+  txId: 'tx_abc123',
+  chainId: 8453,
+  intent: {
+    intentHash: '0x...',
+    amount: '100000000',
+    timestampMs: '1713600000000',
+    paymentMethod: '0x...',
+    fiatCurrency: '0x...',
+    conversionRate: '1000000000000000000',
+    payeeDetails: '0x...',
+  },
+});
+```
+
 ## Error handling
 
 All SDK-specific errors extend `ZKP2PError`.
