@@ -5,9 +5,15 @@ title: Chargeback Protection
 
 # Chargeback Protection
 
-Chargeback Protection limits who can fill your deposit. When it is enabled, only orders routed through Peer's Pay signal relayer can fill your deposit.
+### What is Chargeback Protection
 
-This means every order that reaches your deposit has already been validated before it gets to you. For payment methods like PayPal and Cash App, that lowers the risk of a buyer payment turning into a chargeback dispute later.
+Chargeback Protection limits who can fill your deposit. When it is enabled, only orders routed through Peer's Pay signal relayer can fill it.
+
+That means every order that fills your deposit has already been pre-validated before it reaches you. For payment methods like PayPal and Cash App, that lowers the risk of a buyer payment turning into a chargeback dispute later.
+
+:::info Who is this for?
+This guide is for sellers who want fewer chargeback disputes on higher-risk payment platforms.
+:::
 
 ### Who Can Enable It
 
@@ -18,18 +24,18 @@ You can enable Chargeback Protection if you are:
 
 ### How to Enable It
 
-1. Open the details page for the deposit you want to protect.
+1. Open your deposit details.
 2. Find the **Chargeback Protection** toggle in the deposit controls section.
-3. Turn the toggle on.
+3. Flip the toggle on.
 4. Confirm both wallet prompts to finish setup.
 
 :::info Expect two wallet prompts
-Turning on Chargeback Protection sends two on-chain transactions. The first turns on protection for the deposit, and the second authorizes Peer's Pay relayer to fill it. Both transactions must complete before the deposit becomes protected.
+Turning on Chargeback Protection sends two on-chain transactions. One sets up protection for the deposit, and the other whitelists Peer's Pay signal relayer. Both transactions must complete before the deposit becomes protected.
 :::
 
 ### What the Protected Badge Means
 
-After Chargeback Protection is enabled, a **Protected** badge appears:
+After Chargeback Protection is enabled, a **Protected** badge appears in three places:
 
 - In the deposit list
 - In the deposit header
@@ -50,6 +56,6 @@ Chargeback Protection is less important for platforms like Revolut, Wise, and Mo
 
 ### Trade-offs
 
-Chargeback Protection improves safety, but it can reduce how many buyers are able to fill your deposit. Only orders routed through Pay can take the deposit, so fills may be slower.
+Chargeback Protection improves safety, but it can reduce how many buyers are able to fill your deposit. Only orders routed through Pay can take the deposit, so you may see fewer potential takers.
 
 If you care more about safety than speed, turn it on. If you care more about getting filled as quickly as possible, you may prefer to leave it off.
