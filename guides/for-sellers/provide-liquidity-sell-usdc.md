@@ -75,12 +75,16 @@ Choose your preferred platform from the dropdown:
 
 - Venmo (USD Only)  
 - Cash App (USD Only)  
-- Zelle (USD Only)
+- Zelle (USD Only)  
 - Revolut (Multi Currency)  
 - Wise (Multi Currency)  
-- Mercado Pago (ARS Only)
-- PayPal (Multi Currency)
-- Monzo (GBP Only)
+- Mercado Pago (ARS Only)  
+- PayPal (Multi Currency)  
+- Monzo (GBP Only)  
+- N26 (EUR Only)  
+- Alipay (CNY Only)  
+- Chime (USD Only)  
+- Luxon (USD, EUR, GBP)
 
 ![Provide Step 9](/img/provide-liquidity/ProvideStep9a.png)
 
@@ -91,10 +95,16 @@ Enter your username/account details for the selected platform:
 
 - Venmo Username  
 - Cash App Cashtag  
+- Zelle Email  
 - Revolut Revtag  
 - Wise Wisetag  
 - Mercado Pago CVU  
 - PayPal Email  
+- Monzo Sort Code + Account Number  
+- N26 IBAN  
+- Alipay ID  
+- Chime $Cashtag  
+- Luxon Account ID  
 
 > 🔍 **Double-check accuracy** — these details are how buyers send you money.
 
