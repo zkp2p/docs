@@ -94,8 +94,13 @@ Enter your username/account details for the selected platform:
 - Revolut Revtag  
 - Wise Wisetag  
 - Mercado Pago CVU  
+- PayPal Email  
 
 > 🔍 **Double-check accuracy** — these details are how buyers send you money.
+
+:::info PeerAuth Extension Required for PayPal
+PayPal requires identity verification through the PeerAuth browser extension (v0.4.13+). When you select PayPal, you will be prompted to complete extension-based verification before your deposit goes live. This is the same flow used for Wise.
+:::
 
 ![Provide Step 10](/img/provide-liquidity/ProvideStep9.png)
 
