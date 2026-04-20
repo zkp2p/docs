@@ -354,6 +354,166 @@ The response object includes:
 - cooldown metadata such as `cooldownHours`, `cooldownActive`, and `nextIntentAvailableAt`
 - `platformLimits`, including risk level and minimum required tier per payment platform
 
+## Seller Automated Release
+
+Use these methods to upload seller credentials, inspect credential status, and verify seller payments for automated release flows.
+
+:::info Authentication
+`uploadSellerCredential()` and `getSellerCredentialStatus()` require the client to be initialized with `apiKey` or `authorizationToken`.
+:::
+
+### `uploadSellerCredential()`
+
+Use `uploadSellerCredential(params, opts?)` to create a signed credential bundle via the attestation service and store it on the maker through curator. Returns `CuratorSellerCredentialUploadResponse`.
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `makerId` | Yes | Maker identifier |
+| `platform` | Yes | Seller payment platform: `venmo`, `cashapp`, or `wise` |
+| `payeeId` | Yes | Payee identifier for the seller account |
+| `sessionMaterial` | Yes | Platform-specific session material: `VenmoSessionMaterial`, `CashAppSessionMaterial`, or `WiseSessionMaterial` |
+
+Optional `opts` fields:
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `baseApiUrl` | No | Override for the curator base API URL |
+| `attestationServiceUrl` | No | Override for the attestation service used to sign the credential bundle |
+| `timeoutMs` | No | Request timeout in milliseconds |
+
+`VenmoSessionMaterial`
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `recipientUsername` | Yes | Venmo username that receives the seller payment |
+| `accountId` | Yes | Venmo account identifier |
+| `sessionCookie` | Yes | Authenticated Venmo session cookie |
+| `requestHeaders` | No | Optional request headers captured from the authenticated session |
+
+`CashAppSessionMaterial`
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `recipientCashtag` | Yes | Cash App cashtag that receives the seller payment |
+| `customerId` | Yes | Cash App customer identifier |
+| `sessionCookie` | Yes | Authenticated Cash App session cookie |
+| `requestHeaders` | No | Optional request headers captured from the authenticated session |
+| `requestPayload` | Yes | Captured Cash App request payload used during verification |
+
+`WiseSessionMaterial`
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `apiToken` | Yes | Wise API token |
+| `profileId` | Yes | Wise profile identifier |
+| `balanceId` | Yes | Wise balance identifier |
+| `currency` | Yes | Wise balance currency code |
+
+```ts
+import { Zkp2pClient } from '@zkp2p/sdk';
+
+const client = new Zkp2pClient({
+  walletClient,
+  chainId: 8453,
+  apiKey: 'your-api-key',
+});
+
+const response = await client.uploadSellerCredential(
+  {
+    makerId: 'maker_123',
+    platform: 'venmo',
+    payeeId: 'payee_123',
+    sessionMaterial: {
+      recipientUsername: 'peer-seller',
+      accountId: '123456789',
+      sessionCookie: 'session_cookie',
+      requestHeaders: {
+        'user-agent': 'Mozilla/5.0',
+      },
+    },
+  },
+  { timeoutMs: 10_000 },
+);
+```
+
+### `getSellerCredentialStatus()`
+
+Use `getSellerCredentialStatus(params, opts?)` to fetch seller credential status from curator. Returns `CuratorSellerCredentialStatusResponse`.
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `makerId` | Yes | Maker identifier |
+
+Optional `opts` fields:
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `baseApiUrl` | No | Override for the curator base API URL |
+| `timeoutMs` | No | Request timeout in milliseconds |
+
+```ts
+import { Zkp2pClient } from '@zkp2p/sdk';
+
+const client = new Zkp2pClient({
+  walletClient,
+  chainId: 8453,
+  apiKey: 'your-api-key',
+});
+
+const response = await client.getSellerCredentialStatus(
+  {
+    makerId: 'maker_123',
+  },
+  { timeoutMs: 10_000 },
+);
+```
+
+### `verifySellerPayment()`
+
+Use `verifySellerPayment(params, opts?)` to verify a seller payment through curator's seller-credential proxy. Returns `CuratorSellerVerifyResponse`.
+
+:::warning Internal-only authentication
+`verifySellerPayment()` requires curator's internal `x-api-key`, not standard SDK consumer keys. It returns `410 GONE` when the seller credential is inactive or fails a re-probe.
+:::
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `platform` | Yes | Seller payment platform: `venmo`, `cashapp`, or `wise` |
+| `txId` | Yes | Payment transaction identifier to verify |
+| `chainId` | Yes | Chain ID associated with the verification request |
+| `intent` | Yes | `SellerVerifyIntentDetails` payload for the seller payment verification |
+
+Optional `opts` fields:
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `baseApiUrl` | No | Override for the curator base API URL |
+| `timeoutMs` | No | Request timeout in milliseconds |
+
+```ts
+import {
+  Zkp2pClient,
+  type SellerVerifyIntentDetails,
+} from '@zkp2p/sdk';
+
+declare const sellerVerifyIntentDetails: SellerVerifyIntentDetails;
+
+const client = new Zkp2pClient({
+  walletClient,
+  chainId: 8453,
+});
+
+const response = await client.verifySellerPayment(
+  {
+    platform: 'wise',
+    txId: 'transfer_123',
+    chainId: 8453,
+    intent: sellerVerifyIntentDetails,
+  },
+  { timeoutMs: 10_000 },
+);
+```
+
 ## Querying on-chain data
 
 For common read flows, start with the RPC-first methods:
