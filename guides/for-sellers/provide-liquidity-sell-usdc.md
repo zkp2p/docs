@@ -94,8 +94,13 @@ Enter your username/account details for the selected platform:
 - Revolut Revtag  
 - Wise Wisetag  
 - Mercado Pago CVU  
+- PayPal Email
 
 > 🔍 **Double-check accuracy** — these details are how buyers send you money.
+
+:::info PayPal & Wise Extension Verification
+PayPal and Wise require account verification through the PeerAuth browser extension (v0.4.13+). After entering your payee details, follow the extension prompt to complete verification before your deposit goes live.
+:::
 
 ![Provide Step 10](/img/provide-liquidity/ProvideStep9.png)
 
