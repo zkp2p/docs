@@ -1,6 +1,6 @@
 ---
 title: Intent Hooks (V3)
-slug: /developer/api/v3/post-intent-hooks
+slug: /api/v3/post-intent-hooks
 ---
 
 # Intent Hooks
