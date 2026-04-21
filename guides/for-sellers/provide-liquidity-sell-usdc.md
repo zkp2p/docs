@@ -129,7 +129,7 @@ View the guide on optimal currency conversion rates for more tips.
 ### Step 11: Add Secondary Payment Platform (Optional)
 
 - Click **Add Payment** in the top right hand corner, if you want to accept multiple payment methods  
-- Repeat Steps 8–10 for the new platform  
+- Repeat Steps 8–10 for the new platform
 
 ![Provide Step 12](/img/provide-liquidity/ProvideStep12.png)
 
