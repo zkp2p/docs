@@ -63,13 +63,7 @@ You can also click the **Sell** button on the toolbar
 ![Provide Step 7](/img/provide-liquidity/ProvideStep7.png)
 
 
-### Step 8: Add Telegram Username (Optional)
-
-- Enter your Telegram username so buyers can contact you if any issues arise  
-
-![Provide Step 8](/img/provide-liquidity/ProvideStep7.png)
-
-### Step 9: Select Primary Payment Platform
+### Step 8: Select Primary Payment Platform
 
 Choose your preferred platform from the dropdown:
 
@@ -89,7 +83,7 @@ Choose your preferred platform from the dropdown:
 ![Provide Step 9](/img/provide-liquidity/ProvideStep9a.png)
 
 
-### Step 10: Enter Payee Details
+### Step 9: Enter Payee Details
 
 Enter your username/account details for the selected platform:
 
@@ -115,7 +109,7 @@ PayPal requires identity verification through the PeerAuth browser extension (v0
 ![Provide Step 10](/img/provide-liquidity/ProvideStep9.png)
 
 
-### Step 11: Set Exchange Rates
+### Step 10: Set Exchange Rates
 
 - Enter how much you want to sell your USDC for in each currency  
 - Adjust based on what you observed in Step 2
@@ -132,22 +126,22 @@ View the guide on optimal currency conversion rates for more tips.
 ![Provide Step 11](/img/provide-liquidity/ProvideStep11.png)
 
 
-### Step 12: Add Secondary Payment Platform (Optional)
+### Step 11: Add Secondary Payment Platform (Optional)
 
 - Click **Add Payment** in the top right hand corner, if you want to accept multiple payment methods  
-- Repeat Steps 9–11 for the new platform  
+- Repeat Steps 8–10 for the new platform  
 
 ![Provide Step 12](/img/provide-liquidity/ProvideStep12.png)
 
 
-### Step 13: Configure Order Limits (Optional)
+### Step 12: Configure Order Limits (Optional)
 
 - Click **Order Limits** to expand options  
 - Set **minimum** and **maximum** order sizes (e.g. 5 USDC → max: your total deposit) 
 
 ![Provide Step 13](/img/provide-liquidity/ProvideStep13.png)
 
-### Step 14: Review your details
+### Step 13: Review your details
 
 - Are my tags correct?
 - Are my spreads what I expected?
@@ -158,7 +152,7 @@ If all details are correct you can continue with your transaction!
 ![Provide Step 14](/img/provide-liquidity/ProvideStep14.png)
 
 
-### Step 15: Approve & Deposit into Vault
+### Step 14: Approve & Deposit into Vault
 
 - Click **Approve**  
 - After approval, confirm the **deposit transaction**
@@ -169,7 +163,7 @@ If all details are correct you can continue with your transaction!
 ![Provide Step 15](/img/provide-liquidity/ProvideStep15.png)
 
 
-### Step 16: Monitor Your Deposit
+### Step 15: Monitor Your Deposit
 
 - Go to the **Sell** tab  
 - You’ll see your active deposit showing:
