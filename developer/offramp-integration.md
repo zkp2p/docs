@@ -159,8 +159,6 @@ The expected `depositData` shape for each platform is:
 | Luxon | `luxon` | `{ luxonUsername: 'maker@example.com' }` | Use a lowercase Luxon email address. |
 | N26 | `n26` | `{ iban: 'DE89370400440532013000' }` | Pass a valid IBAN with spaces removed. |
 
-If you want to mirror the web app's posting flow exactly, you can also include `telegramUsername` alongside the required platform-specific field, but the processor-specific key above is the part curator actually validates.
-
 ```ts
 import { getPaymentMethodsCatalog, PLATFORM_METADATA, PAYMENT_PLATFORMS } from '@zkp2p/sdk';
 

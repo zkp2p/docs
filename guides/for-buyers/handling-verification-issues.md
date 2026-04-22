@@ -26,14 +26,13 @@ When you buy USDC or crypto through ZKP2P, the platform tries to automatically v
 2. If you just installed it, you might need to **refresh the page**  
 3. The extension needs proper permissions to access your payment data
 
-#### Contact the Seller or Support via Telegram
+#### Contact Support
 
 If verification continues to fail after multiple attempts:
 
-- Contact the seller or support through Telegram  
-- Sellers typically list their Telegram username in their deposit details  
+- Reach out in the [Peer Telegram](https://t.me/+XDj9FNnW-xs5ODNl) community group or [Discord](https://discord.gg/4hNVTv2MbH) for help  
 
-Send the following info to the seller:
+Send the following info to support:
 
 - Your order ID or transaction details  
 - Screenshot of your payment receipt/confirmation  
