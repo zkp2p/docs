@@ -151,7 +151,7 @@ The expected `depositData` shape for each platform is:
 | Venmo | `venmo` | `{ venmoUsername: 'YourVenmoUsername' }` | Do not include `@`. Curator validates the exact Venmo username casing. |
 | Revolut | `revolut` | `{ revolutUsername: 'your-revtag' }` | Do not include `@`. |
 | Cash App | `cashapp` | `{ cashtag: 'yourcashtag' }` | Do not include `$`. |
-| PayPal | `paypal` | `{ paypalEmail: 'maker@example.com' }` | Use the payee's PayPal email address. |
+| PayPal | `paypal` | `{ paypalMeUsername: 'yourpaypalmeusername' }` | Use the PayPal.me username without the `paypal.me/` prefix. Requires PeerAuth extension v0.4.14+. |
 | Zelle | `zelle` | `{ zelleEmail: 'maker@example.com' }` | Curator expects a lowercase email address. |
 | Monzo | `monzo` | `{ monzoMeUsername: 'your-monzo-me-name' }` | Use the Monzo.me username only. |
 | Mercado Pago | `mercadopago` | `{ cvu: '0000003100064367123868' }` | CVU must be a valid 22-digit Mercado Pago / bank CVU. |
