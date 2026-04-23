@@ -1,0 +1,19 @@
+## Summary
+
+- Updates the PayPal row in the `depositData` shape table to use `paypalMeUsername` instead of the deprecated `paypalEmail` field.
+- Documents the PeerAuth extension v0.4.14+ requirement for the new PayPal.me flow.
+
+## Why
+
+zkp2p-clients PR #649 shipped a breaking cutover: PayPal maker deposits now key off `normalizePaypalMeUsername(payeeDetails)` as `offchainId` instead of email. The existing docs reference the old `paypalEmail` shape which no longer works after the cutover.
+
+## Changes
+
+- **`developer/offramp-integration.md`**: Updated PayPal row (line 154) from `{ paypalEmail: 'maker@example.com' }` to `{ paypalMeUsername: 'yourpaypalmeusername' }` with updated description noting the `paypal.me/` prefix should be omitted and the v0.4.14+ extension requirement.
+
+## Test plan
+
+- `yarn build` — passed, all internal links compile-validated.
+- `git diff origin/main...HEAD` — confirmed exactly one line changed (PayPal row only).
+
+Closes #67
