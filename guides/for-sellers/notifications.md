@@ -38,4 +38,4 @@ The notifications sidebar is where makers (sellers) manage Telegram alerts for o
 - Telegram link failing? Retry and confirm the Telegram app is installed on your device.
 - Still stuck? Join [Peer Telegram](https://t.me/+XDj9FNnW-xs5ODNl) for help.
 
-➡️ _Next: [Handling Manual Releases](manual-releases.md)_
+➡️ _Next: [Automated Rate Management](automated-rate-management.md)_
