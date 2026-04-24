@@ -1,0 +1,1 @@
+docs: update seller guide paypal payee details to paypal.me username
