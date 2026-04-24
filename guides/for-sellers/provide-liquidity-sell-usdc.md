@@ -93,7 +93,7 @@ Enter your username/account details for the selected platform:
 - Revolut Revtag  
 - Wise Wisetag  
 - Mercado Pago CVU  
-- PayPal Email  
+- PayPal.me Username (e.g. `yourusername`, omit the `paypal.me/` prefix)  
 - Monzo.me Username  
 - N26 IBAN  
 - Alipay ID  
@@ -103,7 +103,7 @@ Enter your username/account details for the selected platform:
 > 🔍 **Double-check accuracy** — these details are how buyers send you money.
 
 :::info PeerAuth Extension Required for PayPal
-PayPal requires identity verification through the PeerAuth browser extension (v0.4.13+). When you select PayPal, you will be prompted to complete extension-based verification before your deposit goes live. This is the same flow used for Wise.
+PayPal requires identity verification through the PeerAuth browser extension (v0.4.14+). When you select PayPal, you will be prompted to complete extension-based verification before your deposit goes live. This is the same flow used for Wise. Enter your PayPal.me username (no `paypal.me/` prefix) — maker identity is now keyed off the normalized PayPal.me username, not your email.
 :::
 
 :::warning PayPal Business Accounts Not Supported
