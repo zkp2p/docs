@@ -5,12 +5,12 @@ title: Migration Guide (V2 → V3)
 
 # Migration Guide (V2 → V3)
 
-This guide helps integrators move from the V2 proof flow to the V3 attestation flow with minimal changes.
+How to move from the V2 proof flow to the V3 attestation flow with minimal changes.
 
 ### Key differences
 - Off-chain verification
   - V2: proof JSON (e.g., Reclaim/TLSN) was parsed/validated on-chain by per‑platform verifier contracts.
-  - V3: proofs are validated off-chain by the Attestation Service, which emits a signed `PaymentAttestation` verified by a single `UnifiedPaymentVerifier` on-chain.
+  - V3: proofs are validated off-chain by the Attestation Service, which emits a signed `PaymentAttestation` verified by a single `UnifiedPaymentVerifierV2` on-chain.
 - On-chain interface
   - V2: multiple verifiers per platform with heterogeneous calldata.
   - V3: one `paymentProof` encoding a `PaymentAttestation` and a fixed snapshot format.

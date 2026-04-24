@@ -4,7 +4,7 @@ title: Escrow
 
 ## Overview
 
-The Escrow contract allows users to lock ERC-20 tokens in order to receive off-chain payments. Users deposit tokens specifying:
+The Escrow contract allows users to lock ERC-20 tokens to receive off-chain payments. Users deposit tokens specifying:
 
 - Which off-chain payment verifiers they accept.
 - Conversion rates for various fiat currencies.

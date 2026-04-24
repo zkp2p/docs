@@ -19,7 +19,7 @@ src/
 
 ## Brand Package
 
-See `src/brand/CLAUDE.md` for comprehensive design system documentation.
+See `src/brand/CLAUDE.md` for the full design system documentation.
 
 Key exports:
 - `tokens.ts` - Colors, typography, spacing, gradients

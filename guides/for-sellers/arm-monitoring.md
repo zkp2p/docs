@@ -5,7 +5,7 @@ title: How to Monitor Your ARM Rates
 
 # How to Monitor Your ARM Rates
 
-Once ARM is running on your deposit, you should check in periodically to make sure your rates are competitive and your feeds are healthy.
+Once ARM is running on your deposit, check periodically that your rates are competitive and your feeds are healthy.
 
 ## Checking Your Rates on Peer
 

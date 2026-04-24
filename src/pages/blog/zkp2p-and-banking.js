@@ -31,7 +31,7 @@ export default function ZKP2PAndBanking() {
     content: `
 In a world where crypto users get de-banked, we've heard a lot of questions like "Will Wise close my account if I use ZKP2P?" The short answer is they shouldn't, but the long answer is slightly more complex.
 
-It's important to understand exactly what ZKP2P is and what it isn't:
+Here's what ZKP2P is and isn't:
 
 ZKP2P isn't an exchange. 
 
@@ -49,7 +49,7 @@ You don't trust a middleman.
 
 You are just using a smart contract to make your P2P trade verifiable, permissionless, and private. When used properly, it can be no riskier than paying your friend back for coffee.
 
-Banks are regulated, and have a duty to ensure that no fraudulent behaviour or transactions that go against their terms and conditions. It is important to note, ZKP2P doesn't interact with your bank, you do! So they key to staying safe is to behave like any other peer-to-peer transaction like sending money to a friend or relative.
+Banks are regulated, and have a duty to ensure that no fraudulent behaviour or transactions go against their terms and conditions. ZKP2P doesn't interact with your bank — you do. So the key to staying safe is to treat this like any other peer-to-peer transaction, such as sending money to a friend or relative.
 
 Here are some best practices that you can use when sending money: 
 

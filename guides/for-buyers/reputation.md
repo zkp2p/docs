@@ -21,7 +21,7 @@ P2P systems work best when participants are reliable. When a taker locks an orde
 
 Taker Tiers incentivize good behavior by rewarding consistent, reliable users with higher limits.
 
-Similar to other reputation systems on other P2P platforms, except this is computed entirely from your onchain activity.
+Similar to reputation systems on other P2P platforms, but computed entirely from your onchain activity.
 
 ## The Five Tiers
 

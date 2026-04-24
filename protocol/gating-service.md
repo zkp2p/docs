@@ -3,7 +3,7 @@ id: gating-service
 title: Gating Service
 ---
 
-The Gating Service is a periphery service that acts as a trusted relayer of identity verification and payment details offchain. The Gating Service does not have access to seller or buyer funds. All actions that the service conducts can be verifiably checked by either party to prevent undetected malicious behavior.
+The Gating Service is a periphery service that acts as a trusted relayer of identity verification and payment details offchain. The Gating Service does not have access to seller or buyer funds. Either party can verifiably check all service actions to prevent undetected malicious behavior.
 
 The Gating Service has 2 roles
 
