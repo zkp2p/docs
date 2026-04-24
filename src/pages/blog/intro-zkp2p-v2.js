@@ -44,7 +44,7 @@ Since then, our team has spent 2024 exploring applications using additional prim
 - A secondary ticketing marketplace for Ticketmaster tickets with 90% lower fees
 
 ### Revisiting the Onboarding Problem
-As our tech stack matured the past year, we're now doubling down on the most impactful market that we believe zkTLS enables–private and permissionless flow between fiat and crypto.
+As our tech stack matured the past year, we're now doubling down on the most impactful market that we believe zkTLS enables–seamless and permissionless flow between fiat and crypto.
 
 Despite the promise of Bitcoin as P2P electronic cash, payments on crypto rails have yet to be widely adopted globally and DeFi largely exists as a parallel financial system. This is because getting value across web2 and web3 is still the major bottleneck. Existing solutions fall short in crucial ways:
 
@@ -64,7 +64,7 @@ V2 incorporates the latest in programmable cryptography systems, product and UX 
 
 3. Permissionless integration. V2 is open source and deployed onchain, meaning applications can permissionlessly integrate and compose actions on top–unlike centralized solutions which for example require developers to KYC.
 
-4. Faster workflow. We've rewritten our entire stack to significantly reduce the number of steps required for onramping. This includes a headless extension flow and App Clips on mobile for verifying payments–no more popups or app downloads. Onramping fiat to crypto end-to-end now takes around 60 seconds.
+4. Streamlined workflow. We've rewritten our entire stack to significantly reduce the number of steps required for onramping. This includes usage of a headless extension flow and appclips on mobile for verifying payments–no more popups or app downloads. Onramping fiat to crypto end-to-end now takes around 60 seconds.
 
 ![Liquidity dashboard example](/img/v2/v2_liquidity_table.png)
 
@@ -83,7 +83,7 @@ ZKP2P V2 supercharges this base V1 workflow with 2 new design considerations in 
 ![High-level V2 flow](/img/v2/v2_flow_simple.png)
 
 ### Extensibility:
-V2 uses a generic escrow protocol that supports any ERC20 token and unlocking condition. These predicates can be defined using any programmable crypto primitive including zkEmail, zkTLS, MPCTLS, and TEEs (and anything in the future). For example, we can support:
+V2 is designed to be maximally flexible, which means a generic escrow protocol that supports any ERC20 token and unlocking condition. These predicates can be defined using any programmable crypto primitive including zkEmail, zkTLS, MPCTLS, and TEEs (and anything in the future). For example, we can support:
 
 1. If Venmo sends an email attesting to $X was transferred to Y person
 
@@ -100,7 +100,7 @@ Our [PeerAuth extension](https://chromewebstore.google.com/detail/peerauth-authe
 At launch, we currently support the proxy-TLS protocol, but will be quickly rolling out support for MPC-TLS, TEEs and zkEmail.
 
 ### Separation of concerns
-V2 assigns custody and settlement to the onchain protocol, which remains non-custodial, and keeps periphery logic offchain. In particular, we introduce an offchain relayer role that relays payee details, gates liquidity based on seller requirements, and abstracts gas and wallet signing.
+V2 is designed to optimize what each layer of our stack does best. Onchain for custody of funds and settlement of escrow transactions (the protocol will always remain non custodial). And offchain for any periphery logic. In particular, we introduce an offchain relayer role that relays payee details, gates liquidity based on seller requirements, and abstracts gas and wallet signing.
 
 Today, anyone can run a relaying service fully customizable to how they want to serve their users, should they choose to not user ZKP2P's default relayer. For example, a relayer that:
 

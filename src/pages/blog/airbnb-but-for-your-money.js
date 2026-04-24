@@ -31,7 +31,7 @@ export default function AirbnbButForYourMoney() {
     content: `
 Airbnb transformed how we travel, we stopped staying in boring hotel rooms or paying for a late checkout. Suddenly, you could book homes, apartments or even castles, with a kitchen, garden or desk with a view. Airbnb facilitated the trade between people who wanted a room and people who had a room. ZKP2P is doing the same for on chain money.
 
-Stablecoins are becoming mainstream, adding over $110 billion to their market cap in the last 12 months, but bringing them on and off chain fast, privately, and easily is still lacking. ZKP2P is becoming more than a marketplace, a "Capital as a Service" provider, a way that users can bring their idle money to earn better than TradFi yield, and bring their earned yield off-chain to meet their real world needs.
+Stablecoins are becoming mainstream, adding over $110 billion to their market cap in the last 12 months. Everyone is trying to get a piece of the pie, but bringing them on and off chain fast, privately, and easily is still lacking. ZKP2P is becoming more than a marketplace, a "Capital as a Service" provider, a way that users can bring their idle money to earn better than TradFi yield, and bring their earned yield off-chain to meet their real world needs.
 
 ZKP2P isn't building a bank, it's creating a permissionless protocol to match people who need capital with those who have capital; unreliant on institutions. Think of it as an order book of intents, every user becomes a market maker setting their own spread, payment method, and risk profile dependent on their own needs. Similar to how Airbnb lets users set price, dates, rules and availability, ZKP2P facilitates the interaction between capital providers and seekers matching based on intents.
 
@@ -47,7 +47,7 @@ These platforms charge significant (sometimes hidden) fees for the privilege of 
 
 We've seen Coinbase suffer a data breach where ~1% of their users data was leaked; Name, Addresses, Phone Numbers, ID Photos, Bank Details, and Transaction History. These users are now on a literal wrench list with their most sensitive data available to anyone. This is an overlooked risk, when platforms require custody of your data and your money. They can freeze your funds. They can suffer a data breach. And you're left exposed with minimal protections.
 
-ZKP2P uses zero-knowledge proofs to verify the data that matters; Date, Payment Amount, Hashed Recipient ID, and Currency, whilst protecting sensitive personal data. This results in a protocol that is open to anyone, anywhere, permissionlessly.
+ZKP2P leverages zero-knowledge proofs verifying data that matters; Date, Payment Amount, Hashed Recipient ID, and Currency, whilst protecting sensitive personal data. This results in a protocol that is open to anyone, anywhere, permissionlessly.
 
 ## Onramp the ZKP2P Way
 
@@ -94,4 +94,4 @@ Airbnb reimagined hotels. Uber reimagined taxis. ZKP2P is reimagining capital as
       </main>
     </Layout>
   );
-}
+} 

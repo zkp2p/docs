@@ -45,7 +45,7 @@ All in one tap.
 
 The Mini App users list their USDC at a discount range between 3-5% based on size, incentivising takers to send pesos. This creates a two sided benefit; Argentinians looking to onramp gain access to discounted USDC and those offramping enjoy faster settlement. We expect users to go from $WLD to Pesos in ~15 minutes or less.
 
-Comparing the two flows, Binance P2P has eight offramping steps, additional verification, and waiting for a buyer to come and take their offer. ZKP2P has 3 steps, with the most difficult condensed into a single tap. We then use our Telegram bot to alert our buyers to take the order. All of this happens in the World Mini App, users never have to leave the app they're comfortable using.
+Comparing the two flows, Binance P2P has eight offramping steps, additional verification, and waiting for a buyer to come and take their offer. ZKP2P has 3 steps, with the most difficult condensed into a single tap. We then utilise our Telegram bot to alert our buyers to take the order. All of this happens in the World Mini App, users never have to leave the app they're comfortable using.
 
 ![argentina](/img/accountabstraction/Argentina.jpeg)
 
@@ -71,7 +71,7 @@ Users are no longer tied or constrained to specific chains or wallets. We've ful
 
 #### Caching & Resilience
 
-To keep the experience fast and smooth, even on low spec devices and slow connections, we cache data briefly, use ephemeral logic to prevent duplicate processing, and handle repeated requests efficiently without impacting the user.
+To ensure a fast and smooth experience, even on low spec devices and in low bandwidth environments, we cache data briefly, use ephemeral logic to prevent duplicate processing, and handle repeated requests efficiently without impacting the user.
 
 Much like the orchestra below the stage, all the hard work and complexity happens behind the scenes, our user just sees the performance.
 
@@ -81,7 +81,7 @@ World's Universal Basic Income were just speculative token grants, but now they 
 
 By abstracting away the complexity of chains, swaps, bridges, and confirmations, we're pioneering the way to making crypto accessible for the next generation of users (aka we suffered so you don't have to!).
 
-This World Mini App model isn't limited to Argentina, and can be rolled out to other markets. It also isn't limited to World, it's the blueprint for chain-agnostic offramps anywhere that people need them. With one tap, someone can go from onchain assets to real world assets, non-custodially, permissionlessly, and fast.
+This World Mini App model isn't limited to Argentina, and can be seamlessly rolled out to other markets. It also isn't limited to World, it's the blueprint for chain-agnostic offramps anywhere that people need them. With one tap, someone can go from onchain assets to real world assets, non-custodially, permissionlessly, and fast.
 
 Max Account Abstraction makes crypto disappear, leaving global, instant, permissionless value transfer.
     `

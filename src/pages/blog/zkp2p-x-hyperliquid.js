@@ -33,7 +33,7 @@ export default function ZKP2PXHyperliquid() {
 
 Historically, Binance has been the default gateway for users entering crypto; to purchase tokens, either via a CEX or peer-to-peer, and then staying to trade on their perpetual exchange. The stack is integrated and easy to use, but it is centralised, permissioned, and opaque.
 
-ZKP2P challenges this model, offering a decentralised, fast, and permissionless fiat onramp that uses zk proofs and focuses on privacy. When paired with Hyperliquid, it forms a fully on chain alternative that can directly compete with the Binance behemoth.
+ZKP2P challenges this model, offering a decentralised, fast, and permissionless fiat onramp that leverages zk proofs and focuses on privacy. When paired with Hyperliquid, it forms a fully on chain alternative that can directly compete with the Binance behemoth.
 
 ### P2P: Centralised vs Permissionless
 
