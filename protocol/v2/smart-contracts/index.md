@@ -8,13 +8,13 @@ title: Smart Contracts
 
 ## Escrow
 
-The `Escrow` contract is designed to orchestrate the interaction between different actors in the ecosystem. It manages user registrations, deposits, and transaction intents, and employs Zero-Knowledge Proofs for validation purposes. Additionally, it provides mechanisms for dispute resolution, instant verification, and governance controls to maintain system integrity and ensure a secure and trustless environment for P2P transactions.
+The `Escrow` contract orchestrates interactions between actors in the ecosystem. It manages user registrations, deposits, and transaction intents, and uses Zero-Knowledge Proofs for validation. It also provides dispute resolution, instant verification, and governance controls to maintain a secure and trustless environment for P2P transactions.
 
 [](https://docs.peer.xyz/developer/smart-contracts#verifiers)
 
 ## Verifiers
 
-The Verifiers are contracts designed to verify and process on-chain proof of off-chain transactions, ensuring they conform to specified protocols. It validates various elements of the transactions including transaction amount, timestamp, recipient ID and intent hash. Through these validations, it facilitates secure transaction processing in the system.
+Verifiers check and process on-chain proof of off-chain transactions, ensuring they conform to specified protocols. They validate transaction amount, timestamp, recipient ID, and intent hash before the system processes the transaction.
 
 Verifiers conform to a `BasePaymentVerifier` [specification](https://github.com/zkp2p/zkp2p-v2-contracts/tree/main/contracts/verifiers/BaseVerifiers).
 

@@ -35,7 +35,7 @@ Since a web browser can't make TCP connection, we need to use a WebSocket proxy 
 
 ### Decentralization of Notaries
 
-Note that, the seller is trusting the Notary to not collude with the Buyer and generate fake proof of payment. The buyer is also trusting the Notary to not censor it. Currently ZKP2P runs both the Notary and websocket proxy. But we are commited to the decentralization roadmap and are coming up with solutions to solve both the collusion and censorship problem in a decentralized way. One solution that we are working on currently is the Optimistic Notarization flow.
+Note that, the seller is trusting the Notary to not collude with the Buyer and generate fake proof of payment. The buyer is also trusting the Notary to not censor it. Currently ZKP2P runs both the Notary and websocket proxy. But we are committed to the decentralization roadmap and are developing solutions for both the collusion and censorship problems in a decentralized way. One solution that we are working on currently is the Optimistic Notarization flow.
 
 #### Optimistic Notarization with a network of Notaries
 

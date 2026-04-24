@@ -11,7 +11,7 @@ Our mission is to bridge the gap between traditional Web2 platforms and decentra
 
 ### Background
 
-As crypto evolves (DeFi, NFTs, social, on-chain gaming), the necessity for seamless interoperability between fiat and cryptoassets becomes much more important. Existing solutions for onramping are not sufficient to address this need:
+As crypto evolves (DeFi, NFTs, social, on-chain gaming), interoperability between fiat and cryptoassets becomes increasingly important. Existing solutions for onramping are not sufficient to address this need:
 
 1. Not globally inclusive (Coinbase is not available everywhere)
 
@@ -33,12 +33,12 @@ ZKP2P is the first trust-minimized onramp and offramp protocol powered by advanc
 
 ### Why ZKP2P?
 
-- **Trustless**: By leveraging cryptographic proofs, ZKP2P eliminates the need for intermediaries to settle transactions and disputes, promoting direct peer-to-peer transfers.
+- **Trustless**: By using cryptographic proofs, ZKP2P eliminates the need for intermediaries to settle transactions and disputes, promoting direct peer-to-peer transfers.
 - **Private**: ZKP2P ensures the authenticity of transactions while keeping sensitive user data off-chain and hidden from the public.
-- **Interoperable**: The protocol is designed to integrate with popular Web2 payment rails, bridging traditional and decentralized finance.
+- **Interoperable**: The protocol integrates with popular Web2 payment rails, connecting traditional and decentralized finance.
 - **Low Fees**: Eliminates intermediaries by using ZK proofs of payment to minimize fees in fiat-to-crypto conversions.
 - **Fast**: Enables rapid, permissionless, private transactions that settle efficiently on-chain.
 
-ZKP2P isn’t building a bank, it’s creating a permissionless protocol to match people who need capital with those who have capital; unreliant on institutions. Think of it as an order book of intents, every user becomes a market maker setting their own spread, payment method, and risk profile dependent on their own needs. Similar to how Airbnb lets users set price, dates, rules and availability, ZKP2P facilitates the interaction between capital providers and seekers matching based on intents.
+ZKP2P isn’t building a bank. It is a permissionless protocol that matches people who need capital with those who have capital, independent of institutions. ZKP2P is an order book of intents where every user becomes a market maker, setting their own spread, payment method, and risk profile based on their needs. Similar to how Airbnb lets users set price, dates, rules, and availability, ZKP2P facilitates the interaction between capital providers and seekers by matching intents.
 
-ZKP2P is evolving into global, permissionless Capital-as-a-Service network deployed on-chain. Anyone can deploy idle funds, earn yield, and serve real world demand. ZKP2P isn't just a marketplace,  but programmable infrastructure for permissionless innovation around private, instant payments across borders and platforms.  
+ZKP2P is evolving into a global, permissionless Capital-as-a-Service network deployed on-chain. Anyone can deploy idle funds, earn yield, and serve real-world demand. ZKP2P is more than a marketplace. It is programmable infrastructure for private, instant payments across borders and platforms.

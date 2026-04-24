@@ -5,7 +5,7 @@ title: How to Monitor Your ARM Rates
 
 # How to Monitor Your ARM Rates
 
-Once ARM is running on your deposit, you should check in periodically to make sure your rates are competitive and your feeds are healthy.
+Once ARM is running on your deposit, check periodically that your rates are competitive and your feeds are healthy.
 
 ## Checking Your Rates on Peer
 
@@ -81,7 +81,7 @@ The ARM dashboard at [arm.peer.xyz](https://arm.peer.xyz) gives you a real-time 
   - Slow or no fills = your spread is too wide, or there's low demand for that currency
 
 :::info
-ARM is designed to run without constant monitoring. But checking in and adjusting your spreads based on market conditions and fill rates will maximize your returns.
+ARM can run without constant monitoring, but checking in and adjusting your spreads based on market conditions and fill rates will maximize your returns.
 :::
 
 ➡️ _Back to: [ARM Overview](automated-rate-management.md)_

@@ -9,7 +9,7 @@ title: Run a Vault
 Download [`create-a-vault-llm.md`](pathname:///create-a-vault-llm.md) and pass it to Claude, ChatGPT, or any LLM. It has everything an AI needs to build and deploy a vault for you: contracts, SDK methods, Peerlytics API, strategies, and a working rate engine example.
 :::
 
-This guide covers everything you need to create and operate a vault on Peer. A vault lets you manage conversion rates on behalf of depositors (liquidity providers) and earn a fee on every fulfilled order.
+How to create and operate a vault on Peer. A vault lets you manage conversion rates on behalf of depositors (liquidity providers) and earn a fee on every fulfilled order.
 
 Vaults use the `RateManagerV1` contract. All rate floor enforcement happens on `EscrowV2`.
 
@@ -188,7 +188,7 @@ You can filter rates by platform or currency to quickly check specific pairs.
 
 ## 7. Register your vault
 
-Once your vault is deployed and running, add it to the [vault-list registry](https://github.com/zkp2p/vault-list) so it appears on peer.xyz/vaults and is visible to depositors.
+Once your vault is deployed and running, add it to the [vault-list registry](https://github.com/zkp2p/vault-list) so depositors can find it on peer.xyz/vaults.
 
 ### Steps
 

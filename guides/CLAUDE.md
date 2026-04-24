@@ -4,7 +4,7 @@ End-user documentation for Peer buyers and sellers.
 
 ## Audience
 
-Non-technical users learning to use the Peer platform for fiat-to-crypto and crypto-to-fiat exchanges.
+Non-technical users who need help using the Peer platform for fiat-to-crypto and crypto-to-fiat exchanges.
 
 ## Directory Structure
 

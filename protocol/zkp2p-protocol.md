@@ -7,7 +7,7 @@ title: The ZKP2P Protocol
 
 ## Introduction
 
-The ZKP2P Protocol enables permissionless and fully noncustodial buying and selling of any offchain digital asset (e.g. fiat currencies) for any onchain asset (e.g. USDC, Ethereum, Solana). The protocol functions as a set of onchain smart contracts that escrows and unlocks tokens upon satisfaction of a predefined predicate (i.e. proof of web2 payment). These predicates can be defined in the form of any cryptographic primitive whether proxy-TLS (zkTLS), MPC-TLS (TLSNotary), zkEmail or TEEs.
+The ZKP2P Protocol enables permissionless and fully noncustodial buying and selling of any offchain digital asset (e.g. fiat currencies) for any onchain asset (e.g. USDC, Ethereum, Solana). The protocol functions as a set of onchain smart contracts that escrow and unlock tokens upon satisfaction of a predefined predicate (i.e. proof of web2 payment). These predicates can be defined in the form of any cryptographic primitive whether proxy-TLS (zkTLS), MPC-TLS (TLSNotary), zkEmail or TEEs.
 
 ## Previous Work
 
@@ -24,10 +24,9 @@ The ZKP2P V2 protocol was designed from the ground up to make it more generic, c
 2. Offchain gating service to enable pre transaction optional identity verification and gate liquidity to specific users
 3. Capital efficiency for sellers. Sellers can specify all fiat and platforms they are willing to receive payment in supported in the protocol for their deposited liquidity. This is in contrast to providing liquidity for each pool by itself
 4. Supports any cryptographic primitives including TEEs. Cryptographic primitives have been evolving rapidly and will continue to do so, therefore, the protocol must adapt to be able to support any primitive in the future
-5. Non custodial. V2 moves all logic that is not associated with fund transfers or custody to supporting relayers which decreases latency and steps for parties transacting in the protocol. While leveraging the blockchain for decentralization, and the non custodial nature of smart contracts. No one has access to user funds except themselves. And that will always remain the case
+5. Non custodial. V2 moves all logic that is not associated with fund transfers or custody to supporting relayers, which decreases latency and reduces steps for parties transacting in the protocol. While using the blockchain for decentralization and keeping the smart contracts non custodial, no one has access to user funds except the users themselves. And that will always remain the case
 
-
-Below is an illustrative example of the V2 protoclol flow using TLSNotary as the cryptographic primitive.
+Below is an illustrative example of the V2 protocol flow using TLSNotary as the cryptographic primitive.
 
 ![Protocol Overview](/img/developer/ZKP2PProtocolOverview.jpeg)
 
@@ -48,11 +47,11 @@ At a Glance
 
 
 ## User Flow
-**Signal Intent:** The buyer indicates an intention to on-ramp by creating an order and specifying the amount of the onchain asset they wish to receive. Once the order is created, the corresponding offramper's liquidity is locked in escrow the buyer a period of time to complete the offchain payment and generate a proof of transaction.
+**Signal Intent:** The buyer creates an order specifying the amount of the onchain asset they want to receive. Once the order is created, the corresponding offramper's liquidity is locked in escrow, giving the buyer a period of time to complete the offchain payment and generate a proof of transaction.
 
 **Perform Off-chain Payment.** Execute an offchain payment in fiat currency through the payment service to the designated seller
 
-**Proof of Payment:** After payment, the buyer generates a proof of payment data and it's authenticity along with also extracting the following from the payment data:
+**Proof of Payment:** After payment, the buyer generates a proof for the payment data and its authenticity, extracting the following from the payment data:
 - Off-ramper's Off-chain payment ID
 - Payment amount
 - Payment timestamp
@@ -71,11 +70,11 @@ At a Glance
 
 **Circuits / zkTLS protocol:** Cryptographic primitives that enable generation of private, secure and verifiable credentials to validate payments were made properly in a web2 context. Under the hood, these are proxy-TLS (Reclaim), MPC-TLS (TLSNotary), zkEmail and TEEs
 
-**PeerAuth Extension / Appclip:**  Browser extension and mobile appclip that enables users to generate privacy preserving web proofs using any cryptographic primitive (zkTLS, TLSNotary, zkEmail etc) similar to OAuth
+**PeerAuth Extension / Appclip:** Browser extension and mobile app clip that enables users to generate privacy-preserving web proofs using any cryptographic primitive (zkTLS, TLSNotary, zkEmail, etc.), similar to OAuth
 
-**Gating Service:**  Backend service that curates validates intents enabling sellers to only offer liquidity to users who pass any optional additional verification. Sellers trust the Gating Service to prevent buyers from submitting an intent to their liquidity if they haven't satisfied certain requirements (e.g. user identity). The gating service does not custody or touch funds ever. Conforms to a standard gating service specification as defined by the ZKP2P protocol.
+**Gating Service:** Backend service that curates and validates intents, enabling sellers to offer liquidity only to users who pass any optional additional verification. Sellers trust the Gating Service to prevent buyers from submitting an intent to their liquidity if they haven't satisfied certain requirements (e.g. user identity). The gating service does not custody or touch funds ever. Conforms to a standard gating service specification as defined by the ZKP2P protocol.
 
-**Attestation Service:** The attestation service is a backend service that validates proofs and returns an EIP-712 PaymentAttestation. It abstracts the complexity of zkTLS proof parsing and verification from the smart contracts. It also enables the protocol to support multiple zkTLS primitives going forward. It will be extended to support TEEs in the future.
+**Attestation Service:** The attestation service is a backend service that validates proofs and returns an EIP-712 PaymentAttestation. It abstracts the complexity of zkTLS proof parsing and verification from the smart contracts. It also enables the protocol to support multiple zkTLS primitives. It will be extended to support TEEs in the future.
 
 **Quoter Backend:** The quoter backend is a backend service that provides the best quotes for the protocol. It indexes all the liquidity in the protocol and provides a REST API for the front end to fetch quotes.
 
@@ -87,7 +86,7 @@ At a Glance
 ZKP2P builds upon the 0xParc/PSE [zkEmail](https://prove.email/) libraries to enable proof generation related to the contents of payment confirmation emails. These libraries are essential for verifying transaction details without exposing private information.
 
 ### TLSNotary Libraries
-ZKP2P utilizes [TLSNotary](https://tlsnotary.org/) for certain flows to enable TLS data to be used on-chain in a privacy preserving way.
+ZKP2P uses [TLSNotary](https://tlsnotary.org/) for certain flows to enable TLS data to be used on-chain in a privacy-preserving way.
 
 ### TLSProxy Libraries
-ZKP2P V2 utilizes Proxy based TLS protocols such as [Reclaim](https://reclaimprotocol.org/) to verify payments.
+ZKP2P V2 uses proxy-based TLS protocols such as [Reclaim](https://reclaimprotocol.org/) to verify payments.

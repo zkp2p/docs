@@ -3,7 +3,7 @@ id: privacy
 title: Privacy
 ---
 
-ZKP2P is committed to making sure that your transactions are as private as possible, and that your personal data is not exposed in anyway.
+ZKP2P keeps your transactions private and your personal data off-chain.
 
 
 > **I'm concerned that I'm giving PeerAuth OAuth access to all of my data when I'm on a website.**

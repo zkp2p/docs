@@ -10,7 +10,7 @@ In ZKP2P, all transactions are fully peer-to-peer, meaning onrampers are buying 
 
 Sellers receive payments on **Revolut, Cash App, Venmo, Wise**, and **Mercado Pago**, and buyers receive **USDC automatically**. Unlike other P2P marketplaces, the ZKP2P protocol **automatically verifies proof of payment** from the buyer using cryptography.
 
-You don’t need to be online to manually release crypto. Simply **deposit USDC** and passively wait for fiat to arrive in your payment account. Charge a spread to earn yield (often **>50% APR**) and rebalance your fiat back into crypto every few days.
+You don’t need to be online to manually release crypto. Just **deposit USDC** and wait for fiat to arrive in your payment account. Charge a spread to earn yield (often **>50% APR**) and rebalance your fiat back into crypto every few days.
 
 ### Get Started
 
