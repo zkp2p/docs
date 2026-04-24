@@ -3,7 +3,7 @@
 Since launching V2 in February, we've had exponential growth, going from $30k to $300k weekly volume, and hitting $1M+ monthly volume. Since then, we've been working on improving our products for buyers, liquidity providers, and developers.
 
 ![V2 Monthly and Weekly Volume](/img/v3/v2-volume.png)
-![*Figure 1: ZKP2P V2 weekly and monthly volume growth as of 3rd Nov 20225*]
+![*Figure 1: ZKP2P V2 weekly and monthly volume growth as of 3rd Nov 2025*]
 
 We’d made onramping and offramping via web2 payment providers easier, faster, and cheaper than CEXs and traditional ramps, but there is still work to be done to improve the user and developer experience. Over the past 4 months, we’ve received a lot of feedback about wrong currency payment errors. Liquidity Providers need to check rates constantly against rate fluctuations. Every new payment provider integration required a custom smart contract. 
 

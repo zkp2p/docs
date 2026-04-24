@@ -5,7 +5,7 @@ title: Complete Guide to Onboarding with ZKP2P
 
 # Complete Guide to Onboarding with ZKP2P
 
-This guide will walk you through the process of buying USDC and cryptocurrency on ZKP2P using various payment methods like Revolut, Venmo, Cash App, and Wise. ZKP2P allows you to buy USDC and crypto directly from peer liquidity providers with low fees and quick verification.
+How to buy USDC and cryptocurrency on ZKP2P using Revolut, Venmo, Cash App, Wise, and other payment methods. Buy directly from peer liquidity providers with low fees and quick verification.
 
 ### Step 1: Navigate to ZKP2P
 

@@ -13,7 +13,7 @@ This package provides:
 
 Extracted from **[Figma Brand Book](https://www.figma.com/design/uwou994XdkDmul4n8uz9cE)** and **[Figma UI Toolkit](https://www.figma.com/design/t6mxz4O8CtFKTNO58yt2cE?node-id=140-8907)** - the authoritative sources for all Peer brand specifications.
 
-See `DESIGN_SYSTEM_RULES.md` for comprehensive Figma-derived rules.
+See `DESIGN_SYSTEM_RULES.md` for Figma-derived rules.
 
 ## Package Structure
 

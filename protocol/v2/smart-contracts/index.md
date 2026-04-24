@@ -8,7 +8,7 @@ title: Smart Contracts
 
 ## Escrow
 
-The `Escrow` contract is designed to orchestrate the interaction between different actors in the ecosystem. It manages user registrations, deposits, and transaction intents, and employs Zero-Knowledge Proofs for validation purposes. Additionally, it provides mechanisms for dispute resolution, instant verification, and governance controls to maintain system integrity and ensure a secure and trustless environment for P2P transactions.
+The `Escrow` contract is designed to orchestrate the interaction between different actors in the ecosystem. It manages user registrations, deposits, and transaction intents, and uses Zero-Knowledge Proofs for validation. Additionally, it provides mechanisms for dispute resolution, instant verification, and governance controls to maintain system integrity and ensure a secure and trustless environment for P2P transactions.
 
 [](https://docs.peer.xyz/developer/smart-contracts#verifiers)
 

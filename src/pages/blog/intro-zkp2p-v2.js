@@ -44,7 +44,7 @@ Since then, our team has spent 2024 exploring applications using additional prim
 - A secondary ticketing marketplace for Ticketmaster tickets with 90% lower fees
 
 ### Revisiting the Onboarding Problem
-As our tech stack matured the past year, we're now doubling down on the most impactful market that we believe zkTLS enables–seamless and permissionless flow between fiat and crypto.
+As our tech stack matured the past year, we're now doubling down on the most impactful market that we believe zkTLS enables–private and permissionless flow between fiat and crypto.
 
 Despite the promise of Bitcoin as P2P electronic cash, payments on crypto rails have yet to be widely adopted globally and DeFi largely exists as a parallel financial system. This is because getting value across web2 and web3 is still the major bottleneck. Existing solutions fall short in crucial ways:
 
@@ -64,7 +64,7 @@ V2 incorporates the latest in programmable cryptography systems, product and UX 
 
 3. Permissionless integration. V2 is open source and deployed onchain, meaning applications can permissionlessly integrate and compose actions on top–unlike centralized solutions which for example require developers to KYC.
 
-4. Streamlined workflow. We've rewritten our entire stack to significantly reduce the number of steps required for onramping. This includes usage of a headless extension flow and appclips on mobile for verifying payments–no more popups or app downloads. Onramping fiat to crypto end-to-end now takes around 60 seconds.
+4. Faster workflow. We've rewritten our entire stack to significantly reduce the number of steps required for onramping. This includes a headless extension flow and App Clips on mobile for verifying payments–no more popups or app downloads. Onramping fiat to crypto end-to-end now takes around 60 seconds.
 
 ![Liquidity dashboard example](/img/v2/v2_liquidity_table.png)
 

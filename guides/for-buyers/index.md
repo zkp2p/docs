@@ -9,7 +9,7 @@ title: For Buyers
 
 Traditional P2P marketplaces make you wait for the seller to confirm your payment, message them, and send them your personal information. 
 
-By leveraging **Zero Knowledge proofs of payment**, your USDC is automatically released from escrow as soon as the payment is confirmed. No waiting for the seller to manually release, no messaging, and no sharing of personal information. 
+By using **Zero Knowledge proofs of payment**, your USDC is automatically released from escrow as soon as the payment is confirmed. No waiting for the seller to manually release, no messaging, and no sharing of personal information.
 
 
 ### Get Started

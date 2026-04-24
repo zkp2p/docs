@@ -5,7 +5,7 @@ title: How to Provide Liquidity and Sell USDC
 
 # How to Provide Liquidity and Sell USDC
 
-This guide will walk you through the process of providing liquidity on ZKP2P.
+How to provide liquidity on ZKP2P.
 
 ### Step 1: Navigate to ZKP2P
 
@@ -47,7 +47,7 @@ You can also click the **Sell** button on the toolbar
 
 ![Provide Step 5](/img/provide-liquidity/ProvideStep5.png)
 
-**- If you dont have enough USDC, check out the guide to depositing from any chain here!**
+**- If you don't have enough USDC, see the guide to depositing from any chain.**
 
 ### Step 6: Create New Deposit
 
@@ -149,7 +149,7 @@ View the guide on optimal currency conversion rates for more tips.
 
 - Are my tags correct?
 - Are my spreads what I expected?
-- How what proceeds can I expect from providing liquidity? 
+- What proceeds can I expect from providing liquidity?
 
 If all details are correct you can continue with your transaction! 
 
