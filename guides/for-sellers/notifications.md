@@ -5,7 +5,7 @@ title: Notifications and Alerts
 
 # Notifications and Alerts
 
-The notifications sidebar is where makers manage Telegram alerts for order and deposit activity. Open it from the bell icon next to your profile pill in the top-right navbar on desktop or mobile.
+The notifications sidebar is where makers (sellers) manage Telegram alerts for order and deposit activity. Open it from the bell icon next to your profile pill in the top-right navbar on both desktop and mobile.
 
 ### Opening the Notifications Sidebar
 
@@ -23,7 +23,7 @@ The notifications sidebar is where makers manage Telegram alerts for order and d
 
 ### Alert Preferences
 
-- Use the controls in the drawer to turn alerts on or off for the activity you want to track
+- Use the controls in the drawer to toggle order alerts on or off
 - Changes are handled inside the sidebar
 - Loading and error states are handled automatically
 
