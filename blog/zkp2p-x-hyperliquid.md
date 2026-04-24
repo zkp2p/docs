@@ -2,7 +2,7 @@
 
 Historically, Binance has been the default gateway for users entering crypto; to purchase tokens, either via a CEX or peer-to-peer, and then staying to trade on their perpetual exchange. The stack is integrated and easy to use, but it is centralised, permissioned, and opaque.
 
-ZKP2P challenges this model, offering a decentralised, fast, and permissionless fiat onramp that leverages zk proofs and focuses on privacy. When paired with Hyperliquid, it forms a fully on chain alternative that can directly compete with the Binance behemoth.
+ZKP2P challenges this model, offering a decentralised, fast, and permissionless fiat onramp that uses zk proofs and focuses on privacy. When paired with Hyperliquid, it forms a fully on chain alternative that can directly compete with the Binance behemoth.
 
 ### P2P: Centralised vs Permissionless
 
@@ -35,13 +35,15 @@ In contrast, Hyperliquid is:
 - Fully onchain
 - Self custodial
 - Comparable funding rates
-- Building the Onchain Stack
+
+### Building the Onchain Stack
 
 Hyperliquid and ZKP2P are both starting to become more composable within DeFi ecosystems. The former through products like hwHLP, bringing the yield bearing HyperCore asset to HyperEVM, and the latter through 1-click onramps and bridging, and vaults being built on top. They’re accelerating the future of a modular, permissionless financial stack where access and liquidity can flow freely. Both protocols are front end agnostic, enabling others to plug into the same infrastructure and fostering ecosystem development and innovation.
 
 Getting started with trading on Hyperliquid with ZKP2P is as much easier than getting started with Binance. You can go from your fiat payment app to the casino within 5 minutes:
 
-- Go to zkp2p.xyz and signal your intentChoose your amount, currency, and payment provider
+- Go to peer.xyz and signal your intent
+- Choose your amount, currency, and payment provider
 - Send your fiat to the counterparty through your payment app
 - Generate the proof using the PeerAuth extension (mobile soon™)
 - Complete your order and bridge to Hypercore

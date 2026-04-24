@@ -53,7 +53,7 @@ To recap, the ZKP2P V1 protocol was a simple construction:
 ZKP2P V2 supercharges this base V1 workflow with 2 new design considerations in mind: extensibility and separation of concerns.
 
 ### Extensibility:
-V2 is designed to be maximally flexible, which means a generic escrow protocol that supports any ERC20 token and unlocking condition. These predicates can be defined using any programmable crypto primitive including zkEmail, zkTLS, MPCTLS, and TEEs (and anything in the future). For example, we can support:
+V2 uses a generic escrow protocol that supports any ERC20 token and unlocking condition. These predicates can be defined using any programmable crypto primitive including zkEmail, zkTLS, MPCTLS, and TEEs (and anything in the future). For example, we can support:
 
 1. If Venmo sends an email attesting to $X was transferred to Y person
 
@@ -69,7 +69,7 @@ Our [PeerAuth extension](https://chromewebstore.google.com/detail/peerauth-authe
 At launch, we currently support the proxy-TLS protocol, but will be quickly rolling out support for MPC-TLS, TEEs and zkEmail.
 
 ### Separation of concerns
-V2 is designed to optimize what each layer of our stack does best. Onchain for custody of funds and settlement of escrow transactions (the protocol will always remain non custodial). And offchain for any periphery logic. In particular, we introduce an offchain relayer role that relays payee details, gates liquidity based on seller requirements, and abstracts gas and wallet signing.
+V2 assigns custody and settlement to the onchain protocol, which remains non-custodial, and keeps periphery logic offchain. In particular, we introduce an offchain relayer role that relays payee details, gates liquidity based on seller requirements, and abstracts gas and wallet signing.
 
 Today, anyone can run a relaying service fully customizable to how they want to serve their users, should they choose to not user ZKP2P's default relayer. For example, a relayer that:
 

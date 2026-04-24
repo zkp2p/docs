@@ -188,7 +188,7 @@ You can filter rates by platform or currency to quickly check specific pairs.
 
 ## 7. Register your vault
 
-Once your vault is deployed and running, add it to the [vault-list registry](https://github.com/zkp2p/vault-list) so it appears on peer.xyz/vaults and is visible to depositors.
+Once your vault is deployed and running, add it to the [vault-list registry](https://github.com/zkp2p/vault-list) so depositors can find it on peer.xyz/vaults.
 
 ### Steps
 

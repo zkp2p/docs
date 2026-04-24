@@ -81,7 +81,7 @@ The ARM dashboard at [arm.peer.xyz](https://arm.peer.xyz) gives you a real-time 
   - Slow or no fills = your spread is too wide, or there's low demand for that currency
 
 :::info
-ARM is designed to run without constant monitoring. But checking in and adjusting your spreads based on market conditions and fill rates will maximize your returns.
+ARM can run without constant monitoring, but checking in and adjusting your spreads based on market conditions and fill rates will maximize your returns.
 :::
 
 ➡️ _Back to: [ARM Overview](automated-rate-management.md)_

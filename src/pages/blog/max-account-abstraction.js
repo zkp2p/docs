@@ -71,7 +71,7 @@ Users are no longer tied or constrained to specific chains or wallets. We've ful
 
 #### Caching & Resilience
 
-To ensure a fast and smooth experience, even on low spec devices and in low bandwidth environments, we cache data briefly, use ephemeral logic to prevent duplicate processing, and handle repeated requests efficiently without impacting the user.
+To keep the experience fast and smooth, even on low spec devices and slow connections, we cache data briefly, use ephemeral logic to prevent duplicate processing, and handle repeated requests efficiently without impacting the user.
 
 Much like the orchestra below the stage, all the hard work and complexity happens behind the scenes, our user just sees the performance.
 
