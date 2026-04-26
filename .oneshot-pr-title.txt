@@ -1,1 +1,1 @@
-docs: deslop and tighten prose across all documentation
+docs: document frontend fee breakdown in buyer onboarding guide
