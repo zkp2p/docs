@@ -58,6 +58,23 @@ ZKP2P will automatically calculate how much USDC you'll receive based on liquidi
 - Verify the amount of USDC you'll receive  
 - Confirm the exchange rate is acceptable  
 
+#### Understanding the Fees
+
+Peer shows two fee rows above your USDC total, and each one hides automatically when it is zero:
+
+- **Frontend fee** — the total you pay to the peer network, bundled from multiple components. Hover the info icon for the breakdown.
+- **Network fee** — gas paid to Base to settle your order on-chain.
+
+The **Frontend fee** tooltip breaks down into up to five line items, in this order:
+
+- **Service fee** — the Peer curator service fee (sourced from the curator quote)
+- **Relay app fee** — the Relay API app fee charged by our bridge partner
+- **Relayer fee** — the Relay operator fee
+- **Relayer gas fee** — shown only when your relay path includes a gas-denominated relayer charge
+- **Referrer fee** — shown only when your order has a referrer code attached
+
+If you signed in with socials (Google, Email, X), gas is sponsored, so your **Network fee** shows as 0.
+
 ### Step 6: Start Your Order
 
 - Click the **Start Order** button to proceed  
