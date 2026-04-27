@@ -5,32 +5,26 @@ title: Notifications and Alerts
 
 # Notifications and Alerts
 
-The notifications sidebar is where makers (sellers) manage Telegram alerts for order and deposit activity. Open it from the bell icon next to your profile pill in the top-right navbar on both desktop and mobile.
+Manage Telegram alerts for orders and deposits from the notifications sidebar.
 
-### Opening the Notifications Sidebar
+### Opening the Sidebar
 
-- Click the bell icon next to your profile pill
-- The bell only appears when you are logged in with a connected wallet or social login, and when notifications are enabled for the app
-- The sidebar opens from the right side of the screen
-- If your profile drawer is open, it closes automatically when you open notifications so only one drawer is visible at a time
-- You can also open the same drawer from the **Notifications** shortcut inside the profile sidebar
+- Click the bell icon next to your profile pill in the top-right navbar
+- The bell appears once you are logged in with a wallet or social login
+- You can also open it from the **Notifications** shortcut inside the profile sidebar
 
 ### Linking Telegram
 
-- Open the notifications sidebar
-- Use the Telegram link control to connect your Telegram account
-- Linking Telegram is required before you can receive order alerts
+- Open the notifications sidebar and connect your Telegram account
+- You must link Telegram before you can receive alerts
 
 ### Alert Preferences
 
-- Use the controls in the drawer to toggle order alerts on or off
-- Changes are handled inside the sidebar
-- Loading and error states are handled automatically
+- Toggle order alerts on or off from the sidebar controls
 
 ### Unlinking Telegram
 
-- Open the same notifications drawer
-- Use the unlink option to disconnect Telegram and stop receiving alerts
+- Open the sidebar and use the unlink option to disconnect Telegram and stop alerts
 
 ### Troubleshooting
 
