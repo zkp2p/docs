@@ -1,19 +1,21 @@
 ## Summary
 
-- Adds a **Backup Linking via Code** subsection under the existing **Linking Telegram** heading in the seller notifications guide
-- Documents the alternate code-based Telegram linking flow (expand → generate code → open Telegram → send `/link <code>`) including expiry and manual fallback
-- UI strings verified against `TelegramLinkCode.tsx` in `zkp2p-clients` origin/main
+- Seller guide: reworded "PayPal Business Accounts Not Supported" warning to scope the restriction to the maker/deposit side only, and added a note that buyers CAN pay from Business accounts
+- Buyer guide: added an info admonition in Step 9 explaining the "PayPal account type" selector buyers must set correctly (Personal vs Business) before PayPal verification
 
 ## Why
 
-PR #72 shipped the notifications guide before the backup code-linking flow landed in `zkp2p-clients` PR #698 (merged 2026-04-24). Sellers who hit widget failures had no documented fallback path.
+zkp2p-clients PR #654 (merged 2026-04-23) added PayPal Business verification support for buyers. The existing docs blanket-stated "PayPal Business accounts are not supported" without qualifying that the restriction is maker-only, and never mentioned the new Personal/Business account-type selector that buyers see at verification time. Picking the wrong type causes verification to fail silently.
 
 ## Changes
 
-- `guides/for-sellers/notifications.md` — new `#### Backup Linking via Code` subsection inserted after the existing Linking Telegram bullets, before Alert Preferences
+- `guides/for-sellers/provide-liquidity-sell-usdc.md` — rewrote the PayPal Business warning admonition to clarify deposits-only restriction and add taker clarifier
+- `guides/for-buyers/complete-guide-to-onboarding.md` — inserted `:::info` admonition between Step 9 and Step 10 explaining the account type selector
 
 ## Test plan
 
-- `yarn build` — succeeded, no broken links or build errors
+- Verified UI label strings ("PayPal account type", "Select account type", "Personal", "Business") against zkp2p-clients origin/main at `PaymentTable.tsx:721-722` and `paypal.ts:292-297`
+- `yarn build` passed with no broken-link warnings or console errors
+- Confirmed only two files changed via `git diff --name-only origin/main...HEAD`
 
-Closes #75
+Closes #84
