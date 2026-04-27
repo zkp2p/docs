@@ -58,6 +58,15 @@ ZKP2P will automatically calculate how much USDC you'll receive based on liquidi
 - Verify the amount of USDC you'll receive  
 - Confirm the exchange rate is acceptable  
 
+#### Understanding the Fees
+
+Two fee rows appear above your USDC total. Either row hides when its value is zero.
+
+- **Frontend fee** — the total platform fee for your order. Hover the info icon to see the breakdown (service fee, referrer fee if applicable, and bridge relay fees).
+- **Network fee** — gas paid to Base to settle the order on-chain.
+
+If you signed in with socials (Google, Email, or X), gas is sponsored and the Network fee shows as 0.
+
 ### Step 6: Start Your Order
 
 - Click the **Start Order** button to proceed  
