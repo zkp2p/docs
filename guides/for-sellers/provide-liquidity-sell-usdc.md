@@ -140,8 +140,13 @@ View the guide on optimal currency conversion rates for more tips.
 
 ### Step 12: Configure Order Limits (Optional)
 
-- Click **Order Limits** to expand options  
-- Set **minimum** and **maximum** order sizes (e.g. 5 USDC → max: your total deposit) 
+Default order limits are applied automatically:
+
+- Deposits of **101 USDC or less** set the minimum order to roughly 5% of the deposit
+- Deposits above **101 USDC** set the minimum order to **101 USDC**
+- The maximum order always defaults to the full deposit amount
+
+To override either limit, click **Order Limits** and enter your own values.
 
 ![Provide Step 13](/img/provide-liquidity/ProvideStep13.png)
 
