@@ -207,5 +207,6 @@ If all details are correct you can continue with your transaction!
 - Long pending? Check gas — you need ETH on Base  
 - Deposit not appearing? Refresh or reconnect wallet  
 - Still stuck? Join [Peer Telegram](https://t.me/+XDj9FNnW-xs5ODNl) for help  
+- Want order alerts? Set them up in [Notifications and Alerts](notifications.md)
 
 ➡️ _Next: [How to Update USDC Conversion Rates](update-usdc-rates.md)_
