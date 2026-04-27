@@ -1,1 +1,1 @@
-docs: deslop and tighten prose across all documentation
+docs: clarify PayPal Business support is buyer-only
