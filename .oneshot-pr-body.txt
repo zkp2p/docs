@@ -1,20 +1,20 @@
 ## Summary
-- Remove jargon ('leveraging', 'utilize', 'streamline', 'comprehensive', 'seamlessly', 'It is important to note') across documentation and JSX copy, replacing it with direct alternatives
-- Tighten prose: cut throat-clearing intros, convert passive voice to active, remove filler phrases
-- Fix typos ('protoclol' → 'protocol', '20225' → '2025', 'commited' → 'committed', 'they key' → 'the key')
-- Correct `UnifiedPaymentVerifier` → `UnifiedPaymentVerifierV2` in V3 migration guide
+
+- Updates Step 12 (Configure Order Limits) in the seller guide to explain how default minimum and maximum order sizes are now set automatically
+- Deposits at or below 101 USDC default the minimum to ~5% of the deposit; deposits above 101 USDC default the minimum to 101 USDC
+- Describes how to override defaults via the Order Limits section
 
 ## Why
-Documentation accumulated jargon and filler that made it harder to read. A full editorial pass brings every doc to a consistent, direct voice and fixes factual inaccuracies in technical references.
+
+The create-deposit flow shipped a new default minimum order behavior (zkp2p-clients #701 / #705). The existing guide only showed a static example of 5 USDC and did not explain the automatic defaults, leaving makers unaware of why their minimum order differs from the old percentage-based formula.
+
+Closes zkp2p/docs#77
 
 ## Changes
-- **Blog posts** (`blog/`, `src/pages/blog/`): Light touch — replaced 'leveraging' with 'using', 'utilize' with 'use', 'seamlessly' with direct phrasing, fixed missing newlines at EOF, corrected year typo in V3 intro
-- **User guides** (`guides/`): Rewrote wordy intros ('This guide will walk you through...' → direct descriptions), removed hedge language, tightened instructions
-- **Protocol docs** (`protocol/`): Replaced slop terms, fixed typo in 'protoclol', corrected contract name in migration guide, tightened technical descriptions
-- **Developer docs** (`developer/`): Replaced 'facilitate' with 'enable' in provider integration overview
-- **Internal instruction files** (`guides/`, `src/`, `src/brand/`): Removed flagged terms while preserving instructional tone
-- **JSX blog pages** (`src/pages/blog/`): Mirrored all prose changes from markdown sources, fixed missing EOF newlines
+
+- `guides/for-sellers/provide-liquidity-sell-usdc.md` — rewrote Step 12 body to describe automatic defaults before the optional override, keeping heading and image reference unchanged
 
 ## Test plan
-- `yarn typecheck` (not available: no `typecheck` script is defined)
-- `yarn build`
+
+- `yarn build` — succeeded with no broken link or missing image warnings
+- Confirmed only Step 12 content changed via `git diff origin/main...HEAD`
