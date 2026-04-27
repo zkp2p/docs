@@ -106,8 +106,10 @@ Enter your username/account details for the selected platform:
 PayPal requires identity verification through the PeerAuth browser extension (v0.4.14+). When you select PayPal, you will be prompted to complete extension-based verification before your deposit goes live. This is the same flow used for Wise. Enter your PayPal.me username (no `paypal.me/` prefix) — maker identity is now keyed off the normalized PayPal.me username, not your email.
 :::
 
-:::warning PayPal Business Accounts Not Supported
-PayPal Business accounts are not supported. Business accounts redirect to a different page during PeerAuth verification, causing registration to fail silently. Use a personal PayPal account instead.
+:::warning PayPal Business Accounts Not Supported for Deposits
+Deposits must use a **personal** PayPal account. PayPal Business accounts cannot register as makers — extension registration fails silently because Business accounts redirect to a different page during PeerAuth verification.
+
+Note: Buyers (takers) CAN pay you from a PayPal Business account — they pick "Business" in the "PayPal account type" selector at verification time. This restriction only affects the maker/deposit side.
 :::
 
 ![Provide Step 10](/img/provide-liquidity/ProvideStep9.png)
