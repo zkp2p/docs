@@ -1,1 +1,1 @@
-docs: describe default minimum order limits in seller guide
+docs: deslop and tighten prose across all documentation
