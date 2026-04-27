@@ -1,20 +1,20 @@
 ## Summary
 
-- New guide `guides/for-sellers/delegate-to-a-vault.md` covering what vault delegation does, how to enable it, how to choose a vault, and post-deposit states.
-- Wired into `guides-sidebars.js` after `manual-releases` and before `notifications` in the For Sellers section.
-- All UI labels verified against `zkp2p-clients` source (ExpressMode, AdvancedMode, VaultDelegationPanel, VaultDelegationCTA).
+- Add new seller guide explaining how to create Private Orders with Peer Pay inline whitelisting
+- Add sidebar entry in For Sellers section between Manual Releases and ARM
 
 ## Why
 
-Vault delegation shipped in zkp2p-clients commit 10f00f53 (2026-04-27) with zero docs coverage. Sellers need a reference for enabling delegation, choosing a vault, and understanding post-deposit follow-up states.
+zkp2p-clients PR #714 shipped the Private Orders + Peer Pay inline creation feature in both Express and Advanced deposit flows. Existing protocol docs cover the underlying whitelist hook at the contract level, but there was no user-facing guide for sellers.
 
-Closes zkp2p/docs#88
+Closes #80
 
 ## Changes
 
-- **`guides/for-sellers/delegate-to-a-vault.md`** — New doc covering: what delegation does (with verbatim tip quote), who it's for (cross-link to ARM), toggle location (Express + Advanced, phase flag note), vault selection (sort tabs, pagination, card metrics, empty state), post-deposit states (Express and Advanced CTA labels, success/unavailable/error states), and next steps (vaults page, vault manager guide).
-- **`guides-sidebars.js`** — Added `for-sellers/delegate-to-a-vault` to the For Sellers items array between `manual-releases` and `notifications`.
+- **guides/for-sellers/private-orders.md** -- new guide covering who the feature is for, step-by-step enable flow, key behaviors, and common issues
+- **guides-sidebars.js** -- added `for-sellers/private-orders` entry after `manual-releases` and before the ARM category
 
 ## Test plan
 
-- `yarn build` — succeeded with zero broken-link warnings.
+- `yarn build` -- passed, all internal links compile-validated
+- `git diff --stat origin/main...HEAD` -- confirms exactly 2 files changed (1 new, 1 modified)
