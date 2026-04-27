@@ -204,3 +204,11 @@ If all details are correct you can continue with your transaction!
 - Still stuck? Join [Peer Telegram](https://t.me/+XDj9FNnW-xs5ODNl) for help  
 
 ➡️ _Next: [How to Update USDC Conversion Rates](update-usdc-rates.md)_
+
+## 💰 Bounty Contribution
+
+- **Task:** docs: document 101 USDC default minimum order for deposits above 101 USDC
+- **Reward:** $101
+- **Source:** GitHub-Paid
+- **Date:** 2026-04-27
+
