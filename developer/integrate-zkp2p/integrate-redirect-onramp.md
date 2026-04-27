@@ -117,16 +117,21 @@ import {
 Pass these parameters as an object to `peerExtensionSdk.onramp()`. The SDK builds and validates the query string for you.
 
 | Parameter | Description | Type | Example |
-|-----------|-------------|------|---------| 
+|-----------|-------------|------|---------|
 | `referrer` | (Recommended) Your application name shown in the extension | String | `referrer=Rampy` |
-| `referrerLogo` | (Recommended) Your application logo | String | `referrerLogo=https://<logo-link>` |
+| `referrerLogo` | (Recommended) Your application logo. Must be an `http` or `https` URL. | String | `referrerLogo=https://<logo-link>` |
 | `inputCurrency` | (Optional) Input currency user wants to swap. Defaults to the user's local currency when available, otherwise USD. | String | `inputCurrency=USD` |
 | `inputAmount` | (Optional) Amount of input currency the user wants to swap | String or number (up to 6 decimal places) | `inputAmount=12.34` |
-| `paymentPlatform` | (Optional) Preferred payment platform for the initial quote. The user can still choose a different one in the extension. | String | `paymentPlatform=venmo` |
-| `amountUsdc` | (Optional) Exact USDC output amount in base units (`1000000` = `1` USDC). Requires `recipientAddress`. | String, number, or bigint | `amountUsdc=1000000` |
+| `paymentPlatform` | (Optional) Preferred payment platform for the initial quote. Required for exact-deposit handoffs. | String | `paymentPlatform=venmo` |
+| `depositId` | (Optional) Exact maker deposit selected by the source page. Use a string or bigint for large ids. | String, number, or bigint | `depositId=12345678901234567890` |
+| `amountUsdc` | (Optional) Base USDC amount in raw 6-decimal units (`1000000` = `1` USDC). Used for exact-output and exact-deposit handoffs. | String, number, or bigint | `amountUsdc=1000000` |
 | `toToken` | (Optional) Output token the user will onramp to | String (Has to be in the format explained below) | `toToken=8453:0x0000000000000000000000000000000000000000` |
-| `recipientAddress` | (Optional) Address to which the output tokens will be sent. | String | `recipientAddress=0xf39...66` |
+| `recipientAddress` | (Optional) Address to which the output tokens will be sent. Defaults to the connected extension wallet when omitted. | String | `recipientAddress=0xf39...66` |
 | `intentHash` | (Optional) Existing intent hash to reopen directly in the send-payment step. Must be a `0x`-prefixed 32-byte hex string. | String | `intentHash=0xabc...123` |
+
+:::note Exact-order constraints
+Only pass `depositId` as the public exact-order constraint. Do not pass `escrowAddress`, `paymentMethodHash`, or `hashedOnchainId` through the onramp URL. The extension uses SDK/backend escrow defaults, and it derives the payment method hash from `paymentPlatform`.
+:::
 
 ### Completion Callback
 
@@ -154,7 +159,7 @@ type PeerIntentFulfilledResult = {
   destinationToken: string | null;
   bridge: {
     required: boolean;
-    status: 'not_required' | 'pending';
+    status: 'not_required' | 'pending' | 'completed';
     trackingUrl?: string | null;
     txHashes?: Array<{ txHash: `0x${string}`; chainId: number }>;
     outputAmount?: string | null;
@@ -163,11 +168,11 @@ type PeerIntentFulfilledResult = {
 };
 ```
 
-Current callback semantics in extension `0.4.9`:
+Current callback semantics:
 
 - Non-bridge orders emit once with `bridge.status = 'not_required'`
 - Bridge orders emit once after fulfill succeeds with `bridge.status = 'pending'`
-- Bridge completion is not emitted as a second callback today; use `bridge.trackingUrl` or `bridge.txHashes` to continue tracking
+- Bridge orders emit again after destination bridge completion with `bridge.status = 'completed'`
 - The callback is delivered only to the tab that originally called `onramp()`
 
 ### To Token
@@ -253,9 +258,9 @@ peerExtensionSdk.onramp({
 Onramp exactly 1 USDC on Base to a recipient address. Users can choose their preferred currency and payment method. The best available quote is fetched and displayed so the user can complete the order.
 
 :::note
-- Exact amount output is currently only available for USDC and not for other tokens
-- `amountUsdc` overrides any output token (`toToken`) and input (`inputAmount`) params
-- `recipientAddress` is required for the exact output flow
+- `amountUsdc` is denominated in Base USDC raw units, even when `toToken` is a non-Base-USDC destination token.
+- If `toToken` points to another token or chain, the extension uses `amountUsdc` as the Base USDC source amount and keeps the bridge quote/execution path active.
+- `recipientAddress` is recommended. When omitted, the extension defaults to the connected extension wallet.
 :::
 
 ```ts
@@ -266,6 +271,34 @@ peerExtensionSdk.onramp({
   recipientAddress: '0x84e113087C97Cd80eA9D78983D4B8Ff61ECa1929',
 });
 ```
+
+#### Onramp an Exact Liquidity Deposit
+
+Use this when your app already knows the maker deposit and amount the user selected, such as a liquidity page handing off an exact order into the extension.
+
+```ts
+peerExtensionSdk.onramp({
+  referrer: 'Liquidity Page',
+  referrerLogo: 'https://app.peer.xyz/logo.svg',
+  inputCurrency: 'USD',
+  inputAmount: '500',
+  paymentPlatform: 'venmo',
+  depositId: '12345678901234567890',
+  amountUsdc: '488280000',
+  toToken: '8453:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
+  recipientAddress: '0x84e113087C97Cd80eA9D78983D4B8Ff61ECa1929',
+});
+```
+
+Exact-deposit semantics:
+
+- `depositId` scopes the extension quote to the maker deposit the user selected.
+- `amountUsdc` is the selected Base USDC receive amount in raw 6-decimal units.
+- `inputAmount` is the fiat amount the user pays for that selected deposit.
+- `paymentPlatform` identifies the payment platform and is used to derive the payment method hash.
+- If `toToken` is not Base USDC, the selected Base USDC amount remains the source amount and Relay prices the destination output.
+
+Always serialize exact deposit ids as strings unless the value is known to be within JavaScript's safe integer range. Deposit ids are protocol identifiers and must remain lossless from the page URL through quote matching.
 
 ### Migrating From Pre-`0.4.9`
 
