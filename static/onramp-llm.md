@@ -32,14 +32,19 @@ const unsubscribe = peerSdk.onIntentFulfilled((result) => {
     return;
   }
 
+  if (result.bridge.status === 'completed') {
+    console.log('Peer bridge complete:', result.bridge.txHashes);
+    return;
+  }
+
   console.log('Peer fulfill complete, bridge pending:', result.bridge.trackingUrl);
 });
 ```
 
 - Register the listener before calling `peerSdk.onramp(...)`.
 - Non-bridge flows emit once with `bridge.status = 'not_required'`.
-- Bridge flows emit once with `bridge.status = 'pending'`.
-- There is no second bridge-complete callback today. Use `trackingUrl` or `txHashes` to keep tracking.
+- Bridge flows emit once after fulfill with `bridge.status = 'pending'`.
+- Bridge flows emit again after destination completion with `bridge.status = 'completed'`.
 
 ## 4. Open the onramp side panel
 
@@ -51,6 +56,7 @@ peerSdk.onramp({
   referrerLogo: '<https://your-site/logo>',   // Must be http/https URL, not a data URI
   inputCurrency: 'USD',                       // Optional fiat currency
   inputAmount: '25',                          // Optional fiat amount, up to 6 decimals
+  // depositId + amountUsdc can be added for exact selected liquidity orders.
 });
 ```
 
@@ -65,8 +71,11 @@ peerSdk.onramp({
 | `inputCurrency` | Optional | Fiat currency code (e.g. `USD`, `EUR`). Defaults to user's locale |
 | `inputAmount` | Optional | Fiat amount to convert (up to 6 decimal places) |
 | `paymentPlatform` | Optional | Preferred payment method (e.g. `venmo`, `revolut`) — not enforced |
-| `amountUsdc` | Optional | Exact USDC output amount in base units (e.g. `1000000` = 1 USDC). Overrides `toToken` and `inputAmount`. Requires `recipientAddress` |
+| `depositId` | Optional | Exact maker deposit selected by the source page. Use a string or bigint for large ids |
+| `amountUsdc` | Optional | Base USDC amount in raw 6-decimal units (e.g. `1000000` = 1 USDC). Used for exact-output and exact-deposit handoffs |
 | `intentHash` | Optional | Existing `0x`-prefixed 32-byte intent hash to reopen directly in the send-payment step |
+
+Do not pass `escrowAddress`, `paymentMethodHash`, or `hashedOnchainId`. For exact selected liquidity orders, pass `depositId`, `paymentPlatform`, `inputAmount`, and `amountUsdc`; the extension derives the payment method hash and uses SDK/backend escrow defaults.
 
 ### Supported chains for `toToken`
 
