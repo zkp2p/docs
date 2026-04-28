@@ -28,6 +28,7 @@ module.exports = {
         'for-sellers/calculating-apr',
         'for-sellers/manual-releases',
         'for-sellers/notifications',
+        'for-sellers/private-orders',
         {
           type: 'category',
           label: 'Automated Rate Management (ARM)',

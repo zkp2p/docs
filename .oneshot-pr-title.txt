@@ -1,1 +1,1 @@
-docs: deslop and tighten prose across all documentation
+docs: add private orders seller guide
