@@ -26,6 +26,7 @@ module.exports = {
         'for-sellers/provide-liquidity-diff-chain',
         'for-sellers/update-usdc-rates',
         'for-sellers/calculating-apr',
+        'for-sellers/monitor-your-deposit',
         'for-sellers/manual-releases',
         'for-sellers/notifications',
         {

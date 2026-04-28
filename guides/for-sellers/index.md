@@ -20,6 +20,7 @@ Below are guides to get started as a seller of USDC on ZKP2P:
 - [How to Provide Liquidity from another chain](provide-liquidity-diff-chain.md)
 - [How to Update USDC Conversion Rates](update-usdc-rates.md)
 - [Calculating APR](calculating-apr.md)
+- [How to Monitor Your Deposit](monitor-your-deposit.md)
 
 ### Automated Rate Management (ARM)
 
