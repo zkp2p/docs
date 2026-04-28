@@ -1,21 +1,21 @@
 ## Summary
 
-- Seller guide: reworded "PayPal Business Accounts Not Supported" warning to scope the restriction to the maker/deposit side only, and added a note that buyers CAN pay from Business accounts
-- Buyer guide: added an info admonition in Step 9 explaining the "PayPal account type" selector buyers must set correctly (Personal vs Business) before PayPal verification
+- Adds a new seller guide (`guides/for-sellers/monitor-your-deposit.md`) covering the deposit table columns and the deposit detail StatsBar shipped in zkp2p-clients PR #716.
+- Registers the new guide in the For Sellers sidebar and index page.
 
 ## Why
 
-zkp2p-clients PR #654 (merged 2026-04-23) added PayPal Business verification support for buyers. The existing docs blanket-stated "PayPal Business accounts are not supported" without qualifying that the restriction is maker-only, and never mentioned the new Personal/Business account-type selector that buyers see at verification time. Picking the wrong type causes verification to fail silently.
+Sellers had no documentation for interpreting the deposit table columns (Remaining, Taken utilization bar, PnL, status badges) or the six-stat detail view (Available, Volume, Utilization, Fills, Realized PnL, APR). This fills that gap so sellers can tune spreads with confidence.
+
+Closes zkp2p/docs#86
 
 ## Changes
 
-- `guides/for-sellers/provide-liquidity-sell-usdc.md` — rewrote the PayPal Business warning admonition to clarify deposits-only restriction and add taker clarifier
-- `guides/for-buyers/complete-guide-to-onboarding.md` — inserted `:::info` admonition between Step 9 and Step 10 explaining the account type selector
+- **`guides/for-sellers/monitor-your-deposit.md`** — New guide with three sections: reading the deposits table, reading the deposit detail StatsBar (with exact tooltip strings), and status badge definitions.
+- **`guides/for-sellers/index.md`** — Added link to the new guide in the Get Started list.
+- **`guides-sidebars.js`** — Added `for-sellers/monitor-your-deposit` after `calculating-apr` in the For Sellers sidebar group.
 
 ## Test plan
 
-- Verified UI label strings ("PayPal account type", "Select account type", "Personal", "Business") against zkp2p-clients origin/main at `PaymentTable.tsx:721-722` and `paypal.ts:292-297`
-- `yarn build` passed with no broken-link warnings or console errors
-- Confirmed only two files changed via `git diff --name-only origin/main...HEAD`
-
-Closes #84
+- `yarn build` — succeeded with no broken-link warnings or errors.
+- `git diff --stat origin/main...HEAD` — confirmed only the three expected files changed (89 insertions).

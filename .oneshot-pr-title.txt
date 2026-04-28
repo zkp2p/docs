@@ -1,1 +1,1 @@
-docs: clarify PayPal Business support is buyer-only
+docs: add seller guide for deposit monitoring metrics
