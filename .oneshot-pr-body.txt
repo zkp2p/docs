@@ -1,20 +1,21 @@
 ## Summary
-- Remove jargon ('leveraging', 'utilize', 'streamline', 'comprehensive', 'seamlessly', 'It is important to note') across documentation and JSX copy, replacing it with direct alternatives
-- Tighten prose: cut throat-clearing intros, convert passive voice to active, remove filler phrases
-- Fix typos ('protoclol' → 'protocol', '20225' → '2025', 'commited' → 'committed', 'they key' → 'the key')
-- Correct `UnifiedPaymentVerifier` → `UnifiedPaymentVerifierV2` in V3 migration guide
+
+- Adds a new seller guide (`guides/for-sellers/monitor-your-deposit.md`) covering the deposit table columns and the deposit detail StatsBar shipped in zkp2p-clients PR #716.
+- Registers the new guide in the For Sellers sidebar and index page.
 
 ## Why
-Documentation accumulated jargon and filler that made it harder to read. A full editorial pass brings every doc to a consistent, direct voice and fixes factual inaccuracies in technical references.
+
+Sellers had no documentation for interpreting the deposit table columns (Remaining, Taken utilization bar, PnL, status badges) or the six-stat detail view (Available, Volume, Utilization, Fills, Realized PnL, APR). This fills that gap so sellers can tune spreads with confidence.
+
+Closes zkp2p/docs#86
 
 ## Changes
-- **Blog posts** (`blog/`, `src/pages/blog/`): Light touch — replaced 'leveraging' with 'using', 'utilize' with 'use', 'seamlessly' with direct phrasing, fixed missing newlines at EOF, corrected year typo in V3 intro
-- **User guides** (`guides/`): Rewrote wordy intros ('This guide will walk you through...' → direct descriptions), removed hedge language, tightened instructions
-- **Protocol docs** (`protocol/`): Replaced slop terms, fixed typo in 'protoclol', corrected contract name in migration guide, tightened technical descriptions
-- **Developer docs** (`developer/`): Replaced 'facilitate' with 'enable' in provider integration overview
-- **Internal instruction files** (`guides/`, `src/`, `src/brand/`): Removed flagged terms while preserving instructional tone
-- **JSX blog pages** (`src/pages/blog/`): Mirrored all prose changes from markdown sources, fixed missing EOF newlines
+
+- **`guides/for-sellers/monitor-your-deposit.md`** — New guide with three sections: reading the deposits table, reading the deposit detail StatsBar (with exact tooltip strings), and status badge definitions.
+- **`guides/for-sellers/index.md`** — Added link to the new guide in the Get Started list.
+- **`guides-sidebars.js`** — Added `for-sellers/monitor-your-deposit` after `calculating-apr` in the For Sellers sidebar group.
 
 ## Test plan
-- `yarn typecheck` (not available: no `typecheck` script is defined)
-- `yarn build`
+
+- `yarn build` — succeeded with no broken-link warnings or errors.
+- `git diff --stat origin/main...HEAD` — confirmed only the three expected files changed (89 insertions).

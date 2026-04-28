@@ -1,1 +1,1 @@
-docs: deslop and tighten prose across all documentation
+docs: add seller guide for deposit monitoring metrics
