@@ -1,1 +1,1 @@
-docs: add seller guide for deposit monitoring metrics
+docs: add seller guide for vault delegation
