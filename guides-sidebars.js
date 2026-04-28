@@ -27,6 +27,7 @@ module.exports = {
         'for-sellers/update-usdc-rates',
         'for-sellers/calculating-apr',
         'for-sellers/manual-releases',
+        'for-sellers/delegate-to-a-vault',
         'for-sellers/notifications',
         {
           type: 'category',
