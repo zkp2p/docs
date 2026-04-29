@@ -5,7 +5,7 @@ title: How to Monitor Your Deposit
 
 # How to Monitor Your Deposit
 
-Use the Sell tab on [peer.xyz](https://peer.xyz) to track how much USDC is still available, how often your deposit is filling, and whether anything needs attention.
+Open the Sell tab on [peer.xyz](https://peer.xyz) to see your active deposits and their performance.
 
 ## Reading the Deposits Table
 
@@ -15,7 +15,7 @@ Your seller dashboard shows one row per deposit. Each column gives you a quick r
 
   The row number for that deposit in the table.
 
-- **Remaining / Available**
+- **Remaining**
 
   The amount of USDC on the deposit that has not been filled yet and can still be used for new orders.
 
@@ -37,7 +37,7 @@ Your seller dashboard shows one row per deposit. Each column gives you a quick r
 
 - **Status**
 
-  Shows whether the deposit is `Active`, `Paused`, or `Closed`. This area can also include an `Oracle` badge, a lock icon for protected deposits, a delegation badge, and an `{n} active` pill when orders are currently being filled.
+  Shows whether the deposit is `Active`, `Paused`, or `Closed`. This area can also include an `Oracle` badge, a lock icon for protected deposits, and a delegation badge.
 
 ## Reading the Deposit Detail StatsBar
 
@@ -75,13 +75,5 @@ Click a deposit to open its detail view. The six-column StatsBar at the top summ
 - **Delegation badge**
 
   A vault or rate manager is managing this deposit.
-
-- **`{n} active`**
-
-  This shows how many live orders are currently being filled from the deposit.
-
-:::info
-Check these metrics regularly when you are tuning your spreads so you can spot slow fills, low availability, or settings that need adjustment.
-:::
 
 Back to: [For Sellers](./index.md)
