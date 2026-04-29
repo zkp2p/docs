@@ -17,7 +17,7 @@ Use this when you want to show a buyer what they can do before they open a quote
 
 ```ts
 const response = await client.getTakerTier({
-  owner: '0xBuyerAddress',
+  owner: '0x0000000000000000000000000000000000000001',
   chainId: 8453,
 });
 

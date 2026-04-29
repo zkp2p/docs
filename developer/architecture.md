@@ -166,6 +166,6 @@ Use `getContracts(chainId, env)` when you want to inspect the exact addresses an
 
 ## Troubleshooting
 
-- `getDeposits()` is empty but public liquidity exists: `getDeposits()` only returns deposits owned by the connected wallet. Use `client.indexer.getDeposits()` or quote APIs for market-wide discovery
+- `getAccountDeposits()` is empty but public liquidity exists: account-scoped reads only show that owner's deposits. Use `client.indexer.getDeposits()` or quote APIs for market-wide discovery
 - Indexer data looks stale: confirm with RPC-first methods before you submit a transaction
 - `fulfillIntent()` seems to do two steps: that is expected. It talks to the Attestation Service first, then submits the final on-chain transaction

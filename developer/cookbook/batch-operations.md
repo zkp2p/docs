@@ -91,6 +91,8 @@ await client.deactivateCurrenciesBatch({
 ```tsx
 import { useVaultDelegation } from '@zkp2p/sdk/react';
 
+const escrowAddress = '0x0000000000000000000000000000000000000000' as const;
+
 const { delegateDeposits, clearDelegations } = useVaultDelegation({
   client,
   sendTransaction,
@@ -104,13 +106,13 @@ await delegateDeposits({
   rateManagerId,
   deposits: [
     {
-      compositeDepositId: '0xescrow_12',
-      escrow: '0xescrow',
+      compositeDepositId: `8453_${escrowAddress}_12`,
+      escrow: escrowAddress,
       depositId: 12n,
     },
     {
-      compositeDepositId: '0xescrow_19',
-      escrow: '0xescrow',
+      compositeDepositId: `8453_${escrowAddress}_19`,
+      escrow: escrowAddress,
       depositId: 19n,
     },
   ],

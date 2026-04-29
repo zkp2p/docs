@@ -25,7 +25,7 @@ Create a client with `new Zkp2pClient(opts)`.
 | `runtimeEnv` | No | Runtime environment: `production`, `preproduction`, or `staging`. Defaults to `production` |
 | `indexerUrl` | No | Override for the indexer GraphQL endpoint |
 | `baseApiUrl` | No | Override for ZKP2P service APIs |
-| `apiKey` | No | Optional curator API key — not required for any method. When provided, some responses are enriched (e.g. `getQuote` returns maker `depositData`) |
+| `apiKey` | No | Optional curator API key — not required for any method. When provided, some responses are enriched (e.g. `getQuote` returns maker `payeeData`) |
 | `authorizationToken` | No | Optional bearer token for hybrid authentication |
 | `getAuthorizationToken` | No | Async token provider for long-lived clients |
 | `indexerApiKey` | No | Optional `x-api-key` header for indexer proxy authentication |
@@ -41,7 +41,7 @@ const client = new Zkp2pClient({
 ```
 
 :::info No API key required
-All SDK methods work without `apiKey` or `authorizationToken`. Auth credentials are optional and only affect response richness. `signalIntent()` can auto-fetch its gating signature when you provide `apiKey` or `authorizationToken`; if you do not want the SDK to make that request, pass `gatingServiceSignature` and `signatureExpiration` yourself.
+All SDK methods work without `apiKey` or `authorizationToken` when you provide any required signatures yourself. Auth credentials are optional and mostly affect response richness. `signalIntent()` can auto-fetch its gating signature when you provide `baseApiUrl` plus `apiKey` or `authorizationToken`; if you do not want the SDK to make that request, pass `gatingServiceSignature` and `signatureExpiration` yourself.
 :::
 
 ## Prepared transactions
@@ -55,9 +55,9 @@ Most write methods are "prepareable":
 const prepared = await client.signalIntent.prepare({
   depositId: 42n,
   amount: 100_000000n,
-  toAddress: '0xYourRecipientAddress',
+  toAddress: '0x0000000000000000000000000000000000000001',
   processorName: 'wise',
-  payeeDetails: '0xPayeeHash',
+  payeeDetails: '0x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
   fiatCurrencyCode: 'USD',
   conversionRate: 1_020000000000000000n,
 });
@@ -77,7 +77,7 @@ const { depositDetails, prepared } = await client.prepareCreateDeposit({
   amount: 1_000_000000n,
   intentAmountRange: { min: 10_000000n, max: 500_000000n },
   processorNames: ['wise'],
-  depositData: [{ email: 'maker@example.com' }],
+  payeeData: [{ offchainId: 'maker@example.com' }],
   conversionRates: [[
     { currency: 'USD', conversionRate: '1020000000000000000' },
   ]],
@@ -91,14 +91,15 @@ Use `registerPayeeDetails()` when you want to register payment details first and
 | Parameter | Type | Description |
 | --- | --- | --- |
 | `processorNames` | `string[]` | Payment platforms such as `wise`, `revolut`, or `venmo` |
-| `depositData` | `Array<Record<string, string>>` | Processor-specific payment details in the same order as `processorNames` |
+| `payeeData` | `Array<{ offchainId: string; telegramUsername?: string \| null; metadata?: Record<string, string> \| null }>` | Processor-specific payment details in the same order as `processorNames` |
+| `depositData` | Same shape as `payeeData` | Backward-compatible alias for `payeeData` |
 
 ```ts
 const { hashedOnchainIds } = await client.registerPayeeDetails({
   processorNames: ['wise', 'revolut'],
-  depositData: [
-    { email: 'maker@example.com' },
-    { tag: '@maker' },
+  payeeData: [
+    { offchainId: 'maker@example.com' },
+    { offchainId: '@maker' },
   ],
 });
 
@@ -107,9 +108,9 @@ await client.createDeposit({
   amount: 1_000_000000n,
   intentAmountRange: { min: 10_000000n, max: 500_000000n },
   processorNames: ['wise', 'revolut'],
-  depositData: [
-    { email: 'maker@example.com' },
-    { tag: '@maker' },
+  payeeData: [
+    { offchainId: 'maker@example.com' },
+    { offchainId: '@maker' },
   ],
   conversionRates: [
     [{ currency: 'USD', conversionRate: '1020000000000000000' }],
@@ -355,8 +356,8 @@ The response includes:
 const quote = await client.getQuote({
   paymentPlatforms: ['wise'],
   fiatCurrency: 'USD',
-  user: '0xYourAddress',
-  recipient: '0xRecipientAddress',
+  user: '0x0000000000000000000000000000000000000001',
+  recipient: '0x0000000000000000000000000000000000000002',
   destinationChainId: 8453,
   destinationToken: '0x833589fcd6edb6e08f4c7c32d4f71b54bda02913',
   amount: '100',
@@ -394,8 +395,8 @@ The response shape mirrors `getQuote` but is keyed by platform:
 ```ts
 const best = await client.getQuotesBestByPlatform({
   fiatCurrency: 'USD',
-  user: '0xYourAddress',
-  recipient: '0xRecipientAddress',
+  user: '0x0000000000000000000000000000000000000001',
+  recipient: '0x0000000000000000000000000000000000000002',
   destinationChainId: 8453,
   destinationToken: '0x833589fcd6edb6e08f4c7c32d4f71b54bda02913',
   amount: '100',

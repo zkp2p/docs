@@ -1,1 +1,1 @@
-docs: add private orders seller guide
+docs: add developer quickstart, tutorials, cookbook, and architecture

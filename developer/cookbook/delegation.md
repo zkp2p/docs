@@ -52,6 +52,11 @@ How to interpret it:
 ```tsx
 import { useVaultDelegation } from '@zkp2p/sdk/react';
 
+const escrowAddress = '0x0000000000000000000000000000000000000001' as const;
+const vaultAddress = '0x0000000000000000000000000000000000000002' as const;
+const rateManagerId =
+  '0x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef' as const;
+
 const { delegateDeposit, clearDelegation } = useVaultDelegation({
   client,
   sendTransaction: async ({ to, data, value }) => {
@@ -60,10 +65,10 @@ const { delegateDeposit, clearDelegation } = useVaultDelegation({
 });
 
 await delegateDeposit({
-  escrow: '0xEscrowAddress',
+  escrow: escrowAddress,
   depositId: 42n,
-  registry: '0xVaultAddress',
-  rateManagerId: '0xRateManagerId',
+  registry: vaultAddress,
+  rateManagerId,
   currentRateManagerId,
   currentRateManagerRegistry: currentRegistry,
 });

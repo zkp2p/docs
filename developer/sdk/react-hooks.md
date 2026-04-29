@@ -217,7 +217,7 @@ The hooks package re-exports several delegation helpers and types.
 | `isZeroRateManagerId(value)` | Checks whether a vault ID is the zero ID |
 | `normalizeRateManagerId(value)` | Normalizes a vault ID string |
 | `normalizeRegistry(value)` | Normalizes a registry address string |
-| `getDelegationRoute(client, escrow)` | Returns whether the deposit should use the `legacy` or `v2` delegation path |
+| `getDelegationRoute(client, escrow)` | Returns the current delegation route. In `0.3.2`, this resolves to direct `v2` delegation |
 | `classifyDelegationState(currentRateManagerId, currentRegistry, targetRateManagerId, targetRegistry)` | Classifies whether a deposit is delegated here, elsewhere, or not delegated |
 
 Useful exported types:

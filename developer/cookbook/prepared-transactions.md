@@ -34,9 +34,9 @@ The main exception is `createDeposit()`, which uses `prepareCreateDeposit()`.
 const prepared = await client.signalIntent.prepare({
   depositId: 42n,
   amount: 250_000000n,
-  toAddress: '0xBuyerAddress',
+  toAddress: '0x0000000000000000000000000000000000000001',
   processorName: 'wise',
-  payeeDetails: '0xPayeeDetailsHash',
+  payeeDetails: '0x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
   fiatCurrencyCode: 'USD',
   conversionRate: 1_020000000000000000n,
 });
@@ -103,10 +103,13 @@ const { createVault, prepareCreateVault, txHash } = useCreateVault({
   referrer: ['acme-wallet'],
 });
 
+const manager = '0x0000000000000000000000000000000000000001' as const;
+const feeRecipient = '0x0000000000000000000000000000000000000002' as const;
+
 await createVault({
   config: {
-    manager: '0xManager',
-    feeRecipient: '0xFeeRecipient',
+    manager,
+    feeRecipient,
     maxFee: 50_000000000000000n,
     fee: 10_000000000000000n,
     name: 'Acme Vault',

@@ -31,7 +31,7 @@ peerSdk.onramp({
   inputAmount: '25',
   paymentPlatform: 'wise',
   toToken: '8453:0x0000000000000000000000000000000000000000',
-  recipientAddress: '0xBuyerAddress',
+  recipientAddress: '0x0000000000000000000000000000000000000001',
 });
 ```
 
@@ -45,7 +45,7 @@ Use:
 
 ```ts
 peerSdk.onramp({
-  intentHash: '0x1234...abcd',
+  intentHash: '0x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
 });
 ```
 

@@ -21,7 +21,7 @@ If you operate both sides of the flow, you can still call `client.fulfillIntent(
 
 ## Prerequisites
 
-- Node.js 20+ or Bun
+- Node.js 22+ or Bun
 - A Base RPC URL
 - A maker wallet with ETH for gas and USDC for liquidity
 - Off-chain logic that watches incoming fiat payments
@@ -188,7 +188,7 @@ async function pruneExpired() {
   });
 
   for (const intent of expired) {
-    const [escrowAddress, rawDepositId] = intent.depositId.split('_');
+    const [, escrowAddress, rawDepositId] = intent.depositId.split('_');
     if (!escrowAddress || !rawDepositId) continue;
 
     console.log('pruning expired intent', intent.intentHash);
@@ -274,7 +274,7 @@ When your system receives a valid proof, call `fulfillIntent()` from the taker w
 
 ```ts
 await client.fulfillIntent({
-  intentHash: '0x...',
+  intentHash: '0x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
   proof: proofFromPeerAuthOrReclaim,
 });
 ```

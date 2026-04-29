@@ -22,10 +22,11 @@ Use this if you want the fastest path from "I want to build on Peer" to "I have 
 
 ## Prerequisites
 
-- Node.js `20+` or Bun
+- Node.js `22+` or Bun
 - A Base RPC URL
 - A wallet with ETH for gas on Base
 - For the Node example: a private key for that wallet
+- For automatic `signalIntent()` gating signatures: a ZKP2P API key or an equivalent backend that returns `gatingServiceSignature` and `signatureExpiration`
 
 :::info Base USDC
 All examples below use Base USDC: `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`.
@@ -57,7 +58,7 @@ Create `scripts/quickstart.ts`:
 ```ts
 import { Zkp2pClient, setLogLevel } from '@zkp2p/sdk';
 import { privateKeyToAccount } from 'viem/accounts';
-import { createWalletClient, http } from 'viem';
+import { createWalletClient, http, parseUnits } from 'viem';
 import { base } from 'viem/chains';
 
 const USDC = '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913' as const;
@@ -82,15 +83,17 @@ const client = new Zkp2pClient({
   walletClient,
   chainId: base.id,
   runtimeEnv: 'production',
+  baseApiUrl: 'https://api.zkp2p.xyz',
+  apiKey: process.env.ZKP2P_API_KEY,
 });
 ```
 
 ## 3. Read deposits and fetch a quote
 
-`client.getDeposits()` reads deposits owned by the connected wallet. `client.indexer.getDeposits()` is the faster way to inspect public liquidity when you are building a taker flow.
+`client.getDeposits()` reads live protocol deposits from ProtocolViewer. Use `client.getAccountDeposits(account.address)` when you only want the connected wallet's deposits. `client.indexer.getDeposits()` is the faster way to inspect public liquidity when you are building a taker flow.
 
 ```ts
-const myDeposits = await client.getDeposits();
+const myDeposits = await client.getAccountDeposits(account.address);
 console.log('connected wallet deposits:', myDeposits.length);
 
 const publicDeposits = await client.indexer.getDeposits(
@@ -143,7 +146,7 @@ const txHash = await client.signalIntent({
   processorName: quote.intent.processorName,
   payeeDetails: quote.intent.payeeDetails,
   fiatCurrencyCode: quote.intent.fiatCurrencyCode,
-  conversionRate: BigInt(quote.conversionRate),
+  conversionRate: parseUnits(quote.conversionRate, 18),
   escrowAddress: quote.intent.escrowAddress as `0x${string}` | undefined,
   orchestratorAddress: quote.intent.orchestratorAddress as `0x${string}` | undefined,
 });
@@ -156,6 +159,7 @@ Run it:
 ```bash
 PRIVATE_KEY=0x... \
 RPC_URL=https://base-mainnet.g.alchemy.com/v2/your-key \
+ZKP2P_API_KEY=your-api-key \
 bun run scripts/quickstart.ts
 ```
 
@@ -170,7 +174,7 @@ import {
 } from '@zkp2p/sdk';
 import { useSignalIntent } from '@zkp2p/sdk/react';
 import type { Address } from 'viem';
-import { createWalletClient, custom } from 'viem';
+import { createWalletClient, custom, parseUnits } from 'viem';
 import { base } from 'viem/chains';
 import { useEffect, useState } from 'react';
 
@@ -242,7 +246,7 @@ export default function App() {
       processorName: quote.intent.processorName,
       payeeDetails: quote.intent.payeeDetails,
       fiatCurrencyCode: quote.intent.fiatCurrencyCode,
-      conversionRate: BigInt(quote.conversionRate),
+      conversionRate: parseUnits(quote.conversionRate, 18),
       escrowAddress: quote.intent.escrowAddress as `0x${string}` | undefined,
       orchestratorAddress: quote.intent.orchestratorAddress as `0x${string}` | undefined,
     });

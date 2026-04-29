@@ -19,7 +19,7 @@ Use the indexer when you need history, filtering, search, or vault analytics. Us
 const deposits = await client.indexer.getDeposits(
   {
     status: 'ACTIVE',
-    depositor: '0xMakerAddress',
+    depositor: '0x0000000000000000000000000000000000000001',
     acceptingIntents: true,
     minLiquidity: '1000000',
   },
@@ -68,12 +68,15 @@ const ownerIntents = await client.indexer.getOwnerIntents(buyerAddress, [
 
 const expired = await client.indexer.getExpiredIntents({
   now: Math.floor(Date.now() / 1000).toString(),
-  depositIds: ['0xescrow_12', '0xescrow_18'],
+  depositIds: [
+    '8453_0x0000000000000000000000000000000000000000_12',
+    '8453_0x0000000000000000000000000000000000000000_18',
+  ],
   limit: 100,
 });
 ```
 
-Composite deposit IDs are formatted as `escrowAddress_depositId`.
+Composite deposit IDs are formatted as `chainId_escrowAddress_depositId`.
 
 ## Run a raw GraphQL query
 
@@ -109,11 +112,12 @@ const deposits = await client.indexer.getDepositsWithRelations(
   { limit: 10 },
 );
 
-const liquidityViews = convertDepositsForLiquidity(deposits, 8453, '0xescrowAddress');
+const escrowAddress = '0x0000000000000000000000000000000000000000' as const;
+const liquidityViews = convertDepositsForLiquidity(deposits, 8453, escrowAddress);
 const firstDepositView = convertIndexerDepositToEscrowView(
   deposits[0],
   8453,
-  '0xescrowAddress',
+  escrowAddress,
 );
 const intentViews = convertIndexerIntentsToEscrowViews(
   deposits.flatMap((deposit) => deposit.intents ?? []),

@@ -20,9 +20,10 @@ import {
   assertValidReferrerFeeConfig,
   parseReferrerFeeConfig,
 } from '@zkp2p/sdk';
+import { parseUnits } from 'viem';
 
 const referrerFeeConfig = assertValidReferrerFeeConfig(
-  parseReferrerFeeConfig('0xReferrerFeeRecipient', 50),
+  parseReferrerFeeConfig('0x0000000000000000000000000000000000000001', 50),
   'getQuote',
 );
 
@@ -63,7 +64,7 @@ await client.signalIntent({
   processorName: quote.intent.processorName,
   payeeDetails: quote.intent.payeeDetails,
   fiatCurrencyCode: quote.intent.fiatCurrencyCode,
-  conversionRate: BigInt(quote.conversionRate),
+  conversionRate: parseUnits(quote.conversionRate, 18),
   referrerFeeConfig,
   escrowAddress: quote.intent.escrowAddress as `0x${string}` | undefined,
   orchestratorAddress: quote.intent.orchestratorAddress as `0x${string}` | undefined,
@@ -86,7 +87,7 @@ import {
 const suffix = getAttributionDataSuffix([ZKP2P_IOS_REFERRER, 'acme-wallet']);
 console.log(BASE_BUILDER_CODE, suffix);
 
-const calldata = encodeWithAttribution(
+const attributedCalldata = encodeWithAttribution(
   {
     abi: escrowAbi,
     functionName: 'addFunds',
@@ -95,7 +96,8 @@ const calldata = encodeWithAttribution(
   ['acme-wallet'],
 );
 
-const finalCalldata = appendAttributionToCalldata(calldata, 'partner-campaign');
+const existingCalldata = '0x1234' as const;
+const campaignCalldata = appendAttributionToCalldata(existingCalldata, 'partner-campaign');
 ```
 
 If you are not using SDK write helpers, send the transaction manually:

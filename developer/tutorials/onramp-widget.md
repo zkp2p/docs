@@ -86,12 +86,11 @@ Create `src/components/OnrampWidget.tsx`:
 ```tsx
 import {
   createPeerExtensionSdk,
-  getTierDisplayInfo,
   type PeerExtensionState,
   type PeerIntentFulfilledResult,
   type Zkp2pClient,
 } from '@zkp2p/sdk';
-import { useGetTakerTier } from '@zkp2p/sdk/react';
+import { getTierDisplayInfo, useGetTakerTier } from '@zkp2p/sdk/react';
 import { base } from 'viem/chains';
 import { useEffect, useMemo, useState } from 'react';
 import { createBrowserClient } from '../lib/peer';
