@@ -101,7 +101,7 @@ For first-time users, you'll need to install the PeerAuth Extension that helps v
 - PeerAuth will automatically redirect you back to ZKP2P  
 
 :::info PayPal: Pick your account type
-If you paid with PayPal, before logging in you'll see a "PayPal account type" selector. Pick **Personal** or **Business** to match the account you used to send the payment. Picking the wrong type will cause verification to fail because the extracted parameter keys and auth endpoints differ between Personal and Business PayPal. Remember your choice so you can pick the same type if you re-verify.
+If you paid with PayPal, before logging in you'll see a "PayPal account type" selector. Pick **Personal** or **Business** to match the account you used to send the payment. Picking the wrong type will cause verification to fail because Personal and Business PayPal use different login pages and payment data formats. Remember your choice so you can pick the same type if you re-verify.
 :::
 
 ### Step 10: Select Your Payment for Verification

@@ -107,7 +107,7 @@ PayPal requires identity verification through the PeerAuth browser extension (v0
 :::
 
 :::warning PayPal Business Accounts Not Supported for Deposits
-Deposits must use a **personal** PayPal account. PayPal Business accounts cannot register as makers — extension registration fails silently because Business accounts redirect to a different page during PeerAuth verification.
+Deposits must use a **personal** PayPal account. PayPal Business accounts cannot register as makers — extension registration fails because Business accounts redirect to a different page during PeerAuth verification.
 
 Note: Buyers (takers) CAN pay you from a PayPal Business account — they pick "Business" in the "PayPal account type" selector at verification time. This restriction only affects the maker/deposit side.
 :::
