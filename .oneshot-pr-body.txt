@@ -1,21 +1,20 @@
 ## Summary
 
-- Adds a new seller guide (`guides/for-sellers/monitor-your-deposit.md`) covering the deposit table columns and the deposit detail StatsBar shipped in zkp2p-clients PR #716.
-- Registers the new guide in the For Sellers sidebar and index page.
+- New guide `guides/for-sellers/delegate-to-a-vault.md` covering what vault delegation does, how to enable it, how to choose a vault, and post-deposit states.
+- Wired into `guides-sidebars.js` after `manual-releases` and before `notifications` in the For Sellers section.
+- All UI labels verified against `zkp2p-clients` source (ExpressMode, AdvancedMode, VaultDelegationPanel, VaultDelegationCTA).
 
 ## Why
 
-Sellers had no documentation for interpreting the deposit table columns (Remaining, Taken utilization bar, PnL, status badges) or the six-stat detail view (Available, Volume, Utilization, Fills, Realized PnL, APR). This fills that gap so sellers can tune spreads with confidence.
+Vault delegation shipped in zkp2p-clients commit 10f00f53 (2026-04-27) with zero docs coverage. Sellers need a reference for enabling delegation, choosing a vault, and understanding post-deposit follow-up states.
 
-Closes zkp2p/docs#86
+Closes zkp2p/docs#88
 
 ## Changes
 
-- **`guides/for-sellers/monitor-your-deposit.md`** — New guide with three sections: reading the deposits table, reading the deposit detail StatsBar (with exact tooltip strings), and status badge definitions.
-- **`guides/for-sellers/index.md`** — Added link to the new guide in the Get Started list.
-- **`guides-sidebars.js`** — Added `for-sellers/monitor-your-deposit` after `calculating-apr` in the For Sellers sidebar group.
+- **`guides/for-sellers/delegate-to-a-vault.md`** — New doc covering: what delegation does (with verbatim tip quote), who it's for (cross-link to ARM), toggle location (Express + Advanced, phase flag note), vault selection (sort tabs, pagination, card metrics, empty state), post-deposit states (Express and Advanced CTA labels, success/unavailable/error states), and next steps (vaults page, vault manager guide).
+- **`guides-sidebars.js`** — Added `for-sellers/delegate-to-a-vault` to the For Sellers items array between `manual-releases` and `notifications`.
 
 ## Test plan
 
-- `yarn build` — succeeded with no broken-link warnings or errors.
-- `git diff --stat origin/main...HEAD` — confirmed only the three expected files changed (89 insertions).
+- `yarn build` — succeeded with zero broken-link warnings.
