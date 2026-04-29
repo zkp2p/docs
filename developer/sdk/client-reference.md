@@ -250,7 +250,76 @@ Use one of the delegation paths below depending on how the deposit is routed.
 | `getManagerFee(escrow, depositId)` | `bigint` | Reads the effective manager fee |
 | `getEffectiveRate({ escrow, depositId, paymentMethod, fiatCurrency })` | `bigint` | Reads effective EscrowV2 rate after manager logic |
 
-For EscrowV2 pricing flows, the client also exposes `setOracleRateConfig()`, `removeOracleRateConfig()`, `setOracleRateConfigBatch()`, `updateCurrencyConfigBatch()`, and `deactivateCurrenciesBatch()`.
+### Oracle rate configuration
+
+Use these methods when a deposit should track an oracle-backed floor on EscrowV2 instead of a purely manual fixed rate.
+
+#### `setOracleRateConfig()`
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `depositId` | Yes | Deposit to update |
+| `paymentMethodHash` | Yes | Payment method hash such as the result of `resolvePaymentMethodHash()` |
+| `currencyHash` | Yes | Fiat currency bytes32 such as the result of `resolveFiatCurrencyBytes32()` |
+| `config.adapter` | Yes | Oracle adapter contract address |
+| `config.adapterConfig` | Yes | Adapter-specific bytes payload |
+| `config.spreadBps` | Yes | Signed spread in basis points applied to the market price |
+| `config.maxStaleness` | Yes | Maximum oracle age in seconds |
+| `escrowAddress` | No | Explicit EscrowV2 override |
+| `txOverrides` | No | viem transaction overrides |
+
+#### `removeOracleRateConfig()`
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `depositId` | Yes | Deposit to update |
+| `paymentMethodHash` | Yes | Payment method hash |
+| `currencyHash` | Yes | Fiat currency bytes32 |
+| `escrowAddress` | No | Explicit EscrowV2 override |
+| `txOverrides` | No | viem transaction overrides |
+
+#### `setOracleRateConfigBatch()`
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `depositId` | Yes | Deposit to update |
+| `paymentMethods` | Yes | Payment method hashes grouped by outer index |
+| `currencies` | Yes | Nested currency arrays grouped by payment method index |
+| `configs` | Yes | Nested oracle-config arrays grouped by payment method index |
+| `escrowAddress` | No | Explicit EscrowV2 override |
+| `txOverrides` | No | viem transaction overrides |
+
+For a full setup example, see [Oracle Rate Configuration](/developer/cookbook/oracle-rates).
+
+### Batch currency operations
+
+These methods are useful for bots, vault operators, and admin tooling that need to move several currency pairs at once.
+
+#### `updateCurrencyConfigBatch()`
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `depositId` | Yes | Deposit to update |
+| `paymentMethods` | Yes | Payment method hashes grouped by outer index |
+| `updates` | Yes | Nested `CurrencyRateUpdate` arrays grouped by payment method index |
+| `updates[][code]` | Yes | Fiat currency bytes32 |
+| `updates[][minConversionRate]` | Yes | Fixed floor with 18 decimals |
+| `updates[][updateOracle]` | Yes | Whether to apply `oracleRateConfig` |
+| `updates[][oracleRateConfig]` | Yes | Oracle config payload when `updateOracle` is `true` |
+| `escrowAddress` | No | Explicit EscrowV2 override |
+| `txOverrides` | No | viem transaction overrides |
+
+#### `deactivateCurrenciesBatch()`
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `depositId` | Yes | Deposit to update |
+| `paymentMethods` | Yes | Payment method hashes grouped by outer index |
+| `currencyCodes` | Yes | Nested currency arrays grouped by payment method index |
+| `escrowAddress` | No | Explicit EscrowV2 override |
+| `txOverrides` | No | viem transaction overrides |
+
+For higher-level recipes that combine these methods with vault and delegation flows, see [Batch Operations](/developer/cookbook/batch-operations).
 
 ## Quote API
 
