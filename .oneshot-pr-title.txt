@@ -1,1 +1,1 @@
-docs: deslop and tighten prose across all documentation
+docs: add backup code-linking flow to notifications guide

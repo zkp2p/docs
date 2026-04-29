@@ -18,6 +18,16 @@ Manage Telegram alerts for orders and deposits from the notifications sidebar.
 - Open the notifications sidebar and connect your Telegram account
 - You must link Telegram before you can receive alerts
 
+#### Backup Linking via Code
+
+If the Telegram login widget does not load or fails to authorize, use the alternate code flow that appears directly below the widget.
+
+- Click **Use a code instead** to expand the alternate section.
+- Press **Generate linking code** to get a short one-time code. Each code expires after a few minutes. The **Expires in** timer shows the remaining time.
+- Press **Open Telegram**. The app opens with `/link <code>` pre-filled. Send the message to finish linking.
+- If the button cannot open Telegram on your device, DM the bot directly and send `/link <code>` yourself.
+- If the code expires before you use it, press **Generate new code** to get a fresh one.
+
 ### Alert Preferences
 
 - Toggle order alerts on or off from the sidebar controls
