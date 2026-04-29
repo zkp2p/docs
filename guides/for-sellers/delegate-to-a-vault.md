@@ -9,9 +9,7 @@ Vault delegation lets a vault manager adjust your rates for you. Your USDC does 
 
 ### What delegation does
 
-When you delegate a deposit, the vault manager updates your pricing on your behalf. This helps you stay competitive without manually changing rates yourself.
-
-Peer describes it like this:
+When you delegate a deposit, the vault manager updates your pricing on your behalf. Your USDC stays in your wallet.
 
 > Tip: Vaults auto-adjust your rates to stay competitive. Your deposit stays in your wallet.
 
@@ -43,7 +41,7 @@ In Express mode, the action button reads `DELEGATE TO VAULT`. While the transact
 
 When delegation succeeds, the deposit shows `Delegated` with the vault name.
 
-In Express mode, if the vault cannot accept the delegation, the follow-up state is `Deposit created. Vault delegation unavailable` and the button changes to `VIEW DEPOSIT`.
+In Express mode, if the vault cannot accept the delegation, the follow-up state is `Vault delegation unavailable` and the button changes to `VIEW DEPOSIT`.
 
 In Express mode, if the delegation transaction fails, the error state is `Vault delegation failed`. In Advanced mode, the follow-up card shows the returned error and lets you retry.
 
