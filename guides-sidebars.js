@@ -30,6 +30,7 @@ module.exports = {
         'for-sellers/manual-releases',
         'for-sellers/delegate-to-a-vault',
         'for-sellers/notifications',
+        'for-sellers/private-orders',
         {
           type: 'category',
           label: 'Automated Rate Management (ARM)',

@@ -1,1 +1,1 @@
-docs: add seller guide for vault delegation
+docs: add private orders seller guide
