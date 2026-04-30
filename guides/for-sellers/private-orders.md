@@ -1,11 +1,11 @@
 ---
 id: private-orders
-title: How to Set Up Trusted Takers with Peer Pay
+title: How to Set Up Trusted Takers with Peer Relayer
 ---
 
-# How to Set Up Trusted Takers with Peer Pay
+# How to Set Up Trusted Takers with Peer Relayer
 
-Trusted Takers lets you restrict who can take liquidity on your deposit to specific wallet addresses. Useful for private orderbooks, OTC flows, and accepting Peer Pay checkout volume exclusively.
+Trusted Takers lets you restrict who can take liquidity on your deposit to specific wallet addresses. Useful for private orderbooks, OTC flows, and accepting [Peer Pay](https://pay.peer.xyz) checkout volume exclusively.
 
 ## Who is this for?
 
@@ -16,14 +16,14 @@ Trusted Takers lets you restrict who can take liquidity on your deposit to speci
 
 1. Start a new deposit at https://peer.xyz
 2. In the create-deposit flow (Express or Advanced), toggle on **Trusted Takers**
-3. Peer Pay is added by default when you first enable the toggle. You can remove it if you only want custom addresses.
+3. Peer Relayer is added by default when you first enable the toggle. You can remove it if you only want custom addresses.
 4. Add any additional taker addresses (EVM, `.eth`, or `.peer` supported)
 5. Review and approve the deposit. After the deposit lands on-chain, follow-up transactions (`setDepositWhitelistHook` + `addToWhitelist`) fire automatically.
 
 ## Key behaviors
 
 - Takers not on the whitelist see the deposit as unavailable in the orderbook
-- The Peer Pay entry adds the relayer address used by [Peer Pay](https://pay.peer.xyz) checkout
+- The Peer Relayer entry adds the relayer address used by [Peer Pay](https://pay.peer.xyz) checkout
 - Smart wallets that support atomic batching combine both whitelist setup transactions into a single on-chain transaction
 - You can add or remove whitelisted addresses later from the Trusted Takers tab on the deposit detail page
 
