@@ -65,7 +65,6 @@ peerSdk.onramp({
 | `inputCurrency` | Optional | Fiat currency code (e.g. `USD`, `EUR`). Defaults to user's locale |
 | `inputAmount` | Optional | Fiat amount to convert (up to 6 decimal places) |
 | `paymentPlatform` | Optional | Preferred payment method (e.g. `venmo`, `revolut`) — not enforced |
-| `amountUsdc` | Optional | Exact USDC output amount in base units (e.g. `1000000` = 1 USDC). Overrides `toToken` and `inputAmount`. Requires `recipientAddress` |
 | `intentHash` | Optional | Existing `0x`-prefixed 32-byte intent hash to reopen directly in the send-payment step |
 
 ### Supported chains for `toToken`

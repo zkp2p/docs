@@ -123,7 +123,6 @@ Pass these parameters as an object to `peerExtensionSdk.onramp()`. The SDK build
 | `inputCurrency` | (Optional) Input currency user wants to swap. Defaults to the user's local currency when available, otherwise USD. | String | `inputCurrency=USD` |
 | `inputAmount` | (Optional) Amount of input currency the user wants to swap | String or number (up to 6 decimal places) | `inputAmount=12.34` |
 | `paymentPlatform` | (Optional) Preferred payment platform for the initial quote. The user can still choose a different one in the extension. | String | `paymentPlatform=venmo` |
-| `amountUsdc` | (Optional) Exact USDC output amount in base units (`1000000` = `1` USDC). Requires `recipientAddress`. | String, number, or bigint | `amountUsdc=1000000` |
 | `toToken` | (Optional) Output token the user will onramp to | String (Has to be in the format explained below) | `toToken=8453:0x0000000000000000000000000000000000000000` |
 | `recipientAddress` | (Optional) Address to which the output tokens will be sent. | String | `recipientAddress=0xf39...66` |
 | `intentHash` | (Optional) Existing intent hash to reopen directly in the send-payment step. Must be a `0x`-prefixed 32-byte hex string. | String | `intentHash=0xabc...123` |
@@ -244,25 +243,6 @@ peerExtensionSdk.onramp({
   inputAmount: '10',
   paymentPlatform: 'revolut',
   toToken: '1:0x0000000000000000000000000000000000000000',
-  recipientAddress: '0x84e113087C97Cd80eA9D78983D4B8Ff61ECa1929',
-});
-```
-
-#### Onramp Exact USDC Amount
-
-Onramp exactly 1 USDC on Base to a recipient address. Users can choose their preferred currency and payment method. The best available quote is fetched and displayed so the user can complete the order.
-
-:::note
-- Exact amount output is currently only available for USDC and not for other tokens
-- `amountUsdc` overrides any output token (`toToken`) and input (`inputAmount`) params
-- `recipientAddress` is required for the exact output flow
-:::
-
-```ts
-peerExtensionSdk.onramp({
-  referrer: 'Rampy Pay',
-  referrerLogo: 'https://demo.peer.xyz/Rampy_logo.svg',
-  amountUsdc: '1000000',
   recipientAddress: '0x84e113087C97Cd80eA9D78983D4B8Ff61ECa1929',
 });
 ```
