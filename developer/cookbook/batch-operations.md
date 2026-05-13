@@ -44,6 +44,15 @@ await client.setVaultMinRatesBatch({
 `updateCurrencyConfigBatch()` lets you change fixed floors and oracle settings together.
 
 ```ts
+import { getSpreadOracleConfig } from '@zkp2p/sdk';
+
+const usdOracle = getSpreadOracleConfig('USD');
+const eurOracle = getSpreadOracleConfig('EUR');
+
+if (!usdOracle || !eurOracle) {
+  throw new Error('Missing bundled oracle config for USD or EUR');
+}
+
 await client.updateCurrencyConfigBatch({
   depositId: 42n,
   paymentMethods: [wise],
@@ -64,10 +73,10 @@ await client.updateCurrencyConfigBatch({
       minConversionRate: 940000000000000000n,
       updateOracle: false,
       oracleRateConfig: {
-        adapter: usdOracle.adapter,
-        adapterConfig: usdOracle.adapterConfig,
+        adapter: eurOracle.adapter,
+        adapterConfig: eurOracle.adapterConfig,
         spreadBps: 0,
-        maxStaleness: usdOracle.maxStaleness,
+        maxStaleness: eurOracle.maxStaleness,
       },
     },
   ]],

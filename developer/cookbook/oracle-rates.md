@@ -74,6 +74,10 @@ After removal, the pair falls back to fixed-rate-only behavior.
 const usdOracle = getSpreadOracleConfig('USD');
 const eurOracle = getSpreadOracleConfig('EUR');
 
+if (!usdOracle || !eurOracle) {
+  throw new Error('Missing bundled oracle config for USD or EUR');
+}
+
 await client.setOracleRateConfigBatch({
   depositId: 42n,
   paymentMethods: [paymentMethodHash],
@@ -83,16 +87,16 @@ await client.setOracleRateConfigBatch({
   ]],
   configs: [[
     {
-      adapter: usdOracle!.adapter,
-      adapterConfig: usdOracle!.adapterConfig,
+      adapter: usdOracle.adapter,
+      adapterConfig: usdOracle.adapterConfig,
       spreadBps: -50,
-      maxStaleness: usdOracle!.maxStaleness,
+      maxStaleness: usdOracle.maxStaleness,
     },
     {
-      adapter: eurOracle!.adapter,
-      adapterConfig: eurOracle!.adapterConfig,
+      adapter: eurOracle.adapter,
+      adapterConfig: eurOracle.adapterConfig,
       spreadBps: 0,
-      maxStaleness: eurOracle!.maxStaleness,
+      maxStaleness: eurOracle.maxStaleness,
     },
   ]],
 });
