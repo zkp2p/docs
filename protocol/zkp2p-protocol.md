@@ -35,7 +35,7 @@ Below is an illustrative example of the V2 protocol flow using TLSNotary as the 
 ZKP2P V3 is the current production protocol deployed on Base mainnet. It enables permissionless, non‑custodial exchange between off‑chain payments and on‑chain tokens with faster attestations, a simpler on‑chain surface, and clearer integration points.
 
 At a Glance
-- Off‑chain attestation: proofs (e.g., Reclaim/TLSNotary) are validated off‑chain and returned as an EIP‑712 PaymentAttestation.
+- Off‑chain attestation: payment evidence is validated off‑chain and returned as an EIP‑712 PaymentAttestation. V3 supports buyer-generated proofs and the TEE flow used by Seller Automated Release.
 - Unified on‑chain verification: a single `UnifiedPaymentVerifierV2` checks the attestation and enforces protocol rules (snapshot match, nullifiers, capping).
 - Orchestrated intents: `OrchestratorV2` owns the intent lifecycle (signal, cancel, fulfill) and fee routing; `EscrowV2` focuses on deposits and token custody.
 - Oracle rate management: depositors can configure oracle adapters (Chainlink) per currency to auto-adjust minimum conversion rates based on market prices.
@@ -51,7 +51,7 @@ At a Glance
 
 **Perform Off-chain Payment.** Execute an offchain payment in fiat currency through the payment service to the designated seller
 
-**Proof of Payment:** After payment, the buyer generates a proof for the payment data and its authenticity, extracting the following from the payment data:
+**Proof or attestation of payment:** After payment, the protocol verifies the payment data and its authenticity. This can happen through a buyer-generated proof or through Seller Automated Release, where the TEE checks seller-side payment data directly. The verified payment data extracts:
 - Off-ramper's Off-chain payment ID
 - Payment amount
 - Payment timestamp
@@ -68,13 +68,13 @@ At a Glance
 ## The Tech Stack
 **Smart Contract Protocol:** Smart contracts on the Ethereum blockchain enable trustless transactions and manage the logic of the protocol. They are responsible for managing the deposits and intents and the logic for unlocking the escrowed funds.
 
-**Circuits / zkTLS protocol:** Cryptographic primitives that enable generation of private, secure and verifiable credentials to validate payments were made properly in a web2 context. Under the hood, these are proxy-TLS (Reclaim), MPC-TLS (TLSNotary), zkEmail and TEEs
+**Circuits / zkTLS / TEE protocols:** Cryptographic and trusted-computing primitives that validate payments in a web2 context. Buyer flows currently use proxy-TLS (Reclaim) and can support MPC-TLS (TLSNotary) or zkEmail-style proofs. Seller Automated Release uses an AWS Nitro Enclave to handle seller credentials and provider lookups.
 
-**PeerAuth Extension / Appclip:** Browser extension and mobile app clip that enables users to generate privacy-preserving web proofs using any cryptographic primitive (zkTLS, TLSNotary, zkEmail, etc.), similar to OAuth
+**PeerAuth Extension / Appclip:** Browser extension and mobile app clip that enables users to generate privacy-preserving buyer web proofs using primitives such as zkTLS, TLSNotary, and zkEmail, similar to OAuth
 
 **Gating Service:** Backend service that curates and validates intents, enabling sellers to offer liquidity only to users who pass any optional additional verification. Sellers trust the Gating Service to prevent buyers from submitting an intent to their liquidity if they haven't satisfied certain requirements (e.g. user identity). The gating service does not custody or touch funds ever. Conforms to a standard gating service specification as defined by the ZKP2P protocol.
 
-**Attestation Service:** The attestation service is a backend service that validates proofs and returns an EIP-712 PaymentAttestation. It abstracts the complexity of zkTLS proof parsing and verification from the smart contracts. It also enables the protocol to support multiple zkTLS primitives. It will be extended to support TEEs in the future.
+**Attestation Service:** The attestation service validates payment evidence and returns an EIP-712 PaymentAttestation.
 
 **Quoter Backend:** The quoter backend is a backend service that provides the best quotes for the protocol. It indexes all the liquidity in the protocol and provides a REST API for the front end to fetch quotes.
 
@@ -90,3 +90,6 @@ ZKP2P uses [TLSNotary](https://tlsnotary.org/) for certain flows to enable TLS d
 
 ### TLSProxy Libraries
 ZKP2P V2 uses proxy-based TLS protocols such as [Reclaim](https://reclaimprotocol.org/) to verify payments.
+
+### Trusted Execution Environments
+ZKP2P V3 uses AWS Nitro Enclaves for Seller Automated Release. Clients verify the enclave measurement before sending encrypted seller credentials; the enclave performs provider lookups and EIP-712 signing.

@@ -24,7 +24,7 @@ This page summarizes the V3 on-chain contracts and links to detailed pages for e
     - Emits `IntentFulfilled`.
 
 ### UnifiedPaymentVerifier
-- Purpose: canonical on-chain verifier for off-chain attestations.
+- Purpose: canonical on-chain verifier for off-chain attestations from buyer zkTLS and Seller Automated Release.
 - V3 uses `UnifiedPaymentVerifierV2` (`0x46A58Dc65587D4D7B8198C6A25eEdf5b2535Da94`).
 - Typed data
   - Type: `PaymentAttestation(bytes32 intentHash,uint256 releaseAmount,bytes32 dataHash)`
@@ -35,6 +35,7 @@ This page summarizes the V3 on-chain contracts and links to detailed pages for e
   - `dataHash`: hash of the `data` blob.
   - `signatures[]`: witness signatures checked by `AttestationVerifier`.
   - `data`: ABI-encoded `(PaymentDetails, IntentSnapshot)`.
+  - `metadata`: optional attribution bytes. Current service responses encode `buyer-zktls` or `seller-tee`; this field is not signed or digested.
     - `PaymentDetails`:
       - `method`: bytes32 (payment method, e.g., keccak256("venmo"))
       - `payeeId`: bytes32 (hashed off-chain recipient id)

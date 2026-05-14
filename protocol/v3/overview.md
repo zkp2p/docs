@@ -8,7 +8,8 @@ title: ZKP2P Protocol V3 — Overview
 ZKP2P V3 is the current production protocol. It enables faster, more flexible, and easier-to-integrate P2P exchange by moving proof verification off-chain into a standardized Attestation Service, and by consolidating on-chain verification logic into a single Unified Payment Verifier. The protocol remains fully non-custodial: contracts only move funds, while verification and orchestration are modular and replaceable.
 
 ### What's new vs V2
-- Off-chain verification: the Attestation Service validates provider proofs (e.g., Reclaim/TLSNotary), normalizes them, and signs an EIP-712 PaymentAttestation used on-chain.
+- Off-chain verification: the Attestation Service validates payment evidence, normalizes it, and signs an EIP-712 PaymentAttestation used on-chain.
+- Seller Automated Release: sellers can upload encrypted platform credentials once; the TEE later verifies matching payments and signs the V3 attestation.
 - Single on-chain verifier: `UnifiedPaymentVerifierV2` validates the EIP-712 signature and enforces protocol rules (intent bounds, nullifiers, release capping).
 - Cleaner intent path: the gating service signs intents with richer context (payment method, fiat currency, conversion rate, orchestrator/escrow addresses) to reduce round trips.
 - Extensible: adding providers is purely off-chain (transformers) with a stable on-chain attestation format.
@@ -23,7 +24,7 @@ ZKP2P V3 is the current production protocol. It enables faster, more flexible, a
 - Buyer (on-ramper): pays off-chain and receives on-chain tokens.
 - Seller (off-ramper): supplies token liquidity in Escrow and receives off-chain fiat.
 - Gating Service (Curator): authorizes intent creation for sellers, returns payee details and a signature.
-- Attestation Service: verifies provider proofs and issues PaymentAttestations.
+- Attestation Service: verifies payment evidence and issues PaymentAttestations.
 - On-chain: EscrowV2, OrchestratorV2, OrchestratorRegistry, RateManagerV1, UnifiedPaymentVerifierV2, AttestationVerifier (witness set).
 - Pre-intent hooks run before fund locking during `signalIntent`.
 
@@ -32,7 +33,7 @@ ZKP2P V3 is the current production protocol. It enables faster, more flexible, a
 2) Intent signing: client calls the gating API (Curator v2 endpoint) to obtain `gatingServiceSignature` tied to deposit/payment method/fiat.
 3) Signal Intent (on-chain): call `OrchestratorV2.signalIntent(...)` with depositId, amount, to, paymentMethod, fiatCurrency, conversionRate, referralFees, `gatingServiceSignature`. Pre-intent hooks validate the intent before state changes.
 4) Pay off-chain: buyer pays seller's off-chain identifier (hashed on-chain as `payeeDetails`).
-5) Generate proof: via PeerAuth; send proof + intent details to Attestation Service.
+5) Verify payment through buyer proof generation or Seller Automated Release. In SAR, the TEE decrypts the seller's encrypted credential bundle, queries the payment platform, and verifies the payment.
 6) Attestation: Attestation Service returns a `PaymentAttestation` EIP-712 signature and an ABI-encoded payload.
 7) Fulfill (on-chain): call `OrchestratorV2.fulfillIntent({ paymentProof: abi.encode(PaymentAttestation), intentHash, ... })`. Orchestrator routes to `UnifiedPaymentVerifierV2` to check the attestation, then unlocks and transfers tokens.
 
