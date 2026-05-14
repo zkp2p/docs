@@ -9,7 +9,6 @@ title: zkTLS
 
 At ZKP2P, we make heavy use of zkTLS techniques to prove authenticity of data while preserving user privacy. zkTLS enables us to port any data from the web served through TLS1.2 and TLS1.3 to smart contracts. In particular, there are 2 techniques: TLSNotary (MPC-TLS) and TLSProxy (proxy based approach e.g [Reclaim Protocol](https://reclaimprotocol.org/))
 
-
 ## TLSNotary
 
 ### Notary

@@ -2,7 +2,7 @@
 title: PeerAuth Extension
 ---
 
-ZKP2P uses a cryptographic technology called zkTLS. zkTLS allows users to securely and privately export data similar to [OAuth](https://oauth.net/2/) but for any website even if there are no public APIs. This is powerful because users can now free their data from monopolies held by the largest providers such as Google or Facebook.
+ZKP2P uses a cryptographic technology called zkTLS for the buyer-generated proof path. zkTLS allows users to securely and privately export data similar to [OAuth](https://oauth.net/2/) but for any website even if there are no public APIs. This is powerful because users can now free their data from monopolies held by the largest providers such as Google or Facebook.
 
 The flow uses Zero Knowledge Proofs (ZKP) and Multi-Party Computation (MPC) to let users selectively share their data in a verifiable, privacy-preserving way.
 
@@ -22,6 +22,8 @@ PeerAuth plays a key role in helping buyers authenticate their payment transacti
 -   Fetching Necessary Cookies: The extension retrieves the relevant cookies from sites you're logged into. These cookies are used to generate proof of web2 data, such as previous 10 Venmo transactions.
 
 ***Note*:** All data stays on the user's device — only zero-knowledge proofs leave. Private data not relevant to proving validity is redacted before sharing with our deployed verifier.
+
+Seller Automated Release is TEE-based and does not use PeerAuth for credential upload or seller-side verification.
 
 Currently, PeerAuth only supports ZKP2P as its first integration, but the extension is generalized to support OAuth into any website.
 

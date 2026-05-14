@@ -4,7 +4,7 @@ title: Unified Payment Verifier
 
 ## Overview
 
-`UnifiedPaymentVerifierV2` (`0x46A58Dc65587D4D7B8198C6A25eEdf5b2535Da94` on Base) is the production verifier for V3 contracts. It verifies standardized off‑chain attestations produced by the Attestation Service. It validates EIP‑712 signatures via a pluggable `AttestationVerifier`, enforces snapshot consistency with on‑chain intent state, prevents replay via nullifiers, and caps the release amount to the signaled intent amount.
+`UnifiedPaymentVerifierV2` (`0x46A58Dc65587D4D7B8198C6A25eEdf5b2535Da94` on Base) is the production verifier for V3 contracts. It verifies standardized off-chain attestations produced by the Attestation Service, whether the source evidence was buyer zkTLS or Seller Automated Release. It validates EIP-712 signatures via a pluggable `AttestationVerifier`, enforces snapshot consistency with on-chain intent state, prevents replay via nullifiers, and caps the release amount to the signaled intent amount.
 
 :::note
 The legacy `UnifiedPaymentVerifier` (`0x16b3e4a3CA36D3A4bCA281767f15C7ADeF4ab163`) is used only by the deprecated V3 Orchestrator. New intents use `UnifiedPaymentVerifierV2` exclusively.
@@ -29,7 +29,7 @@ struct PaymentAttestation {
   bytes32 dataHash;        // keccak256(data)
   bytes[] signatures;      // witness signatures
   bytes data;              // abi.encode(PaymentDetails, IntentSnapshot)
-  bytes metadata;          // optional; not signed
+  bytes metadata;          // optional attribution bytes; not signed
 }
 ```
 
@@ -68,6 +68,8 @@ struct IntentSnapshot {
 6) Cap `releaseAmount` to `intent.amount`.
 
 Returns `PaymentVerificationResult { success, intentHash, releaseAmount }` to the Orchestrator.
+
+`attestation.metadata` is not digested into `dataHash` and is not part of signature verification. Current Attestation Service responses use it as an ABI-encoded source tag: `buyer-zktls` for `/verify/*` and `seller-tee` for `/seller/verify/*`.
 
 ---
 
