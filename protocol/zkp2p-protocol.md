@@ -68,13 +68,13 @@ At a Glance
 ## The Tech Stack
 **Smart Contract Protocol:** Smart contracts on the Ethereum blockchain enable trustless transactions and manage the logic of the protocol. They are responsible for managing the deposits and intents and the logic for unlocking the escrowed funds.
 
-**Circuits / zkTLS / TEE protocols:** Cryptographic and trusted-computing primitives that validate payments in a web2 context. Buyer flows currently use proxy-TLS (Reclaim) and can support MPC-TLS (TLSNotary) or zkEmail-style proofs. Seller Automated Release uses an AWS Nitro Enclave to handle seller credentials and provider lookups.
+**Circuits / zkTLS / TEE protocols:** Cryptographic and trusted-computing primitives that validate payments in a web2 context. Buyer flows currently use proxy-TLS (Reclaim) and can support MPC-TLS (TLSNotary) or zkEmail-style proofs. Both the buyer-side `/verify` path and Seller Automated Release run end-to-end inside an AWS Nitro Enclave: the enclave validates the payment evidence, applies the seven on-chain invariants, and signs the EIP-712 PaymentAttestation. The signing key is KMS-wrapped and only unwrappable by an enclave running the published code measurement.
 
 **PeerAuth Extension / Appclip:** Browser extension and mobile app clip that enables users to generate privacy-preserving buyer web proofs using primitives such as zkTLS, TLSNotary, and zkEmail, similar to OAuth
 
 **Gating Service:** Backend service that curates and validates intents, enabling sellers to offer liquidity only to users who pass any optional additional verification. Sellers trust the Gating Service to prevent buyers from submitting an intent to their liquidity if they haven't satisfied certain requirements (e.g. user identity). The gating service does not custody or touch funds ever. Conforms to a standard gating service specification as defined by the ZKP2P protocol.
 
-**Attestation Service:** The attestation service validates payment evidence and returns an EIP-712 PaymentAttestation.
+**Attestation Service:** The attestation service validates payment evidence and returns an EIP-712 PaymentAttestation. It runs inside an AWS Nitro Enclave for both buyer (`/verify`) and seller (Seller Automated Release) flows, with the EIP-712 signing key KMS-wrapped and PCR8-gated to the enclave. Clients can verify the running enclave via the `/attestation` endpoint before trusting any signed output.
 
 **Quoter Backend:** The quoter backend is a backend service that provides the best quotes for the protocol. It indexes all the liquidity in the protocol and provides a REST API for the front end to fetch quotes.
 
@@ -92,4 +92,4 @@ ZKP2P uses [TLSNotary](https://tlsnotary.org/) for certain flows to enable TLS d
 ZKP2P V2 uses proxy-based TLS protocols such as [Reclaim](https://reclaimprotocol.org/) to verify payments.
 
 ### Trusted Execution Environments
-ZKP2P V3 uses AWS Nitro Enclaves for Seller Automated Release. Clients verify the enclave measurement before sending encrypted seller credentials; the enclave performs provider lookups and EIP-712 signing.
+ZKP2P V3 runs the Attestation Service inside an AWS Nitro Enclave for both buyer-side proof verification (`/verify`) and Seller Automated Release. The EIP-712 signing key is wrapped by an AWS KMS key whose decrypt policy is gated on the enclave's PCR8 measurement, so the key can only be unwrapped by an enclave running the published code. Clients can verify the running enclave's measurement via `GET /attestation?nonce=...` (which returns an AWS-signed NSM attestation document) before trusting any signed PaymentAttestation. Reference verifier: [`@zkp2p/zkp2p-attestation`](https://www.npmjs.com/package/@zkp2p/zkp2p-attestation).
