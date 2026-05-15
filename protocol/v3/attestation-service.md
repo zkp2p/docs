@@ -7,12 +7,27 @@ title: Attestation Service
 
 The Attestation Service validates provider proofs off-chain and returns a standardized, signed EIP‑712 PaymentAttestation that the on-chain `UnifiedPaymentVerifier` can verify.
 
-Base URL
+Base URLs
+- Production: `https://attestation-service.zkp2p.xyz` (Base mainnet, runs inside an AWS Nitro Enclave)
 - Local dev: `http://localhost:8080`
 
 Endpoints
 - `GET /verify/supported` — list supported verifiers with their typed data spec.
-- `POST /verify/{platform}/{actionType}` — verify a provider proof and produce a PaymentAttestation.
+- `POST /verify/{platform}/{actionType}` — verify a buyer-generated provider proof and produce a PaymentAttestation.
+- `POST /seller/credentials/{platform}` — upload an encrypted seller credential bundle (Seller Automated Release).
+- `POST /seller/verify/{platform}` — resolve a seller-side payment from a stored credential bundle and produce a PaymentAttestation.
+- `GET /attestation?nonce=...` — return a Nitro NSM attestation document binding the response to the running enclave's code measurement. Used by clients to verify they are talking to the expected enclave before trusting any signed output.
+
+## Trust model
+
+Both the buyer-side `/verify` flow and the seller-side `/seller/*` flow run **end‑to‑end inside an AWS Nitro Enclave**. The same code path that validates a Reclaim/TLSNotary proof, checks the seven payment-detail invariants, and signs the EIP-712 PaymentAttestation executes inside the enclave.
+
+- The EIP-712 signing key is wrapped by an AWS KMS Customer Managed Key whose decrypt policy is gated on the enclave's PCR8 measurement. The key is unwrapped in enclave memory at first use and never leaves the enclave; no operator, AWS, or attacker outside the enclave can extract it.
+- Build artifacts (PCR0/PCR1/PCR2/PCR8) are reproducible from the published source tree. The expected signer address and PCR8 are baked into the enclave image and returned by `/attestation` alongside the NSM document.
+- Clients can verify the attestation document and PCR8 match the published values before sending any sensitive material or trusting any signed PaymentAttestation. Reference verifier: [`@zkp2p/zkp2p-attestation`](https://www.npmjs.com/package/@zkp2p/zkp2p-attestation).
+- On-chain, the enclave's signer is registered as a witness on `MultiAttestationVerifier`. Signatures from any other key are rejected at `fulfillIntent`.
+
+The previous (legacy) deployment ran the same code on commodity infrastructure with the signing key held in plaintext environment variables; that deployment is sunsetted and the canonical hostname now points at the enclave.
 
 `POST /verify/\{platform\}/\{actionType\}`
 Request body (shape)

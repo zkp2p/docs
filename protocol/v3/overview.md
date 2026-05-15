@@ -38,6 +38,7 @@ ZKP2P V3 is the current production protocol. It enables faster, more flexible, a
 7) Fulfill (on-chain): call `OrchestratorV2.fulfillIntent({ paymentProof: abi.encode(PaymentAttestation), intentHash, ... })`. Orchestrator routes to `UnifiedPaymentVerifierV2` to check the attestation, then unlocks and transfers tokens.
 
 ### Trust model
+- TEE-hosted Attestation Service: both the buyer-side `/verify` path and the seller-side Seller Automated Release path run inside an AWS Nitro Enclave. The EIP-712 signing key is KMS-wrapped and PCR8-gated, so it can only be unwrapped by an enclave running the published code measurement; no operator can extract it. Clients can verify the running enclave via `GET /attestation?nonce=...` before trusting any signed output (reference verifier: `@zkp2p/zkp2p-attestation`).
 - Off-chain witnesses: Attestation Service signatures are verified on-chain by `AttestationVerifier` (e.g., `SimpleAttestationVerifier` with a witness key). Witness rotation is on-chain governed.
 - Intent integrity: snapshot values in the attestation are checked against on-chain intent state; nullifiers prevent double-spend; release amount is capped to the signaled amount.
 - Oracle adapter safety: oracle adapters are view-only (no state mutation). Staleness checks ensure stale data is rejected. Oracle rates can only raise the floor, never lower it below the fixed rate.
