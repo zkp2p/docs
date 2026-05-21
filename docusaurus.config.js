@@ -110,6 +110,7 @@ const config = {
     /** @type {import('@docusaurus/types').ThemeConfig} */
     ({
 
+      image: 'img/link-preview.png',
       colorMode: {
         defaultMode: 'dark',
         disableSwitch: true,
