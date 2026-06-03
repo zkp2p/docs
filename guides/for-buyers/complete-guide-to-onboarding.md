@@ -76,12 +76,13 @@ If you signed in with socials (Google, Email, or X), gas is sponsored and the Ne
 ![Onramp Step 6](/img/onramping/OnrampStep6.png)
 
 
-### Step 7: Install the PeerAuth Chrome Extension
+### Step 7: Prepare for Payment Verification
 
-For first-time users, you'll need to install the PeerAuth Extension that helps verify your payments.
+After you send the payment, Peer will guide you through a secure verification step.
 
-- You'll see the **Install PeerAuth Extension** screen  
-- Click **Add to Chrome** to install the extension
+- Keep your payment provider available in case you need to log in
+- Follow the prompts shown in the order flow
+- Stay on the page until verification finishes
 
 ### Step 8: Make and Confirm the Payment
 
@@ -96,9 +97,9 @@ For first-time users, you'll need to install the PeerAuth Extension that helps v
 
 ### Step 9: Payment Verification Process
 
-- You will be redirected to log in to the payment provider you have chosen  
-- Let PeerAuth access the page  
-- PeerAuth will automatically redirect you back to ZKP2P  
+- You may be redirected to log in to the payment provider you chose
+- Follow the prompts so Peer can securely verify the payment
+- After verification, you will be redirected back to ZKP2P
 
 :::info PayPal: Pick your account type
 If you paid with PayPal, before logging in you'll see a "PayPal account type" selector. Pick **Personal** or **Business** to match the account you used to send the payment. Picking the wrong type will cause verification to fail because Personal and Business PayPal use different login pages and payment data formats. Remember your choice so you can pick the same type if you re-verify.
@@ -117,8 +118,7 @@ If you have multiple payments in your payment platform:
 
 ### Step 11: Wait for Transaction Verification
 
-- The system generates a zero-knowledge proof of your payment  
-- This process is private, secure, and done locally on your computer  
+- Peer securely checks that your payment matches the order
 - Wait for the verification to complete (usually around 30 seconds)  
 
 ![Onramp Step 11](/img/onramping/OnrampStep11.png)

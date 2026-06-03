@@ -5,12 +5,15 @@ title: Privacy
 
 ZKP2P keeps your transactions private and your personal data off-chain.
 
+> **How does buyer payment verification work?**
 
-> **I'm concerned that I'm giving PeerAuth OAuth access to all of my data when I'm on a website.**
+Peer checks that your payment matches the order before funds are released. Personal payment data is not posted on-chain; only the verification result is used to release funds.
 
-When PeerAuth views data after an OAuth (e.g. Sign In With Venmo), only select data is revealed to the webpage by the extension. All data not required for a successful on-chain transaction is blinded. As part of the extension logic we redact all data except the required fields which prevents any additional account details being leaked other than data related to a transaction.
+> **What payment data does Peer see?**
 
-All data remains local in your browser and nothing is stored across sessions. Additionally to verify client build is correct, you can inspect the Networks tab in your browser Developer Tools to ensure no data is leaked from your browser. 
+You should follow the verification prompts shown in the Peer app. Only data needed to confirm the payment should be used for order verification.
+
+Peer does not put your personal payment data on-chain.
 
 > **Who sees my personal data (like Revtag or Venmo username)?**
 

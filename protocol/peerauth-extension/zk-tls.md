@@ -13,7 +13,7 @@ At ZKP2P, we make heavy use of zkTLS techniques to prove authenticity of data wh
 
 ### Notary
 
-The Notary runs the 2PC-TLS protocol with the Buyer and attests the transcript to make the data portable. The buyer submits that attestation as the proof of payment to the verifier contract on-chain. Currently, ZKP2P provides a hosted Notary to its users via the ZKP2P extension.
+The Notary runs the 2PC-TLS protocol with the Buyer and attests the transcript to make the data portable. In V3, buyer-generated proofs are submitted to the Attestation Service, which validates the proof, signs a `PaymentAttestation`, and returns the payload used by the on-chain verifier. Currently, ZKP2P provides a hosted Notary to its users via the ZKP2P extension.
 
 #### Generating proof of payment for ZKP2P using TLSN
 

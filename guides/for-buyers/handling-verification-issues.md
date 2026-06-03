@@ -7,24 +7,26 @@ title: Handling Verification Issues as a Buyer
 
 ### Understanding the Verification Process
 
-When you buy USDC or crypto through ZKP2P, the platform tries to automatically verify your payment through a zero-knowledge proof system. Sometimes this verification process can fail due to various reasons:
+When you buy USDC or crypto through ZKP2P, Peer tries to automatically verify your payment. Sometimes verification can fail due to various reasons:
 
-- The PeerAuth extension couldn't properly load your payment  
+- You were logged out of the payment provider
+- The payment you selected does not match the order amount, recipient, currency, or timestamp
 - Technical issues with the payment platform
 
 ### Step-by-Step: What to Do When Verification Fails
 
 #### Try Again First
 
-1. Click the **"Proof Gen Failed – Try again"** button  
+1. Click the retry button shown in the order flow
 2. Wait 30 seconds for another verification attempt  
 3. Sometimes a simple retry solves the issue  
 
-#### Check Your Extension
+#### Check Your Payment Provider
 
-1. Ensure the **PeerAuth extension** is properly installed and active  
-2. If you just installed it, you might need to **refresh the page**  
-3. The extension needs proper permissions to access your payment data
+1. Make sure you are logged in to the payment provider you used
+2. Confirm the payment is visible in your provider account
+3. If prompted, select the exact payment that matches your ZKP2P order
+4. For PayPal, make sure you chose the correct account type: **Personal** or **Business**
 
 #### Contact Support
 

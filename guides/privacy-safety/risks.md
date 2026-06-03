@@ -15,9 +15,9 @@ title: Risks
 
 ## On-ramp Risks
 
--   **Privacy Concerns:** All proving is conducted locally, sensitive data is redacted prior to posting onchain, but you are leaking your username to the seller when onramping
+-   **Privacy Concerns:** Personal payment data is not posted on-chain. You may still reveal the payment identifier required for the seller to receive your payment.
 
--   **API Change:** If the payment platform alters its API format, the existing integrations may no longer be valid for proof generation, even if the off-chain payment has already been made. This could prevent the completion of the on-ramping process. If this happens, governance will try to update the smart contract processors to allow the continued functioning of the protocol.
+-   **API Change:** If the payment platform changes how payment data is shown or accessed, Peer may not be able to verify a payment, even if the off-chain payment has already been made. This could prevent the completion of the on-ramping process until the integration is updated.
 
 ## Banking Risks 
 
@@ -33,6 +33,5 @@ title: Risks
 
 
 ### Audits
--   Reclaim circuits that are used in our zkTLS flows are [audited by ZKSecurity](https://www.zksecurity.xyz/blog/posts/reclaim/)
 -   ZKP2P V2 Protocol has been audited by independent smart contract security engineers and Sherlock.
 -   ZKP2P V3 Protocol has been audited by independent smart contract security engineers, Sherlock, and Scroll.
