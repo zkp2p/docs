@@ -76,12 +76,13 @@ If you signed in with socials (Google, Email, or X), gas is sponsored and the Ne
 ![Onramp Step 6](/img/onramping/OnrampStep6.png)
 
 
-### Step 7: Install the PeerAuth Chrome Extension
+### Step 7: Prepare for Secure Payment Verification
 
-For first-time users, you'll need to install the PeerAuth Extension that helps verify your payments.
+Peer now uses Buyer TEE verification for supported payment methods. This replaces the older Reclaim/PeerAuth proof-generation flow.
 
-- You'll see the **Install PeerAuth Extension** screen  
-- Click **Add to Chrome** to install the extension
+- You do not need to generate a Reclaim proof manually
+- Keep your payment provider session available so Peer can help verify the payment after you send it
+- Peer verifies the payment through a secure enclave and uses that verification to release your crypto
 
 ### Step 8: Make and Confirm the Payment
 
@@ -96,9 +97,10 @@ For first-time users, you'll need to install the PeerAuth Extension that helps v
 
 ### Step 9: Payment Verification Process
 
-- You will be redirected to log in to the payment provider you have chosen  
-- Let PeerAuth access the page  
-- PeerAuth will automatically redirect you back to ZKP2P  
+- You may be redirected to log in to the payment provider you chose
+- Follow the prompts so Peer can securely verify the payment
+- Peer encrypts the verification material to a secure enclave before checking the payment
+- After verification, you will be redirected back to ZKP2P
 
 :::info PayPal: Pick your account type
 If you paid with PayPal, before logging in you'll see a "PayPal account type" selector. Pick **Personal** or **Business** to match the account you used to send the payment. Picking the wrong type will cause verification to fail because Personal and Business PayPal use different login pages and payment data formats. Remember your choice so you can pick the same type if you re-verify.
@@ -117,8 +119,8 @@ If you have multiple payments in your payment platform:
 
 ### Step 11: Wait for Transaction Verification
 
-- The system generates a zero-knowledge proof of your payment  
-- This process is private, secure, and done locally on your computer  
+- Peer securely checks that your payment matches the order
+- The verification replaces the older local Reclaim proof-generation step for supported payment methods
 - Wait for the verification to complete (usually around 30 seconds)  
 
 ![Onramp Step 11](/img/onramping/OnrampStep11.png)

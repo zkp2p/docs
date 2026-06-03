@@ -9,7 +9,7 @@ title: For Buyers
 
 Traditional P2P marketplaces make you wait for the seller to confirm your payment, message them, and send them your personal information. 
 
-By using **Zero Knowledge proofs of payment**, your USDC is automatically released from escrow as soon as the payment is confirmed. No waiting for the seller to manually release, no messaging, and no sharing of personal information.
+By using **Buyer TEE payment verification**, your USDC is automatically released from escrow as soon as your payment is confirmed. Peer verifies your payment inside a secure enclave, replacing the older Reclaim/PeerAuth proof-generation flow for supported payment methods. No waiting for the seller to manually release, no messaging, and no sharing payment screenshots in normal flows.
 
 
 ### Get Started

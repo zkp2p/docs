@@ -24,7 +24,6 @@ module.exports = {
           ],
         },
         { type: 'doc', id: 'v3/v3-attestation-service', label: 'Attestation Service' },
-        { type: 'doc', id: 'v3/v3-buyer-zktls-reclaim', label: 'Buyer zkTLS / Reclaim' },
         { type: 'doc', id: 'v3/v3-buyer-tee-verification', label: 'Buyer TEE Verification' },
         { type: 'doc', id: 'v3/v3-seller-automated-release', label: 'Seller Automated Release' },
         { type: 'doc', id: 'v3/v3-deployments', label: 'Deployments' },

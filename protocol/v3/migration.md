@@ -20,7 +20,7 @@ How to move from the V2 proof flow to the V3 attestation flow with minimal chang
 
 ### What stays the same
 - Non-custodial: Escrow only holds and transfers funds.
-- PeerAuth: proof generation UX and API are the same.
+- Buyer verification: supported buyer methods should move from PeerAuth/Reclaim proof generation to Buyer TEE Verification.
 - Currency/method hashing: still keccak256 bytes32 on-chain.
 
 ### API changes you'll notice

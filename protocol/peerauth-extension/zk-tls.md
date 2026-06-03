@@ -80,8 +80,6 @@ Despite this, we believe the proxy based approach is most production ready and c
 
 Additionally, ZKP2P is built to be generic so we can plug in any primitive as they become mature.
 
-In V3, Reclaim proofs are submitted to `POST /verify/{platform}/{actionType}` on the Attestation Service. The service verifies the Reclaim claim identifier, provider hash, and attestor claim signature, then signs the standard `PaymentAttestation` used on-chain. For endpoint details and the supported Reclaim transformer matrix, see [Buyer zkTLS / Reclaim](../v3/buyer-zktls-reclaim.md).
-
 For more details, please check out the Reclaim docs:
 
 [Reclaim Protocol Docs](https://docs.reclaimprotocol.org/)

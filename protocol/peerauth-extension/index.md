@@ -23,7 +23,7 @@ PeerAuth plays a key role in helping buyers authenticate their payment transacti
 
 ***Note*:** In the PeerAuth/Reclaim proof path, all data stays on the user's device and only zero-knowledge proofs leave. Private data not relevant to proving validity is redacted before sharing with the Attestation Service.
 
-Buyer TEE Verification and Seller Automated Release are TEE-based and do not use PeerAuth/Reclaim proof generation. Buyer TEE sends session material as a compact JWE encrypted to the verified enclave; unlike PeerAuth, no Reclaim proof leaves the browser or app. SAR uses encrypted seller credential bundles.
+Current buyer payment verification for supported methods uses Buyer TEE instead of PeerAuth/Reclaim proof generation. PeerAuth remains useful background for zkTLS-style proof flows, while Buyer TEE and Seller Automated Release are the TEE-based payment verification paths.
 
 Currently, PeerAuth only supports ZKP2P as its first integration, but the extension is generalized to support OAuth into any website.
 

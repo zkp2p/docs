@@ -35,7 +35,7 @@ Below is an illustrative example of the V2 protocol flow using TLSNotary as the 
 ZKP2P V3 is the current production protocol deployed on Base mainnet. It enables permissionless, non‑custodial exchange between off‑chain payments and on‑chain tokens with faster attestations, a simpler on‑chain surface, and clearer integration points.
 
 At a Glance
-- Off‑chain attestation: payment evidence is validated off‑chain and returned as an EIP‑712 PaymentAttestation. V3 supports buyer-generated proofs, Buyer TEE Verification, and the TEE flow used by Seller Automated Release.
+- Off‑chain attestation: payment evidence is validated off‑chain and returned as an EIP‑712 PaymentAttestation. V3 uses Buyer TEE Verification for supported buyer payment methods and the TEE flow used by Seller Automated Release.
 - Unified on‑chain verification: a single `UnifiedPaymentVerifierV2` checks the attestation and enforces protocol rules (snapshot match, nullifiers, capping).
 - Orchestrated intents: `OrchestratorV2` owns the intent lifecycle (signal, cancel, fulfill) and fee routing; `EscrowV2` focuses on deposits and token custody.
 - Oracle rate management: depositors can configure oracle adapters (Chainlink) per currency to auto-adjust minimum conversion rates based on market prices.
@@ -51,7 +51,7 @@ At a Glance
 
 **Perform Off-chain Payment.** Execute an offchain payment in fiat currency through the payment service to the designated seller
 
-**Proof or attestation of payment:** After payment, the protocol verifies the payment data and its authenticity. This can happen through a buyer-generated proof, through Buyer TEE Verification where the TEE checks buyer-side payment data directly, or through Seller Automated Release where the TEE checks seller-side payment data directly. The verified payment data extracts:
+**Proof or attestation of payment:** After payment, the protocol verifies the payment data and its authenticity. For supported buyer methods, Buyer TEE Verification checks buyer-side payment data directly inside the enclave. Seller Automated Release checks seller-side payment data directly. The verified payment data extracts:
 - Off-ramper's Off-chain payment ID
 - Payment amount
 - Payment timestamp
@@ -68,13 +68,13 @@ At a Glance
 ## The Tech Stack
 **Smart Contract Protocol:** Smart contracts on the Ethereum blockchain enable trustless transactions and manage the logic of the protocol. They are responsible for managing the deposits and intents and the logic for unlocking the escrowed funds.
 
-**Circuits / zkTLS / TEE protocols:** Cryptographic and trusted-computing primitives that validate payments in a web2 context. Buyer flows can use proxy-TLS (Reclaim), MPC-TLS (TLSNotary), zkEmail-style proofs, or the buyer TEE path. Buyer zkTLS (`/verify`), Buyer TEE Verification (`/buyer/verify`), and Seller Automated Release run end-to-end inside an AWS Nitro Enclave: the enclave validates the payment evidence, applies the seven on-chain invariants, and signs the EIP-712 PaymentAttestation. The signing key is KMS-wrapped and only unwrappable by an enclave running the published code measurement.
+**Circuits / zkTLS / TEE protocols:** Cryptographic and trusted-computing primitives validate payments in a web2 context. V3 uses Buyer TEE Verification as the current buyer flow for supported payment methods, replacing older buyer-side Reclaim proof generation. Buyer TEE Verification and Seller Automated Release run end-to-end inside an AWS Nitro Enclave: the enclave validates the payment evidence, applies the seven on-chain invariants, and signs the EIP-712 PaymentAttestation. The signing key is KMS-wrapped and only unwrappable by an enclave running the published code measurement.
 
 **PeerAuth Extension / Appclip:** Browser extension and mobile app clip that enables users to generate privacy-preserving buyer web proofs using primitives such as zkTLS, TLSNotary, and zkEmail, similar to OAuth
 
 **Gating Service:** Backend service that curates and validates intents, enabling sellers to offer liquidity only to users who pass any optional additional verification. Sellers trust the Gating Service to prevent buyers from submitting an intent to their liquidity if they haven't satisfied certain requirements (e.g. user identity). The gating service does not custody or touch funds ever. Conforms to a standard gating service specification as defined by the ZKP2P protocol.
 
-**Attestation Service:** The attestation service validates payment evidence and returns an EIP-712 PaymentAttestation. It runs inside an AWS Nitro Enclave for buyer zkTLS (`/verify`), buyer TEE (`/buyer/verify`), and seller (Seller Automated Release) flows, with the EIP-712 signing key KMS-wrapped and PCR8-gated to the enclave. Clients can verify the running enclave via the `/attestation` endpoint before trusting any signed output or encrypting session material to its upload key.
+**Attestation Service:** The attestation service validates payment evidence and returns an EIP-712 PaymentAttestation. It runs inside an AWS Nitro Enclave for buyer proof verification, Buyer TEE Verification, and seller (Seller Automated Release) flows, with the EIP-712 signing key KMS-wrapped and PCR8-gated to the enclave. Clients can verify the running enclave via the `/attestation` endpoint before trusting any signed output or encrypting session material to its upload key.
 
 **Quoter Backend:** The quoter backend is a backend service that provides the best quotes for the protocol. It indexes all the liquidity in the protocol and provides a REST API for the front end to fetch quotes.
 
@@ -92,4 +92,4 @@ ZKP2P uses [TLSNotary](https://tlsnotary.org/) for certain flows to enable TLS d
 ZKP2P V2 uses proxy-based TLS protocols such as [Reclaim](https://reclaimprotocol.org/) to verify payments.
 
 ### Trusted Execution Environments
-ZKP2P V3 runs the Attestation Service inside an AWS Nitro Enclave for buyer-side proof verification (`/verify`), Buyer TEE Verification (`/buyer/verify`), and Seller Automated Release. The EIP-712 signing key is wrapped by an AWS KMS key whose decrypt policy is gated on the enclave's PCR8 measurement, so the key can only be unwrapped by an enclave running the published code. Clients can verify the running enclave's measurement via `GET /attestation?nonce=...` (which returns an AWS-signed NSM attestation document) before trusting any signed PaymentAttestation or encrypting session material to its upload key. Reference verifier: [`@zkp2p/zkp2p-attestation`](https://www.npmjs.com/package/@zkp2p/zkp2p-attestation).
+ZKP2P V3 runs the Attestation Service inside an AWS Nitro Enclave for buyer proof verification, Buyer TEE Verification, and Seller Automated Release. The EIP-712 signing key is wrapped by an AWS KMS key whose decrypt policy is gated on the enclave's PCR8 measurement, so the key can only be unwrapped by an enclave running the published code. Clients can verify the running enclave's measurement via `GET /attestation?nonce=...` (which returns an AWS-signed NSM attestation document) before trusting any signed PaymentAttestation or encrypting session material to its upload key. Reference verifier: [`@zkp2p/zkp2p-attestation`](https://www.npmjs.com/package/@zkp2p/zkp2p-attestation).
