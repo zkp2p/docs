@@ -5,22 +5,24 @@ title: Attestation Service
 
 # Attestation Service
 
-The Attestation Service validates provider proofs off-chain and returns a standardized, signed EIP‑712 PaymentAttestation that the on-chain `UnifiedPaymentVerifier` can verify.
+The Attestation Service validates payment evidence off-chain and returns a standardized, signed EIP-712 `PaymentAttestation` that the on-chain `UnifiedPaymentVerifierV2` can verify.
 
 Base URLs
 - Production: `https://attestation-service.zkp2p.xyz` (Base mainnet, runs inside an AWS Nitro Enclave)
 - Local dev: `http://localhost:8080`
 
 Endpoints
-- `GET /verify/supported` — list supported verifiers with their typed data spec.
-- `POST /verify/{platform}/{actionType}` — verify a buyer-generated provider proof and produce a PaymentAttestation.
-- `POST /seller/credentials/{platform}` — upload an encrypted seller credential bundle (Seller Automated Release).
-- `POST /seller/verify/{platform}` — resolve a seller-side payment from a stored credential bundle and produce a PaymentAttestation.
-- `GET /attestation?nonce=...` — return a Nitro NSM attestation document binding the response to the running enclave's code measurement. Used by clients to verify they are talking to the expected enclave before trusting any signed output.
+- `GET /verify/supported` - list buyer zkTLS/Reclaim verifiers with their typed data spec.
+- `POST /verify/{platform}/{actionType}` - verify a buyer-generated provider proof and produce a `PaymentAttestation`.
+- `GET /buyer/supported` - list buyer TEE verifiers with their typed data spec.
+- `POST /buyer/verify/{platform}/{actionType}` - verify a buyer payment by querying the payment platform inside the enclave and produce a `PaymentAttestation`.
+- `POST /seller/credentials/{platform}` - upload an encrypted seller credential bundle (Seller Automated Release).
+- `POST /seller/verify/{platform}` - resolve a seller-side payment from a stored credential bundle and produce a `PaymentAttestation`.
+- `GET /attestation?nonce=...` - return a Nitro NSM attestation document binding the response to the running enclave's code measurement. Used by clients to verify they are talking to the expected enclave before trusting any signed output or sending sensitive session material.
 
 ## Trust model
 
-Both the buyer-side `/verify` flow and the seller-side `/seller/*` flow run **end‑to‑end inside an AWS Nitro Enclave**. The same code path that validates a Reclaim/TLSNotary proof, checks the seven payment-detail invariants, and signs the EIP-712 PaymentAttestation executes inside the enclave.
+The buyer zkTLS (`/verify/*`), buyer TEE (`/buyer/verify/*`), and seller-side (`/seller/*`) flows run inside an AWS Nitro Enclave. The code that validates evidence, checks the seven payment-detail invariants, and signs the EIP-712 `PaymentAttestation` executes inside the enclave.
 
 - The EIP-712 signing key is wrapped by an AWS KMS Customer Managed Key whose decrypt policy is gated on the enclave's PCR8 measurement. The key is unwrapped in enclave memory at first use and never leaves the enclave; no operator, AWS, or attacker outside the enclave can extract it.
 - Build artifacts (PCR0/PCR1/PCR2/PCR8) are reproducible from the published source tree. The expected signer address and PCR8 are baked into the enclave image and returned by `/attestation` alongside the NSM document.
@@ -29,8 +31,14 @@ Both the buyer-side `/verify` flow and the seller-side `/seller/*` flow run **en
 
 The previous (legacy) deployment ran the same code on commodity infrastructure with the signing key held in plaintext environment variables; that deployment is sunsetted and the canonical hostname now points at the enclave.
 
-`POST /verify/\{platform\}/\{actionType\}`
-Request body (shape)
+## Buyer zkTLS / Reclaim
+
+`POST /verify/{platform}/{actionType}`
+
+This path accepts a buyer-generated provider proof. For Reclaim, the service verifies the claim identifier and attestor signature, transforms the extracted proof context into normalized payment details, runs `UnifiedPaymentVerifier`, and signs the result with source tag `buyer-zktls`.
+
+Request body:
+
 ```
 {
   "proofType": "reclaim",
@@ -45,12 +53,55 @@ Request body (shape)
     "fiatCurrency": "0x...",                 // bytes32
     "conversionRate": "1000000000000000000", // 1e18-scaled
     "payeeDetails": "0x...",                 // bytes32
-    "timestampBufferMs": "5000"              // ms as decimal string
+    "timestampBufferMs": "5000"              // optional; ms as decimal string
   }
 }
 ```
 
-Response (shape)
+## Buyer TEE
+
+`POST /buyer/verify/{platform}/{actionType}`
+
+This path does not accept a Reclaim proof. The buyer submits a platform transaction id and platform-specific session material; the enclave contacts the payment platform over HTTPS, validates the authenticated response, normalizes the payment, runs `UnifiedPaymentVerifier`, and signs the result with source tag `buyer-tee`.
+
+Current supported verifier: `POST /buyer/verify/venmo/transfer_venmo`.
+
+Request body:
+
+```
+{
+  "txId": "4404236547182699730",
+  "sessionMaterial": {
+    "buyerUsername": "buyer_user",
+    "accountId": "123456789",
+    "sessionCookie": "venmo_access_token=...",
+    "requestHeaders": {
+      "user-agent": "..."
+    }
+  },
+  "metadata": {
+    "nextId": "optional-pagination-cursor"
+  },
+  "chainId": 8453,
+  "intent": {
+    "intentHash": "0x...",
+    "amount": "50000000",
+    "timestampMs": "1700000000000",
+    "paymentMethod": "0x...",
+    "fiatCurrency": "0x...",
+    "conversionRate": "1000000000000000000",
+    "payeeDetails": "0x...",
+    "timestampBufferMs": "5000"
+  }
+}
+```
+
+For details, see [Buyer TEE Verification](./buyer-tee-verification.md).
+
+## Response
+
+All verification paths return the same response shape:
+
 ```
 {
   "success": true,
@@ -78,54 +129,32 @@ Response (shape)
     "proofInput": "{…}",                // normalized proof input JSON string
     "platform": "venmo",
     "actionType": "transfer_venmo",
-    "encodedPaymentDetails": "0x…",     // ABI-encoded (PaymentDetails)
-    "metadata": "0x…"                   // ABI-encoded (IntentSnapshot)
+    "encodedPaymentDetails": "0x…",     // data blob: ABI-encoded PaymentDetails + IntentSnapshot
+    "metadata": "0x…"                   // ABI-encoded source tag: buyer-zktls, buyer-tee, or seller-tee
   }
 }
 ```
 
-How to build `paymentProof` for fulfillIntent
+For buyer TEE responses, `proofInput` redacts `sessionMaterial`.
+
+## How to build `paymentProof` for fulfillIntent
+
 1) Construct the `PaymentAttestation` struct in TypeScript/ethers:
+
 ```ts
 import { ethers } from "ethers";
 
 // Values from Attestation Service response
 const sig = resp.responseObject.signature;
 const typed = resp.responseObject.typedDataValue; // { intentHash, releaseAmount, dataHash }
-const encodedPaymentDetails = resp.responseObject.encodedPaymentDetails; // bytes
-const metadata = resp.responseObject.metadata; // bytes
 
-// Signatures array (single signer in SimpleAttestationVerifier)
-const signatures: string[] = [sig];
-
-// data is ABI-encoded (PaymentDetails, IntentSnapshot)
-const data = ethers.AbiCoder.defaultAbiCoder().encode(
-  [
-    // PaymentDetails
-    "tuple(bytes32 method,bytes32 payeeId,uint256 amount,bytes32 currency,uint256 timestamp,bytes32 paymentId)",
-    // IntentSnapshot
-    "tuple(bytes32 intentHash,uint256 amount,bytes32 paymentMethod,bytes32 fiatCurrency,bytes32 payeeDetails,uint256 conversionRate,uint256 signalTimestamp,uint256 timestampBuffer)"
-  ],
-  [
-    ethers.AbiCoder.defaultAbiCoder().decode(
-      ["tuple(bytes32,bytes32,uint256,bytes32,uint256,bytes32)"],
-      encodedPaymentDetails
-    )[0],
-    ethers.AbiCoder.defaultAbiCoder().decode(
-      ["tuple(bytes32,uint256,bytes32,bytes32,bytes32,uint256,uint256,uint256)"],
-      metadata
-    )[0]
-  ]
-);
-
-// Final attestation struct
 const attestation = {
   intentHash: typed.intentHash,
   releaseAmount: typed.releaseAmount,
   dataHash: typed.dataHash,
-  signatures,
-  data,
-  metadata: "0x" // optional/unused path; keep zero-bytes if not used
+  signatures: [sig],
+  data: resp.responseObject.encodedPaymentDetails,
+  metadata: resp.responseObject.metadata
 };
 
 // Encode for Orchestrator.fulfillIntent
@@ -133,8 +162,10 @@ const paymentProof = ethers.AbiCoder.defaultAbiCoder().encode([
   "tuple(bytes32 intentHash,uint256 releaseAmount,bytes32 dataHash,bytes[] signatures,bytes data,bytes metadata)"
 ], [attestation]);
 ```
+
 2) Call `fulfillIntent` with `paymentProof` and the on-chain `intentHash`.
 
-Choosing `chainId` and `verifyingContract`
+## Choosing `chainId` and `verifyingContract`
+
 - `chainId` must match the destination chain where `UnifiedPaymentVerifierV2` lives.
-- `verifyingContract` is the on-chain `UnifiedPaymentVerifierV2` address (`0x46A58Dc65587D4D7B8198C6A25eEdf5b2535Da94` on Base); it is part of the EIP‑712 domain and must match exactly.
+- `verifyingContract` is deprecated in API requests. The service resolves the on-chain `UnifiedPaymentVerifierV2` address from `chainId` (`0x46A58Dc65587D4D7B8198C6A25eEdf5b2535Da94` on Base). If callers still include `verifyingContract`, it must match the service-resolved address.

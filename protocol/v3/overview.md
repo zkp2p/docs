@@ -9,6 +9,7 @@ ZKP2P V3 is the current production protocol. It enables faster, more flexible, a
 
 ### What's new vs V2
 - Off-chain verification: the Attestation Service validates payment evidence, normalizes it, and signs an EIP-712 PaymentAttestation used on-chain.
+- Buyer TEE verification: buyers can use an enclave-resident verification path where the TEE fetches payment-platform data directly instead of receiving a Reclaim proof.
 - Seller Automated Release: sellers can upload encrypted platform credentials once; the TEE later verifies matching payments and signs the V3 attestation.
 - Single on-chain verifier: `UnifiedPaymentVerifierV2` validates the EIP-712 signature and enforces protocol rules (intent bounds, nullifiers, release capping).
 - Cleaner intent path: the gating service signs intents with richer context (payment method, fiat currency, conversion rate, orchestrator/escrow addresses) to reduce round trips.
@@ -33,12 +34,12 @@ ZKP2P V3 is the current production protocol. It enables faster, more flexible, a
 2) Intent signing: client calls the gating API (Curator v2 endpoint) to obtain `gatingServiceSignature` tied to deposit/payment method/fiat.
 3) Signal Intent (on-chain): call `OrchestratorV2.signalIntent(...)` with depositId, amount, to, paymentMethod, fiatCurrency, conversionRate, referralFees, `gatingServiceSignature`. Pre-intent hooks validate the intent before state changes.
 4) Pay off-chain: buyer pays seller's off-chain identifier (hashed on-chain as `payeeDetails`).
-5) Verify payment through buyer proof generation or Seller Automated Release. In SAR, the TEE decrypts the seller's encrypted credential bundle, queries the payment platform, and verifies the payment.
+5) Verify payment through buyer proof generation, Buyer TEE Verification, or Seller Automated Release. In the buyer TEE flow, the enclave uses buyer session material to query the platform directly; in SAR, the enclave decrypts the seller's encrypted credential bundle, queries the payment platform, and verifies the payment.
 6) Attestation: Attestation Service returns a `PaymentAttestation` EIP-712 signature and an ABI-encoded payload.
 7) Fulfill (on-chain): call `OrchestratorV2.fulfillIntent({ paymentProof: abi.encode(PaymentAttestation), intentHash, ... })`. Orchestrator routes to `UnifiedPaymentVerifierV2` to check the attestation, then unlocks and transfers tokens.
 
 ### Trust model
-- TEE-hosted Attestation Service: both the buyer-side `/verify` path and the seller-side Seller Automated Release path run inside an AWS Nitro Enclave. The EIP-712 signing key is KMS-wrapped and PCR8-gated, so it can only be unwrapped by an enclave running the published code measurement; no operator can extract it. Clients can verify the running enclave via `GET /attestation?nonce=...` before trusting any signed output (reference verifier: `@zkp2p/zkp2p-attestation`).
+- TEE-hosted Attestation Service: buyer zkTLS (`/verify/*`), buyer TEE (`/buyer/verify/*`), and Seller Automated Release (`/seller/verify/*`) run inside an AWS Nitro Enclave. The EIP-712 signing key is KMS-wrapped and PCR8-gated, so it can only be unwrapped by an enclave running the published code measurement; no operator can extract it. Clients can verify the running enclave via `GET /attestation?nonce=...` before trusting any signed output or sending sensitive session material (reference verifier: `@zkp2p/zkp2p-attestation`).
 - Off-chain witnesses: Attestation Service signatures are verified on-chain by `AttestationVerifier` (e.g., `SimpleAttestationVerifier` with a witness key). Witness rotation is on-chain governed.
 - Intent integrity: snapshot values in the attestation are checked against on-chain intent state; nullifiers prevent double-spend; release amount is capped to the signaled amount.
 - Oracle adapter safety: oracle adapters are view-only (no state mutation). Staleness checks ensure stale data is rejected. Oracle rates can only raise the floor, never lower it below the fixed rate.
