@@ -68,7 +68,7 @@ At a Glance
 ## The Tech Stack
 **Smart Contract Protocol:** Smart contracts on the Ethereum blockchain enable trustless transactions and manage the logic of the protocol. They are responsible for managing the deposits and intents and the logic for unlocking the escrowed funds.
 
-**Circuits / zkTLS / TEE protocols:** Cryptographic and trusted-computing primitives validate payments in a web2 context. V3 uses Buyer TEE Verification as the current buyer flow for supported payment methods, replacing older buyer-side Reclaim proof generation. Buyer TEE Verification and Seller Automated Release run end-to-end inside an AWS Nitro Enclave: the enclave validates the payment evidence, applies the seven on-chain invariants, and signs the EIP-712 PaymentAttestation. The signing key is KMS-wrapped and only unwrappable by an enclave running the published code measurement.
+**Circuits / zkTLS / TEE protocols:** Cryptographic and trusted-computing primitives validate payments in a web2 context. V3 uses Buyer TEE Verification as the current buyer flow for supported payment methods. Buyer TEE Verification and Seller Automated Release run end-to-end inside an AWS Nitro Enclave: the enclave validates the payment evidence, applies the seven on-chain invariants, and signs the EIP-712 PaymentAttestation. The signing key is KMS-wrapped and only unwrappable by an enclave running the published code measurement.
 
 **PeerAuth Extension / Appclip:** Browser extension and mobile app clip that enables users to generate privacy-preserving buyer web proofs using primitives such as zkTLS, TLSNotary, and zkEmail, similar to OAuth
 

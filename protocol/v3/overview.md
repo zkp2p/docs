@@ -9,7 +9,7 @@ ZKP2P V3 is the current production protocol. It enables faster, more flexible, a
 
 ### What's new vs V2
 - Off-chain verification: the Attestation Service validates payment evidence, normalizes it, and signs an EIP-712 PaymentAttestation used on-chain.
-- Buyer TEE verification: supported buyer payment methods use an enclave-resident verification path where the TEE fetches payment-platform data directly instead of requiring buyer-side Reclaim proof generation.
+- Buyer TEE verification: supported buyer payment methods use an enclave-resident verification path where the TEE fetches payment-platform data directly.
 - Seller Automated Release: sellers can upload encrypted platform credentials once; the TEE later verifies matching payments and signs the V3 attestation.
 - Single on-chain verifier: `UnifiedPaymentVerifierV2` validates the EIP-712 signature and enforces protocol rules (intent bounds, nullifiers, release capping).
 - Cleaner intent path: the gating service signs intents with richer context (payment method, fiat currency, conversion rate, orchestrator/escrow addresses) to reduce round trips.

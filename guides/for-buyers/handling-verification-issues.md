@@ -7,9 +7,9 @@ title: Handling Verification Issues as a Buyer
 
 ### Understanding the Verification Process
 
-When you buy USDC or crypto through ZKP2P, Peer tries to automatically verify your payment through Buyer TEE verification. This replaces the older Reclaim/PeerAuth proof-generation flow for supported payment methods. Sometimes verification can fail due to various reasons:
+When you buy USDC or crypto through ZKP2P, Peer tries to automatically verify your payment. Sometimes verification can fail due to various reasons:
 
-- Your payment provider session expired or was not available
+- You were logged out of the payment provider
 - The payment you selected does not match the order amount, recipient, currency, or timestamp
 - Technical issues with the payment platform
 
@@ -21,7 +21,7 @@ When you buy USDC or crypto through ZKP2P, Peer tries to automatically verify yo
 2. Wait 30 seconds for another verification attempt  
 3. Sometimes a simple retry solves the issue  
 
-#### Check Your Payment Provider Session
+#### Check Your Payment Provider
 
 1. Make sure you are logged in to the payment provider you used
 2. Confirm the payment is visible in your provider account

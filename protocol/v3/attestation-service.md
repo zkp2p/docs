@@ -32,7 +32,7 @@ The previous (legacy) deployment ran the same code on commodity infrastructure w
 
 ### Buyer TEE
 
-Buyer TEE replaces the old buyer-side Reclaim proof-generation flow for supported platforms. The buyer client verifies the Nitro enclave, encrypts payment-platform session material to the attested upload key, and sends that encrypted material with public provider params and the intent snapshot. The enclave decrypts in memory, contacts the payment platform over HTTPS, validates and normalizes the response, runs `UnifiedPaymentVerifier`, and signs the result with source tag `buyer-tee`.
+Buyer TEE is the current buyer verification flow for supported platforms. The buyer client verifies the Nitro enclave, encrypts payment-platform session material to the attested upload key, and sends that encrypted material with public provider params and the intent snapshot. The enclave decrypts in memory, contacts the payment platform over HTTPS, validates and normalizes the response, runs `UnifiedPaymentVerifier`, and signs the result with source tag `buyer-tee`.
 
 Buyer TEE supports Venmo, Cash App, Monzo, Wise, Revolut, Chime, Chase Zelle, Bank of America Zelle, Citi Zelle, PayPal Personal, and PayPal Business. See [Buyer TEE Verification](./buyer-tee-verification.md) for the high-level flow and security model.
 

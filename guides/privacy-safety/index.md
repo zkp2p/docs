@@ -13,7 +13,7 @@ This section covers how ZKP2P protects your privacy and the safety consideration
 
 ## Our Commitment to Privacy
 
-ZKP2P is built with privacy as a core principle. For supported buyer payment methods, Peer now uses Buyer TEE verification instead of the older Reclaim/PeerAuth proof-generation flow. Payment verification material is encrypted to a secure enclave, and only the payment details needed to release the order are used for settlement.
+ZKP2P is built with privacy as a core principle. Peer verifies only the payment details needed to release an order, and personal payment data is not posted on-chain.
 
 ## Safety First
 

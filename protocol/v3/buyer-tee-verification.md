@@ -7,13 +7,13 @@ title: Buyer TEE Verification
 
 ## What this does
 
-Buyer TEE Verification is the current buyer-side verification flow for supported payment platforms. It replaces the old buyer-side Reclaim proof-generation path with a secure enclave flow: the buyer client verifies the Attestation Service enclave, encrypts payment-platform session material to the enclave upload key, and the enclave checks the payment directly.
+Buyer TEE Verification is the current buyer-side verification flow for supported payment platforms. The buyer client verifies the Attestation Service enclave, encrypts payment-platform session material to the enclave upload key, and the enclave checks the payment directly.
 
-The result is still the standard V3 `PaymentAttestation`. On-chain contracts do not need a special Buyer TEE path; they receive the same signed attestation format used by the other V3 fulfillment flows.
+The result is the standard V3 `PaymentAttestation`. On-chain contracts do not need a special Buyer TEE path; they receive the same signed attestation format used by the other V3 fulfillment flows.
 
 ## Who is this for?
 
-Use this page when you need to understand how Peer verifies buyer payments without asking the buyer to generate a Reclaim proof. This is intentionally high level; platform request details live in the Attestation Service implementation and client integration templates.
+Use this page when you need to understand how Peer verifies buyer payments for supported platforms. This is intentionally high level; platform request details live in the Attestation Service implementation and client integration templates.
 
 ## Supported Platforms
 
@@ -40,7 +40,7 @@ Each transformer owns the platform-specific request shape and response parser. I
 
 ## Security Model
 
-Buyer TEE changes where payment evidence is authenticated. Instead of a buyer-generated Reclaim proof leaving the browser or app, the enclave performs the authenticated platform lookup itself.
+Buyer TEE authenticates payment evidence inside the enclave. The enclave performs the authenticated platform lookup, normalizes the payment, and signs only after the shared V3 verifier confirms the payment matches the intent.
 
 Important properties:
 
@@ -52,20 +52,7 @@ Important properties:
 
 The encrypted session payload should still be treated as sensitive. If it leaks, rotate the upstream payment-platform session because the encrypted payload can remain useful for as long as that upstream session remains valid.
 
-## Replacing Reclaim
-
-For supported platforms, the buyer experience should use Buyer TEE instead of the old Reclaim/PeerAuth proof flow. The buyer still proves payment, but the proof source changes:
-
-| Old buyer Reclaim flow | Buyer TEE flow |
-|---|---|
-| Buyer generates a zkTLS/Reclaim proof in the browser or app. | Verified enclave fetches and checks the payment-platform data directly. |
-| Client submits a Reclaim proof to the Attestation Service. | Client submits encrypted session material and provider params to the verified enclave. |
-| Reclaim proof is the authenticity root. | Nitro attestation, encrypted upload-key binding, and in-enclave TLS are the authenticity root. |
-| On-chain settlement consumes a V3 `PaymentAttestation`. | On-chain settlement consumes the same V3 `PaymentAttestation`. |
-
-Seller Automated Release remains a separate seller-side TEE flow and is already documented separately.
-
-## What Users See
+## User Experience
 
 In the buyer UI, this should feel like a normal payment verification step:
 
@@ -75,4 +62,4 @@ In the buyer UI, this should feel like a normal payment verification step:
 4. Wait while Peer verifies the payment securely.
 5. Complete the order and receive crypto on-chain.
 
-The user should not need to understand Reclaim, zkTLS proof generation, or enclave internals to complete an order.
+The user should not need to understand enclave internals to complete an order.
