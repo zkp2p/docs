@@ -13,7 +13,7 @@ At ZKP2P, we make heavy use of zkTLS techniques to prove authenticity of data wh
 
 ### Notary
 
-The Notary runs the 2PC-TLS protocol with the Buyer and attests the transcript to make the data portable. The buyer submits that attestation as the proof of payment to the verifier contract on-chain. Currently, ZKP2P provides a hosted Notary to its users via the ZKP2P extension.
+The Notary runs the 2PC-TLS protocol with the Buyer and attests the transcript to make the data portable. In V3, buyer-generated proofs are submitted to the Attestation Service, which validates the proof, signs a `PaymentAttestation`, and returns the payload used by the on-chain verifier. Currently, ZKP2P provides a hosted Notary to its users via the ZKP2P extension.
 
 #### Generating proof of payment for ZKP2P using TLSN
 
@@ -79,6 +79,8 @@ Additionally, there is a possibility of a Prover MITM (man-in-the-middle) attack
 Despite this, we believe the proxy based approach is most production ready and can scale up to a certain dollar amount of value before we need to migrate to TLSNotary. Reclaim protocol has undergone multiple audits.
 
 Additionally, ZKP2P is built to be generic so we can plug in any primitive as they become mature.
+
+In V3, Reclaim proofs are submitted to `POST /verify/{platform}/{actionType}` on the Attestation Service. The service verifies the Reclaim claim identifier, provider hash, and attestor claim signature, then signs the standard `PaymentAttestation` used on-chain. For endpoint details and the supported Reclaim transformer matrix, see [Buyer zkTLS / Reclaim](../v3/buyer-zktls-reclaim.md).
 
 For more details, please check out the Reclaim docs:
 

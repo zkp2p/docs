@@ -7,37 +7,75 @@ title: Buyer TEE Verification
 
 ## What this does
 
-Buyer TEE verification is the buyer-side enclave flow for payment evidence that is produced by querying the payment platform from inside the Attestation Service TEE. Instead of submitting a Reclaim proof, the buyer submits a platform transaction id and short-lived session material. The AWS Nitro Enclave uses that material to fetch the payment, normalize the result, run the V3 verifier checks, and sign the same `PaymentAttestation` used by every other V3 fulfillment path.
+Buyer TEE verification is the buyer-side enclave flow for payment evidence that cannot or should not be represented as a Reclaim proof. The buyer encrypts platform session material to the Attestation Service enclave upload key, sends that compact JWE with public provider params and the intent snapshot, and the AWS Nitro Enclave performs the payment-platform HTTPS request itself.
+
+The service decrypts the session material in enclave memory, normalizes the payment with a platform-specific buyer TEE transformer, runs the same V3 `UnifiedPaymentVerifier` checks used by Reclaim and Seller Automated Release, and signs the standard EIP-712 `PaymentAttestation`.
 
 ## Who is this for?
 
-Use this page when you are integrating a buyer flow that does not generate a Reclaim proof through PeerAuth, or when you need to understand how the buyer TEE source differs from the buyer zkTLS source.
+Use this page when you are integrating `POST /buyer/verify/{platform}/{actionType}` or comparing the buyer TEE evidence source against [Buyer zkTLS / Reclaim](./buyer-zktls-reclaim.md).
 
 ## Endpoints
 
 | Endpoint | Purpose |
 |---|---|
-| `GET /buyer/supported` | Lists buyer TEE verifiers and the typed data spec they sign. |
-| `POST /buyer/verify/{platform}/{actionType}` | Verifies a buyer payment inside the enclave and returns a signed `PaymentAttestation`. |
+| `GET /buyer/supported` | Lists registered buyer TEE verifiers and the typed data spec they sign. |
+| `POST /buyer/verify/{platform}/{actionType}` | Verifies a buyer payment by querying the payment platform inside the enclave and returns a signed `PaymentAttestation`. |
 
-Current supported verifier:
+Buyer TEE verification only runs in Nitro envelope mode. Non-enclave deployments return `503 Buyer TEE verification requires SIGNER_MODE=envelope`.
 
-| Platform | Action type | Currency | Source tag |
-|---|---|---|---|
-| `venmo` | `transfer_venmo` | `USD` | `buyer-tee` |
+## Supported Buyer TEE Transformers
 
-Buyer TEE verification only runs when the service is in Nitro envelope mode. Non-enclave deployments return `503` for this API.
+| Platform | Action type | Currency | Required `sessionMaterial` fields inside JWE | Public `params` |
+|---|---|---|---|---|
+| `venmo` | `transfer_venmo` | USD | `Cookie` | `SENDER_ID`, `index` |
+| `cashapp` | `transfer_cashapp` | USD | `Cookie`, `x-csrf-token`, `x-device-name`, `x-request-signature`, `x-request-uuid`, `cash-web-request`, `x-web-device-info`, `x-web-context`, `x-bt-id` | `SENDER_ID`, `index` |
+| `monzo` | `transfer_monzo` | GBP | `Authorization` | `TX_ID` |
+| `wise` | `transfer_wise` | Multi-currency | `Cookie` or `X-Access-Token` | `PROFILE_ID`, `TRANSACTION_ID` |
+| `revolut` | `transfer_revolut` | Multi-currency | `Cookie`, `x-device-id` | `index` |
+| `citi` | `transfer_zelle` | USD | `Cookie` | `index` |
+| `chime` | `transfer_chime` | USD | `Cookie`, `body` | `{}` |
+| `chase` | `transfer_zelle` | USD | `Cookie`, `x-jpmc-channel`, `x-jpmc-csrf-token`, `Referer`, `Origin` | `index` |
+| `bankofamerica` | `transfer_zelle` | USD | `Cookie` | `index` |
+| `paypal` | `transfer_paypal` | Multi-currency | `Cookie` | `PAYMENT_ID` |
+| `paypal` | `transfer_business_paypal` | Multi-currency | `Cookie` | `PAYMENT_ID` |
+
+`params` must always be an object. Public provider-template values keep their exact field names, such as `SENDER_ID`, `TX_ID`, `PROFILE_ID`, `TRANSACTION_ID`, and `PAYMENT_ID`. Captured request bodies, including the Chime GraphQL body, belong in encrypted `sessionMaterial`, not public `params`.
+
+PayPal transfer settlement is hard-cut to Buyer TEE and Seller TEE. Personal PayPal Buyer TEE uses `PAYMENT_ID` to fetch the buyer-visible detail row, then hashes the resolved seller/receiver transaction id for `paymentId` and nullification. PayPal Business Buyer TEE hashes the buyer-visible `PAYMENT_ID`.
 
 ## High-Level Flow
 
-1. The client verifies the running enclave with `GET /attestation?nonce=...` and the pinned PCR8 value before sending sensitive session material.
-2. The buyer signals an intent on-chain and pays the seller off-chain.
-3. The client calls `POST /buyer/verify/{platform}/{actionType}` with the platform transaction id, buyer session material, `chainId`, and intent snapshot.
-4. The enclave resolves the `UnifiedPaymentVerifierV2` address from `chainId`, normalizes the intent, and selects the buyer TEE transformer.
-5. The transformer makes the platform HTTPS request from inside the enclave. The TLS client enforces `https://`, the expected hostname, TLS 1.2 or 1.3, certificate-chain validity, and allowed ciphers.
-6. The transformer finds the outgoing payment, confirms it belongs to the authenticated buyer account, and normalizes method, payee, amount, currency, timestamp, and payment id.
-7. `UnifiedPaymentVerifier` checks the normalized payment against the intent and computes `releaseAmount`.
-8. The enclave signs EIP-712 `PaymentAttestation(bytes32 intentHash,uint256 releaseAmount,bytes32 dataHash)` and returns the same attestation shape used by `/verify/*` and `/seller/verify/*`.
+1. The client calls `GET /attestation?nonce=...`, verifies the Nitro attestation document, checks the expected PCR8 measurement, and extracts the enclave upload public key.
+2. The client encrypts buyer session material as a compact JWE using `RSA-OAEP-256` and `A256GCM`.
+3. The buyer signals an intent on-chain and pays the seller off-chain.
+4. The client calls `POST /buyer/verify/{platform}/{actionType}` with `encryptedSessionMaterial`, public `params`, `chainId`, and the intent snapshot.
+5. The enclave decrypts the JWE, verifies the plaintext binding fields, resolves `UnifiedPaymentVerifierV2` from `chainId`, and selects the matching buyer TEE transformer.
+6. The transformer performs the upstream HTTPS request from inside the enclave. The TLS client enforces `https://`, the expected hostname, Node CA authorization, TLS 1.2 or 1.3, non-legacy ciphers, certificate validity, leaf hostname match, adjacent certificate signatures, non-redirect status, and uncompressed JSON before parsing.
+7. The transformer normalizes method, payee, amount, currency, timestamp, and payment id.
+8. `UnifiedPaymentVerifier` checks the normalized payment against the intent and computes `releaseAmount`.
+9. The enclave signs EIP-712 `PaymentAttestation(bytes32 intentHash,uint256 releaseAmount,bytes32 dataHash)` and returns the same attestation shape used by `/verify/*` and `/seller/verify/*`.
+
+## Encrypted Session Material
+
+The service rejects plaintext `sessionMaterial`. The request must use `encryptedSessionMaterial`, a compact JWE encrypted to the attested upload public key returned by `GET /attestation`.
+
+The decrypted JWE plaintext must be strict JSON with these fields:
+
+```json
+{
+  "platform": "venmo",
+  "actionType": "transfer_venmo",
+  "sessionMaterial": {
+    "Cookie": "..."
+  },
+  "boundPubKeySha256": "<sha256-of-attested-upload-public-key>"
+}
+```
+
+The service rejects the envelope if the payload has extra top-level fields, is bound to a different upload key, or is bound to a different `{ platform, actionType }` than the route being called. The enclave decrypts in memory, uses the `sessionMaterial` object for the upstream request, and discards the plaintext after verification.
+
+Buyer TEE verification does not enforce a capture-age limit or one-use replay limit. A leaked encrypted JWE is valid for as long as the upstream platform session remains active, so treat disclosure of the JWE like disclosure of the underlying platform credential and rotate the upstream session.
 
 ## Request Shape
 
@@ -45,17 +83,10 @@ Buyer TEE verification only runs when the service is in Nitro envelope mode. Non
 
 ```json
 {
-  "txId": "4404236547182699730",
-  "sessionMaterial": {
-    "buyerUsername": "buyer_user",
-    "accountId": "123456789",
-    "sessionCookie": "venmo_access_token=...",
-    "requestHeaders": {
-      "user-agent": "..."
-    }
-  },
-  "metadata": {
-    "nextId": "optional-pagination-cursor"
+  "encryptedSessionMaterial": "<compact JWE>",
+  "params": {
+    "SENDER_ID": "buyer-venmo-id",
+    "index": 0
   },
   "chainId": 8453,
   "intent": {
@@ -75,56 +106,44 @@ Fields:
 
 | Field | Required | Description |
 |---|---|---|
-| `txId` | Yes | Platform transaction id. For Venmo, this must be alphanumeric and at least 16 characters. |
-| `sessionMaterial` | Yes | Platform-specific buyer auth material. It is parsed and used by the enclave transformer, then redacted from `proofInput` in the service response. |
-| `metadata` | No | Platform-specific query metadata. Venmo supports `nextId` pagination when the first page does not include the target payment. |
+| `encryptedSessionMaterial` | Yes | Compact JWE encrypted to the verified enclave upload public key. |
+| `params` | Yes | Transformer-specific public params. Use `{}` for platforms with no public params. |
 | `chainId` | Yes | Destination chain id. Production Base is `8453`; staging Base Sepolia is `84532`. |
 | `verifyingContract` | No | Deprecated parity field. The service resolves `UnifiedPaymentVerifierV2` from `chainId`. |
 | `intent` | Yes | Intent snapshot supplied by the caller. The verifier checks the observed payment against these values before signing. |
 
-## Venmo Normalization
+## Transformer Responsibilities
 
-The Venmo buyer TEE transformer reads the authenticated buyer feed and only accepts an outgoing payment that matches all of the following:
+Each buyer TEE transformer owns its upstream request shape and response parser in code. Across platforms, the transformer must:
 
-| Check | Requirement |
+| Step | Requirement |
 |---|---|
-| Payment id | `story.paymentId` equals `txId`. |
-| Payment type | Story type is `payment` and subtype is one of the supported payment subtypes. |
-| Buyer account | The sender is the authenticated account id from `sessionMaterial.accountId`. |
-| Buyer username | The authenticated sender username exactly matches `sessionMaterial.buyerUsername`. |
-| Receiver | The story exposes a receiver id; this becomes `keccak256(receiverId)`. |
-| Amount | The story amount parses to a positive USD-cent amount. |
-| Response shape | Venmo returns JSON with identity encoding; compressed or non-JSON responses are rejected. |
+| Authenticate | Use only session material decrypted from the attested-key JWE. |
+| Fetch | Query the expected platform hostname through the enclave TLS client. |
+| Locate payment | Use public `params` and platform response fields to select the buyer's outgoing payment. |
+| Validate response | Reject unauthorized sessions, redirects, compressed responses, malformed JSON, unexpected response shapes, wrong payment states, and missing receiver identifiers. |
+| Normalize | Produce `NormalizedPaymentDetails` with method hash, payee hash, amount in fiat minor units, currency hash, timestamp in milliseconds, and payment id hash. |
 
-Normalized payment details:
-
-| Payment field | Value |
-|---|---|
-| `method` | `keccak256("venmo")` |
-| `payeeId` | `keccak256(receiverId)` |
-| `amount` | USD cents as `uint256` |
-| `currency` | `keccak256("USD")` |
-| `timestamp` | Venmo payment timestamp in milliseconds |
-| `paymentId` | `keccak256(txId)` |
+For example, Venmo uses `SENDER_ID` and `index` as public params, reads the authenticated buyer feed with decrypted cookies, and hashes the receiver id and payment id into the unified payment details. Other providers use their own equivalent response fields and request headers.
 
 ## How It Differs From Reclaim
 
-| Area | Reclaim buyer zkTLS | Buyer TEE |
+| Area | Buyer zkTLS / Reclaim | Buyer TEE |
 |---|---|---|
 | API | `POST /verify/{platform}/{actionType}` | `POST /buyer/verify/{platform}/{actionType}` |
-| Request evidence | `proofType: "reclaim"` plus a stringified Reclaim proof | `txId` plus platform-specific buyer session material |
+| Request evidence | `proofType: "reclaim"` plus a stringified Reclaim proof | `encryptedSessionMaterial` compact JWE plus public `params` |
 | Who contacts the payment platform | The buyer proof flow contacts the platform while generating the Reclaim proof | The Nitro Enclave contacts the platform during verification |
-| Authenticity root | Reclaim attestor signature, claim identifier, provider hash, and proof context | Nitro measurement plus an in-enclave HTTPS request to the expected platform hostname |
-| Proof handler | `ReclaimProofHandler` verifies the Reclaim claim signature before transformation | No external proof handler; the buyer TEE transformer fetches and validates the platform response itself |
+| Authenticity root | Reclaim claim identifier, provider hash, attestor allowlist, and attestor claim signature | Nitro attestation, attested upload-key JWE binding, and in-enclave HTTPS/TLS validation |
+| Proof handler | `ReclaimProofHandler.verifySignature` verifies proof authenticity before transformation | No external proof handler; the buyer TEE transformer fetches and validates the platform response itself |
 | PeerAuth | Used by browser/mobile proof generation | Not used for the TEE request path |
 | Source tag | `buyer-zktls` | `buyer-tee` |
 | On-chain format | Standard V3 `PaymentAttestation` | Same standard V3 `PaymentAttestation` |
 
-Both paths converge on the same `UnifiedPaymentVerifier` checks and the same on-chain `UnifiedPaymentVerifierV2` contract. The difference is only the off-chain evidence source and where the platform data is authenticated.
+Both paths converge on the same `UnifiedPaymentVerifier` checks and the same on-chain `UnifiedPaymentVerifierV2` contract. The difference is the off-chain evidence source and where platform data is authenticated.
 
 ## Verifier Checks
 
-After normalization, buyer TEE attestations use the same V3 checks as buyer zkTLS and Seller Automated Release:
+After normalization, buyer TEE attestations use the same V3 checks as Buyer zkTLS / Reclaim and Seller Automated Release:
 
 | Check | Requirement |
 |---|---|
@@ -196,10 +215,13 @@ const paymentProof = ethers.AbiCoder.defaultAbiCoder().encode(
 
 | Failure | Meaning |
 |---|---|
-| Nitro verification fails | The client should not send buyer session material to that service instance. |
+| Nitro verification fails | The client should not encrypt or send buyer session material to that service instance. |
 | `503 Buyer TEE verification requires SIGNER_MODE=envelope` | The API was called on a non-enclave deployment. |
-| Invalid session material | Required platform auth fields are missing or malformed. |
-| Unauthorized session | The payment platform rejected the buyer session. |
-| No matching payment | The current page of the buyer feed did not contain `txId`; Venmo responses may include `nextCursor` for another request. |
+| Unknown buyer TEE verifier | The `{platform, actionType}` route is not registered in the buyer TEE transformer registry. |
+| Missing `encryptedSessionMaterial` | Plaintext `sessionMaterial` is rejected; send an attested-key compact JWE. |
+| Invalid JWE envelope | The JWE cannot be decrypted with the enclave upload key, uses the wrong algorithms, or includes unsupported protected-header fields. |
+| Invalid JWE binding | The plaintext is missing binding fields, has extra top-level fields, is bound to another upload key, or is bound to another `{platform, actionType}`. |
+| Unauthorized session | The payment platform rejected the decrypted buyer session material. |
+| No matching payment | The transformer could not find the expected outgoing payment from the public params and platform response. |
 | Platform lookup fails | The enclave could not fetch or parse the platform response. |
 | Verifier check fails | The observed payment does not satisfy the intent. |

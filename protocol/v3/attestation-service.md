@@ -18,7 +18,7 @@ Endpoints
 - `POST /buyer/verify/{platform}/{actionType}` - verify a buyer payment by querying the payment platform inside the enclave and produce a `PaymentAttestation`.
 - `POST /seller/credentials/{platform}` - upload an encrypted seller credential bundle (Seller Automated Release).
 - `POST /seller/verify/{platform}` - resolve a seller-side payment from a stored credential bundle and produce a `PaymentAttestation`.
-- `GET /attestation?nonce=...` - return a Nitro NSM attestation document binding the response to the running enclave's code measurement. Used by clients to verify they are talking to the expected enclave before trusting any signed output or sending sensitive session material.
+- `GET /attestation?nonce=...` - return a Nitro NSM attestation document binding the response to the running enclave's code measurement. Used by clients to verify they are talking to the expected enclave before trusting any signed output or sending encrypted session material.
 
 ## Trust model
 
@@ -26,7 +26,7 @@ The buyer zkTLS (`/verify/*`), buyer TEE (`/buyer/verify/*`), and seller-side (`
 
 - The EIP-712 signing key is wrapped by an AWS KMS Customer Managed Key whose decrypt policy is gated on the enclave's PCR8 measurement. The key is unwrapped in enclave memory at first use and never leaves the enclave; no operator, AWS, or attacker outside the enclave can extract it.
 - Build artifacts (PCR0/PCR1/PCR2/PCR8) are reproducible from the published source tree. The expected signer address and PCR8 are baked into the enclave image and returned by `/attestation` alongside the NSM document.
-- Clients can verify the attestation document and PCR8 match the published values before sending any sensitive material or trusting any signed PaymentAttestation. Reference verifier: [`@zkp2p/zkp2p-attestation`](https://www.npmjs.com/package/@zkp2p/zkp2p-attestation).
+- Clients can verify the attestation document and PCR8 match the published values before encrypting session material or trusting any signed PaymentAttestation. Reference verifier: [`@zkp2p/zkp2p-attestation`](https://www.npmjs.com/package/@zkp2p/zkp2p-attestation).
 - On-chain, the enclave's signer is registered as a witness on `MultiAttestationVerifier`. Signatures from any other key are rejected at `fulfillIntent`.
 
 The previous (legacy) deployment ran the same code on commodity infrastructure with the signing key held in plaintext environment variables; that deployment is sunsetted and the canonical hostname now points at the enclave.
@@ -36,6 +36,8 @@ The previous (legacy) deployment ran the same code on commodity infrastructure w
 `POST /verify/{platform}/{actionType}`
 
 This path accepts a buyer-generated provider proof. For Reclaim, the service verifies the claim identifier and attestor signature, transforms the extracted proof context into normalized payment details, runs `UnifiedPaymentVerifier`, and signs the result with source tag `buyer-zktls`.
+
+`proofType` currently supports only `reclaim`. Supported Reclaim transformers are documented in [Buyer zkTLS / Reclaim](./buyer-zktls-reclaim.md).
 
 Request body:
 
@@ -62,25 +64,20 @@ Request body:
 
 `POST /buyer/verify/{platform}/{actionType}`
 
-This path does not accept a Reclaim proof. The buyer submits a platform transaction id and platform-specific session material; the enclave contacts the payment platform over HTTPS, validates the authenticated response, normalizes the payment, runs `UnifiedPaymentVerifier`, and signs the result with source tag `buyer-tee`.
+This path does not accept a Reclaim proof. The buyer submits an attested-key compact JWE as `encryptedSessionMaterial`, public provider `params`, `chainId`, and the intent snapshot. The enclave decrypts the JWE in memory, contacts the payment platform over HTTPS, validates the authenticated response, normalizes the payment, runs `UnifiedPaymentVerifier`, and signs the result with source tag `buyer-tee`.
 
-Current supported verifier: `POST /buyer/verify/venmo/transfer_venmo`.
+Buyer TEE supports Venmo, Cash App, Monzo, Wise, Revolut, Chime, Chase Zelle, Bank of America Zelle, Citi Zelle, PayPal personal, and PayPal Business. Current route keys and required params are documented in [Buyer TEE Verification](./buyer-tee-verification.md).
+
+The request body must carry `encryptedSessionMaterial`. Plaintext `sessionMaterial` is rejected. The JWE plaintext is bound to `{ platform, actionType, boundPubKeySha256 }`, so the service rejects payloads encrypted for a different upload key or route.
 
 Request body:
 
 ```
 {
-  "txId": "4404236547182699730",
-  "sessionMaterial": {
-    "buyerUsername": "buyer_user",
-    "accountId": "123456789",
-    "sessionCookie": "venmo_access_token=...",
-    "requestHeaders": {
-      "user-agent": "..."
-    }
-  },
-  "metadata": {
-    "nextId": "optional-pagination-cursor"
+  "encryptedSessionMaterial": "<compact JWE>",
+  "params": {
+    "SENDER_ID": "buyer-venmo-id",
+    "index": 0
   },
   "chainId": 8453,
   "intent": {
@@ -95,8 +92,6 @@ Request body:
   }
 }
 ```
-
-For details, see [Buyer TEE Verification](./buyer-tee-verification.md).
 
 ## Response
 
@@ -135,7 +130,7 @@ All verification paths return the same response shape:
 }
 ```
 
-For buyer TEE responses, `proofInput` redacts `sessionMaterial`.
+For buyer TEE responses, `proofInput` redacts `encryptedSessionMaterial`.
 
 ## How to build `paymentProof` for fulfillIntent
 

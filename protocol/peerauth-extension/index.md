@@ -21,9 +21,9 @@ PeerAuth plays a key role in helping buyers authenticate their payment transacti
 
 -   Fetching Necessary Cookies: The extension retrieves the relevant cookies from sites you're logged into. These cookies are used to generate proof of web2 data, such as previous 10 Venmo transactions.
 
-***Note*:** All data stays on the user's device — only zero-knowledge proofs leave. Private data not relevant to proving validity is redacted before sharing with our deployed verifier.
+***Note*:** In the PeerAuth/Reclaim proof path, all data stays on the user's device and only zero-knowledge proofs leave. Private data not relevant to proving validity is redacted before sharing with the Attestation Service.
 
-Buyer TEE Verification and Seller Automated Release are TEE-based and do not use PeerAuth/Reclaim proof generation. Buyer TEE sends short-lived buyer session material to the verified enclave, while SAR uses encrypted seller credential bundles.
+Buyer TEE Verification and Seller Automated Release are TEE-based and do not use PeerAuth/Reclaim proof generation. Buyer TEE sends session material as a compact JWE encrypted to the verified enclave; unlike PeerAuth, no Reclaim proof leaves the browser or app. SAR uses encrypted seller credential bundles.
 
 Currently, PeerAuth only supports ZKP2P as its first integration, but the extension is generalized to support OAuth into any website.
 
