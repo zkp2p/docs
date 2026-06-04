@@ -24,7 +24,7 @@ pnpm add @zkp2p/sdk viem react
 bun add @zkp2p/sdk viem react
 ```
 
-`react >= 16.8.0` is an optional peer dependency of `@zkp2p/sdk`.
+`viem ^2.37.3` is a peer dependency of the core SDK. `react >= 16.8.0` is an optional peer dependency that is required for `@zkp2p/sdk/react`.
 
 ## Hook pattern
 
@@ -214,10 +214,11 @@ The hooks package re-exports several delegation helpers and types.
 | Export | Purpose |
 | --- | --- |
 | `ZERO_RATE_MANAGER_ID` | Canonical zero vault ID |
+| `VAULT_ZERO_ADDRESS` | Canonical zero vault registry address |
 | `isZeroRateManagerId(value)` | Checks whether a vault ID is the zero ID |
 | `normalizeRateManagerId(value)` | Normalizes a vault ID string |
 | `normalizeRegistry(value)` | Normalizes a registry address string |
-| `getDelegationRoute(client, escrow)` | Returns whether the deposit should use the `legacy` or `v2` delegation path |
+| `getDelegationRoute(client, escrow)` | Returns the V2 delegation route for the target escrow |
 | `classifyDelegationState(currentRateManagerId, currentRegistry, targetRateManagerId, targetRegistry)` | Classifies whether a deposit is delegated here, elsewhere, or not delegated |
 
 Useful exported types:
