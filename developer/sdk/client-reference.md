@@ -25,7 +25,7 @@ Create a client with `new Zkp2pClient(opts)`.
 | `runtimeEnv` | No | Runtime environment: `production`, `preproduction`, or `staging`. Defaults to `production` |
 | `indexerUrl` | No | Override for the indexer GraphQL endpoint |
 | `baseApiUrl` | No | Override for ZKP2P service APIs |
-| `apiKey` | No | Optional curator API key — not required for any method. When provided, some responses are enriched (e.g. `getQuote` returns maker `depositData`) |
+| `apiKey` | No | Optional curator API key — not required to get started. When provided, it enables auto-fetching `signalIntent()` gating signatures and enriches authenticated quote responses with maker `payeeData` |
 | `authorizationToken` | No | Optional bearer token for hybrid authentication |
 | `getAuthorizationToken` | No | Async token provider for long-lived clients |
 | `indexerApiKey` | No | Optional `x-api-key` header for indexer proxy authentication |
@@ -41,7 +41,11 @@ const client = new Zkp2pClient({
 ```
 
 :::info No API key required
-All SDK methods work without `apiKey` or `authorizationToken`. Auth credentials are optional and only affect response richness. `signalIntent()` can auto-fetch its gating signature when you provide `apiKey` or `authorizationToken`; if you do not want the SDK to make that request, pass `gatingServiceSignature` and `signatureExpiration` yourself.
+Most public SDK methods work without `apiKey` or `authorizationToken`. Auth credentials are optional for normal deposit, quote, and intent flows and mostly affect response richness. `signalIntent()` can auto-fetch its gating signature when you provide `apiKey` or `authorizationToken`; if you do not want the SDK to make that request, pass `gatingServiceSignature` and `signatureExpiration` yourself.
+:::
+
+:::note Runtime requirements
+The published `0.4.3` package declares `node >= 22` for Node runtimes and `viem ^2.37.3` as a peer dependency.
 :::
 
 ## Prepared transactions
@@ -57,7 +61,7 @@ const prepared = await client.signalIntent.prepare({
   amount: 100_000000n,
   toAddress: '0xYourRecipientAddress',
   processorName: 'wise',
-  payeeDetails: '0xPayeeHash',
+  payeeDetails: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
   fiatCurrencyCode: 'USD',
   conversionRate: 1_020000000000000000n,
 });
@@ -77,7 +81,7 @@ const { depositDetails, prepared } = await client.prepareCreateDeposit({
   amount: 1_000_000000n,
   intentAmountRange: { min: 10_000000n, max: 500_000000n },
   processorNames: ['wise'],
-  depositData: [{ email: 'maker@example.com' }],
+  payeeData: [{ offchainId: 'maker@example.com' }],
   conversionRates: [[
     { currency: 'USD', conversionRate: '1020000000000000000' },
   ]],
@@ -91,14 +95,15 @@ Use `registerPayeeDetails()` when you want to register payment details first and
 | Parameter | Type | Description |
 | --- | --- | --- |
 | `processorNames` | `string[]` | Payment platforms such as `wise`, `revolut`, or `venmo` |
-| `depositData` | `Array<Record<string, string>>` | Processor-specific payment details in the same order as `processorNames` |
+| `payeeData` | `Array<Record<string, string>>` | Processor-specific payment details in the same order as `processorNames` |
+| `depositData` | `Array<Record<string, string>>` | Deprecated alias for `payeeData` |
 
 ```ts
 const { hashedOnchainIds } = await client.registerPayeeDetails({
   processorNames: ['wise', 'revolut'],
-  depositData: [
-    { email: 'maker@example.com' },
-    { tag: '@maker' },
+  payeeData: [
+    { offchainId: 'maker@example.com' },
+    { offchainId: 'maker' },
   ],
 });
 
@@ -107,9 +112,9 @@ await client.createDeposit({
   amount: 1_000_000000n,
   intentAmountRange: { min: 10_000000n, max: 500_000000n },
   processorNames: ['wise', 'revolut'],
-  depositData: [
-    { email: 'maker@example.com' },
-    { tag: '@maker' },
+  payeeData: [
+    { offchainId: 'maker@example.com' },
+    { offchainId: 'maker' },
   ],
   conversionRates: [
     [{ currency: 'USD', conversionRate: '1020000000000000000' }],
@@ -163,7 +168,7 @@ Fulfills a signaled intent with a payment proof. The SDK handles attestation enc
 | Parameter | Required | Description |
 | --- | --- | --- |
 | `intentHash` | Yes | `0x`-prefixed 32-byte intent hash |
-| `proof` | Yes | Reclaim proof object or JSON string |
+| `proof` | Yes | Reclaim proof object/JSON string or a buyer TEE proof input |
 | `timestampBufferMs` | No | Allowed timestamp variance in milliseconds |
 | `attestationServiceUrl` | No | Override for the attestation service |
 | `orchestratorAddress` | No | Explicit orchestrator override |
@@ -182,12 +187,24 @@ Manual release path for returning reserved funds to the deposit owner when an in
 | `orchestratorAddress` | No | Explicit orchestrator override |
 | `txOverrides` | No | viem transaction overrides |
 
+### Deposit hook controls
+
+The V2 orchestrator lets deposit owners configure hooks around intent signaling.
+
+| Method | Description | Key parameters |
+| --- | --- | --- |
+| `setDepositPreIntentHook()` / `.prepare()` | Set the hook called before an intent is accepted | `depositId`, `preIntentHook`, `escrowAddress?`, `orchestratorAddress?` |
+| `getDepositPreIntentHook()` | Read the configured pre-intent hook | `depositId`, `escrowAddress?`, `orchestratorAddress?` |
+| `setDepositWhitelistHook()` / `.prepare()` | Set the whitelist hook for private orderbook or gated deposits | `depositId`, `whitelistHook`, `escrowAddress?`, `orchestratorAddress?` |
+| `getDepositWhitelistHook()` | Read the configured whitelist hook | `depositId`, `escrowAddress?`, `orchestratorAddress?` |
+| `cleanupOrphanedIntents()` / `.prepare()` | Permissionless cleanup for orphaned V2 intents | `intentHashes`, `escrowAddress?`, `orchestratorAddress?` |
+
 ## Vault and rate-manager operations
 
 At the client layer, vaults are exposed as rate managers. These flows are most relevant when you are delegating deposits or managing shared pricing.
 
 :::note
-`staging` defaults to V2 routing. Several vault, delegation, and oracle-backed pricing features are V2-only, even though the SDK still supports legacy fallback for broader deposit and intent flows.
+The `0.4.x` client routes against EscrowV2 and OrchestratorV2. Pass explicit `escrowAddress` or `orchestratorAddress` only when targeting a configured V2 deployment.
 :::
 
 ### Create a vault
@@ -274,6 +291,7 @@ Use `getQuote(req, opts?)` to fetch available liquidity for a taker flow.
 | `includeNearbyQuotes` | No | Include nearby suggestions when no exact quote is available |
 | `nearbySearchRange` | No | Max percent deviation for nearby quote search |
 | `nearbyQuotesCount` | No | Number of nearby suggestions above and below |
+| `includePrivateOrderbooks` | No | Include whitelist-gated private orderbook deposits scoped to the requesting user |
 
 The response includes:
 
@@ -320,6 +338,7 @@ Use `getQuotesBestByPlatform(req, opts?)` when you want the single best quote pe
 The response shape mirrors `getQuote` but is keyed by platform:
 
 - `responseObject.platformQuotes`: array of `{ platform, bestQuote }` entries
+- `responseObject.quoteExpiresAt`: quote expiration timestamp
 - Each `bestQuote` carries the same `referrerFeeAmount` / display fields as `getQuote` when a `referrerFeeConfig` is supplied
 
 ```ts
@@ -356,22 +375,30 @@ The response object includes:
 
 ## Seller Automated Release
 
-Use these methods to upload seller credentials, inspect credential status, and verify seller payments for automated release flows.
-
-:::info Authentication
-`uploadSellerCredential()` and `getSellerCredentialStatus()` require the client to be initialized with `apiKey` or `authorizationToken`.
-:::
+Use these methods to upload seller credentials, inspect credential status, and verify seller payments for automated release flows. Supported seller platforms are `venmo`, `cashapp`, `wise`, and `paypal`.
 
 ### `uploadSellerCredential()`
 
-Use `uploadSellerCredential(params, opts?)` to create a signed credential bundle via the attestation service and store it on the maker through curator. Returns `CuratorSellerCredentialUploadResponse`.
+Use `uploadSellerCredential(params, opts?)` to create a signed credential bundle through the attestation service and store the public credential status in curator. Returns `CuratorSellerCredentialUploadResponse`.
+
+For registered payee platforms (`venmo`, `cashapp`, and `paypal`), pass the seller identity plus platform-specific session material:
 
 | Field | Required | Description |
 | --- | --- | --- |
-| `makerId` | Yes | Maker identifier |
-| `platform` | Yes | Seller payment platform: `venmo`, `cashapp`, or `wise` |
-| `payeeId` | Yes | Payee identifier for the seller account |
-| `sessionMaterial` | Yes | Platform-specific session material: `VenmoSessionMaterial`, `CashAppSessionMaterial`, or `WiseSessionMaterial` |
+| `platform` | Yes | `venmo`, `cashapp`, or `paypal` |
+| `offchainId` | Yes | Stable seller identity used for payee registration |
+| `payeeId` | Yes | Platform payee identifier |
+| `telegramUsername` | No | Optional seller Telegram username |
+| `metadata` | No | Optional curator metadata |
+| `sessionMaterial` | Yes | Platform-specific session material |
+
+For Wise, pass only the platform and Wise session material. The enclave derives the payee hash from the submitted token:
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `platform` | Yes | `wise` |
+| `sessionMaterial.apiToken` | Yes | Wise Personal API Token |
+| `sessionMaterial.profileId` | No | Wise profile identifier. If omitted and multiple profiles exist, handle the profile-selection response |
 
 Optional `opts` fields:
 
@@ -380,6 +407,7 @@ Optional `opts` fields:
 | `baseApiUrl` | No | Override for the curator base API URL |
 | `attestationServiceUrl` | No | Override for the attestation service used to sign the credential bundle |
 | `timeoutMs` | No | Request timeout in milliseconds |
+| `attestationRuntime` | No | Runtime overrides for `fetch`, `subtle`, or `getRandomValues` |
 
 `VenmoSessionMaterial`
 
@@ -405,9 +433,15 @@ Optional `opts` fields:
 | Field | Required | Description |
 | --- | --- | --- |
 | `apiToken` | Yes | Wise API token |
-| `profileId` | Yes | Wise profile identifier |
-| `balanceId` | Yes | Wise balance identifier |
-| `currency` | Yes | Wise balance currency code |
+| `profileId` | No | Wise profile identifier |
+
+`PayPalSessionMaterial`
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `payeeEmail` | Yes | PayPal seller email |
+| `forwardingBaseMailbox` | Yes | Gmail forwarding base mailbox |
+| `forwardingMailboxAlias` | Yes | Per-seller forwarding alias |
 
 ```ts
 import { Zkp2pClient } from '@zkp2p/sdk';
@@ -415,14 +449,13 @@ import { Zkp2pClient } from '@zkp2p/sdk';
 const client = new Zkp2pClient({
   walletClient,
   chainId: 8453,
-  apiKey: 'your-api-key',
 });
 
 const response = await client.uploadSellerCredential(
   {
-    makerId: 'maker_123',
     platform: 'venmo',
-    payeeId: 'payee_123',
+    offchainId: 'peer-seller',
+    payeeId: '123456789',
     sessionMaterial: {
       recipientUsername: 'peer-seller',
       accountId: '123456789',
@@ -436,13 +469,39 @@ const response = await client.uploadSellerCredential(
 );
 ```
 
-### `getSellerCredentialStatus()`
+### `confirmPayPalForwarding()`
 
-Use `getSellerCredentialStatus(params, opts?)` to fetch seller credential status from curator. Returns `CuratorSellerCredentialStatusResponse`.
+Use `confirmPayPalForwarding(params, opts?)` after a PayPal seller has configured Gmail forwarding. The SDK forwards any configured `apiKey` or bearer token to curator.
 
 | Field | Required | Description |
 | --- | --- | --- |
-| `makerId` | Yes | Maker identifier |
+| `payeeDetails` | Yes | Hashed payee details for the PayPal maker |
+| `payeeEmail` | Yes | PayPal seller email |
+| `forwardingInitiatorEmail` | Yes | Gmail account that initiated forwarding |
+
+The package exports `PayPalForwardingConfirmationErrorCode` for UI-specific handling of rejected, expired, missing, or mismatched forwarding confirmations.
+
+### `uploadGoogleOAuthSellerCredential()`
+
+Use `uploadGoogleOAuthSellerCredential(params, opts?)` when curator owns the Google OAuth encryption hop for PayPal or Venmo credentials.
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `platform` | Yes | `paypal` or `venmo` |
+| `authorizationCode` | Yes | One-time Google OAuth code |
+| `payeeDetails` | Yes | Hashed payee details |
+| `redirectUri` | Yes | OAuth redirect URI used to obtain the code |
+| `payeeEmail` | PayPal only | PayPal seller email |
+| `accountId` | Venmo only | Venmo account identifier |
+
+### `getSellerCredentialStatus()`
+
+Use `getSellerCredentialStatus(params, opts?)` to fetch public seller credential status from curator. Returns `CuratorSellerCredentialStatusResponse`.
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `processorName` | Yes | Seller payment platform: `venmo`, `cashapp`, `wise`, or `paypal` |
+| `payeeDetails` | Yes | Hashed payee details bytes32 |
 
 Optional `opts` fields:
 
@@ -457,12 +516,12 @@ import { Zkp2pClient } from '@zkp2p/sdk';
 const client = new Zkp2pClient({
   walletClient,
   chainId: 8453,
-  apiKey: 'your-api-key',
 });
 
 const response = await client.getSellerCredentialStatus(
   {
-    makerId: 'maker_123',
+    processorName: 'paypal',
+    payeeDetails: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
   },
   { timeoutMs: 10_000 },
 );
@@ -478,7 +537,7 @@ Use `verifySellerPayment(params, opts?)` to verify a seller payment through cura
 
 | Field | Required | Description |
 | --- | --- | --- |
-| `platform` | Yes | Seller payment platform: `venmo`, `cashapp`, or `wise` |
+| `platform` | Yes | Seller payment platform: `venmo`, `cashapp`, `wise`, or `paypal` |
 | `txId` | Yes | Payment transaction identifier to verify |
 | `chainId` | Yes | Chain ID associated with the verification request |
 | `intent` | Yes | `SellerVerifyIntentDetails` payload for the seller payment verification |
@@ -514,6 +573,23 @@ const response = await client.verifySellerPayment(
 );
 ```
 
+## Standalone API and attestation helpers
+
+The package also exports low-level helpers for integrations that call service APIs directly instead of going through `Zkp2pClient`.
+
+| Helper | Purpose |
+| --- | --- |
+| `apiGetOrderbook(params, opts)` | Fetch orderbook entries for a fiat currency, optional platform, sort, limit, chain, and token |
+| `apiGetDepositBundle(params, opts)` | Fetch one deposit with related intents, events, profit snapshots, fund activities, and daily snapshots |
+| `apiValidatePayeeDetails(req, baseApiUrl, timeoutMs?)` | Validate a payee identity before registration |
+| `apiGetPayeeDetails(req, apiKey, baseApiUrl, authToken?, timeoutMs?)` | Resolve curator payee details from a hashed on-chain ID |
+| `apiGetOwnerDeposits(req, apiKey, baseApiUrl, authToken?, timeoutMs?)` | Fetch owner deposits from the service API |
+| `apiRequestIdentityAttestation(payload, attestationServiceUrl, platform, actionType)` | Request a maker identity attestation |
+| `createEncryptedBuyerTeeSessionMaterial(input)` | Encrypt buyer TEE session material for a buyer-payment proof |
+| `apiCreateSellerCredentialBundle(payload, attestationServiceUrl, platform, timeoutMs?, runtime?)` | Create a signed seller credential bundle directly through attestation service |
+
+`apiGetOrderbook()` accepts `{ currency, paymentPlatform?, sortBy?, sortDirection?, limit?, chainId?, token? }`. `apiGetDepositBundle()` accepts `{ depositId, escrowAddress, dailySnapshotLimit? }`.
+
 ## Querying on-chain data
 
 For common read flows, start with the RPC-first methods:
@@ -525,8 +601,15 @@ For common read flows, start with the RPC-first methods:
 - `getIntents()`
 - `getAccountIntents(owner)`
 - `getIntent(intentHash)`
+- `getPvDepositById(depositId)`
+- `getPvDepositsFromIds(ids)`
+- `getPvAccountDeposits(owner)`
+- `getPvAccountIntents(owner)`
+- `getPvIntent(intentHash)`
 - `resolvePayeeHash(depositId, paymentMethodHash)`
 - `getFulfillIntentInputs(intentHash)`
+- `getDepositPreIntentHook(depositId, options?)`
+- `getDepositWhitelistHook(depositId, options?)`
 - `getDeployedAddresses()`
 - `getUsdcAddress()`
 
@@ -578,7 +661,7 @@ Use `client.indexer` when you need historical data, richer filtering, or paginat
 - `query<T>({ query, variables? })` — raw GraphQL
 - `client` — raw `IndexerClient` instance
 
-The package also exports `IndexerRateManagerService` and the standalone helper `fetchFulfillmentAndPayment(client.indexer.client, intentHash)`.
+The package also exports `IndexerRateManagerService` and the standalone helper `fetchIndexerFulfillmentAndPayment(client.indexer.client, intentHash)`.
 
 ### Indexer converters
 
@@ -588,7 +671,21 @@ The SDK exports converter helpers for turning indexer payloads into the same `Es
 | --- | --- |
 | `convertIndexerDepositToEscrowView(deposit, chainId, escrowAddress)` | Converts a single indexer deposit (with relations) into an `EscrowDepositView` |
 | `convertDepositsForLiquidity(deposits, chainId, escrowAddress, options?)` | Filters and converts indexer deposits into the active liquidity set used by takers. Pass `{ includePrivateOrderbooks: true }` to also include deposits gated by a non-zero whitelist hook (defaults to `false`, public orderbooks only) |
-| `convertIndexerIntentsToEscrowViews(intents)` | Converts indexer intents into `EscrowIntentView[]` |
+| `convertIndexerIntentsToEscrowViews(intents, depositViewsById)` | Converts indexer intents into `EscrowIntentView[]` |
+
+## Oracle helpers
+
+The SDK exports helper constants and encoders for oracle-backed ARM spread pricing.
+
+| Helper | Purpose |
+| --- | --- |
+| `getSpreadOracleConfig(currency, adapters?)` | Resolve bundled Chainlink-first oracle config for a fiat currency |
+| `encodeSpreadOracleAdapterConfig(config)` | Encode Chainlink adapter config |
+| `encodePythAdapterConfig(config)` | Encode Pyth adapter config |
+| `validateOracleFeedsOnChain(publicClient, pythContract?)` | Return currencies whose bundled feeds are available on-chain |
+| `supportsInlineOracleRateConfig({ escrowAddress? })` | Client method that reports whether the target Escrow ABI accepts inline oracle configs |
+
+Useful constants include `CHAINLINK_ORACLE_ADAPTER`, `PYTH_ORACLE_ADAPTER`, `DEFAULT_ORACLE_MAX_STALENESS_SECONDS`, `CHAINLINK_ORACLE_FEEDS`, `SPREAD_ORACLE_FEEDS`, and `PYTH_ORACLE_FEEDS`.
 
 ## Referrer fees
 
@@ -596,7 +693,8 @@ Use these helpers when you want to validate or normalize referrer fee settings b
 
 | Helper | Purpose |
 | --- | --- |
-| `assertValidReferrerFeeConfig(config, context)` | Throws if the config is invalid for `getQuote` or `signalIntent` |
+| `assertValidReferrerFeeConfig(config, context)` | Throws if the config is invalid for `getQuote`, `getQuotesBestByPlatform`, or `signalIntent` |
+| `isValidReferrerFeeRecipient(value)` | Checks whether a referrer fee recipient is a valid address |
 | `isValidReferrerFeeBps(value)` | Checks whether a BPS value is allowed |
 | `parseReferrerFeeConfig(recipient, feeBpsValue)` | Builds a `ReferrerFeeConfig` from loosely typed input |
 | `referrerFeeConfigToPreciseUnits(config)` | Converts the fee config into precise units for on-chain use |

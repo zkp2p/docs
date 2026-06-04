@@ -58,9 +58,9 @@ await client.createDeposit({
   amount: 10000000000n, // 10,000 USDC (6 decimals)
   intentAmountRange: { min: 100000n, max: 1000000000n },
   processorNames: ['wise', 'revolut'],
-  depositData: [
-    { wisetag: 'maker' },           // Wise payee details
-    { revolutUsername: 'maker' },   // Revolut payee details
+  payeeData: [
+    { offchainId: 'maker' }, // Wise payee details
+    { offchainId: 'maker' }, // Revolut payee details
   ],
   conversionRates: [
     [{ currency: Currency.USD, conversionRate: '1020000000000000000' }], // 1.02 (18 decimals)
@@ -141,23 +141,23 @@ Supported payment platforms and keys:
 | Luxon | `luxon` |
 | N26 | `n26` |
 
-Each item in `depositData` must line up by index with `processorNames`. If you pass `payeeDetailsHashes` to `createDeposit()`, the SDK uses those hashes directly and skips the curator call. Otherwise the SDK forwards each `depositData` object to curator's public `/v1/makers/create` endpoint to obtain the hashes, so the key names need to match the processor exactly. Either path works without an API key — you can also call `registerPayeeDetails()` standalone to get the hashes ahead of time.
+Each item in `payeeData` must line up by index with `processorNames`. If you pass `payeeDetailsHashes` to `createDeposit()`, the SDK uses those hashes directly and skips the curator call. Otherwise the SDK forwards each `payeeData` object to curator's public `/v1/makers/create` endpoint to obtain the hashes. Either path works without an API key. You can also call `registerPayeeDetails()` standalone to get the hashes ahead of time.
 
-The expected `depositData` shape for each platform is:
+The canonical `payeeData` shape is `{ offchainId, telegramUsername?, metadata? }`. Put the platform-specific identifier in `offchainId`.
 
-| Platform | Key | `depositData` shape | Notes |
+| Platform | Key | `payeeData` example | Notes |
 |----------|-----|---------------------|-------|
-| Wise | `wise` | `{ wisetag: 'your-wisetag' }` | Pass the Wisetag without `@`. Wise uses a manual approval flow in curator. |
-| Venmo | `venmo` | `{ venmoUsername: 'YourVenmoUsername' }` | Do not include `@`. Curator validates the exact Venmo username casing. |
-| Revolut | `revolut` | `{ revolutUsername: 'your-revtag' }` | Do not include `@`. |
-| Cash App | `cashapp` | `{ cashtag: 'yourcashtag' }` | Do not include `$`. |
-| PayPal | `paypal` | `{ paypalMeUsername: 'yourpaypalmeusername' }` | Use the PayPal.me username without the `paypal.me/` prefix. Requires PeerAuth extension v0.4.14+. |
-| Zelle | `zelle` | `{ zelleEmail: 'maker@example.com' }` | Curator expects a lowercase email address. |
-| Monzo | `monzo` | `{ monzoMeUsername: 'your-monzo-me-name' }` | Use the Monzo.me username only. |
-| Mercado Pago | `mercadopago` | `{ cvu: '0000003100064367123868' }` | CVU must be a valid 22-digit Mercado Pago / bank CVU. |
-| Chime | `chime` | `{ chimesign: '$yourchimesign' }` | Include the leading `$`. Curator expects the value in lowercase. |
-| Luxon | `luxon` | `{ luxonUsername: 'maker@example.com' }` | Use a lowercase Luxon email address. |
-| N26 | `n26` | `{ iban: 'DE89370400440532013000' }` | Pass a valid IBAN with spaces removed. |
+| Wise | `wise` | `{ offchainId: 'your-wisetag' }` | Pass the Wisetag without `@`. Wise uses a manual approval flow in curator. |
+| Venmo | `venmo` | `{ offchainId: 'YourVenmoUsername' }` | Do not include `@`. Curator validates the exact Venmo username casing. |
+| Revolut | `revolut` | `{ offchainId: 'your-revtag' }` | Do not include `@`. |
+| Cash App | `cashapp` | `{ offchainId: 'yourcashtag' }` | Do not include `$`. |
+| PayPal | `paypal` | `{ offchainId: 'yourpaypalmeusername' }` | Use the PayPal.me username without the `paypal.me/` prefix. Requires PeerAuth extension v0.4.14+. |
+| Zelle | `zelle` | `{ offchainId: 'maker@example.com' }` | Curator expects a lowercase email address. |
+| Monzo | `monzo` | `{ offchainId: 'your-monzo-me-name' }` | Use the Monzo.me username only. |
+| Mercado Pago | `mercadopago` | `{ offchainId: '0000003100064367123868' }` | CVU must be a valid 22-digit Mercado Pago / bank CVU. |
+| Chime | `chime` | `{ offchainId: '$yourchimesign' }` | Include the leading `$`. Curator expects the value in lowercase. |
+| Luxon | `luxon` | `{ offchainId: 'maker@example.com' }` | Use a lowercase Luxon email address. |
+| N26 | `n26` | `{ offchainId: 'DE89370400440532013000' }` | Pass a valid IBAN with spaces removed. |
 
 ```ts
 import { getPaymentMethodsCatalog, PLATFORM_METADATA, PAYMENT_PLATFORMS } from '@zkp2p/sdk';
@@ -272,7 +272,7 @@ function DepositManager({ client }) {
       amount: 10000000000n,
       intentAmountRange: { min: 100000n, max: 1000000000n },
       processorNames: ['wise'],
-      depositData: [{ email: 'maker@example.com' }],
+      payeeData: [{ offchainId: 'maker@example.com' }],
       conversionRates: [[{ currency: 'USD', conversionRate: '1020000000000000000' }]],
     });
     console.log('Created deposit:', result.hash);

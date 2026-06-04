@@ -8,7 +8,7 @@ slug: /sdk
 
 ## What this does
 
-`@zkp2p/sdk` is the TypeScript SDK for building with Peer. Use it to manage deposits, signal and fulfill intents, access quote and taker-tier APIs, work with vault and rate-manager flows, and embed the Peer extension onramp. The current npm release is `0.3.0` and is published under the MIT license.
+`@zkp2p/sdk` is the TypeScript SDK for building with Peer. Use it to manage deposits, signal and fulfill intents, access quote and taker-tier APIs, work with vault and rate-manager flows, embed the Peer extension onramp, and integrate seller automated release. The current npm release is `0.4.3` and is published under the MIT license.
 
 ## Who is this for?
 
@@ -46,14 +46,15 @@ bun add react
 ```
 
 :::note
-`viem` is a peer dependency. `react >= 16.8.0` is an optional peer dependency that is only required for `@zkp2p/sdk/react`.
+`viem ^2.37.3` is a peer dependency. `react >= 16.8.0` is an optional peer dependency that is only required for `@zkp2p/sdk/react`. For Node runtimes, the published package declares `node >= 22`.
 :::
 
 ## Architecture
 
-The SDK is built around RPC-first reads and contract-safe write helpers.
+The SDK is built around RPC-first reads, V2 contract routing, and contract-safe write helpers.
 
 - Common reads such as `getDeposits()`, `getDeposit()`, `getIntents()`, and `getIntent()` use ProtocolViewer and on-chain state first, which helps avoid indexer lag for core flows.
+- Contract routing targets the EscrowV2/OrchestratorV2 stack. Legacy V1 escrow/orchestrator fallbacks are not part of the `0.4.x` client routing surface.
 - Advanced history and filtering live behind `client.indexer.*`, which gives you GraphQL-backed access to richer search, pagination, and fulfillment records.
 - Write methods are split between deposit management, intent operations, and vault/rate-manager flows, with prepared-transaction support for relayers and smart accounts.
 
@@ -64,6 +65,8 @@ The SDK is built around RPC-first reads and contract-safe write helpers.
 | `Zkp2pClient` | The canonical SDK client for reads, writes, and API-backed flows | [Client Reference](/developer/sdk/client-reference) |
 | `peerExtensionSdk` | Peer extension detection, connection, and onramp deeplink helpers | [Onramp Integration](/developer/integrate-zkp2p/integrate-redirect-onramp) |
 | `client.indexer` | Advanced deposit, intent, and fulfillment queries | [Client Reference](/developer/sdk/client-reference#indexer) |
+| Seller automated release | Seller credential upload, PayPal forwarding confirmation, OAuth credential upload, status, and payment verification helpers | [Client Reference](/developer/sdk/client-reference#seller-automated-release) |
+| API and attestation helpers | Orderbook, deposit bundle, payee validation, identity attestation, and buyer TEE helpers | [Client Reference](/developer/sdk/client-reference#standalone-api-and-attestation-helpers) |
 | Contract helpers | `getContracts`, `getRateManagerContracts`, `getPaymentMethodsCatalog`, `getGatingServiceAddress` | [Client Reference](/developer/sdk/client-reference#contract-helpers) |
 | Currency and payment helpers | `currencyInfo`, `resolveFiatCurrencyBytes32`, payment-method hash helpers | [Client Reference](/developer/sdk/client-reference#contract-helpers) |
 | Attribution and fee helpers | ERC-8021 helpers and referrer fee validation utilities | [Client Reference](/developer/sdk/client-reference#referrer-fees) |
@@ -107,7 +110,7 @@ The current SDK docs assume Base. Deployment selection is controlled by `chainId
 | --- | --- | --- | --- |
 | Base production | `8453` | `production` | Default customer-facing deployment |
 | Base preproduction | `8453` | `preproduction` | Production contracts with preproduction services |
-| Base staging | `8453` | `staging` | Staging services and V2-first routing defaults |
+| Base staging | `8453` | `staging` | Staging services with V2 contract routing |
 
 ## Recommended starting points
 
