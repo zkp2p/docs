@@ -22,4 +22,4 @@ See [Pre-Intent Hooks](/protocol/v3/smart-contracts/pre-intent-hooks) for detail
 
 ### API Reference
 
-Our current gating service API is hosted at api.peer.xyz
+Our current gating service API is hosted at `https://api.zkp2p.xyz`. SDK clients should pass this as the root `baseApiUrl`; do not append `/v1`, `/v2`, or `/v3`.
