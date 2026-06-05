@@ -15,6 +15,7 @@ module.exports = {
       items: [
         { type: 'doc', id: 'sdk/sdk-client-reference', label: 'Client Reference' },
         { type: 'doc', id: 'sdk/sdk-react-hooks', label: 'React Hooks' },
+        { type: 'doc', id: 'sdk/sdk-react-native', label: 'React Native SDK' },
       ],
     },
   ],

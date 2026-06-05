@@ -44,6 +44,10 @@ const client = new Zkp2pClient({
 Most public SDK methods work without `apiKey` or `authorizationToken`. Auth credentials are optional for normal deposit, quote, and intent flows and mostly affect response richness. `signalIntent()` can auto-fetch its gating signature when you provide `apiKey` or `authorizationToken`; if you do not want the SDK to make that request, pass `gatingServiceSignature` and `signatureExpiration` yourself.
 :::
 
+:::note Service roots
+Set `baseApiUrl` to the service root, for example `https://api.zkp2p.xyz`. Do not append `/v1`, `/v2`, or `/v3`; the SDK appends the current versioned paths internally.
+:::
+
 :::note Runtime requirements
 The published `0.4.3` package declares `node >= 22` for Node runtimes and `viem ^2.37.3` as a peer dependency.
 :::

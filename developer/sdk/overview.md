@@ -18,6 +18,7 @@ slug: /sdk
 | An app that wants to open the Peer extension onramp | [Onramp Integration](/developer/integrate-zkp2p/integrate-redirect-onramp) | Covers `peerExtensionSdk` and the extension deeplink flow |
 | A custom taker flow, backend, or internal tool | [Client Reference](/developer/sdk/client-reference) | Covers `Zkp2pClient`, intents, quotes, vaults, helpers, and API-backed flows |
 | A React app | [React Hooks](/developer/sdk/react-hooks) | Covers the `@zkp2p/sdk/react` hook layer for transaction UX |
+| A React Native app | [React Native SDK](/developer/sdk/react-native) | Covers mobile WebView auth, Buyer TEE proofs, taker registration, SAR, and mobile endpoint defaults |
 
 ## Installation
 
@@ -49,6 +50,12 @@ bun add react
 `viem ^2.37.3` is a peer dependency. `react >= 16.8.0` is an optional peer dependency that is only required for `@zkp2p/sdk/react`. For Node runtimes, the published package declares `node >= 22`.
 :::
 
+For React Native, use the mobile package instead:
+
+```bash
+yarn add @zkp2p/zkp2p-react-native-sdk viem react-native-webview react-native-svg @react-native-async-storage/async-storage @react-native-cookies/cookies expo-crypto expo-web-browser
+```
+
 ## Architecture
 
 The SDK is built around RPC-first reads, V2 contract routing, and contract-safe write helpers.
@@ -71,11 +78,13 @@ The SDK is built around RPC-first reads, V2 contract routing, and contract-safe 
 | Currency and payment helpers | `currencyInfo`, `resolveFiatCurrencyBytes32`, payment-method hash helpers | [Client Reference](/developer/sdk/client-reference#contract-helpers) |
 | Attribution and fee helpers | ERC-8021 helpers and referrer fee validation utilities | [Client Reference](/developer/sdk/client-reference#referrer-fees) |
 | React hooks | Transaction-oriented hooks for deposits, intents, and vaults | [React Hooks](/developer/sdk/react-hooks) |
+| React Native SDK | Mobile provider, `useZkp2p()`, Buyer TEE proof preparation, taker registration, and SAR | [React Native SDK](/developer/sdk/react-native) |
 
 ### Entry points
 
 - Import the core SDK from `@zkp2p/sdk`
 - Import hooks from `@zkp2p/sdk/react`
+- Import the mobile provider, hook, and client from `@zkp2p/zkp2p-react-native-sdk`
 
 :::info Naming note
 `OfframpClient` is a re-export alias of `Zkp2pClient`. Both names work, but `Zkp2pClient` is the canonical class name used by the published typings and the docs on this page.
@@ -119,6 +128,7 @@ If you are new to the SDK, use this order:
 1. Read [Offramp Integration](/developer/offramp) or [Onramp Integration](/developer/integrate-zkp2p/integrate-redirect-onramp) for an end-to-end flow.
 2. Use [Client Reference](/developer/sdk/client-reference) to look up concrete methods, request shapes, and helper exports.
 3. Use [React Hooks](/developer/sdk/react-hooks) if you want component-level loading, error, and transaction state.
+4. Use [React Native SDK](/developer/sdk/react-native) for mobile WebView auth, Buyer TEE, identity registration, and SAR.
 
 ## Help?
 
