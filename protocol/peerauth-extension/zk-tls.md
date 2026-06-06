@@ -7,7 +7,7 @@ title: zkTLS
 
 ## Overview
 
-At ZKP2P, we make heavy use of zkTLS techniques to prove authenticity of data while preserving user privacy. zkTLS enables us to port any data from the web served through TLS1.2 and TLS1.3 to smart contracts. In particular, there are 2 techniques: TLSNotary (MPC-TLS) and TLSProxy (proxy based approach e.g [Reclaim Protocol](https://reclaimprotocol.org/))
+At ZKP2P, we make heavy use of zkTLS techniques to prove authenticity of data while preserving user privacy. zkTLS enables us to port any data from the web served through TLS1.2 and TLS1.3 to smart contracts. In particular, there are 2 techniques: TLSNotary (MPC-TLS) and TLSProxy (a proxy-based approach using third-party zkTLS proof providers).
 
 ## TLSNotary
 
@@ -68,7 +68,11 @@ To understand TLSNotary, please go through their docs
 
 [TLSN Docs](https://docs.tlsnotary.org/)
 
-### TLSProxy (Reclaim)
+### TLSProxy
+
+:::note
+The proxy-TLS provider flow described below was used in the legacy V2 protocol. It is retained here for historical context. The current V3 production flow validates payments off-chain via the Attestation Service (Buyer TEE Verification and Seller Automated Release).
+:::
 
 Unlike TLSNotary, the proxy approach relies on the Notary being in between the Prover (buyer) and the Server. Privacy is still preserved as only encrypted ciphertext is sent from the Prover to the Notary (Witness Proxy), and the prover is the only party that holds the symmetric TLS keys. This approach is significantly more efficient as it removes the need to generate the TLS session keys using 2PC Garbled Circuits.
 
@@ -76,10 +80,6 @@ However, it is not as censorship resistant as the MPC-TLS approach due to the in
 
 Additionally, there is a possibility of a Prover MITM (man-in-the-middle) attack to change packets enroute if they are able to gain access to the port in the datacenter where the Notary (Proxy) is hosted. This is because the Prover holds the TLS keys.
 
-Despite this, we believe the proxy based approach is most production ready and can scale up to a certain dollar amount of value before we need to migrate to TLSNotary. Reclaim protocol has undergone multiple audits.
+The proxy-based zkTLS proof providers used in V2 had undergone multiple independent audits, which is why the approach was considered production ready at the time.
 
 Additionally, ZKP2P is built to be generic so we can plug in any primitive as they become mature.
-
-For more details, please check out the Reclaim docs:
-
-[Reclaim Protocol Docs](https://docs.reclaimprotocol.org/)

@@ -3,6 +3,10 @@ id: v2-deployments
 title: Deployments
 ---
 
+:::note
+These V2 verifier contracts are legacy. The on-chain proxy-TLS (zkTLS) verifiers listed below are no longer the active verification path — they are kept read-only for historical reference. The current production flow validates payments off-chain via the V3 Attestation Service (Buyer TEE Verification and Seller Automated Release), checked on-chain by `UnifiedPaymentVerifierV2`. See the [Attestation Service](../../v3/attestation-service.md) docs.
+:::
+
 ## Base
 
 <table>
