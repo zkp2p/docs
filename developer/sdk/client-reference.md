@@ -172,7 +172,7 @@ Fulfills a signaled intent with a payment proof. The SDK handles attestation enc
 | Parameter | Required | Description |
 | --- | --- | --- |
 | `intentHash` | Yes | `0x`-prefixed 32-byte intent hash |
-| `proof` | Yes | Reclaim proof object/JSON string or a buyer TEE proof input |
+| `proof` | Yes | zkTLS proof object/JSON string or a buyer TEE proof input |
 | `timestampBufferMs` | No | Allowed timestamp variance in milliseconds |
 | `attestationServiceUrl` | No | Override for the attestation service |
 | `orchestratorAddress` | No | Explicit orchestrator override |

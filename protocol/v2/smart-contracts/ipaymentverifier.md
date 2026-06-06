@@ -22,7 +22,7 @@ struct VerifyPaymentData {
 }
 ```
 
-Additional data may include mail server key hash if using zkEmail, notary public key for TLSNotary or witness proxy for TLSProxy (Reclaim)
+Additional data may include mail server key hash if using zkEmail, notary public key for TLSNotary or witness proxy for proxy-TLS (zkTLS) providers
 
 ### External Functions
 

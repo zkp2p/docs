@@ -9,7 +9,7 @@ How to move from the V2 proof flow to the V3 attestation flow with minimal chang
 
 ### Key differences
 - Off-chain verification
-  - V2: proof JSON (e.g., Reclaim/TLSN) was parsed/validated on-chain by per‑platform verifier contracts.
+  - V2: zkTLS proof JSON (proxy-TLS or TLSNotary) was parsed/validated on-chain by per‑platform verifier contracts.
   - V3: proofs are validated off-chain by the Attestation Service, which emits a signed `PaymentAttestation` verified by a single `UnifiedPaymentVerifierV2` on-chain.
 - On-chain interface
   - V2: multiple verifiers per platform with heterogeneous calldata.

@@ -89,7 +89,7 @@ ZKP2P builds upon the 0xParc/PSE [zkEmail](https://prove.email/) libraries to en
 ZKP2P uses [TLSNotary](https://tlsnotary.org/) for certain flows to enable TLS data to be used on-chain in a privacy-preserving way.
 
 ### TLSProxy Libraries
-ZKP2P V2 uses proxy-based TLS protocols such as [Reclaim](https://reclaimprotocol.org/) to verify payments.
+The legacy V2 protocol used proxy-based zkTLS proof providers to verify payments on-chain. This flow is superseded in V3 by the off-chain Attestation Service (Buyer TEE Verification and Seller Automated Release); the on-chain V2 proxy-TLS verifiers remain deployed only for historical reference.
 
 ### Trusted Execution Environments
 ZKP2P V3 runs the Attestation Service inside an AWS Nitro Enclave for buyer proof verification, Buyer TEE Verification, and Seller Automated Release. The EIP-712 signing key is wrapped by an AWS KMS key whose decrypt policy is gated on the enclave's PCR8 measurement, so the key can only be unwrapped by an enclave running the published code. Clients can verify the running enclave's measurement via `GET /attestation?nonce=...` (which returns an AWS-signed NSM attestation document) before trusting any signed PaymentAttestation or encrypting session material to its upload key. Reference verifier: [`@zkp2p/zkp2p-attestation`](https://www.npmjs.com/package/@zkp2p/zkp2p-attestation).
