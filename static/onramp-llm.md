@@ -1,179 +1,300 @@
-Add an onramp button to this site's payment flow using `@zkp2p/sdk`. When a user clicks it:
+Add Peer extension `0.6.0` headless Buyer TEE capture to this site's onramp or intent fulfillment flow using `@zkp2p/sdk`.
 
-This prompt targets Peer extension manifest version `0.4.9+`. Do not use `callbackUrl` or `onProofComplete()`. Use `onIntentFulfilled()` instead.
+The app owns order UI, payment-row selection, and `fulfillIntent()`. The extension opens the provider auth tab, captures provider-template metadata, encrypts Buyer TEE session material, and returns metadata rows to the page.
 
 ## 1. Initialize the SDK
 
-Use a scoped instance — **not** the default singleton:
+Use a scoped extension instance and an app-owned `Zkp2pClient`.
 
 ```ts
-import { createPeerExtensionSdk } from '@zkp2p/sdk';
+import {
+  createPeerExtensionSdk,
+  Zkp2pClient,
+  type BuyerTeePaymentProofInput,
+  type PeerBuyerTeePaymentCapture,
+  type PeerMetadataMessage,
+  type PeerMetadataRow,
+} from '@zkp2p/sdk';
 
 const peerSdk = createPeerExtensionSdk({ window });
 ```
 
-## 2. Check extension state and handle each case
+## 2. Configure Buyer TEE routing
+
+Use the payment method's verify config. The important fields are:
 
 ```ts
-const state = await peerSdk.getState();
-// Returns: 'needs_install' | 'needs_connection' | 'ready'
+type BuyerTeePlatformConfig = {
+  actionPlatform: string;
+  actionType: string;
+  attestationActionType?: string;
+  includeMetadataIndex?: boolean;
+  platform: string;
+};
+
+const config: BuyerTeePlatformConfig = {
+  actionPlatform: 'venmo',
+  actionType: 'transfer_venmo',
+  includeMetadataIndex: true,
+  platform: 'venmo',
+};
+
+const attestationServiceUrl = 'https://attestation-service.zkp2p.xyz';
 ```
 
-- **`needs_install`** — Show a modal prompting the user to install the Peer extension. The modal should explain: *"A funding wallet that lets you go from fiat to crypto in seconds, without additional verification."* Include a button that calls `peerSdk.openInstallPage()`. **Do not** silently redirect to the Chrome Web Store.
-- **`needs_connection`** — Call `peerSdk.requestConnection()`. If the user declines, show a message explaining the extension must be connected.
-- **`ready`** — Proceed to open the onramp.
+Set `includeMetadataIndex: true` only for Venmo, Cash App, Revolut, and Zelle providers. Do not add `index` for PayPal, Wise, Monzo, or Chime.
 
-## 3. Register the fulfillment callback before opening the flow
+## 3. Check extension state and version
 
 ```ts
-const unsubscribe = peerSdk.onIntentFulfilled((result) => {
-  if (result.bridge.status === 'not_required') {
-    console.log('Peer onramp complete:', result.intentHash);
-    return;
+function isPeerExtension060OrNewer(version: string): boolean {
+  const [major = 0, minor = 0] = version.split('.').map(Number);
+  return major > 0 || (major === 0 && minor >= 6);
+}
+
+async function ensurePeerReady() {
+  const state = await peerSdk.getState();
+
+  if (state === 'needs_install') {
+    peerSdk.openInstallPage();
+    throw new Error('Peer extension 0.6.0 is required');
   }
 
-  console.log('Peer fulfill complete, bridge pending:', result.bridge.trackingUrl);
-});
+  if (state === 'needs_connection') {
+    const approved = await peerSdk.requestConnection();
+    if (!approved) {
+      throw new Error('Peer extension connection was not approved');
+    }
+  }
+
+  const version = await peerSdk.getVersion();
+  if (!isPeerExtension060OrNewer(version)) {
+    throw new Error(`Peer extension 0.6.0 or newer is required; found ${version}`);
+  }
+}
 ```
 
-- Register the listener before calling `peerSdk.onramp(...)`.
-- Non-bridge flows emit once with `bridge.status = 'not_required'`.
-- Bridge flows emit once with `bridge.status = 'pending'`.
-- There is no second bridge-complete callback today. Use `trackingUrl` or `txHashes` to keep tracking.
+## 4. Select the correct metadata row
 
-## 4. Open the onramp side panel
+The selected row's `params` are the attestation params. Do not join against `buyerTeeCapture.params`. Do not use a filtered UI array index as the provider index; use `row.originalIndex`.
 
 ```ts
-peerSdk.onramp({
-  toToken: '<chainId>:<tokenAddress>',       // Token needed for this flow (zero address for native tokens)
-  recipientAddress: '<connectedWalletAddr>',  // Omit if no wallet connected — button should work either way
-  referrer: '<this-site-name>',               // Your application name
-  referrerLogo: '<https://your-site/logo>',   // Must be http/https URL, not a data URI
-  inputCurrency: 'USD',                       // Optional fiat currency
-  inputAmount: '25',                          // Optional fiat amount, up to 6 decimals
+function isBuyerTeeParams(
+  value: unknown,
+): value is Record<string, string | number | boolean> {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    !Array.isArray(value) &&
+    Object.values(value).every(
+      (entry) =>
+        typeof entry === 'string' ||
+        typeof entry === 'number' ||
+        typeof entry === 'boolean',
+    )
+  );
+}
+
+function selectPaymentRow(
+  rows: PeerMetadataRow[],
+  expected: {
+    amount?: string;
+    currency?: string;
+    paymentId?: string;
+    recipient?: string;
+  },
+): PeerMetadataRow | null {
+  const visibleRows = rows.filter((row) => !row.hidden && isBuyerTeeParams(row.params));
+
+  if (expected.paymentId) {
+    const byPaymentId = visibleRows.find((row) => row.paymentId === expected.paymentId);
+    if (byPaymentId) return byPaymentId;
+  }
+
+  return (
+    visibleRows.find(
+      (row) =>
+        (!expected.amount || row.amount === expected.amount) &&
+        (!expected.currency || row.currency === expected.currency) &&
+        (!expected.recipient || row.recipient === expected.recipient),
+    ) ?? null
+  );
+}
+```
+
+## 5. Build Buyer TEE proof params
+
+```ts
+function buildBuyerTeeProof(
+  row: PeerMetadataRow,
+  capture: PeerBuyerTeePaymentCapture | null | undefined,
+  config: BuyerTeePlatformConfig,
+): BuyerTeePaymentProofInput {
+  if (!capture?.encryptedSessionMaterial || !isBuyerTeeParams(row.params)) {
+    throw new Error('Selected payment row is missing Buyer TEE capture data');
+  }
+
+  if (config.includeMetadataIndex && !Number.isInteger(row.originalIndex)) {
+    throw new Error('Selected payment row is missing its provider metadata index');
+  }
+
+  return {
+    proofType: 'buyerTee',
+    encryptedSessionMaterial: capture.encryptedSessionMaterial,
+    params: {
+      ...row.params,
+      ...(config.includeMetadataIndex ? { index: row.originalIndex } : {}),
+    },
+    actionPlatform: config.actionPlatform,
+    actionType: config.attestationActionType ?? config.actionType,
+  };
+}
+```
+
+## 6. Register metadata listener and fulfill
+
+Register the listener before calling `authenticate()`.
+
+```ts
+function registerBuyerTeeHandler({
+  client,
+  config,
+  expectedPayment,
+  intentHash,
+}: {
+  client: Zkp2pClient;
+  config: BuyerTeePlatformConfig;
+  expectedPayment: {
+    amount?: string;
+    currency?: string;
+    paymentId?: string;
+    recipient?: string;
+  };
+  intentHash: `0x${string}`;
+}) {
+  const unsubscribe = peerSdk.onMetadataMessage(async (message: PeerMetadataMessage) => {
+    try {
+      if (message.errorMessage) {
+        throw new Error(message.errorMessage);
+      }
+
+      const selectedRow = selectPaymentRow(message.metadata, expectedPayment);
+      if (!selectedRow) {
+        throw new Error('No returned payment row matched the expected payment');
+      }
+
+      const proof = buildBuyerTeeProof(selectedRow, message.buyerTeeCapture, config);
+
+      await client.fulfillIntent({
+        intentHash,
+        proof,
+        attestationServiceUrl,
+      });
+    } catch (error) {
+      console.error('Buyer TEE onramp fulfillment failed:', error);
+    } finally {
+      unsubscribe();
+    }
+  });
+
+  return unsubscribe;
+}
+```
+
+`client.fulfillIntent()` posts to:
+
+```txt
+POST {attestationServiceUrl}/buyer/verify/{actionPlatform}/{actionType}
+```
+
+with `{ encryptedSessionMaterial, params, chainId, intent }`, then encodes the returned attestation and fulfills the intent on-chain.
+
+## 7. Start headless Buyer TEE capture
+
+```ts
+await ensurePeerReady();
+
+registerBuyerTeeHandler({
+  client,
+  config,
+  expectedPayment: {
+    amount: '10.00',
+    currency: 'USD',
+    recipient: 'alice',
+  },
+  intentHash,
+});
+
+peerSdk.authenticate({
+  actionType: config.actionType,
+  attestationActionType: config.attestationActionType ?? config.actionType,
+  attestationServiceUrl,
+  captureMode: 'buyerTee',
+  platform: config.platform,
 });
 ```
 
-### Parameter reference
+## 8. Direct Buyer TEE endpoint preflight
 
-| Parameter | Required | Description |
-|-----------|----------|-------------|
-| `referrer` | Recommended | Your application name |
-| `referrerLogo` | Recommended | URL to your logo (must be `http`/`https`, not a data URI) |
-| `toToken` | Optional | Destination token in `chainId:tokenAddress` format |
-| `recipientAddress` | Optional | User's connected wallet address. Omit if no wallet is connected |
-| `inputCurrency` | Optional | Fiat currency code (e.g. `USD`, `EUR`). Defaults to user's locale |
-| `inputAmount` | Optional | Fiat amount to convert (up to 6 decimal places) |
-| `paymentPlatform` | Optional | Preferred payment method (e.g. `venmo`, `revolut`) — not enforced |
-| `intentHash` | Optional | Existing `0x`-prefixed 32-byte intent hash to reopen directly in the send-payment step |
+Most apps should use `client.fulfillIntent()`. If you need to preflight the attestation service for a custom transaction builder, call the Buyer TEE endpoint with the same selected-row params.
 
-### Supported chains for `toToken`
-
-| Chain | chainId | Native token example |
-|-------|---------|---------------------|
-| Base | `8453` | `8453:0x0000000000000000000000000000000000000000` |
-| Solana | `792703809` | `792703809:11111111111111111111111111111111` |
-| Ethereum | `1` | `1:0x0000000000000000000000000000000000000000` |
-| Polygon | `137` | `137:0x0000000000000000000000000000000000000000` |
-| Arbitrum | `42161` | `42161:0x0000000000000000000000000000000000000000` |
-| BNB | `56` | `56:0x0000000000000000000000000000000000000000` |
-| Avalanche | `43114` | `43114:0x0000000000000000000000000000000000000000` |
-| HyperEVM | `999` | `999:0x0000000000000000000000000000000000000000` |
-| Hyperliquid | `1337` | `1337:0x0000000000000000000000000000000000000000` |
-| Scroll | `534352` | `534352:0x0000000000000000000000000000000000000000` |
-| FlowEVM | `747` | `747:0x0000000000000000000000000000000000000000` |
-
-For EVM chains, use the zero address (`0x0000…0000`) for native currency. For non-EVM chains (e.g. Solana), use the native token's base-58 address.
-
-## 5. Button placement rules
-
-- Place the onramp button **next to any action that requires a token balance** (swap, stake, mint, bridge, etc.).
-- If the user's balance is too low (or no wallet is connected), **highlight the onramp button over the action button** — make the onramp the primary CTA and the action button secondary/disabled.
-- Add the onramp button to any **insufficient balance error states** (e.g. "Not enough ETH" banners, failed transaction modals).
-
-## 6. Full integration example
-
-```tsx
-import { createPeerExtensionSdk } from '@zkp2p/sdk';
-import { useEffect, useState } from 'react';
-
-const peerSdk = createPeerExtensionSdk({ window });
-
-function OnrampButton({
-  toToken,
-  recipientAddress,
-  siteName,
-  siteLogo,
+```ts
+async function verifyBuyerTeePaymentDirectly({
+  chainId,
+  client,
+  encryptedSessionMaterial,
+  intentHash,
+  params,
 }: {
-  toToken: string;
-  recipientAddress?: string;
-  siteName: string;
-  siteLogo: string;
+  chainId: number;
+  client: Zkp2pClient;
+  encryptedSessionMaterial: string;
+  intentHash: `0x${string}`;
+  params: Record<string, string | number | boolean>;
 }) {
-  const [showInstallModal, setShowInstallModal] = useState(false);
+  const intentInputs = await client.getFulfillIntentInputs(intentHash);
 
-  useEffect(() => {
-    const unsubscribe = peerSdk.onIntentFulfilled((result) => {
-      if (result.bridge.status === 'pending') {
-        console.log('Bridge pending:', result.bridge.trackingUrl);
-        return;
-      }
-
-      console.log('Peer onramp complete:', result.intentHash);
-    });
-
-    return unsubscribe;
-  }, []);
-
-  const handleOnramp = async () => {
-    const state = await peerSdk.getState();
-
-    if (state === 'needs_install') {
-      setShowInstallModal(true);
-      return;
-    }
-
-    if (state === 'needs_connection') {
-      const approved = await peerSdk.requestConnection();
-      if (!approved) return;
-    }
-
-    peerSdk.onramp({
-      toToken,
-      ...(recipientAddress && { recipientAddress }),
-      referrer: siteName,
-      referrerLogo: siteLogo,
-    });
-  };
-
-  return (
-    <>
-      <button onClick={handleOnramp}>Fund with Peer</button>
-
-      {showInstallModal && (
-        <div className="modal">
-          <h3>Install Peer</h3>
-          <p>
-            A funding wallet that lets you go from fiat to crypto in seconds,
-            without additional verification.
-          </p>
-          <button onClick={() => peerSdk.openInstallPage()}>
-            Install Extension
-          </button>
-          <button onClick={() => setShowInstallModal(false)}>Close</button>
-        </div>
-      )}
-    </>
+  const response = await fetch(
+    `${attestationServiceUrl}/buyer/verify/${encodeURIComponent(
+      config.actionPlatform,
+    )}/${encodeURIComponent(config.attestationActionType ?? config.actionType)}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        encryptedSessionMaterial,
+        params,
+        chainId,
+        intent: {
+          intentHash,
+          amount: intentInputs.amount,
+          timestampMs: intentInputs.intentTimestampMs,
+          paymentMethod: intentInputs.paymentMethodHash,
+          fiatCurrency: intentInputs.fiatCurrency,
+          conversionRate: intentInputs.conversionRate,
+          payeeDetails: intentInputs.payeeDetails,
+          timestampBufferMs: '300000',
+        },
+      }),
+    },
   );
+
+  if (!response.ok) {
+    throw new Error(await response.text());
+  }
+
+  return response.json();
 }
 ```
 
 ## Key rules
 
-- Use `createPeerExtensionSdk({ window })` — **not** the default `peerExtensionSdk` singleton.
-- Register `onIntentFulfilled()` before calling `onramp()`.
-- Never silently redirect to the Chrome Web Store. Always show a modal first.
-- The button must work with **or without** a connected wallet — just omit `recipientAddress` if none.
-- `referrerLogo` must be an `http`/`https` URL, never a `data:` URI.
-- Do not pass `callbackUrl`; it was removed in Peer extension `0.4.9`.
-- Keep the integration minimal. No extra wrappers or abstractions.
+- Target Peer extension manifest `0.6.0` or newer.
+- Use `createPeerExtensionSdk({ window })`.
+- Register `onMetadataMessage()` before `authenticate()`.
+- Pass `captureMode: 'buyerTee'` and `attestationServiceUrl`.
+- Select the actual payment row the user made.
+- Build params from the selected row's `params`.
+- Add `index: row.originalIndex` only for platforms that require metadata index params.
+- Use `client.fulfillIntent()` to hit the Buyer TEE endpoint and fulfill on-chain.
+- Keep UI, order state, row selection, and error handling in the page.

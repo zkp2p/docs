@@ -8,14 +8,14 @@ slug: /sdk
 
 ## What this does
 
-`@zkp2p/sdk` is the TypeScript SDK for building with Peer. Use it to manage deposits, signal and fulfill intents, access quote and taker-tier APIs, work with vault and rate-manager flows, embed the Peer extension onramp, and integrate seller automated release. The current npm release is `0.4.3` and is published under the MIT license.
+`@zkp2p/sdk` is the TypeScript SDK for building with Peer. Use it to manage deposits, signal and fulfill intents, access quote and taker-tier APIs, work with vault and rate-manager flows, run Peer extension headless metadata capture, and integrate seller automated release. The current npm release is `0.4.3` and is published under the MIT license.
 
 ## Who is this for?
 
 | You are building... | Start here | Why |
 | --- | --- | --- |
 | A liquidity provider or off-ramp dashboard | [Offramp Integration](/developer/offramp) | Covers deposit creation, funding, and deposit management end to end |
-| An app that wants to open the Peer extension onramp | [Onramp Integration](/developer/integrate-zkp2p/integrate-redirect-onramp) | Covers `peerExtensionSdk` and the extension deeplink flow |
+| An app that needs Peer extension payment capture | [Onramp Integration](/developer/integrate-zkp2p/integrate-redirect-onramp) | Covers `peerExtensionSdk` and the extension `0.6.0` headless metadata bridge |
 | A custom taker flow, backend, or internal tool | [Client Reference](/developer/sdk/client-reference) | Covers `Zkp2pClient`, intents, quotes, vaults, helpers, and API-backed flows |
 | A React app | [React Hooks](/developer/sdk/react-hooks) | Covers the `@zkp2p/sdk/react` hook layer for transaction UX |
 | A React Native app | [React Native SDK](/developer/sdk/react-native) | Covers mobile WebView auth, Buyer TEE proofs, taker registration, SAR, and mobile endpoint defaults |
@@ -70,7 +70,7 @@ The SDK is built around RPC-first reads, V2 contract routing, and contract-safe 
 | Module | What it covers | Start here |
 | --- | --- | --- |
 | `Zkp2pClient` | The canonical SDK client for reads, writes, and API-backed flows | [Client Reference](/developer/sdk/client-reference) |
-| `peerExtensionSdk` | Peer extension detection, connection, and onramp deeplink helpers | [Onramp Integration](/developer/integrate-zkp2p/integrate-redirect-onramp) |
+| `peerExtensionSdk` | Peer extension detection, connection, and headless metadata bridge helpers | [Onramp Integration](/developer/integrate-zkp2p/integrate-redirect-onramp) |
 | `client.indexer` | Advanced deposit, intent, and fulfillment queries | [Client Reference](/developer/sdk/client-reference#indexer) |
 | Seller automated release | Seller credential upload, PayPal forwarding confirmation, OAuth credential upload, status, and payment verification helpers | [Client Reference](/developer/sdk/client-reference#seller-automated-release) |
 | API and attestation helpers | Orderbook, deposit bundle, payee validation, identity attestation, and buyer TEE helpers | [Client Reference](/developer/sdk/client-reference#standalone-api-and-attestation-helpers) |

@@ -145,7 +145,7 @@ Signals a taker-side intent and reserves liquidity from a deposit.
 | `conversionRate` | Yes | Agreed conversion rate with 18 decimals |
 | `referralFees` | No | Multi-recipient referral fee list |
 | `referrer` / `referrerFee` | No | Deprecated legacy single-referrer fields |
-| `referrerFeeConfig` | No | Redirect/onramp-friendly referrer fee configuration |
+| `referrerFeeConfig` | No | Onramp-friendly referrer fee configuration |
 | `postIntentHook` | No | Post-intent hook contract address |
 | `preIntentHookData` | No | Data for a pre-intent hook |
 | `data` | No | Arbitrary bytes passed into hook-enabled flows |
