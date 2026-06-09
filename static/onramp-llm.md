@@ -1,22 +1,50 @@
 Add Peer extension `0.6.0` headless Buyer TEE capture to this site's onramp or intent fulfillment flow using `@zkp2p/sdk`.
 
-The extension is a stateless metadata bridge. The app owns order UI, intent selection, and `fulfillIntent()`. The extension only opens the provider auth tab, captures provider-template metadata, encrypts Buyer TEE session material, and returns the result to the page.
+The app owns order UI, payment-row selection, and `fulfillIntent()`. The extension opens the provider auth tab, captures provider-template metadata, encrypts Buyer TEE session material, and returns metadata rows to the page.
 
 ## 1. Initialize the SDK
 
-Use a scoped instance:
+Use a scoped extension instance and an app-owned `Zkp2pClient`.
 
 ```ts
 import {
   createPeerExtensionSdk,
+  Zkp2pClient,
+  type BuyerTeePaymentProofInput,
   type PeerBuyerTeePaymentCapture,
+  type PeerMetadataMessage,
   type PeerMetadataRow,
 } from '@zkp2p/sdk';
 
 const peerSdk = createPeerExtensionSdk({ window });
 ```
 
-## 2. Check extension state and version
+## 2. Configure Buyer TEE routing
+
+Use the payment method's verify config. The important fields are:
+
+```ts
+type BuyerTeePlatformConfig = {
+  actionPlatform: string;
+  actionType: string;
+  attestationActionType?: string;
+  includeMetadataIndex?: boolean;
+  platform: string;
+};
+
+const config: BuyerTeePlatformConfig = {
+  actionPlatform: 'venmo',
+  actionType: 'transfer_venmo',
+  includeMetadataIndex: true,
+  platform: 'venmo',
+};
+
+const attestationServiceUrl = 'https://attestation-service.zkp2p.xyz';
+```
+
+Set `includeMetadataIndex: true` only for Venmo, Cash App, Revolut, and Zelle providers. Do not add `index` for PayPal, Wise, Monzo, or Chime.
+
+## 3. Check extension state and version
 
 ```ts
 function isPeerExtension060OrNewer(version: string): boolean {
@@ -46,186 +74,216 @@ async function ensurePeerReady() {
 }
 ```
 
-## 3. Register the metadata listener
+## 4. Select the correct metadata row
+
+The selected row's `params` are the attestation params. Do not join against `buyerTeeCapture.params`. Do not use a filtered UI array index as the provider index; use `row.originalIndex`.
+
+```ts
+function isBuyerTeeParams(
+  value: unknown,
+): value is Record<string, string | number | boolean> {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    !Array.isArray(value) &&
+    Object.values(value).every(
+      (entry) =>
+        typeof entry === 'string' ||
+        typeof entry === 'number' ||
+        typeof entry === 'boolean',
+    )
+  );
+}
+
+function selectPaymentRow(
+  rows: PeerMetadataRow[],
+  expected: {
+    amount?: string;
+    currency?: string;
+    paymentId?: string;
+    recipient?: string;
+  },
+): PeerMetadataRow | null {
+  const visibleRows = rows.filter((row) => !row.hidden && isBuyerTeeParams(row.params));
+
+  if (expected.paymentId) {
+    const byPaymentId = visibleRows.find((row) => row.paymentId === expected.paymentId);
+    if (byPaymentId) return byPaymentId;
+  }
+
+  return (
+    visibleRows.find(
+      (row) =>
+        (!expected.amount || row.amount === expected.amount) &&
+        (!expected.currency || row.currency === expected.currency) &&
+        (!expected.recipient || row.recipient === expected.recipient),
+    ) ?? null
+  );
+}
+```
+
+## 5. Build Buyer TEE proof params
+
+```ts
+function buildBuyerTeeProof(
+  row: PeerMetadataRow,
+  capture: PeerBuyerTeePaymentCapture | null | undefined,
+  config: BuyerTeePlatformConfig,
+): BuyerTeePaymentProofInput {
+  if (!capture?.encryptedSessionMaterial || !isBuyerTeeParams(row.params)) {
+    throw new Error('Selected payment row is missing Buyer TEE capture data');
+  }
+
+  if (config.includeMetadataIndex && !Number.isInteger(row.originalIndex)) {
+    throw new Error('Selected payment row is missing its provider metadata index');
+  }
+
+  return {
+    proofType: 'buyerTee',
+    encryptedSessionMaterial: capture.encryptedSessionMaterial,
+    params: {
+      ...row.params,
+      ...(config.includeMetadataIndex ? { index: row.originalIndex } : {}),
+    },
+    actionPlatform: config.actionPlatform,
+    actionType: config.attestationActionType ?? config.actionType,
+  };
+}
+```
+
+## 6. Register metadata listener and fulfill
 
 Register the listener before calling `authenticate()`.
 
 ```ts
-function buildBuyerTeeProof(
-  row: PeerMetadataRow,
-  capture: PeerBuyerTeePaymentCapture | null | undefined,
-) {
-  if (!capture?.encryptedSessionMaterial || !row.params) {
-    throw new Error('Selected payment row is missing Buyer TEE capture data');
-  }
-
-  return {
-    proofType: 'buyerTee' as const,
-    encryptedSessionMaterial: capture.encryptedSessionMaterial,
-    params: {
-      ...row.params,
-      index: row.originalIndex,
-    },
-    actionType: 'transfer_venmo',
-    actionPlatform: 'venmo',
+function registerBuyerTeeHandler({
+  client,
+  config,
+  expectedPayment,
+  intentHash,
+}: {
+  client: Zkp2pClient;
+  config: BuyerTeePlatformConfig;
+  expectedPayment: {
+    amount?: string;
+    currency?: string;
+    paymentId?: string;
+    recipient?: string;
   };
-}
+  intentHash: `0x${string}`;
+}) {
+  const unsubscribe = peerSdk.onMetadataMessage(async (message: PeerMetadataMessage) => {
+    try {
+      if (message.errorMessage) {
+        throw new Error(message.errorMessage);
+      }
 
-const unsubscribe = peerSdk.onMetadataMessage(async (message) => {
-  if (message.errorMessage) {
-    console.error('Peer metadata capture failed:', message.errorMessage);
-    return;
-  }
+      const selectedRow = selectPaymentRow(message.metadata, expectedPayment);
+      if (!selectedRow) {
+        throw new Error('No returned payment row matched the expected payment');
+      }
 
-  const selectedPayment = message.metadata.find((row) => !row.hidden && row.params);
-  if (!selectedPayment) {
-    console.error('No selectable payment metadata was returned');
-    return;
-  }
+      const proof = buildBuyerTeeProof(selectedRow, message.buyerTeeCapture, config);
 
-  const proof = buildBuyerTeeProof(selectedPayment, message.buyerTeeCapture);
-
-  await client.fulfillIntent({
-    intentHash,
-    proof,
+      await client.fulfillIntent({
+        intentHash,
+        proof,
+        attestationServiceUrl,
+      });
+    } catch (error) {
+      console.error('Buyer TEE onramp fulfillment failed:', error);
+    } finally {
+      unsubscribe();
+    }
   });
-});
+
+  return unsubscribe;
+}
 ```
 
-## 4. Start headless Buyer TEE capture
+`client.fulfillIntent()` posts to:
+
+```txt
+POST {attestationServiceUrl}/buyer/verify/{actionPlatform}/{actionType}
+```
+
+with `{ encryptedSessionMaterial, params, chainId, intent }`, then encodes the returned attestation and fulfills the intent on-chain.
+
+## 7. Start headless Buyer TEE capture
 
 ```ts
 await ensurePeerReady();
 
+registerBuyerTeeHandler({
+  client,
+  config,
+  expectedPayment: {
+    amount: '10.00',
+    currency: 'USD',
+    recipient: 'alice',
+  },
+  intentHash,
+});
+
 peerSdk.authenticate({
-  actionType: 'transfer_venmo',
-  attestationActionType: 'transfer_venmo',
-  attestationServiceUrl: 'https://attestation-service.zkp2p.xyz',
+  actionType: config.actionType,
+  attestationActionType: config.attestationActionType ?? config.actionType,
+  attestationServiceUrl,
   captureMode: 'buyerTee',
-  platform: 'venmo',
+  platform: config.platform,
 });
 ```
 
-### Launch parameters
+## 8. Direct Buyer TEE endpoint preflight
 
-| Parameter | Required | Description |
-| --- | --- | --- |
-| `actionType` | Yes | Provider template action, such as `transfer_venmo`. |
-| `platform` | Yes | Provider platform, such as `venmo`, `paypal`, `wise`, or `cashapp`. |
-| `captureMode` | Yes | Use `buyerTee` for onramp payment verification. |
-| `attestationServiceUrl` | Yes | Attestation service root, for example `https://attestation-service.zkp2p.xyz`. |
-| `attestationActionType` | No | Use when the attestation action differs from the provider template action. |
-| `providerConfig` | No | Inline provider template for custom/local testing. Omit to use the API default template. |
+Most apps should use `client.fulfillIntent()`. If you need to preflight the attestation service for a custom transaction builder, call the Buyer TEE endpoint with the same selected-row params.
 
-## 5. Button placement rules
+```ts
+async function verifyBuyerTeePaymentDirectly({
+  chainId,
+  client,
+  encryptedSessionMaterial,
+  intentHash,
+  params,
+}: {
+  chainId: number;
+  client: Zkp2pClient;
+  encryptedSessionMaterial: string;
+  intentHash: `0x${string}`;
+  params: Record<string, string | number | boolean>;
+}) {
+  const intentInputs = await client.getFulfillIntentInputs(intentHash);
 
-- Place the verification button where the user needs to prove fiat payment for an existing order or intent.
-- Request extension connection from a user action.
-- Keep the order UI in the page while the extension opens the provider auth tab.
-- Show returned metadata rows and let the user select the payment row if the flow is not fully automatic.
-- Disable fulfillment until a selected row has `params` and the callback has `buyerTeeCapture.encryptedSessionMaterial`.
+  const response = await fetch(
+    `${attestationServiceUrl}/buyer/verify/${encodeURIComponent(
+      config.actionPlatform,
+    )}/${encodeURIComponent(config.attestationActionType ?? config.actionType)}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        encryptedSessionMaterial,
+        params,
+        chainId,
+        intent: {
+          intentHash,
+          amount: intentInputs.amount,
+          timestampMs: intentInputs.intentTimestampMs,
+          paymentMethod: intentInputs.paymentMethodHash,
+          fiatCurrency: intentInputs.fiatCurrency,
+          conversionRate: intentInputs.conversionRate,
+          payeeDetails: intentInputs.payeeDetails,
+          timestampBufferMs: '300000',
+        },
+      }),
+    },
+  );
 
-## 6. Full React example
-
-```tsx
-import {
-  createPeerExtensionSdk,
-  type PeerBuyerTeePaymentCapture,
-  type PeerMetadataRow,
-} from '@zkp2p/sdk';
-import { useEffect, useMemo, useState } from 'react';
-
-function isPeerExtension060OrNewer(version: string): boolean {
-  const [major = 0, minor = 0] = version.split('.').map(Number);
-  return major > 0 || (major === 0 && minor >= 6);
-}
-
-function buildBuyerTeeProof(
-  row: PeerMetadataRow,
-  capture: PeerBuyerTeePaymentCapture | null | undefined,
-) {
-  if (!capture?.encryptedSessionMaterial || !row.params) {
-    throw new Error('Selected payment row is missing Buyer TEE capture data');
+  if (!response.ok) {
+    throw new Error(await response.text());
   }
 
-  return {
-    proofType: 'buyerTee' as const,
-    encryptedSessionMaterial: capture.encryptedSessionMaterial,
-    params: { ...row.params, index: row.originalIndex },
-    actionType: 'transfer_venmo',
-    actionPlatform: 'venmo',
-  };
-}
-
-export function PeerPaymentVerificationButton({
-  client,
-  intentHash,
-}: {
-  client: { fulfillIntent(args: { intentHash: `0x${string}`; proof: unknown }): Promise<unknown> };
-  intentHash: `0x${string}`;
-}) {
-  const peerSdk = useMemo(() => createPeerExtensionSdk({ window }), []);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const unsubscribe = peerSdk.onMetadataMessage(async (message) => {
-      if (message.errorMessage) {
-        setError(message.errorMessage);
-        return;
-      }
-
-      const selectedPayment = message.metadata.find((row) => !row.hidden && row.params);
-      if (!selectedPayment) {
-        setError('No selectable payment metadata was returned');
-        return;
-      }
-
-      try {
-        const proof = buildBuyerTeeProof(selectedPayment, message.buyerTeeCapture);
-        await client.fulfillIntent({ intentHash, proof });
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unable to fulfill intent');
-      }
-    });
-
-    return unsubscribe;
-  }, [client, intentHash, peerSdk]);
-
-  const handleVerify = async () => {
-    setError(null);
-
-    const state = await peerSdk.getState();
-    if (state === 'needs_install') {
-      peerSdk.openInstallPage();
-      return;
-    }
-
-    if (state === 'needs_connection') {
-      const approved = await peerSdk.requestConnection();
-      if (!approved) return;
-    }
-
-    const version = await peerSdk.getVersion();
-    if (!isPeerExtension060OrNewer(version)) {
-      setError(`Peer extension 0.6.0 or newer is required; found ${version}`);
-      return;
-    }
-
-    peerSdk.authenticate({
-      actionType: 'transfer_venmo',
-      attestationActionType: 'transfer_venmo',
-      attestationServiceUrl: 'https://attestation-service.zkp2p.xyz',
-      captureMode: 'buyerTee',
-      platform: 'venmo',
-    });
-  };
-
-  return (
-    <>
-      <button onClick={handleVerify}>Verify payment with Peer</button>
-      {error ? <p role="alert">{error}</p> : null}
-    </>
-  );
+  return response.json();
 }
 ```
 
@@ -233,8 +291,10 @@ export function PeerPaymentVerificationButton({
 
 - Target Peer extension manifest `0.6.0` or newer.
 - Use `createPeerExtensionSdk({ window })`.
-- Use `authenticate()` and `onMetadataMessage()` for the headless flow.
+- Register `onMetadataMessage()` before `authenticate()`.
 - Pass `captureMode: 'buyerTee'` and `attestationServiceUrl`.
-- Build `fulfillIntent()` proof from `buyerTeeCapture.encryptedSessionMaterial` and the selected metadata row's `params`.
-- Keep UI, order state, and intent fulfillment in the page.
-- Do not add extra wrappers or compatibility branches.
+- Select the actual payment row the user made.
+- Build params from the selected row's `params`.
+- Add `index: row.originalIndex` only for platforms that require metadata index params.
+- Use `client.fulfillIntent()` to hit the Buyer TEE endpoint and fulfill on-chain.
+- Keep UI, order state, row selection, and error handling in the page.
