@@ -11,7 +11,7 @@ slug: /sdk/client-reference
 This page documents the published `Zkp2pClient` API surface for `@zkp2p/sdk`. Use it as the reference layer for custom integrations after you have read the higher-level walkthroughs:
 
 - [Offramp Integration](/developer/offramp)
-- [Headless Onramp Integration](/developer/integrate-zkp2p/integrate-headless-onramp)
+- [Onramp Integration](/developer/integrate-zkp2p/integrate-redirect-onramp)
 
 ## Constructor
 

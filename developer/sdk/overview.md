@@ -15,7 +15,7 @@ slug: /sdk
 | You are building... | Start here | Why |
 | --- | --- | --- |
 | A liquidity provider or off-ramp dashboard | [Offramp Integration](/developer/offramp) | Covers deposit creation, funding, and deposit management end to end |
-| An app that needs Peer extension payment capture | [Headless Onramp Integration](/developer/integrate-zkp2p/integrate-headless-onramp) | Covers `peerExtensionSdk` and the extension `0.6.0` headless metadata bridge |
+| An app that needs Peer extension payment capture | [Onramp Integration](/developer/integrate-zkp2p/integrate-redirect-onramp) | Covers `peerExtensionSdk` and the extension `0.6.0` headless metadata bridge |
 | A custom taker flow, backend, or internal tool | [Client Reference](/developer/sdk/client-reference) | Covers `Zkp2pClient`, intents, quotes, vaults, helpers, and API-backed flows |
 | A React app | [React Hooks](/developer/sdk/react-hooks) | Covers the `@zkp2p/sdk/react` hook layer for transaction UX |
 | A React Native app | [React Native SDK](/developer/sdk/react-native) | Covers mobile WebView auth, Buyer TEE proofs, taker registration, SAR, and mobile endpoint defaults |
@@ -70,7 +70,7 @@ The SDK is built around RPC-first reads, V2 contract routing, and contract-safe 
 | Module | What it covers | Start here |
 | --- | --- | --- |
 | `Zkp2pClient` | The canonical SDK client for reads, writes, and API-backed flows | [Client Reference](/developer/sdk/client-reference) |
-| `peerExtensionSdk` | Peer extension detection, connection, and headless metadata bridge helpers | [Headless Onramp Integration](/developer/integrate-zkp2p/integrate-headless-onramp) |
+| `peerExtensionSdk` | Peer extension detection, connection, and headless metadata bridge helpers | [Onramp Integration](/developer/integrate-zkp2p/integrate-redirect-onramp) |
 | `client.indexer` | Advanced deposit, intent, and fulfillment queries | [Client Reference](/developer/sdk/client-reference#indexer) |
 | Seller automated release | Seller credential upload, PayPal forwarding confirmation, OAuth credential upload, status, and payment verification helpers | [Client Reference](/developer/sdk/client-reference#seller-automated-release) |
 | API and attestation helpers | Orderbook, deposit bundle, payee validation, identity attestation, and buyer TEE helpers | [Client Reference](/developer/sdk/client-reference#standalone-api-and-attestation-helpers) |
@@ -125,7 +125,7 @@ The current SDK docs assume Base. Deployment selection is controlled by `chainId
 
 If you are new to the SDK, use this order:
 
-1. Read [Offramp Integration](/developer/offramp) or [Headless Onramp Integration](/developer/integrate-zkp2p/integrate-headless-onramp) for an end-to-end flow.
+1. Read [Offramp Integration](/developer/offramp) or [Onramp Integration](/developer/integrate-zkp2p/integrate-redirect-onramp) for an end-to-end flow.
 2. Use [Client Reference](/developer/sdk/client-reference) to look up concrete methods, request shapes, and helper exports.
 3. Use [React Hooks](/developer/sdk/react-hooks) if you want component-level loading, error, and transaction state.
 4. Use [React Native SDK](/developer/sdk/react-native) for mobile WebView auth, Buyer TEE, identity registration, and SAR.

@@ -1,9 +1,9 @@
 ---
-id: integrate-headless-onramp
-title: Headless Onramp Integration
+id: integrate-redirect-onramp
+title: Onramp Integration
 ---
 
-# Headless Onramp Integration
+# Onramp Integration
 
 ## What this does
 
@@ -253,7 +253,7 @@ For custom provider testing, pass the template inline as `providerConfig`. A tem
 
 Download a ready-to-paste prompt for AI coding assistants that adds Peer extension `0.6.0` headless capture to an onramp or intent fulfillment flow:
 
-**<a href="/headless-onramp-llm.md" download>Download headless-onramp-llm.md</a>**
+**<a href="/onramp-llm.md" download>Download onramp-llm.md</a>**
 
 ## Help?
 

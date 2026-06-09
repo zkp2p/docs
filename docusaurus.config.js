@@ -181,7 +181,7 @@ const config = {
               },
               {
                 label: 'Developer',
-                to: '/developer/integrate-zkp2p/integrate-headless-onramp',
+                to: '/developer/integrate-zkp2p/integrate-redirect-onramp',
               },
             ],
           },
