@@ -151,7 +151,7 @@ The canonical `payeeData` shape is `{ offchainId, telegramUsername?, metadata? }
 | Venmo | `venmo` | `{ offchainId: 'YourVenmoUsername' }` | Do not include `@`. Curator validates the exact Venmo username casing. |
 | Revolut | `revolut` | `{ offchainId: 'your-revtag' }` | Do not include `@`. |
 | Cash App | `cashapp` | `{ offchainId: 'yourcashtag' }` | Do not include `$`. |
-| PayPal | `paypal` | `{ offchainId: 'yourpaypalmeusername' }` | Use the PayPal.me username without the `paypal.me/` prefix. Requires PeerAuth extension v0.4.14+. |
+| PayPal | `paypal` | `{ offchainId: 'yourpaypalmeusername' }` | Use the PayPal.me username without the `paypal.me/` prefix. Requires Peer extension `0.6.0` or newer. |
 | Zelle | `zelle` | `{ offchainId: 'maker@example.com' }` | Curator expects a lowercase email address. |
 | Monzo | `monzo` | `{ offchainId: 'your-monzo-me-name' }` | Use the Monzo.me username only. |
 | Mercado Pago | `mercadopago` | `{ offchainId: '0000003100064367123868' }` | CVU must be a valid 22-digit Mercado Pago / bank CVU. |
