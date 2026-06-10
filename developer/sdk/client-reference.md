@@ -49,7 +49,7 @@ Set `baseApiUrl` to the service root, for example `https://api.zkp2p.xyz`. Do no
 :::
 
 :::note Runtime requirements
-The published `0.4.3` package declares `node >= 22` for Node runtimes and `viem ^2.37.3` as a peer dependency.
+The published `0.5.0` package declares `node >= 22` for Node runtimes and `viem ^2.37.3` as a peer dependency.
 :::
 
 ## Prepared transactions
@@ -178,7 +178,7 @@ Fulfills a signaled intent with a payment proof. The SDK handles attestation enc
 | `orchestratorAddress` | No | Explicit orchestrator override |
 | `postIntentHookData` | No | Hook payload passed to the orchestrator |
 | `txOverrides` | No | viem transaction overrides |
-| `callbacks` | No | UI lifecycle callbacks such as `onAttestationStart`, `onTxSent`, and `onTxMined` |
+| `callbacks` | No | UI lifecycle callbacks such as `onAttestationStart`, `onAttestationComplete`, `onTxSent`, and `onTxMined` |
 | `precomputedAttestation` | No | Pre-encoded attestation data for advanced flows |
 
 ### `releaseFundsToPayer()` / `releaseFundsToPayer.prepare()`
@@ -208,7 +208,7 @@ The V2 orchestrator lets deposit owners configure hooks around intent signaling.
 At the client layer, vaults are exposed as rate managers. These flows are most relevant when you are delegating deposits or managing shared pricing.
 
 :::note
-The `0.4.x` client routes against EscrowV2 and OrchestratorV2. Pass explicit `escrowAddress` or `orchestratorAddress` only when targeting a configured V2 deployment.
+The `0.5.x` client routes against EscrowV2 and OrchestratorV2. Pass explicit `escrowAddress` or `orchestratorAddress` only when targeting a configured V2 deployment.
 :::
 
 ### Create a vault
@@ -473,6 +473,30 @@ const response = await client.uploadSellerCredential(
 );
 ```
 
+### `uploadSellerCredentialBundle()`
+
+Use `uploadSellerCredentialBundle(params, opts?)` when the encrypted credential bundle was already created elsewhere — typically inside a capture extension via `apiCreateSellerCredentialBundle()` — and you only need to register the payee and store the bundle with curator. This is the page-side half of the [extension Seller Autopilot capture flow](/developer/build-your-own-extension#implementing-the-seller-autopilot-flow). Available from `0.5.0`.
+
+For registered payee platforms (`venmo`, `cashapp`, and `paypal`):
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `platform` | Yes | `venmo`, `cashapp`, or `paypal` |
+| `offchainId` | Yes | Stable seller identity used for payee registration |
+| `bundle` | Yes | Encrypted `SellerCredentialBundle` returned by the capture |
+| `telegramUsername` | No | Optional seller Telegram username |
+| `metadata` | No | Optional curator metadata |
+
+For Wise, pass only `platform: 'wise'` and the `bundle`. Optional `opts` fields are `baseApiUrl` and `timeoutMs`.
+
+```ts
+const response = await client.uploadSellerCredentialBundle({
+  platform: 'venmo',
+  offchainId: capture.offchainId,
+  bundle: capture.credentialBundle,
+});
+```
+
 ### `confirmPayPalForwarding()`
 
 Use `confirmPayPalForwarding(params, opts?)` after a PayPal seller has configured Gmail forwarding. The SDK forwards any configured `apiKey` or bearer token to curator.
@@ -639,8 +663,8 @@ Use `client.indexer` when you need historical data, richer filtering, or paginat
 - `getIntentsByRateManager(rateManagerId, statuses?)`
 - `getIntentByHash(intentHash)`
 - `getExpiredIntents({ now, depositIds, limit? })`
-- `getFulfilledIntentEvents(intentHashes)`
-- `getIntentFulfillmentAmounts(intentHash)`
+- `getFulfilledIntentEvents(intentHashes)` — fulfillment events, including `takerAmountNetFees`
+- `getIntentFulfillmentAmounts(intentHash)` — includes `takerAmountNetFees`, the net USDC the taker received after fees
 - `getFulfillmentAndPayment(intentHash)`
 
 ### Fund activity and snapshots
