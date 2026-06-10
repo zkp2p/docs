@@ -51,6 +51,33 @@ You need:
 
 `client.fulfillIntent()` resolves the intent data, posts to the Buyer TEE attestation endpoint, encodes the returned `PaymentAttestation`, and sends the on-chain fulfillment transaction.
 
+## Getting the intent hash
+
+The capture flow needs the `intentHash` of the intent your app signaled. Derive it from the `signalIntent()` transaction receipt by decoding the `IntentSignaled` event. Do not take the latest entry from `getIntents()` — an account can hold multiple open intents and read ordering is not guaranteed, so you can end up fulfilling the wrong reservation.
+
+```ts
+import { createPublicClient, http, parseAbi, parseEventLogs } from 'viem';
+import { base } from 'viem/chains';
+
+const publicClient = createPublicClient({ chain: base, transport: http() });
+
+// signalIntent() returns the transaction hash; see the Client Reference for params
+const txHash = await client.signalIntent({ /* ... */ });
+const receipt = await publicClient.waitForTransactionReceipt({ hash: txHash });
+
+const [intentSignaled] = parseEventLogs({
+  abi: parseAbi([
+    'event IntentSignaled(bytes32 indexed intentHash, address indexed escrow, uint256 indexed depositId, bytes32 paymentMethod, address owner, address to, uint256 amount, bytes32 fiatCurrency, uint256 conversionRate, uint256 timestamp)',
+  ]),
+  logs: receipt.logs,
+  eventName: 'IntentSignaled',
+});
+
+const intentHash = intentSignaled.args.intentHash;
+```
+
+Persist the hash with your order state — you also need it to resume an interrupted flow or to look the intent back up with `client.getIntent(intentHash)`.
+
 ## Quickstart
 
 This example uses Venmo. Venmo requires the selected metadata row's `originalIndex` to be included as `params.index`.
