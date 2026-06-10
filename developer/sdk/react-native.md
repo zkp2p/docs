@@ -8,7 +8,7 @@ slug: /sdk/react-native
 
 ## What this does
 
-`@zkp2p/zkp2p-react-native-sdk` is the mobile SDK for building Peer onramp, proof, taker registration, and Seller Autopilot flows in React Native. The current npm release is `0.2.3` and it wraps `@zkp2p/sdk@0.4.3` for shared contract, API, quote, and fulfillment logic.
+`@zkp2p/zkp2p-react-native-sdk` is the mobile SDK for building Peer onramp, proof, taker registration, and Seller Autopilot flows in React Native. The current npm release is `0.4.1` and it wraps `@zkp2p/sdk@0.4.3` for shared contract, API, quote, and fulfillment logic.
 
 Use this package when your app needs to:
 

@@ -345,6 +345,8 @@ Before storing, verify the registered payee hash matches the bundle's `payeeIdHa
 
 ## SDK reference for extension builders
 
+All of these ship in `@zkp2p/sdk` `0.5.0` or newer.
+
 | Export | Flow | Use |
 |--------|------|-----|
 | `createEncryptedBuyerTeeSessionMaterial({ platform, actionType, attestationServiceUrl, sessionMaterial })` | Buyer | Encrypt captured session material against the attestation TEE; returns the `encryptedSessionMaterial` string |

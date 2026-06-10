@@ -12,7 +12,7 @@ Extension `0.6.0` removes the side panel and the entire deeplink onramp API: `pe
 
 If you are live on the old flow:
 
-- **Migrate to the flow below now.** Your app drives the onramp with `Zkp2pClient`, and the extension is only used as a headless payment capture bridge.
+- **Migrate to the flow below now.** Your app drives the onramp with `Zkp2pClient` on `@zkp2p/sdk@0.5.0+`, and the extension is only used as a headless payment capture bridge.
 - **As a temporary stopgap**, ask your users to pause extension auto-updates so they remain on their installed pre-`0.6.0` version until your migration ships. Treat this strictly as a bridge — unmanaged Chrome installs cannot pin extension versions reliably.
 
 See [Migrating from the pre-0.6.0 deeplink flow](#migrating-from-the-pre-060-deeplink-flow) for a mapping of the old API to the new surface.
@@ -32,7 +32,7 @@ Use this guide if you are building a desktop web app that needs users to verify 
 
 You need:
 
-- `@zkp2p/sdk` installed in your web app
+- `@zkp2p/sdk` `0.5.0` or newer installed in your web app — `0.5.0` is the first release that ships the headless `peerExtensionSdk`; `0.4.x` only exposes the removed deeplink wrapper
 - The Peer extension installed and connected for the current origin
 - A `Zkp2pClient` configured for the chain and runtime
 - An intent your app already created or selected
@@ -484,7 +484,7 @@ See [Build Your Own Extension](/developer/build-your-own-extension) for the full
 
 ## Migrating from the pre-0.6.0 deeplink flow
 
-The pre-`0.6.0` integration opened a Peer-branded side panel that ran the whole onramp. That UI no longer exists — your app now drives the flow and the extension only captures payment confirmation. Mapping the old surface to the new one:
+The pre-`0.6.0` integration opened a Peer-branded side panel that ran the whole onramp. That UI no longer exists — your app now drives the flow and the extension only captures payment confirmation. Start by upgrading to `@zkp2p/sdk` `0.5.0` or newer: the `0.4.x` `peerExtensionSdk` only exposes the removed deeplink API. Then map the old surface to the new one:
 
 | Pre-`0.6.0` | `0.6.0+` |
 |-------------|----------|
