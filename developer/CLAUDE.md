@@ -9,7 +9,7 @@ Integration guides for developers building on ZKP2P.
 | `integrate-zkp2p/integrate-redirect-onramp.md` | App developers | Use Peer extension headless payment capture in web apps |
 | `offramp-integration.md` | Liquidity providers | Manage USDC deposits for offramp |
 | `post-intent-hooks.md` | Protocol developers | Custom fulfillment logic (Solidity) |
-| `build-new-provider.md` | Protocol developers | zkTLS provider templates (JSON) |
+| `build-your-own-extension.md` | Whitelabel/extension developers | Custom capture extension (buyer + Seller Autopilot), provider templates, inline config |
 
 ## Directory Structure
 
@@ -19,7 +19,7 @@ developer/
 │   └── integrate-redirect-onramp.md    # Peer extension 0.6.0 headless onramp
 ├── offramp-integration.md              # OfframpClient SDK
 ├── post-intent-hooks.md                # IPostIntentHook Solidity
-└── build-new-provider.md               # Provider JSON templates
+└── build-your-own-extension.md         # Custom capture extension + provider templates
 ```
 
 ## SDK Packages

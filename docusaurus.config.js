@@ -102,6 +102,21 @@ const config = {
         editUrl: 'https://github.com/zkp2p/docs/edit/main/',
       },
     ],
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        redirects: [
+          {
+            from: '/developer/build-payment-integration',
+            to: '/developer/build-your-own-extension',
+          },
+          {
+            from: '/protocol/v3/v3-seller-automated-release',
+            to: '/protocol/v3/v3-seller-autopilot',
+          },
+        ],
+      },
+    ],
 
 
   ],

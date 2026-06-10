@@ -8,7 +8,7 @@ slug: /sdk
 
 ## What this does
 
-`@zkp2p/sdk` is the TypeScript SDK for building with Peer. Use it to manage deposits, signal and fulfill intents, access quote and taker-tier APIs, work with vault and rate-manager flows, run Peer extension headless metadata capture, and integrate seller automated release. The current npm release is `0.4.3` and is published under the MIT license.
+`@zkp2p/sdk` is the TypeScript SDK for building with Peer. Use it to manage deposits, signal and fulfill intents, access quote and taker-tier APIs, work with vault and rate-manager flows, run Peer extension headless metadata capture, and integrate Seller Autopilot. The current npm release is `0.4.3` and is published under the MIT license.
 
 ## Who is this for?
 
@@ -18,7 +18,7 @@ slug: /sdk
 | An app that needs Peer extension payment capture | [Onramp Integration](/developer/integrate-zkp2p/integrate-redirect-onramp) | Covers `peerExtensionSdk` and the extension `0.6.0` headless metadata bridge |
 | A custom taker flow, backend, or internal tool | [Client Reference](/developer/sdk/client-reference) | Covers `Zkp2pClient`, intents, quotes, vaults, helpers, and API-backed flows |
 | A React app | [React Hooks](/developer/sdk/react-hooks) | Covers the `@zkp2p/sdk/react` hook layer for transaction UX |
-| A React Native app | [React Native SDK](/developer/sdk/react-native) | Covers mobile WebView auth, Buyer TEE proofs, taker registration, SAR, and mobile endpoint defaults |
+| A React Native app | [React Native SDK](/developer/sdk/react-native) | Covers mobile WebView auth, Buyer TEE proofs, taker registration, Seller Autopilot, and mobile endpoint defaults |
 
 ## Installation
 
@@ -72,13 +72,13 @@ The SDK is built around RPC-first reads, V2 contract routing, and contract-safe 
 | `Zkp2pClient` | The canonical SDK client for reads, writes, and API-backed flows | [Client Reference](/developer/sdk/client-reference) |
 | `peerExtensionSdk` | Peer extension detection, connection, and headless metadata bridge helpers | [Onramp Integration](/developer/integrate-zkp2p/integrate-redirect-onramp) |
 | `client.indexer` | Advanced deposit, intent, and fulfillment queries | [Client Reference](/developer/sdk/client-reference#indexer) |
-| Seller automated release | Seller credential upload, PayPal forwarding confirmation, OAuth credential upload, status, and payment verification helpers | [Client Reference](/developer/sdk/client-reference#seller-automated-release) |
+| Seller Autopilot | Seller credential upload, PayPal forwarding confirmation, OAuth credential upload, status, and payment verification helpers | [Client Reference](/developer/sdk/client-reference#seller-autopilot) |
 | API and attestation helpers | Orderbook, deposit bundle, payee validation, identity attestation, and buyer TEE helpers | [Client Reference](/developer/sdk/client-reference#standalone-api-and-attestation-helpers) |
 | Contract helpers | `getContracts`, `getRateManagerContracts`, `getPaymentMethodsCatalog`, `getGatingServiceAddress` | [Client Reference](/developer/sdk/client-reference#contract-helpers) |
 | Currency and payment helpers | `currencyInfo`, `resolveFiatCurrencyBytes32`, payment-method hash helpers | [Client Reference](/developer/sdk/client-reference#contract-helpers) |
 | Attribution and fee helpers | ERC-8021 helpers and referrer fee validation utilities | [Client Reference](/developer/sdk/client-reference#referrer-fees) |
 | React hooks | Transaction-oriented hooks for deposits, intents, and vaults | [React Hooks](/developer/sdk/react-hooks) |
-| React Native SDK | Mobile provider, `useZkp2p()`, Buyer TEE proof preparation, taker registration, and SAR | [React Native SDK](/developer/sdk/react-native) |
+| React Native SDK | Mobile provider, `useZkp2p()`, Buyer TEE proof preparation, taker registration, and Seller Autopilot | [React Native SDK](/developer/sdk/react-native) |
 
 ### Entry points
 
@@ -128,7 +128,7 @@ If you are new to the SDK, use this order:
 1. Read [Offramp Integration](/developer/offramp) or [Onramp Integration](/developer/integrate-zkp2p/integrate-redirect-onramp) for an end-to-end flow.
 2. Use [Client Reference](/developer/sdk/client-reference) to look up concrete methods, request shapes, and helper exports.
 3. Use [React Hooks](/developer/sdk/react-hooks) if you want component-level loading, error, and transaction state.
-4. Use [React Native SDK](/developer/sdk/react-native) for mobile WebView auth, Buyer TEE, identity registration, and SAR.
+4. Use [React Native SDK](/developer/sdk/react-native) for mobile WebView auth, Buyer TEE, identity registration, and Seller Autopilot.
 
 ## Help?
 

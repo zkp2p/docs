@@ -8,7 +8,7 @@ slug: /sdk/react-native
 
 ## What this does
 
-`@zkp2p/zkp2p-react-native-sdk` is the mobile SDK for building Peer onramp, proof, taker registration, and seller automated release flows in React Native. The current npm release is `0.2.3` and it wraps `@zkp2p/sdk@0.4.3` for shared contract, API, quote, and fulfillment logic.
+`@zkp2p/zkp2p-react-native-sdk` is the mobile SDK for building Peer onramp, proof, taker registration, and Seller Autopilot flows in React Native. The current npm release is `0.2.3` and it wraps `@zkp2p/sdk@0.4.3` for shared contract, API, quote, and fulfillment logic.
 
 Use this package when your app needs to:
 
@@ -16,7 +16,7 @@ Use this package when your app needs to:
 - Prepare Buyer TEE payment proofs from encrypted session material.
 - Fulfill V3 intents through the current attestation service endpoints.
 - Register takers with identity attestations.
-- Register makers for Seller Automated Release (SAR).
+- Register makers for Seller Autopilot.
 
 ## Installation
 
@@ -75,7 +75,7 @@ Pass service roots only. Do not append `/v1`, `/v2`, or `/v3` to `baseApiUrl`; t
 | --- | --- | --- | --- |
 | `baseApiUrl` | `https://api.zkp2p.xyz` | `https://api-staging.zkp2p.xyz` | Curator API, quotes, intent signing, maker/taker registration |
 | `attestationServiceUrl` | `https://attestation-service.zkp2p.xyz` | `https://attestation-service-staging.zkp2p.xyz` | Buyer TEE and legacy buyer proof verification |
-| `sarAttestationServiceUrl` | `https://attestation-service-preprod.zkp2p.xyz` | `https://attestation-service-staging.zkp2p.xyz` | SAR credential bundle signing and upload |
+| `sarAttestationServiceUrl` | `https://attestation-service-preprod.zkp2p.xyz` | `https://attestation-service-staging.zkp2p.xyz` | Seller Autopilot credential bundle signing and upload |
 | `identityAttestationServiceUrl` | `https://attestation-service-preprod.zkp2p.xyz` | `https://attestation-service-staging.zkp2p.xyz` | Taker identity registration attestations |
 | `witnessUrl` | `https://witness-proxy.zkp2p.xyz` | Custom | Legacy Reclaim-only proof surfaces |
 
@@ -264,9 +264,9 @@ function RegisterTakerButton() {
 
 Supported identity registration platforms are `venmo`, `paypal`, and `wise`.
 
-## Seller Automated Release
+## Seller Autopilot
 
-SAR lets a maker register encrypted seller session material so matching buyer payments can be verified from the seller side. The mobile SDK exposes this through `useZkp2p().sar`.
+Seller Autopilot lets a maker register encrypted seller session material so matching buyer payments can be verified from the seller side. The mobile SDK exposes this through `useZkp2p().sar`.
 
 ```tsx
 import { useZkp2p } from '@zkp2p/zkp2p-react-native-sdk';
@@ -290,13 +290,13 @@ function RegisterMakerButton() {
 }
 ```
 
-Supported SAR platforms are `wise`, `venmo`, `cashapp`, and `paypal`. PayPal registration also requires `payeeEmail`; `googleOAuthEmail` is optional when receipts are forwarded through a different Gmail inbox.
+Supported Seller Autopilot platforms are `wise`, `venmo`, `cashapp`, and `paypal`. PayPal registration also requires `payeeEmail`; `googleOAuthEmail` is optional when receipts are forwarded through a different Gmail inbox.
 
 Use `sar.getStatus()`, `sar.revoke()`, `sar.onExpired()`, and `sar.clearAllSessions()` to keep local session state in sync with curator and user sign-out flows.
 
 ## Storage and consent
 
-Pass a `storage` adapter when using credential persistence, consent prompts, or SAR. The SDK stores provider consent and credentials under hashed keys and stores SAR seller sessions under platform-specific keys. Use the context helpers to clear data:
+Pass a `storage` adapter when using credential persistence, consent prompts, or Seller Autopilot. The SDK stores provider consent and credentials under hashed keys and stores Seller Autopilot seller sessions under platform-specific keys. Use the context helpers to clear data:
 
 ```ts
 const {
@@ -322,7 +322,7 @@ To replace the default proof progress sheet, pass `hideDefaultProofUI` and rende
 | Staging contracts work but API calls hit production | `environment="staging"` does not rewrite `baseApiUrl`; pass `https://api-staging.zkp2p.xyz`. |
 | `zkp2pClient` is `null` | The provider is running proof-only mode. Pass a viem `walletClient` for on-chain actions. |
 | Buyer TEE proof fails before upload | Ensure `attestationServiceUrl` points at the root attestation host and that the platform/action pair is supported. |
-| SAR cannot persist session material | Pass a `storage` adapter to `Zkp2pProvider`. |
+| Seller Autopilot cannot persist session material | Pass a `storage` adapter to `Zkp2pProvider`. |
 | Taker registration is rejected | Use `prepareIdentityAttestation()` and submit `identity.attestation`; do not submit legacy proof JSON. |
 
 ## Help?

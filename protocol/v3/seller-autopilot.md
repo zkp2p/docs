@@ -1,13 +1,13 @@
 ---
-id: v3-seller-automated-release
-title: Seller Automated Release
+id: v3-seller-autopilot
+title: Seller Autopilot
 ---
 
-# Seller Automated Release
+# Seller Autopilot
 
 ## TEE
 
-Seller Automated Release (SAR) is an enclave-resident verification flow. Seller credential material is encrypted to an upload key that is generated inside the AWS Nitro Enclave. The enclave validates that credential material against the payment platform, converts it into an encrypted bundle, and later uses the bundle to verify payments and sign a V3 `PaymentAttestation`.
+Seller Autopilot (formerly Seller Automated Release) is an enclave-resident verification flow. Seller credential material is encrypted to an upload key that is generated inside the AWS Nitro Enclave. The enclave validates that credential material against the payment platform, converts it into an encrypted bundle, and later uses the bundle to verify payments and sign a V3 `PaymentAttestation`.
 
 The important primitive is the TEE boundary: plaintext seller credentials are only available inside the measured enclave process.
 

@@ -24,7 +24,7 @@ This page summarizes the V3 on-chain contracts and links to detailed pages for e
     - Emits `IntentFulfilled`.
 
 ### UnifiedPaymentVerifier
-- Purpose: canonical on-chain verifier for off-chain attestations from buyer zkTLS, Buyer TEE Verification, and Seller Automated Release.
+- Purpose: canonical on-chain verifier for off-chain attestations from buyer zkTLS, Buyer TEE Verification, and Seller Autopilot.
 - V3 uses `UnifiedPaymentVerifierV2` (`0x46A58Dc65587D4D7B8198C6A25eEdf5b2535Da94`).
 - Typed data
   - Type: `PaymentAttestation(bytes32 intentHash,uint256 releaseAmount,bytes32 dataHash)`
