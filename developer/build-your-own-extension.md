@@ -17,7 +17,7 @@ That makes the extension fully replaceable. This guide covers how to build your 
 It also documents **provider templates** and the **inline `providerConfig`** launch option, which is how you develop and test capture behavior for new platforms.
 
 :::warning This replaces the "Build a Payment Integration" guide
-The previous guide documented authoring zkTLS provider templates for the legacy proof flow, which is deprecated. Templates are now *capture instructions* consumed by the extension — payment verification happens in the ZKP2P attestation service TEE, not in the browser. To get a new platform template published to the default API path, reach out on [Discord](https://discord.gg/4hNVTv2MbH).
+The previous guide documented authoring zkTLS provider templates for the legacy proof flow, which is deprecated. Templates are now *capture instructions* consumed by the extension — payment verification happens in the ZKP2P attestation service TEE, not in the browser. To get a new platform template published to the default API path, reach out on [Telegram](https://t.me/+XDj9FNnW-xs5ODNl).
 :::
 
 ## Who is this for?
@@ -257,7 +257,7 @@ window.peer.authenticate({
 ```
 
 :::note
-The attestation service decides what a valid capture looks like per `platform`/`actionType` — inline templates are for developing and testing capture behavior. Captures only verify when they match what the attestation service expects, so coordinate on [Discord](https://discord.gg/4hNVTv2MbH) before relying on a custom template in production.
+The attestation service decides what a valid capture looks like per `platform`/`actionType` — inline templates are for developing and testing capture behavior. Captures only verify when they match what the attestation service expects, so reach out on [Telegram](https://t.me/+XDj9FNnW-xs5ODNl) before relying on a custom template in production.
 :::
 
 ## Implementing the buyer flow
@@ -370,4 +370,4 @@ Everything page-side (quotes, intents, fulfillment, curator uploads) is covered 
 
 ## Help?
 
-Building an extension or need a template published? Join our [Discord](https://discord.gg/4hNVTv2MbH) — we can help with template details and attestation service expectations.
+Building an extension or need a template published? Message us on [Telegram](https://t.me/+XDj9FNnW-xs5ODNl) — we can help with template details and attestation service expectations.
