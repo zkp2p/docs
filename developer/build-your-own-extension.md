@@ -12,7 +12,7 @@ As of Peer extension `0.6.0`, the extension is a thin, stateless headless metada
 That makes the extension fully replaceable. This guide covers how to build your own extension under your own brand for both flows:
 
 - **Buyer flow** — capture a buyer's payment confirmation for [onramp fulfillment](/developer/integrate-zkp2p/integrate-redirect-onramp)
-- **SAR flow (Seller Automated Release)** — capture a seller's platform credentials so their payments verify and release automatically
+- **Seller Autopilot flow** — capture a seller's platform credentials so their payments verify and release automatically
 
 It also documents **provider templates** and the **inline `providerConfig`** launch option, which is how you develop and test capture behavior for new platforms.
 
@@ -52,9 +52,9 @@ interface Peer {
 
 | Parameter | Description |
 |-----------|-------------|
-| `actionType` | Provider template action, e.g. `transfer_venmo`. Production SAR launches use the same `transfer_{platform}` templates as the buyer flow |
+| `actionType` | Provider template action, e.g. `transfer_venmo`. Production Seller Autopilot launches use the same `transfer_{platform}` templates as the buyer flow |
 | `platform` | Payment platform the template belongs to, e.g. `venmo` |
-| `captureMode` | `buyerTee` for buyer payment captures, `sellerCredential` for SAR |
+| `captureMode` | `buyerTee` for buyer payment captures, `sellerCredential` for Seller Autopilot |
 | `attestationServiceUrl` | Required for `buyerTee`. Optional for `sellerCredential` (defaults to the production attestation service) |
 | `attestationActionType` | Optional override when the attestation action differs from the template `actionType` |
 | `providerConfig` | Optional inline template — see [Inline provider config](#inline-provider-config) |
@@ -62,7 +62,7 @@ interface Peer {
 The capture result is posted back as a `PeerMetadataMessage` containing the extracted `metadata` rows plus exactly one of:
 
 - `buyerTeeCapture: { encryptedSessionMaterial, params? }` — buyer flow
-- `sarCredentialCapture: { credentialBundle, offchainId }` — SAR flow
+- `sarCredentialCapture: { credentialBundle, offchainId }` — Seller Autopilot flow
 
 See [Metadata Row Selection](/developer/integrate-zkp2p/integrate-redirect-onramp#metadata-row-selection) for the full row shape and selection guidance.
 
@@ -291,15 +291,15 @@ The page then builds `{ proofType: 'buyerTee', encryptedSessionMaterial, params 
 
 The Peer extension runs SDK calls in an MV3 [offscreen document](https://developer.chrome.com/docs/extensions/reference/api/offscreen): the SDK's browser build and XPath-based extraction both expect a window-like runtime that background service workers don't provide.
 
-## Implementing the SAR flow
+## Implementing the Seller Autopilot flow
 
-SAR (Seller Automated Release) lets sellers upload encrypted platform credentials once, so that incoming payments are verified and released automatically. Extension capture is how Venmo and Cash App sellers onboard — Wise uses a personal API token and PayPal uses Gmail forwarding, neither of which needs an extension. See [Seller Automated Release](/developer/sdk/client-reference#seller-automated-release) for the platform matrix and session-material shapes.
+Seller Autopilot lets sellers upload encrypted platform credentials once, so that incoming payments are verified and released automatically. Extension capture is how Venmo and Cash App sellers onboard — Wise uses a personal API token and PayPal uses Gmail forwarding, neither of which needs an extension. See [Seller Autopilot](/developer/sdk/client-reference#seller-autopilot) for the platform matrix and session-material shapes.
 
-The privacy boundary is stricter than the buyer flow: the SAR result must contain **only** the encrypted `credentialBundle` and the seller's `offchainId`. Captured request headers, cookies, payee IDs, and session material must never be posted to the page.
+The privacy boundary is stricter than the buyer flow: the Seller Autopilot result must contain **only** the encrypted `credentialBundle` and the seller's `offchainId`. Captured request headers, cookies, payee IDs, and session material must never be posted to the page.
 
 1. **Launch** — the page calls `authenticate({ actionType: 'transfer_venmo', platform: 'venmo', captureMode: 'sellerCredential' })`. `attestationServiceUrl` is optional here; default to the production service.
 2. **Capture** — same template-driven interception as the buyer flow, against the same `transfer_{platform}` template.
-3. **Parse** — extract the platform-specific plaintext session material from the captured request in memory. This is the one platform-specific part of the extension: each SAR platform needs a parser that produces its session-material shape (for Venmo: `recipientUsername`, `accountId`, `sessionCookie`; for Cash App: `recipientCashtag`, `customerId`, `sessionCookie`, `requestPayload`) plus the seller's `payeeId` and stable `offchainId`.
+3. **Parse** — extract the platform-specific plaintext session material from the captured request in memory. This is the one platform-specific part of the extension: each Seller Autopilot platform needs a parser that produces its session-material shape (for Venmo: `recipientUsername`, `accountId`, `sessionCookie`; for Cash App: `recipientCashtag`, `customerId`, `sessionCookie`, `requestPayload`) plus the seller's `payeeId` and stable `offchainId`.
 4. **Bundle** — create the encrypted credential bundle through the attestation service, inside your extension:
 
 ```ts
@@ -348,8 +348,8 @@ Before storing, verify the registered payee hash matches the bundle's `payeeIdHa
 | Export | Flow | Use |
 |--------|------|-----|
 | `createEncryptedBuyerTeeSessionMaterial({ platform, actionType, attestationServiceUrl, sessionMaterial })` | Buyer | Encrypt captured session material against the attestation TEE; returns the `encryptedSessionMaterial` string |
-| `apiCreateSellerCredentialBundle(payload, attestationServiceUrl, platform, timeoutMs?, runtime?)` | SAR | Create the encrypted seller credential bundle |
-| `SellerCredentialAttestationRuntime` | SAR | Inject `fetch` / `subtle` / `getRandomValues` for extension runtimes |
+| `apiCreateSellerCredentialBundle(payload, attestationServiceUrl, platform, timeoutMs?, runtime?)` | Seller Autopilot | Create the encrypted seller credential bundle |
+| `SellerCredentialAttestationRuntime` | Seller Autopilot | Inject `fetch` / `subtle` / `getRandomValues` for extension runtimes |
 | `resolvePlatformAttestationConfig(processorName)` | Both | Map a protocol platform name to `{ actionType, actionPlatform }` |
 | `PeerAuthenticateParams`, `PeerMetadataMessage`, `PeerMetadataRow`, `SellerCredentialBundle` types | Both | Mirror the Peer extension's page contract so integrator code stays portable |
 
@@ -360,7 +360,7 @@ Everything page-side (quotes, intents, fulfillment, curator uploads) is covered 
 :::danger Non-negotiables
 - **Plaintext session material never reaches the page.** Encrypt in-extension, post only encrypted blobs and extracted metadata, and discard plaintext immediately.
 - **Inline templates require user approval** of the extracted fields before posting back — an unreviewed inline template is an arbitrary-exfiltration primitive.
-- **SAR results contain only `credentialBundle` + `offchainId`.** No captured headers, cookies, payee IDs, or request bodies.
+- **Seller Autopilot results contain only `credentialBundle` + `offchainId`.** No captured headers, cookies, payee IDs, or request bodies.
 :::
 
 - **Gate captures behind per-origin connection approval**, like the Peer extension's `requestConnection()` flow.

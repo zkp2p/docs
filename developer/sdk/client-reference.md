@@ -377,9 +377,9 @@ The response object includes:
 - cooldown metadata such as `cooldownHours`, `cooldownActive`, and `nextIntentAvailableAt`
 - `platformLimits`, including risk level and minimum required tier per payment platform
 
-## Seller Automated Release
+## Seller Autopilot
 
-Use these methods to upload seller credentials, inspect credential status, and verify seller payments for automated release flows. Supported seller platforms are `venmo`, `cashapp`, `wise`, and `paypal`.
+Use these methods to upload seller credentials, inspect credential status, and verify seller payments for Seller Autopilot flows. Supported seller platforms are `venmo`, `cashapp`, `wise`, and `paypal`.
 
 ### `uploadSellerCredential()`
 

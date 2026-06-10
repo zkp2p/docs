@@ -23,7 +23,7 @@ PeerAuth plays a key role in helping buyers authenticate their payment transacti
 
 ***Note*:** All data stays on the user's device — only zero-knowledge proofs leave. Private data not relevant to proving validity is redacted before sharing with our deployed verifier.
 
-Buyer TEE Verification and Seller Automated Release are TEE-based payment verification paths.
+Buyer TEE Verification and Seller Autopilot are TEE-based payment verification paths.
 
 Currently, PeerAuth only supports ZKP2P as its first integration, but the extension is generalized to support OAuth into any website.
 

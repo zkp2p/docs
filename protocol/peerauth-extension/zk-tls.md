@@ -71,7 +71,7 @@ To understand TLSNotary, please go through their docs
 ### TLSProxy
 
 :::note
-The proxy-TLS provider flow described below was used in the legacy V2 protocol. It is retained here for historical context. The current V3 production flow validates payments off-chain via the Attestation Service (Buyer TEE Verification and Seller Automated Release).
+The proxy-TLS provider flow described below was used in the legacy V2 protocol. It is retained here for historical context. The current V3 production flow validates payments off-chain via the Attestation Service (Buyer TEE Verification and Seller Autopilot).
 :::
 
 Unlike TLSNotary, the proxy approach relies on the Notary being in between the Prover (buyer) and the Server. Privacy is still preserved as only encrypted ciphertext is sent from the Prover to the Notary (Witness Proxy), and the prover is the only party that holds the symmetric TLS keys. This approach is significantly more efficient as it removes the need to generate the TLS session keys using 2PC Garbled Circuits.

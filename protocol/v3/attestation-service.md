@@ -15,7 +15,7 @@ Base URLs
 - Enclave attestation: clients verify the running Nitro Enclave before trusting signatures or encrypting session material.
 - Buyer TEE verification: the current buyer flow for supported payment methods.
 - Buyer proof verification: generic buyer-generated provider proof verification.
-- Seller Automated Release: seller-side credential bundle upload and payment resolution.
+- Seller Autopilot: seller-side credential bundle upload and payment resolution.
 
 ## Trust model
 
@@ -40,9 +40,9 @@ Buyer TEE supports Venmo, Cash App, Monzo, Wise, Revolut, Chime, Chase Zelle, Ba
 
 This generic path accepts buyer-generated provider proofs, transforms extracted proof context into normalized payment details, runs `UnifiedPaymentVerifier`, and signs the result. It remains part of the Attestation Service surface, but supported buyer payment methods should use Buyer TEE.
 
-### Seller Automated Release
+### Seller Autopilot
 
-Seller Automated Release uses encrypted seller credential bundles to resolve matching payments from the seller side. It shares the same verifier and attestation output shape. See [Seller Automated Release](./seller-automated-release.md).
+Seller Autopilot uses encrypted seller credential bundles to resolve matching payments from the seller side. It shares the same verifier and attestation output shape. See [Seller Autopilot](./seller-autopilot.md).
 
 ## Shared Output
 

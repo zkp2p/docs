@@ -464,7 +464,7 @@ async function verifyBuyerTeePaymentDirectly({
 
 ## Seller Credential Capture
 
-The same headless bridge can capture seller credentials for seller automated release. The extension returns only the encrypted credential bundle and `offchainId`; it does not create makers, call curator storage APIs, or return plaintext session material.
+The same headless bridge can capture seller credentials for Seller Autopilot. The extension returns only the encrypted credential bundle and `offchainId`; it does not create makers, call curator storage APIs, or return plaintext session material.
 
 ```ts
 peer.authenticate({
@@ -480,7 +480,7 @@ After receiving `message.sarCredentialCapture`, register the maker payee details
 
 Because the `0.6.0` extension does only headless capture, everything else in this guide already runs in your app through `@zkp2p/sdk` — so the Peer extension itself is replaceable. If you want a fully whitelabeled experience (your own name and icon in the Chrome toolbar, your own Web Store listing, your own consent UX), you can ship your own extension and keep the rest of this integration unchanged. If your extension injects the same `window.peer` interface, everything on this page — including `peerExtensionSdk` — works against your extension with zero page-code changes.
 
-See [Build Your Own Extension](/developer/build-your-own-extension) for the full guide: the page contract, the provider template schema, passing inline `providerConfig`, and step-by-step implementations of the buyer capture flow and the SAR (Seller Automated Release) credential flow.
+See [Build Your Own Extension](/developer/build-your-own-extension) for the full guide: the page contract, the provider template schema, passing inline `providerConfig`, and step-by-step implementations of the buyer capture flow and the Seller Autopilot credential flow.
 
 ## Migrating from the pre-0.6.0 deeplink flow
 

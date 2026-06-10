@@ -110,6 +110,10 @@ const config = {
             from: '/developer/build-payment-integration',
             to: '/developer/build-your-own-extension',
           },
+          {
+            from: '/protocol/v3/v3-seller-automated-release',
+            to: '/protocol/v3/v3-seller-autopilot',
+          },
         ],
       },
     ],
