@@ -5,6 +5,19 @@ title: Onramp Integration
 
 # Onramp Integration
 
+:::danger Peer extension below `0.6.0` is deprecated — effective immediately
+Peer extension versions below `0.6.0`, and the deeplink/side-panel onramp flow they supported, are **deprecated effective immediately**.
+
+Extension `0.6.0` removes the side panel and the entire deeplink onramp API: `peerExtensionSdk.onramp()`, `openSidebar()`, `onIntentFulfilled()`, and extension-side proof generation no longer exist. The extension is auto-updated by the Chrome Web Store, so integrations built on the pre-`0.6.0` flow **will stop working as your users receive the update**.
+
+If you are live on the old flow:
+
+- **Migrate to the flow below now.** Your app drives the onramp with `Zkp2pClient`, and the extension is only used as a headless payment capture bridge.
+- **As a temporary stopgap**, ask your users to pause extension auto-updates so they remain on their installed pre-`0.6.0` version until your migration ships. Treat this strictly as a bridge — unmanaged Chrome installs cannot pin extension versions reliably.
+
+See [Migrating from the pre-0.6.0 deeplink flow](#migrating-from-the-pre-060-deeplink-flow) for a mapping of the old API to the new surface.
+:::
+
 ## What this does
 
 Use the Peer extension as a headless metadata bridge for web onramps. Your app owns the order UI, intent lifecycle, payment-row selection, and `fulfillIntent()` call. The extension opens the payment provider auth tab, captures provider-template metadata, encrypts Buyer TEE session material, and returns the capture result to the originating page.
@@ -435,6 +448,32 @@ peer.authenticate({
 ```
 
 After receiving `message.sarCredentialCapture`, register the maker payee details and store the bundle through your app's curator flow.
+
+## Full Customization: Build Your Own Extension
+
+Because the `0.6.0` extension does only headless capture, everything else in this guide already runs in your app through `@zkp2p/sdk` — so the Peer extension itself is replaceable. If you want a fully whitelabeled experience (your own name and icon in the Chrome toolbar, your own Web Store listing, your own consent UX), you can ship your own extension and keep the rest of this integration unchanged. If your extension injects the same `window.peer` interface, everything on this page — including `peerExtensionSdk` — works against your extension with zero page-code changes.
+
+See [Build Your Own Extension](/developer/build-your-own-extension) for the full guide: the page contract, the provider template schema, passing inline `providerConfig`, and step-by-step implementations of the buyer capture flow and the SAR (Seller Automated Release) credential flow.
+
+## Migrating from the pre-0.6.0 deeplink flow
+
+The pre-`0.6.0` integration opened a Peer-branded side panel that ran the whole onramp. That UI no longer exists — your app now drives the flow and the extension only captures payment confirmation. Mapping the old surface to the new one:
+
+| Pre-`0.6.0` | `0.6.0+` |
+|-------------|----------|
+| `peerExtensionSdk.onramp({...})` | Drive the flow yourself: [`getQuote()`](/developer/sdk/client-reference#quote-api) → [`signalIntent()`](/developer/sdk/client-reference#signalintent--signalintentprepare) → the capture and `fulfillIntent()` flow on this page |
+| `onramp({ inputCurrency, inputAmount })` | `getQuote({ fiatCurrency, amount, isExactFiat: true })` |
+| `onramp({ paymentPlatform })` | `getQuote({ paymentPlatforms: [...] })` |
+| `onramp({ toToken: 'chainId:address' })` | `getQuote({ destinationChainId, destinationToken })` |
+| `onramp({ recipientAddress })` | `getQuote({ recipient })` / `signalIntent({ toAddress })` |
+| `onramp({ referrer, referrerLogo })` | Removed — your UI is the brand. Use `referrer` / `referrerFeeConfig` on `getQuote()` and `signalIntent()` for attribution and fees |
+| `onramp({ intentHash })` to resume | Persist the intent hash in your app; resume by re-running the capture and `fulfillIntent()` |
+| `onIntentFulfilled(callback)` | Your app submits the fulfill transaction — await `fulfillIntent()` or use its `callbacks` |
+| `openSidebar(route)` | Removed — there is no side panel |
+| Extension-managed wallet & gas | Your app supplies the `walletClient`; use `fulfillIntent.prepare()` with your own relayer for gasless UX |
+| `onProofComplete()` / `callbackUrl` (pre-`0.4.9`) | Removed since `0.4.9`; covered by the same migration |
+
+Unchanged: `isAvailable()`, `getState()`, `requestConnection()`, `checkConnectionStatus()`, `getVersion()`, and `openInstallPage()` work exactly as before.
 
 ## Common Issues
 

@@ -7,7 +7,7 @@ module.exports = {
     },
     { type: 'doc', id: 'offramp-integration', label: 'Offramp Integration' },
     { type: 'doc', id: 'post-intent-hooks', label: 'Intent Hooks' },
-    { type: 'doc', id: 'build-payment-integration', label: 'Build a Payment Integration' },
+    { type: 'doc', id: 'build-your-own-extension', label: 'Build Your Own Extension' },
     {
       type: 'category',
       label: 'SDK Reference',

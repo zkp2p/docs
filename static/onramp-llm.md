@@ -290,6 +290,7 @@ async function verifyBuyerTeePaymentDirectly({
 ## Key rules
 
 - Target Peer extension manifest `0.6.0` or newer.
+- Never use `onramp()`, `openSidebar()`, `onIntentFulfilled()`, `onProofComplete()`, or `callbackUrl` — the pre-`0.6.0` deeplink/side-panel API was removed.
 - Use `createPeerExtensionSdk({ window })`.
 - Register `onMetadataMessage()` before `authenticate()`.
 - Pass `captureMode: 'buyerTee'` and `attestationServiceUrl`.
