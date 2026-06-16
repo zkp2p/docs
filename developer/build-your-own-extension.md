@@ -16,6 +16,9 @@ That makes the extension fully replaceable. This guide covers how to build your 
 
 It also documents **provider templates** and the **inline `providerConfig`** launch option, which is how you develop and test capture behavior for new platforms.
 
+The fastest starting point is the open-source branded extension template:
+[github.com/zkp2p/peer-examples/tree/main/branded-extension](https://github.com/zkp2p/peer-examples/tree/main/branded-extension). Fork it, edit `brand.config.json`, run `npm run rebrand`, and keep the security invariants intact.
+
 :::warning This replaces the "Build a Payment Integration" guide
 The previous guide documented authoring zkTLS provider templates for the legacy proof flow, which is deprecated. Templates are now *capture instructions* consumed by the extension — payment verification happens in the ZKP2P attestation service TEE, not in the browser. To get a new platform template published to the default API path, reach out on [Telegram](https://t.me/+XDj9FNnW-xs5ODNl).
 :::
@@ -262,7 +265,7 @@ The attestation service decides what a valid capture looks like per `platform`/`
 
 ## Implementing the buyer flow
 
-The buyer flow turns a payment the user already made into proof material for [`fulfillIntent()`](/developer/sdk/client-reference#fulfillintent--fulfillintentprepare). It is fully template-driven — supporting a new buyer platform should not require extension code changes.
+The buyer flow turns a payment the user already made into encrypted session material for [`fulfillIntent()`](/developer/sdk/client-reference#fulfillintent--fulfillintentprepare). It is fully template-driven — supporting a new buyer platform should not require extension code changes.
 
 1. **Launch** — the page calls `authenticate({ actionType, platform, captureMode: 'buyerTee', attestationServiceUrl })`. Load the provider template (default API path or inline config) and open `authLink` in a new tab.
 2. **Intercept** — register `chrome.webRequest` listeners (`onBeforeRequest`, `onSendHeaders`) for the template's `urlRegex` / `fallbackUrlRegex` / `metadataUrl` patterns. Cache the matched request's URL, method, headers, and body. Issue the `metadataUrl` replay when the template defines one.
