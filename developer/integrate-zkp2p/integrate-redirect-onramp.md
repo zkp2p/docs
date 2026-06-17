@@ -33,6 +33,7 @@ Use this guide if you are building a desktop web app that needs users to verify 
 You need:
 
 - `@zkp2p/sdk` `0.5.0` or newer installed in your web app — `0.5.0` is the first release that ships the headless `peerExtensionSdk`; `0.4.x` only exposes the removed deeplink wrapper
+- `@zkp2p/sdk` `0.5.2` or newer if your integration also performs Venmo identity registration through `register_venmo`
 - The Peer extension installed and connected for the current origin
 - A `Zkp2pClient` configured for the chain and runtime
 - An intent your app already created or selected
@@ -475,6 +476,10 @@ peer.authenticate({
 ```
 
 After receiving `message.sarCredentialCapture`, register the maker payee details and store the bundle through your app's curator flow.
+
+For the SDK helper path, call `client.uploadSellerCredentialBundle({ platform, offchainId, bundle })`. The helper registers or recovers the maker payee through curator `POST /v2/makers/create`, verifies the returned payee hash matches `bundle.payeeIdHash`, and stores the bundle at `POST /v2/makers/{platform}/{payeeDetails}/seller-credential`.
+
+Venmo identity registration is a separate attestation flow. It uses the `register_venmo` template and Attestation Service `POST /identity` with `callerAddress`, encrypted session material containing only a replayable Venmo `Cookie`, and public `params.SENDER_ID`. Do not use `transfer_venmo` Seller Autopilot capture or encrypted `sessionMaterial.url` for identity registration.
 
 ## Full Customization: Build Your Own Extension
 

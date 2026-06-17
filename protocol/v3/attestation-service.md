@@ -13,13 +13,14 @@ Base URLs
 
 ## Main Surfaces
 - Enclave attestation: clients verify the running Nitro Enclave before trusting signatures or encrypting session material.
+- Identity registration: clients prove a live payment-platform identity before curator registration.
 - Buyer TEE verification: the current buyer flow for supported payment methods.
 - Buyer proof verification: generic buyer-generated provider proof verification.
 - Seller Autopilot: seller-side credential bundle upload and payment resolution.
 
 ## Trust model
 
-The buyer proof (`/verify/*`), buyer TEE (`/buyer/verify/*`), and seller-side (`/seller/*`) flows run inside an AWS Nitro Enclave. The code that validates evidence, checks the seven payment-detail invariants, and signs the EIP-712 `PaymentAttestation` executes inside the enclave.
+The identity (`/identity`), buyer proof (`/verify/*`), buyer TEE (`/buyer/verify/*`), and seller-side (`/seller/*`) flows run inside an AWS Nitro Enclave. The code that validates evidence, checks payment or identity invariants, and signs EIP-712 outputs executes inside the enclave.
 
 - The EIP-712 signing key is wrapped by an AWS KMS Customer Managed Key whose decrypt policy is gated on the enclave's PCR8 measurement. The key is unwrapped in enclave memory at first use and never leaves the enclave; no operator, AWS, or attacker outside the enclave can extract it.
 - Build artifacts (PCR0/PCR1/PCR2/PCR8) are reproducible from the published source tree. The expected signer address and PCR8 are baked into the enclave image and returned by `/attestation` alongside the NSM document.
@@ -40,13 +41,72 @@ Buyer TEE supports Venmo, Cash App, Monzo, Wise, Revolut, Chime, Chase Zelle, Ba
 
 This generic path accepts buyer-generated provider proofs, transforms extracted proof context into normalized payment details, runs `UnifiedPaymentVerifier`, and signs the result. It remains part of the Attestation Service surface, but supported buyer payment methods should use Buyer TEE.
 
+### Identity Registration
+
+Identity registration proves a live platform identity and returns a signed EIP-712 `IdentityAttestation`. The request shape is:
+
+```text
+POST {attestationServiceUrl}/identity
+```
+
+```ts
+{
+  platform: 'venmo',
+  actionType: 'register_venmo',
+  callerAddress: '0x0000000000000000000000000000000000000002',
+  encryptedSessionMaterial: '<compact-jwe>',
+  params: { SENDER_ID: '123456789' },
+}
+```
+
+Supported identity actions:
+
+| Platform | Action type | Encrypted session material | Public params |
+| --- | --- | --- | --- |
+| `venmo` | `register_venmo` | `Cookie` | `SENDER_ID` |
+| `paypal` | `register_paypal` | `Cookie` | none |
+| `wise` | `register_wise` | `Cookie`, `X-Access-Token` | `PROFILE_ID` |
+
+`callerAddress` is required and is bound into the signed `IdentityAttestation`, so verifiers must check the expected caller address in addition to platform, action type, payee hash, canonical identity `dataHash`, and `validUntil`.
+
+For Venmo, the current service derives the stories replay URL from public `params.SENDER_ID`; clients should not encrypt or send a captured `sessionMaterial.url`. The encrypted Venmo identity session material only needs a replayable `Cookie` header. The enclave verifies the authenticated account id before replaying `https://account.venmo.com/api/stories?feedType=me&externalId={SENDER_ID}` and requires a valid response with a `stories` array.
+
 ### Seller Autopilot
 
 Seller Autopilot uses encrypted seller credential bundles to resolve matching payments from the seller side. It shares the same verifier and attestation output shape. See [Seller Autopilot](./seller-autopilot.md).
 
 ## Shared Output
 
-All verification paths return the same kind of signed EIP-712 `PaymentAttestation`. The response includes the signer, signature, typed attestation values, encoded payment details, and metadata identifying the source path. The client packages that attestation as `paymentProof` and calls `OrchestratorV2.fulfillIntent`.
+Payment verification paths return a signed EIP-712 `PaymentAttestation`. The response includes the signer, signature, typed attestation values, encoded payment details, and metadata identifying the source path. The client packages that attestation as `paymentProof` and calls `OrchestratorV2.fulfillIntent`.
+
+Identity registration returns a signed EIP-712 `IdentityAttestation` plus normalized identity details:
+
+```ts
+{
+  identity: {
+    platform,
+    actionType,
+    method,
+    payeeId,
+    payeeIdHash,
+    username,
+    metadata,
+  },
+  typedDataValue: {
+    method,
+    actionType,
+    callerAddress,
+    payeeIdHash,
+    dataHash,
+    issuedAt,
+    validUntil,
+  },
+  signature,
+  signer,
+}
+```
+
+Identity attestations are used by registration APIs and are not submitted to `OrchestratorV2.fulfillIntent`.
 
 ## Choosing `chainId` and `verifyingContract`
 

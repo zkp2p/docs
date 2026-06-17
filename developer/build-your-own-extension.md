@@ -77,7 +77,7 @@ Templates tell the extension what to intercept and how to extract data from it. 
 https://api.zkp2p.xyz/providers/{platform}/{actionType}.json
 ```
 
-For example `https://api.zkp2p.xyz/providers/venmo/transfer_venmo.json`. When `authenticate()` is called without `providerConfig`, the Peer extension fetches the default template for the requested `platform`/`actionType`; your extension should do the same.
+For example `https://api.zkp2p.xyz/providers/venmo/transfer_venmo.json` for buyer payment capture or `https://api.zkp2p.xyz/providers/venmo/register_venmo.json` for Venmo identity registration capture. When `authenticate()` is called without `providerConfig`, the Peer extension fetches the default template for the requested `platform`/`actionType`; your extension should do the same.
 
 ### Template shape
 
@@ -186,6 +186,32 @@ For buyer captures, `paramNames` and `paramSelectors` define the public paramete
 - `{{INDEX}}` is replaced with the metadata row's `originalIndex`
 
 Selectors with `source: "requestBody"` are private session-material selectors — their values must never be copied into the metadata rows returned to the page.
+
+### Identity registration templates
+
+Identity registration templates use the same template shape, but they feed the Attestation Service identity endpoint instead of `fulfillIntent()`. Current identity actions are `register_venmo`, `register_paypal`, and `register_wise`.
+
+For Venmo, the published `register_venmo` template captures the stories request:
+
+```text
+https://account.venmo.com/api/stories?feedType=me&externalId={SENDER_ID}
+```
+
+The public identity params are `{ SENDER_ID }`, extracted from the request URL with `externalId=([0-9]+)`. The only Venmo identity session material that should be encrypted is a replayable `Cookie` header. Do not include the captured stories URL in `sessionMaterial`; `@zkp2p/zkp2p-attestation@1.5.1` and `@zkp2p/sdk@0.5.2` changed the flow so the service derives that URL from `params.SENDER_ID` and verifies the authenticated account id before replay.
+
+The identity API request sent by the page or mobile client is:
+
+```ts
+{
+  platform: 'venmo',
+  actionType: 'register_venmo',
+  callerAddress: '0x0000000000000000000000000000000000000002',
+  encryptedSessionMaterial,
+  params: { SENDER_ID: '123456789' },
+}
+```
+
+`callerAddress` is part of the signed `IdentityAttestation`. Bind it to the wallet that will complete registration.
 
 ## Inline provider config
 
@@ -344,18 +370,20 @@ const upload = await client.uploadSellerCredentialBundle({
 // Then poll status with client.getSellerCredentialStatus()
 ```
 
-Before storing, verify the registered payee hash matches the bundle's `payeeIdHash` so a tampered capture can't bind credentials to the wrong payee.
+`uploadSellerCredentialBundle()` registers or recovers the payee through curator `POST /v2/makers/create`, verifies the returned `hashedOnchainId` equals `bundle.payeeIdHash`, and then stores the bundle at `POST /v2/makers/{platform}/{hashedOnchainId}/seller-credential`. Keep that hash check if you implement the curator calls yourself; it prevents a tampered capture from binding credentials to the wrong payee.
 
 ## SDK reference for extension builders
 
-All of these ship in `@zkp2p/sdk` `0.5.0` or newer.
+All buyer and Seller Autopilot bridge helpers ship in `@zkp2p/sdk` `0.5.0` or newer. Identity registration support requires `@zkp2p/sdk` `0.5.2` or newer for the current Venmo `register_venmo` session-material shape.
 
 | Export | Flow | Use |
 |--------|------|-----|
 | `createEncryptedBuyerTeeSessionMaterial({ platform, actionType, attestationServiceUrl, sessionMaterial })` | Buyer | Encrypt captured session material against the attestation TEE; returns the `encryptedSessionMaterial` string |
+| `createNitroAttestationClient({ environment, attestationServiceUrl })` | Identity | Request typed identity attestations such as Venmo `register_venmo` without manually assembling `/identity` calls |
+| `apiRequestIdentityAttestation(payload, attestationServiceUrl, platform, actionType)` | Identity | Post already-encrypted identity session material to Attestation Service `POST /identity` |
 | `apiCreateSellerCredentialBundle(payload, attestationServiceUrl, platform, timeoutMs?, runtime?)` | Seller Autopilot | Create the encrypted seller credential bundle |
+| `apiUploadSellerCredentialBundle(params, baseApiUrl?, timeoutMs?)` | Seller Autopilot | Register/recover curator payee details, verify `bundle.payeeIdHash`, and store the credential bundle |
 | `SellerCredentialAttestationRuntime` | Seller Autopilot | Inject `fetch` / `subtle` / `getRandomValues` for extension runtimes |
-| `resolvePlatformAttestationConfig(processorName)` | Both | Map a protocol platform name to `{ actionType, actionPlatform }` |
 | `PeerAuthenticateParams`, `PeerMetadataMessage`, `PeerMetadataRow`, `SellerCredentialBundle` types | Both | Mirror the Peer extension's page contract so integrator code stays portable |
 
 Everything page-side (quotes, intents, fulfillment, curator uploads) is covered by the [Client Reference](/developer/sdk/client-reference).
@@ -366,6 +394,7 @@ Everything page-side (quotes, intents, fulfillment, curator uploads) is covered 
 - **Plaintext session material never reaches the page.** Encrypt in-extension, post only encrypted blobs and extracted metadata, and discard plaintext immediately.
 - **Inline templates require user approval** of the extracted fields before posting back — an unreviewed inline template is an arbitrary-exfiltration primitive.
 - **Seller Autopilot results contain only `credentialBundle` + `offchainId`.** No captured headers, cookies, payee IDs, or request bodies.
+- **Venmo identity registration encrypts only `Cookie`.** Do not pass a captured stories URL or other request metadata to the page or to `sessionMaterial`.
 :::
 
 - **Gate captures behind per-origin connection approval**, like the Peer extension's `requestConnection()` flow.

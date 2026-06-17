@@ -23,3 +23,19 @@ See [Pre-Intent Hooks](/protocol/v3/smart-contracts/pre-intent-hooks) for detail
 ### API Reference
 
 Our current gating service API is hosted at `https://api.zkp2p.xyz`. SDK clients should pass this as the root `baseApiUrl`; do not append `/v1`, `/v2`, or `/v3`.
+
+### Curator maker and credential routes
+
+The same API host also exposes curator routes used by the SDK for maker payee registration and Seller Autopilot credential storage.
+
+| Route | Method | Purpose |
+| --- | --- | --- |
+| `/v2/makers/create` | `POST` | Register or recover maker payee details from `{ processorName, offchainId, telegramUsername?, metadata? }` and return `hashedOnchainId`. This route does not require SDK auth headers. |
+| `/v2/makers/{processorName}/{payeeDetails}/seller-credential` | `POST` | Store an encrypted seller credential bundle under a platform and hashed payee details. |
+| `/v2/makers/{processorName}/{payeeDetails}/seller-credential/google-oauth` | `POST` | Upload a PayPal or Venmo Google OAuth seller credential through curator's encryption path. |
+| `/v2/makers/{processorName}/{payeeDetails}/seller-credential/status` | `GET` | Read public seller credential status. The response is keyed by platform and payee hash, not maker id. |
+| `/v2/verify/seller/{platform}` | `POST` | Internal seller-credential proxy used by Seller Autopilot verification. |
+
+`payeeDetails` is the bytes32 hash returned as `hashedOnchainId` by `/v2/makers/create` or derived inside the enclave for Wise. SDK helpers verify that an encrypted credential bundle's `payeeIdHash` matches the curator-registered `hashedOnchainId` before storing the bundle.
+
+Venmo identity registration is not a curator credential-storage request. First request an identity attestation from the Attestation Service `POST /identity` with `platform: "venmo"`, `actionType: "register_venmo"`, `callerAddress`, encrypted session material containing only a replayable `Cookie`, and public `params.SENDER_ID`. Then submit the returned `IdentityAttestation` to the registration flow that requires it.

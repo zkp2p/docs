@@ -8,7 +8,7 @@ slug: /sdk
 
 ## What this does
 
-`@zkp2p/sdk` is the TypeScript SDK for building with Peer. Use it to manage deposits, signal and fulfill intents, access quote and taker-tier APIs, work with vault and rate-manager flows, run Peer extension headless metadata capture, and integrate Seller Autopilot. The current npm release is `0.5.0` and is published under the MIT license.
+`@zkp2p/sdk` is the TypeScript SDK for building with Peer. Use it to manage deposits, signal and fulfill intents, access quote and taker-tier APIs, work with vault and rate-manager flows, run Peer extension headless metadata capture, request identity attestations, and integrate Seller Autopilot. The current npm release is `0.5.2` and is published under the MIT license.
 
 ## Who is this for?
 
@@ -73,7 +73,7 @@ The SDK is built around RPC-first reads, V2 contract routing, and contract-safe 
 | `peerExtensionSdk` | Peer extension detection, connection, and headless metadata bridge helpers | [Onramp Integration](/developer/integrate-zkp2p/integrate-redirect-onramp) |
 | `client.indexer` | Advanced deposit, intent, and fulfillment queries | [Client Reference](/developer/sdk/client-reference#indexer) |
 | Seller Autopilot | Seller credential upload, PayPal forwarding confirmation, OAuth credential upload, status, and payment verification helpers | [Client Reference](/developer/sdk/client-reference#seller-autopilot) |
-| API and attestation helpers | Orderbook, deposit bundle, payee validation, identity attestation, and buyer TEE helpers | [Client Reference](/developer/sdk/client-reference#standalone-api-and-attestation-helpers) |
+| API and attestation helpers | Orderbook, deposit bundle, payee validation, Venmo/PayPal/Wise identity attestation, and buyer TEE helpers | [Client Reference](/developer/sdk/client-reference#standalone-api-and-attestation-helpers) |
 | Contract helpers | `getContracts`, `getRateManagerContracts`, `getPaymentMethodsCatalog`, `getGatingServiceAddress` | [Client Reference](/developer/sdk/client-reference#contract-helpers) |
 | Currency and payment helpers | `currencyInfo`, `resolveFiatCurrencyBytes32`, payment-method hash helpers | [Client Reference](/developer/sdk/client-reference#contract-helpers) |
 | Attribution and fee helpers | ERC-8021 helpers and referrer fee validation utilities | [Client Reference](/developer/sdk/client-reference#referrer-fees) |
