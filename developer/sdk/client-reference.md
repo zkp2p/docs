@@ -49,7 +49,7 @@ Set `baseApiUrl` to the service root, for example `https://api.zkp2p.xyz`. Do no
 :::
 
 :::note Runtime requirements
-The published `0.5.0` package declares `node >= 22` for Node runtimes and `viem ^2.37.3` as a peer dependency.
+The published `0.5.2` package declares `node >= 22` for Node runtimes and `viem ^2.37.3` as a peer dependency. `0.5.2` depends on `@zkp2p/zkp2p-attestation@1.5.1`, which is the first attestation package version that supports the current Venmo identity registration shape.
 :::
 
 ## Prepared transactions
@@ -102,6 +102,8 @@ Use `registerPayeeDetails()` when you want to register payment details first and
 | `payeeData` | `Array<Record<string, string>>` | Processor-specific payment details in the same order as `processorNames` |
 | `depositData` | `Array<Record<string, string>>` | Deprecated alias for `payeeData` |
 
+`registerPayeeDetails()` posts each payee identity to curator `POST /v2/makers/create` with `{ processorName, offchainId, telegramUsername?, metadata? }`. Curator returns the `hashedOnchainId` used by deposits, quotes, intents, seller credential status, and seller credential uploads. This endpoint does not accept legacy proof JSON or encrypted session material; identity attestations are requested separately through the attestation helpers below.
+
 ```ts
 const { hashedOnchainIds } = await client.registerPayeeDetails({
   processorNames: ['wise', 'revolut'],
@@ -127,6 +129,64 @@ await client.createDeposit({
   payeeDetailsHashes: hashedOnchainIds,
 });
 ```
+
+## Identity attestation
+
+Identity registration is a separate Attestation Service flow for platforms that need a live account identity before curator registration. The SDK exposes it through the Nitro attestation client re-export and through the lower-level `apiRequestIdentityAttestation()` helper.
+
+Current identity platform/action pairs:
+
+| Platform | Action type | Encrypted session material | Public params |
+| --- | --- | --- | --- |
+| `venmo` | `register_venmo` | `Cookie` | `{ SENDER_ID }` |
+| `paypal` | `register_paypal` | `Cookie` | `{}` |
+| `wise` | `register_wise` | `Cookie`, `X-Access-Token` | `{ PROFILE_ID }` |
+
+:::warning Venmo identity registration changed in `@zkp2p/zkp2p-attestation@1.5.1`
+Do not send a captured Venmo stories URL in encrypted session material. The current Venmo identity request sends only a replayable `Cookie` header plus public `params.SENDER_ID`. The Attestation Service derives `https://account.venmo.com/api/stories?feedType=me&externalId={SENDER_ID}`, verifies the authenticated account id, and requires Venmo to return a valid `stories` array. Upgrade to `@zkp2p/sdk@0.5.2` or newer if your code still references `sessionMaterial.url`.
+:::
+
+```ts
+import { createNitroAttestationClient } from '@zkp2p/sdk';
+
+const nitro = createNitroAttestationClient({
+  environment: 'production',
+  attestationServiceUrl: 'https://attestation-service.zkp2p.xyz',
+});
+
+const identity = await nitro.requestIdentityAttestation({
+  platform: 'venmo',
+  actionType: 'register_venmo',
+  callerAddress: '0x0000000000000000000000000000000000000002',
+  sessionMaterial: {
+    Cookie: 'venmo-session-cookie-header',
+  },
+  params: {
+    SENDER_ID: '123456789',
+  },
+});
+
+console.log(identity.identity.payeeIdHash);
+```
+
+If you already encrypted session material outside the Nitro client, call the raw endpoint helper:
+
+```ts
+import { apiRequestIdentityAttestation } from '@zkp2p/sdk';
+
+const response = await apiRequestIdentityAttestation(
+  {
+    callerAddress: '0x0000000000000000000000000000000000000002',
+    encryptedSessionMaterial,
+    params: { SENDER_ID: '123456789' },
+  },
+  'https://attestation-service.zkp2p.xyz',
+  'venmo',
+  'register_venmo',
+);
+```
+
+`callerAddress` is required and is signed into the returned `IdentityAttestation`. Consumers that verify the response must bind it to the expected caller address, platform, action type, payee hash, canonical identity `dataHash`, and validity window.
 
 ## Intent operations
 
@@ -381,15 +441,17 @@ The response object includes:
 
 Use these methods to upload seller credentials, inspect credential status, and verify seller payments for Seller Autopilot flows. Supported seller platforms are `venmo`, `cashapp`, `wise`, and `paypal`.
 
+Seller credential upload and identity attestation are different flows. Identity attestation proves an account identity for registration. Seller Autopilot stores an encrypted credential bundle that lets the enclave verify future seller-side payments. Direct bundle upload supports `venmo`, `cashapp`, and `wise`; PayPal seller credentials use the Google OAuth helper. Curator status is keyed by `{ processorName, payeeDetails }`, not maker id.
+
 ### `uploadSellerCredential()`
 
 Use `uploadSellerCredential(params, opts?)` to create a signed credential bundle through the attestation service and store the public credential status in curator. Returns `CuratorSellerCredentialUploadResponse`.
 
-For registered payee platforms (`venmo`, `cashapp`, and `paypal`), pass the seller identity plus platform-specific session material:
+For registered payee platforms (`venmo` and `cashapp`), pass the seller identity plus platform-specific session material:
 
 | Field | Required | Description |
 | --- | --- | --- |
-| `platform` | Yes | `venmo`, `cashapp`, or `paypal` |
+| `platform` | Yes | `venmo` or `cashapp` |
 | `offchainId` | Yes | Stable seller identity used for payee registration |
 | `payeeId` | Yes | Platform payee identifier |
 | `telegramUsername` | No | Optional seller Telegram username |
@@ -439,14 +501,6 @@ Optional `opts` fields:
 | `apiToken` | Yes | Wise API token |
 | `profileId` | No | Wise profile identifier |
 
-`PayPalSessionMaterial`
-
-| Field | Required | Description |
-| --- | --- | --- |
-| `payeeEmail` | Yes | PayPal seller email |
-| `forwardingBaseMailbox` | Yes | Gmail forwarding base mailbox |
-| `forwardingMailboxAlias` | Yes | Per-seller forwarding alias |
-
 ```ts
 import { Zkp2pClient } from '@zkp2p/sdk';
 
@@ -477,17 +531,25 @@ const response = await client.uploadSellerCredential(
 
 Use `uploadSellerCredentialBundle(params, opts?)` when the encrypted credential bundle was already created elsewhere — typically inside a capture extension via `apiCreateSellerCredentialBundle()` — and you only need to register the payee and store the bundle with curator. This is the page-side half of the [extension Seller Autopilot capture flow](/developer/build-your-own-extension#implementing-the-seller-autopilot-flow). Available from `0.5.0`.
 
-For registered payee platforms (`venmo`, `cashapp`, and `paypal`):
+For registered payee platforms (`venmo` and `cashapp`):
 
 | Field | Required | Description |
 | --- | --- | --- |
-| `platform` | Yes | `venmo`, `cashapp`, or `paypal` |
+| `platform` | Yes | `venmo` or `cashapp` |
 | `offchainId` | Yes | Stable seller identity used for payee registration |
 | `bundle` | Yes | Encrypted `SellerCredentialBundle` returned by the capture |
 | `telegramUsername` | No | Optional seller Telegram username |
 | `metadata` | No | Optional curator metadata |
 
 For Wise, pass only `platform: 'wise'` and the `bundle`. Optional `opts` fields are `baseApiUrl` and `timeoutMs`.
+
+For registered payee platforms, this helper:
+
+1. Calls curator `POST /v2/makers/create` with the supplied `offchainId`, optional `telegramUsername`, optional `metadata`, and `processorName`.
+2. Verifies the returned `hashedOnchainId` equals `bundle.payeeIdHash`.
+3. Stores the bundle with curator `POST /v2/makers/{platform}/{hashedOnchainId}/seller-credential`.
+
+The hash check is required. It prevents a tampered capture from binding an encrypted credential bundle to different public payee details.
 
 ```ts
 const response = await client.uploadSellerCredentialBundle({
@@ -496,18 +558,6 @@ const response = await client.uploadSellerCredentialBundle({
   bundle: capture.credentialBundle,
 });
 ```
-
-### `confirmPayPalForwarding()`
-
-Use `confirmPayPalForwarding(params, opts?)` after a PayPal seller has configured Gmail forwarding. The SDK forwards any configured `apiKey` or bearer token to curator.
-
-| Field | Required | Description |
-| --- | --- | --- |
-| `payeeDetails` | Yes | Hashed payee details for the PayPal maker |
-| `payeeEmail` | Yes | PayPal seller email |
-| `forwardingInitiatorEmail` | Yes | Gmail account that initiated forwarding |
-
-The package exports `PayPalForwardingConfirmationErrorCode` for UI-specific handling of rejected, expired, missing, or mismatched forwarding confirmations.
 
 ### `uploadGoogleOAuthSellerCredential()`
 
@@ -521,6 +571,8 @@ Use `uploadGoogleOAuthSellerCredential(params, opts?)` when curator owns the Goo
 | `redirectUri` | Yes | OAuth redirect URI used to obtain the code |
 | `payeeEmail` | PayPal only | PayPal seller email |
 | `accountId` | Venmo only | Venmo account identifier |
+
+This helper posts to curator `POST /v2/makers/{processorName}/{payeeDetails}/seller-credential/google-oauth`. The `payeeDetails` value is still the hashed payee details bytes32; for Venmo, `accountId` is the Venmo account identifier used by the credential flow.
 
 ### `getSellerCredentialStatus()`
 
@@ -537,6 +589,8 @@ Optional `opts` fields:
 | --- | --- | --- |
 | `baseApiUrl` | No | Override for the curator base API URL |
 | `timeoutMs` | No | Request timeout in milliseconds |
+
+The SDK calls curator `GET /v2/makers/{processorName}/{payeeDetails}/seller-credential/status`. The public status DTO is `{ platform, payeeIdHash, status, credentialType }`; maker row ids are intentionally not returned.
 
 ```ts
 import { Zkp2pClient } from '@zkp2p/sdk';
@@ -612,9 +666,11 @@ The package also exports low-level helpers for integrations that call service AP
 | `apiValidatePayeeDetails(req, baseApiUrl, timeoutMs?)` | Validate a payee identity before registration |
 | `apiGetPayeeDetails(req, apiKey, baseApiUrl, authToken?, timeoutMs?)` | Resolve curator payee details from a hashed on-chain ID |
 | `apiGetOwnerDeposits(req, apiKey, baseApiUrl, authToken?, timeoutMs?)` | Fetch owner deposits from the service API |
-| `apiRequestIdentityAttestation(payload, attestationServiceUrl, platform, actionType)` | Request a maker identity attestation |
+| `createNitroAttestationClient(opts)` | Verify the Nitro enclave and request typed identity attestations, Buyer TEE attestations, or seller credential bundles through `@zkp2p/zkp2p-attestation` |
+| `apiRequestIdentityAttestation(payload, attestationServiceUrl, platform, actionType)` | Request an identity attestation from `POST /identity` after session material has already been encrypted |
 | `createEncryptedBuyerTeeSessionMaterial(input)` | Encrypt buyer TEE session material for a buyer-payment proof |
 | `apiCreateSellerCredentialBundle(payload, attestationServiceUrl, platform, timeoutMs?, runtime?)` | Create a signed seller credential bundle directly through attestation service |
+| `apiUploadSellerCredentialBundle(params, baseApiUrl?, timeoutMs?)` | Register payee details if needed, verify the bundle payee hash, and store an encrypted seller credential bundle with curator |
 
 `apiGetOrderbook()` accepts `{ currency, paymentPlatform?, sortBy?, sortDirection?, limit?, chainId?, token? }`. `apiGetDepositBundle()` accepts `{ depositId, escrowAddress, dailySnapshotLimit? }`.
 

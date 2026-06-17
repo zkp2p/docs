@@ -264,6 +264,10 @@ function RegisterTakerButton() {
 
 Supported identity registration platforms are `venmo`, `paypal`, and `wise`.
 
+:::warning Venmo identity registration lockfile requirement
+Fresh installs of `@zkp2p/zkp2p-react-native-sdk@0.4.1` resolve `@zkp2p/zkp2p-attestation` through its `^1.4.0` range. If your app lockfile pins `@zkp2p/zkp2p-attestation@1.5.0`, update it to `1.5.1` or newer. Venmo `register_venmo` now sends public `params.SENDER_ID` and encrypted session material containing only a replayable `Cookie`; it must not include `sessionMaterial.url`.
+:::
+
 ## Seller Autopilot
 
 Seller Autopilot lets a maker register encrypted seller session material so matching buyer payments can be verified from the seller side. The mobile SDK exposes this through `useZkp2p().sar`.
