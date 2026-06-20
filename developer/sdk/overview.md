@@ -53,15 +53,17 @@ bun add react
 For React Native, use the mobile package instead:
 
 ```bash
-yarn add @zkp2p/zkp2p-react-native-sdk viem react-native-webview react-native-svg @react-native-async-storage/async-storage @react-native-cookies/cookies expo-crypto expo-web-browser
+yarn add @zkp2p/zkp2p-react-native-sdk@0.4.2 viem@2.52.2 react-native-webview@13.16.1 @react-native-async-storage/async-storage@3.1.1 @react-native-cookies/cookies@6.2.1
 ```
+
+See [React Native SDK](/developer/sdk/react-native) for the full peer-version matrix, iOS setup, and proof-only startup flow.
 
 ## Architecture
 
 The SDK is built around RPC-first reads, V2 contract routing, and contract-safe write helpers.
 
 - Common reads such as `getDeposits()`, `getDeposit()`, `getIntents()`, and `getIntent()` use ProtocolViewer and on-chain state first, which helps avoid indexer lag for core flows.
-- Contract routing targets the EscrowV2/OrchestratorV2 stack. Legacy V1 escrow/orchestrator fallbacks are not part of the `0.4.x` client routing surface.
+- Contract routing targets the EscrowV2/OrchestratorV2 stack. Legacy V1 escrow/orchestrator fallbacks are not part of the `0.5.x` client routing surface.
 - Advanced history and filtering live behind `client.indexer.*`, which gives you GraphQL-backed access to richer search, pagination, and fulfillment records.
 - Write methods are split between deposit management, intent operations, and vault/rate-manager flows, with prepared-transaction support for relayers and smart accounts.
 
