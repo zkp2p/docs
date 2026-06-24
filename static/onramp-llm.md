@@ -4,7 +4,7 @@ The app owns order UI, payment-row selection, and `fulfillIntent()`. The extensi
 
 ## 1. Initialize the SDK
 
-Use a scoped extension instance and an app-owned `Zkp2pClient`. Require `@zkp2p/sdk` `0.5.0` or newer.
+Use a scoped extension instance and an app-owned `Zkp2pClient`. Require `@zkp2p/sdk` `0.5.0` or newer for the headless extension surface, and `0.5.7` or newer for authenticated quote paths that rely on private orderbooks or internal quote preferences.
 
 ```ts
 import {
@@ -289,7 +289,7 @@ async function verifyBuyerTeePaymentDirectly({
 
 ## Key rules
 
-- Target Peer extension manifest `0.6.0` or newer and `@zkp2p/sdk` `0.5.0` or newer — `0.4.x` only ships the removed deeplink wrapper.
+- Target Peer extension manifest `0.6.0` or newer and `@zkp2p/sdk` `0.5.0` or newer — `0.4.x` only ships the removed deeplink wrapper. Use `@zkp2p/sdk` `0.5.7` or newer when authenticated quote options need the client's `apiKey` forwarded to curator as `x-api-key`.
 - Never use `onramp()`, `openSidebar()`, `onIntentFulfilled()`, `onProofComplete()`, or `callbackUrl` — the pre-`0.6.0` deeplink/side-panel API was removed.
 - Use `createPeerExtensionSdk({ window })`.
 - Register `onMetadataMessage()` before `authenticate()`.
