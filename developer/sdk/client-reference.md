@@ -25,7 +25,7 @@ Create a client with `new Zkp2pClient(opts)`.
 | `runtimeEnv` | No | Runtime environment: `production`, `preproduction`, or `staging`. Defaults to `production` |
 | `indexerUrl` | No | Override for the indexer GraphQL endpoint |
 | `baseApiUrl` | No | Override for ZKP2P service APIs |
-| `apiKey` | No | Optional curator API key — not required to get started. When provided, it enables auto-fetching `signalIntent()` gating signatures and enriches authenticated quote responses with maker `payeeData` |
+| `apiKey` | No | Optional curator API key — not required to get started. When provided, the SDK forwards it as `x-api-key` for authenticated quote APIs, enables auto-fetching `signalIntent()` gating signatures, and enriches quote responses with maker `payeeData` |
 | `authorizationToken` | No | Optional bearer token for hybrid authentication |
 | `getAuthorizationToken` | No | Async token provider for long-lived clients |
 | `indexerApiKey` | No | Optional `x-api-key` header for indexer proxy authentication |
@@ -41,7 +41,7 @@ const client = new Zkp2pClient({
 ```
 
 :::info No API key required
-Most public SDK methods work without `apiKey` or `authorizationToken`. Auth credentials are optional for normal deposit, quote, and intent flows and mostly affect response richness. `signalIntent()` can auto-fetch its gating signature when you provide `apiKey` or `authorizationToken`; if you do not want the SDK to make that request, pass `gatingServiceSignature` and `signatureExpiration` yourself.
+Most public SDK methods work without `apiKey` or `authorizationToken`. Auth credentials are optional for normal public deposit, quote, and intent flows. Configure `apiKey` when you need authenticated curator quote behavior, such as private orderbook lookups or quote preferences scoped to internal flows. `signalIntent()` can auto-fetch its gating signature when you provide `apiKey` or `authorizationToken`; if you do not want the SDK to make that request, pass `gatingServiceSignature` and `signatureExpiration` yourself.
 :::
 
 :::note Service roots
@@ -49,7 +49,7 @@ Set `baseApiUrl` to the service root, for example `https://api.zkp2p.xyz`. Do no
 :::
 
 :::note Runtime requirements
-The published `0.5.2` package declares `node >= 22` for Node runtimes and `viem ^2.37.3` as a peer dependency. `0.5.2` depends on `@zkp2p/zkp2p-attestation@1.5.1`, which is the first attestation package version that supports the current Venmo identity registration shape.
+The published `0.5.7` package declares `node >= 22` for Node runtimes and `viem ^2.37.3` as a peer dependency. `0.5.7` depends on `@zkp2p/zkp2p-attestation@1.6.3`, which includes the browser and extension fetch binding fix while preserving the current Venmo identity registration shape introduced in `1.5.1`.
 :::
 
 ## Prepared transactions
@@ -357,6 +357,10 @@ Use `getQuote(req, opts?)` to fetch available liquidity for a taker flow.
 | `nearbyQuotesCount` | No | Number of nearby suggestions above and below |
 | `includePrivateOrderbooks` | No | Include whitelist-gated private orderbook deposits scoped to the requesting user |
 
+:::note Authenticated quote requests
+Starting in `@zkp2p/sdk@0.5.7`, `getQuote()` forwards the client's `apiKey` as `x-api-key` to curator. Pass `apiKey` when using authenticated quote options such as `includePrivateOrderbooks: true` or internal quote preferences like `quotePreference: 'EXCLUSIVE_SAR'`. Public quote behavior is unchanged when no `apiKey` is configured.
+:::
+
 The response includes:
 
 - `responseObject.quotes`: matched quotes
@@ -398,6 +402,10 @@ Use `getQuotesBestByPlatform(req, opts?)` when you want the single best quote pe
 | `supportBusinessAccounts` | No | Allow quotes from business accounts |
 | `intentGatingService` | No | Filter by a specific intent gating service address |
 | `includePrivateOrderbooks` | No | Include whitelist-gated private orderbook deposits. Defaults to `false` |
+
+:::note Authenticated quote requests
+Starting in `@zkp2p/sdk@0.5.7`, `getQuotesBestByPlatform()` forwards the client's `apiKey` as `x-api-key` to curator. Pass `apiKey` when using authenticated quote options such as `includePrivateOrderbooks: true` or internal quote preferences like `quotePreference: 'EXCLUSIVE_SAR'`. Public quote behavior is unchanged when no `apiKey` is configured.
+:::
 
 The response shape mirrors `getQuote` but is keyed by platform:
 

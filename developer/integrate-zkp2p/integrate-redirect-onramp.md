@@ -34,6 +34,7 @@ You need:
 
 - `@zkp2p/sdk` `0.5.0` or newer installed in your web app — `0.5.0` is the first release that ships the headless `peerExtensionSdk`; `0.4.x` only exposes the removed deeplink wrapper
 - `@zkp2p/sdk` `0.5.2` or newer if your integration also performs Venmo identity registration through `register_venmo`
+- `@zkp2p/sdk` `0.5.7` or newer if your quote flow uses authenticated curator behavior such as private orderbooks or internal quote preferences
 - The Peer extension installed and connected for the current origin
 - A `Zkp2pClient` configured for the chain and runtime
 - An intent your app already created or selected
