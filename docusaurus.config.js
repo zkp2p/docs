@@ -107,6 +107,10 @@ const config = {
       {
         redirects: [
           {
+            from: '/guides/for-buyers/reputation',
+            to: '/guides/for-buyers/tiers',
+          },
+          {
             from: '/developer/build-payment-integration',
             to: '/developer/build-your-own-extension',
           },

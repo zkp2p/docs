@@ -14,7 +14,7 @@ module.exports = {
         'for-buyers/complete-guide-to-onboarding',
         'for-buyers/handling-verification-issues',
         'for-buyers/guide-to-partial-release',
-        'for-buyers/reputation'
+        'for-buyers/tiers'
         ],
     },
     {
