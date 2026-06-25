@@ -1,167 +1,140 @@
 ---
 id: reputation
-title: Reputation
+title: Tiers
 ---
 
-# Taker Tiers: ZKP2P Reputation System
+# Peer Tiers
 
-## What are Taker Tiers?
+## What are Peer Tiers?
 
-Taker Tiers are ZKP2P's onchain reputation system. Your tier determines your per-intent cap and cooldown period when onramping through ZKP2P.
+Peer Tiers are Peer's onchain reputation system. Your tier determines four things when you onramp (buy crypto) on Peer:
 
-The more orders you complete, the higher your tier, and the larger your order caps and shorter your cooldown periods.
+- Your **per-order limit**
+- Your **trading fee discount**
+- Your **cooldown** between orders
+- Which **payment methods** you can use
 
-## Why Taker Tiers?
+Higher tiers unlock larger orders, lower fees, shorter cooldowns, and access to more payment methods. Everything is calculated from your onchain activity — there is no application or KYC.
 
-P2P systems work best when participants are reliable. When a taker locks an order, then abandons it without cancelling, it:
+## How you earn a tier
 
-- Ties up maker liquidity unnecessarily
-- Wastes time for liquidity providers
-- Degrades the experience for everyone
+Your tier is based on your **Peer Pay volume**: the cumulative value of your liquidity that has been filled through Peer Pay. The more volume you build, the higher your tier climbs.
 
-Taker Tiers incentivize good behavior by rewarding consistent, reliable users with higher limits.
+You're always placed in the highest tier whose volume requirement you meet. New wallets start at Peer Peasant.
 
-Similar to reputation systems on other P2P platforms, but computed entirely from your onchain activity.
+:::info
+Limits, thresholds, cooldowns, and fee discounts are set by the protocol and read live by the app. The numbers on this page are the current defaults and may be tuned over time — the app always shows your real, current values.
+:::
 
-## The Five Tiers
+## The five tiers
 
-| Tier | Volume Threshold | Base Per-Intent Cap | Base Cooldown |
-|------|------------------|---------------------|---------------|
-| Peer Peasant | $0 | $100 | 12 hours |
-| Peer | $500 | $250 | 6 hours |
-| Peer Plus | $2,000 | $1,000 | No cooldown |
-| Peer Pro | $10,000 | $2,500 | No cooldown |
-| Peer Platinum | $25,000 | $5,000 | No cooldown |
+| Tier | Peer Pay volume | Per-order limit | Cooldown | Fee discount |
+|------|----------------:|----------------:|:--------:|:------------:|
+| Peer Peasant | $0 | $100 | 12 hours | — |
+| Peer | $2,500 | $250 | 6 hours | 0.05% |
+| Peer Plus | $20,000 | $1,000 | None | 0.10% |
+| Peer Pro | $75,000 | $2,500 | None | 0.20% |
+| Peer Platinum | $300,000 | $5,000 | None | 0.30% |
 
-## Platform-Based Limits
+The per-order limit shown here is the **base limit** for your tier. Your actual limit on each payment method is adjusted by that method's risk level — see [Payment methods and limits](#payment-methods-and-limits) below.
 
-Not all payment platforms carry the same risk. ZKP2P adjusts your caps and cooldowns based on the payment platform you're using.
+## What your tier unlocks
 
-### Why Platform Risk Matters
+- **Larger orders** — your base limit grows from $100 at Peasant to $5,000 at Platinum, and goes higher still on low-risk payment methods.
+- **Lower fees** — higher tiers earn a discount on the standard trading fee, up to 0.30% at Platinum.
+- **Shorter cooldowns** — the wait between orders shrinks as you climb and disappears entirely at Peer Plus and above.
+- **More payment methods** — some methods (such as PayPal) require a minimum tier before you can use them.
 
-Different payment platforms have varying levels of buyer protection and reversal windows:
+## Payment methods and limits
 
-- **PayPal**: 180-day buyer protection, easiest disputes - highest fraud risk
-- **Venmo/CashApp**: ACH-backed, bank reversal possible within 90 days
-- **Zelle**: Bank-to-bank, harder but possible to reverse
-- **Revolut/Wise/Monzo**: Instant settlement, no reversals - lowest fraud risk
+Payment methods don't all carry the same risk. Methods that can be reversed or charged back are limited more tightly than methods that settle instantly and can't be reversed. Peer adjusts your limit and cooldown for each method accordingly.
 
-### Platform Risk Levels
+### Low-risk methods — open to everyone
 
-| Risk Level | Platforms | Cap Multiplier | Has Cooldown | Notes |
-|------------|-----------|----------------|--------------|-------|
-| **Low Risk** | Revolut, Wise, Monzo, MercadoPago | 5x | No | Instant settlement, no chargebacks |
-| **Medium Risk** | Zelle (all banks) | 1.5x | Yes | Bank-to-bank, harder to reverse |
-| **High Risk** | Venmo, CashApp | 1x | Yes | ACH-backed, 90-day reversal window |
-| **Highest Risk** | PayPal | 0.75x | Yes | Requires Peer Plus tier to access |
+Instant, irreversible methods. **No cooldown and no minimum tier**, available at every tier with the highest limits — up to 5× your tier's base limit.
 
-### Effective Caps by Platform
+| Method | Limit | Cooldown |
+|--------|-------|:--------:|
+| Revolut, Wise, Monzo, MercadoPago, Luxon | Up to 5× your base limit | None |
+| N26 | Up to 5× your base limit (max $10,000) | None |
+| Alipay | Up to 5× your base limit (max $50) | None |
 
-Your effective cap = Base Tier Cap × Platform Multiplier
+### Higher-risk methods — tier-gated
 
-**Example for a Peer user ($250 base cap):**
+Reversible methods that carry chargeback risk. Your limit is your base limit times the method's factor, and a cooldown applies.
 
-| Platform | Multiplier | Effective Cap |
-|----------|------------|---------------|
-| Revolut | 5x | $1,250 |
-| Wise | 5x | $1,250 |
-| Monzo | 5x | $1,250 |
-| MercadoPago | 5x | $1,250 |
-| Zelle | 1.5x | $375 |
-| Venmo | 1x | $250 |
-| CashApp | 1x | $250 |
-| PayPal | - | Locked (requires Peer Plus) |
+| Method | Limit factor | Cooldown | Minimum tier |
+|--------|:------------:|:--------:|:------------:|
+| Zelle | 1.5× | Yes | — |
+| Venmo | 1× (max $5,000) | Yes | — |
+| Cash App | 1× | Yes | — |
+| Chime | 1× | Yes | — |
+| PayPal | 0.75× | Yes | Peer Plus |
 
-### Platform Access Requirements
+:::note
+At the Peer Peasant tier, Venmo is limited to $5 per order.
+:::
 
-Some high-risk platforms require a minimum tier to access:
+### Effective limit example
 
-| Platform | Minimum Tier Required | Volume to Unlock |
-|----------|----------------------|------------------|
-| PayPal | Peer Plus | $2,000 |
+Your limit on a method = your tier's base limit × the method's factor.
 
-Users below the required tier will see the platform as "Locked" and cannot create orders for that platform until they reach the required tier.
+For a **Peer** user (base limit $250):
 
-## Cooldown Periods
+| Method | Factor | Your limit |
+|--------|:------:|-----------:|
+| Revolut / Wise / Monzo / MercadoPago | 5× | $1,250 |
+| Zelle | 1.5× | $375 |
+| Venmo / Cash App / Chime | 1× | $250 |
+| PayPal | — | Locked (requires Peer Plus) |
 
-Cooldowns prevent rapid-fire order creation and only apply to higher-risk platforms.
+You can always see your exact limit for each method in the app before creating an order.
 
-**Low-risk platforms (Revolut, Wise, Monzo, MercadoPago) have NO cooldown regardless of your tier.**
+## Cooldowns
 
-### Cooldown by Tier
+A cooldown is a short waiting period between orders. It applies only to higher-risk (reversible) methods — low-risk methods never have a cooldown.
 
-For platforms with cooldown enforcement (Zelle, Venmo, CashApp, PayPal):
-
-| Tier | Cooldown Duration |
-|------|-------------------|
+| Tier | Cooldown |
+|------|:--------:|
 | Peer Peasant | 12 hours |
 | Peer | 6 hours |
-| Peer Plus | No cooldown |
-| Peer Pro | No cooldown |
-| Peer Platinum | No cooldown |
+| Peer Plus and above | None |
 
-### How Cooldowns Work
+How cooldowns work:
 
-- Cooldown is **per-user**, not per-platform
-- If you're on cooldown, you cannot use any high-risk platform until the cooldown expires
-- Low-risk platforms can be used immediately regardless of cooldown status
-- If you attempt to create an order while on cooldown, you'll see an error with the remaining time
+- The cooldown is **per wallet**, not per method.
+- While on cooldown, you can't start a new order on any higher-risk method until it ends.
+- Low-risk methods (Revolut, Wise, Monzo, and so on) stay available even during a cooldown.
+- If you try to order while on cooldown, the app shows the time remaining.
 
-**Example**: A Peer user completes a Venmo order. They must wait 6 hours before using Venmo, CashApp, Zelle, or PayPal again. However, they can immediately use Revolut, Wise, Monzo, or MercadoPago.
+**Example:** a Peer user completes a Venmo order, then waits 6 hours before using Venmo, Cash App, Zelle, or PayPal again — but can use Revolut, Wise, or Monzo right away.
 
-## How Reputation is Calculated
+## Staying in good standing
 
-Your tier is determined by two factors:
+Your tier can be reduced if you repeatedly lock orders and then fail to complete them. Locking a maker's liquidity and walking away ties up their funds and degrades the experience for everyone, so this behavior carries a penalty.
 
-1. **Total Fulfilled Volume** — The cumulative USD value of orders you've successfully completed. This determines your base tier.
+- Completing orders reliably keeps your standing clean.
+- Abandoning orders (cancelling well after you've locked them) raises a penalty score.
+- Completing more orders dilutes that penalty over time.
+- A quick cancellation right after locking — within about 15 minutes — does **not** count against you.
 
-2. **Lock Score** — A penalty score where lower is better. High lock scores can demote you to a lower tier.
+A high enough penalty score can demote you by up to four tiers below the level your volume would otherwise reach.
 
-### Lock Score Details
+| Penalty score | Tier reduction |
+|--------------:|:--------------:|
+| 50+ | −1 tier |
+| 200+ | −2 tiers |
+| 500+ | −3 tiers |
+| 1,000+ | −4 tiers |
 
-- New users start with no history and are placed in Peer Peasant ($100 cap)
-- Cancelling orders after 15 minutes increases your lock score
-- Completing orders dilutes your lock score over time
+For example, if your volume qualifies you for Peer Plus but your penalty score is 200, you'd be demoted two tiers.
 
-Cancellations within 15 minutes don't count against you — we get that you might need to back out quickly if something's off.
+## Where to see your tier
 
-### Lock Score Penalty Thresholds
+- **Profile** — your current tier, per-order limit, fee discount, and cooldown status.
+- **Order screen** — each payment method shows your effective limit and any restriction (including "Locked" if your tier is too low to use it).
+- **When a limit applies** — if an order exceeds your limit or a cooldown is active, the app shows your current limit or the remaining time.
 
-Your diluted lock score can demote you by up to 4 tiers:
-
-| Diluted Lock Score | Tier Penalty |
-|--------------------|--------------|
-| 50+ | -1 tier |
-| 200+ | -2 tiers |
-| 500+ | -3 tiers |
-| 1000+ | -4 tiers |
-
-For example, if your fulfilled volume qualifies you for Peer Plus but your diluted lock score is 200, you'd be demoted 2 tiers to Peer Peasant.
-
-## Where to See Your Tier
-
-- **Profile Page** — Your tier, badge, order limit, and cooldown status are displayed in the sidebar
-- **Order Creation** — If you exceed your cap or cooldown is active, you'll see an error with your current limit or remaining cooldown time
-- **Platform Selection** — Each platform shows its effective cap and any restrictions
-- **Discord** — Verify your wallet to receive your tier role
-
-## Tier Benefits
-
-### All Users
-
-- Clear limits based on your history
-- Visual badge showing your reputation
-- Transparent scoring system
-- Platform-specific caps optimized for risk
-
-### Peer Plus and Above
-
-- Access to PayPal
-- No cooldown periods on any platform
-- Higher effective caps across all platforms
-
-### Peer Platinum
-
-- Private Discord channel
-- Early access to ZKP2P mobile app
-- Maximum caps on all platforms
+:::note
+Peer also maintains an invite-only **Peer President** tier for select partners, with the highest limits and no cooldowns.
+:::
