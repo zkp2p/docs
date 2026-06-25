@@ -1,5 +1,5 @@
 ---
-id: reputation
+id: tiers
 title: Tiers
 ---
 
@@ -7,7 +7,7 @@ title: Tiers
 
 ## What are Peer Tiers?
 
-Peer Tiers are Peer's onchain reputation system. Your tier determines four things when you onramp (buy crypto) on Peer:
+Peer Tiers rank wallets by their onchain activity. Your tier determines four things when you onramp (buy crypto) on Peer:
 
 - Your **per-order limit**
 - Your **trading fee discount**
