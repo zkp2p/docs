@@ -31,10 +31,10 @@ Limits, thresholds, cooldowns, and fee discounts are set by the protocol and rea
 | Tier | Peer Pay volume | Per-order limit | Cooldown | Fee discount |
 |------|----------------:|----------------:|:--------:|:------------:|
 | Peer Peasant | $0 | $100 | 12 hours | — |
-| Peer | $2,500 | $250 | 6 hours | 0.05% |
-| Peer Plus | $20,000 | $1,000 | None | 0.10% |
-| Peer Pro | $75,000 | $2,500 | None | 0.20% |
-| Peer Platinum | $300,000 | $5,000 | None | 0.30% |
+| Peer | $1,000 | $250 | 6 hours | 0.05% |
+| Peer Plus | $10,000 | $1,000 | None | 0.10% |
+| Peer Pro | $50,000 | $2,500 | None | 0.20% |
+| Peer Platinum | $100,000 | $5,000 | None | 0.30% |
 
 The per-order limit shown here is the **base limit** for your tier. Your actual limit on each payment method is adjusted by that method's risk level — see [Payment methods and limits](#payment-methods-and-limits) below.
 
