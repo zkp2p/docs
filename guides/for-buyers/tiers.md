@@ -28,65 +28,56 @@ Limits, thresholds, cooldowns, and fee discounts are set by the protocol and rea
 
 ## The five tiers
 
-| Tier | Peer Pay volume | Per-order limit | Cooldown | Fee discount |
-|------|----------------:|----------------:|:--------:|:------------:|
-| Peer Peasant | $0 | $100 | 12 hours | — |
-| Peer | $1,000 | $250 | 6 hours | 0.05% |
-| Peer Plus | $10,000 | $1,000 | None | 0.10% |
-| Peer Pro | $50,000 | $2,500 | None | 0.20% |
-| Peer Platinum | $100,000 | $5,000 | None | 0.30% |
+| Tier | Peer Pay volume | Cooldown | Fee discount |
+|------|----------------:|:--------:|:------------:|
+| Peer Peasant | $0 | 12 hours | — |
+| Peer | $1,000 | 6 hours | 0.05% |
+| Peer Plus | $10,000 | None | 0.10% |
+| Peer Pro | $50,000 | None | 0.20% |
+| Peer Platinum | $100,000 | None | 0.30% |
 
-The per-order limit shown here is the **base limit** for your tier. Your actual limit on each payment method is adjusted by that method's risk level — see [Payment methods and limits](#payment-methods-and-limits) below.
+Your per-order limit is **set for each payment method individually** — there's no single across-the-board number. Each method has its own limit at every tier, listed in [Payment methods and limits](#payment-methods-and-limits) below. The app always shows your real limit for a method before you create an order.
 
 ## What your tier unlocks
 
-- **Larger orders** — your base limit grows from $100 at Peasant to $5,000 at Platinum, and goes higher still on low-risk payment methods.
+- **Larger orders** — every tier raises your per-order limit on each payment method. On the lowest-risk methods it rises from $500 at Peasant to $25,000 at Platinum (see the per-method tables below).
 - **Lower fees** — higher tiers earn a discount on the standard trading fee, up to 0.30% at Platinum.
 - **Shorter cooldowns** — the wait between orders shrinks as you climb and disappears entirely at Peer Plus and above.
 - **More payment methods** — some methods (such as PayPal) require a minimum tier before you can use them.
 
 ## Payment methods and limits
 
-Payment methods don't all carry the same risk. Methods that can be reversed or charged back are limited more tightly than methods that settle instantly and can't be reversed. Peer adjusts your limit and cooldown for each method accordingly.
+Payment methods don't all carry the same risk. Methods that can be reversed or charged back are limited more tightly than methods that settle instantly and can't be reversed. Each method has its own per-order limit at every tier, shown in the tables below (all amounts in USD).
 
 ### Low-risk methods — open to everyone
 
-Instant, irreversible methods. **No cooldown and no minimum tier**, available at every tier with the highest limits — up to 5× your tier's base limit.
+Instant, irreversible methods. **No cooldown and no minimum tier** — available at every tier, with the highest limits on Peer.
 
-| Method | Limit | Cooldown |
-|--------|-------|:--------:|
-| Revolut, Wise, Monzo, MercadoPago, Luxon | Up to 5× your base limit | None |
-| N26 | Up to 5× your base limit (max $10,000) | None |
-| Alipay | Up to 5× your base limit (max $50) | None |
+| Method | Peer Peasant | Peer | Peer Plus | Peer Pro | Peer Platinum |
+|--------|-------------:|-----:|----------:|---------:|--------------:|
+| Revolut | $500 | $1,250 | $5,000 | $12,500 | $25,000 |
+| Wise | $500 | $1,250 | $5,000 | $12,500 | $25,000 |
+| Monzo | $500 | $1,250 | $5,000 | $12,500 | $25,000 |
+| MercadoPago | $500 | $1,250 | $5,000 | $12,500 | $25,000 |
+| Luxon | $500 | $1,250 | $5,000 | $12,500 | $25,000 |
+| N26 | $500 | $1,250 | $5,000 | $10,000 | $10,000 |
+| Alipay | $50 | $50 | $50 | $50 | $50 |
 
-### Higher-risk methods — tier-gated
+### Higher-risk methods — cooldown applies
 
-Reversible methods that carry chargeback risk. Your limit is your base limit times the method's factor, and a cooldown applies.
+Reversible methods that carry chargeback risk. Limits are lower and a [cooldown](#cooldowns) applies between orders.
 
-| Method | Limit factor | Cooldown | Minimum tier |
-|--------|:------------:|:--------:|:------------:|
-| Zelle | 1.5× | Yes | — |
-| Venmo | 1× (max $5,000) | Yes | — |
-| Cash App | 1× | Yes | — |
-| Chime | 1× | Yes | — |
-| PayPal | 0.75× | Yes | Peer Plus |
+| Method | Peer Peasant | Peer | Peer Plus | Peer Pro | Peer Platinum |
+|--------|-------------:|-----:|----------:|---------:|--------------:|
+| Zelle | $150 | $375 | $1,500 | $3,750 | $7,500 |
+| Venmo | $5 | $250 | $1,000 | $2,500 | $5,000 |
+| Cash App | $100 | $250 | $1,000 | $2,500 | $5,000 |
+| Chime | $100 | $250 | $1,000 | $2,500 | $5,000 |
+| PayPal | Locked | Locked | $750 | $1,875 | $3,750 |
 
 :::note
-At the Peer Peasant tier, Venmo is limited to $5 per order.
+**PayPal** is locked below Peer Plus — you need to reach Peer Plus before you can use it. **Venmo** is limited to $5 per order at the Peer Peasant tier.
 :::
-
-### Effective limit example
-
-Your limit on a method = your tier's base limit × the method's factor.
-
-For a **Peer** user (base limit $250):
-
-| Method | Factor | Your limit |
-|--------|:------:|-----------:|
-| Revolut / Wise / Monzo / MercadoPago | 5× | $1,250 |
-| Zelle | 1.5× | $375 |
-| Venmo / Cash App / Chime | 1× | $250 |
-| PayPal | — | Locked (requires Peer Plus) |
 
 You can always see your exact limit for each method in the app before creating an order.
 
