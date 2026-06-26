@@ -433,9 +433,13 @@ Use `getTakerTier(req, opts?)` to fetch tiering, cooldown, and platform-limit da
 The response object includes:
 
 - `tier`: one of `PEASANT`, `PEER`, `PLUS`, `PRO`, `PLATINUM`, or `PEER_PRESIDENT`
-- `perIntentCapBaseUnits` and `perIntentCapDisplay`
+- volume metadata such as `minVolumeForTier`, `nextTier`, and `volumeToNextTier`
 - cooldown metadata such as `cooldownHours`, `cooldownActive`, and `nextIntentAvailableAt`
-- `platformLimits`, including risk level and minimum required tier per payment platform
+- `platformLimits`: per-order limits for each payment platform, including the effective cap (`effectiveCap` / `effectiveCapDisplay`), whether the platform is locked for the tier (`isLocked`), the minimum tier required to unlock it (`minTierRequired`), and whether the method is reversible (`reversible`)
+
+:::note
+Per-order caps are set per payment platform — there is no single global per-tier cap. Read each method's limit from `platformLimits[].effectiveCap`.
+:::
 
 ## Seller Autopilot
 
