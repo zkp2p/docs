@@ -26,6 +26,20 @@ You're always placed in the highest tier whose volume requirement you meet. New 
 Limits, thresholds, cooldowns, and fee discounts are set by the protocol and read live by the app. The numbers on this page are the current defaults and may be tuned over time — the app always shows your real, current values.
 :::
 
+## How your tier is calculated
+
+Your tier comes from two things working together:
+
+1. **Your base tier** — set by your **Peer Pay volume** (above). The more volume you build, the higher your base tier.
+2. **A reliability penalty** — a *lock score* that can pull your tier down if you repeatedly lock makers' liquidity and don't follow through.
+
+Your final tier is your base tier minus any reliability penalty. The penalty can only ever **demote** you — it never blocks you outright, and it's offset by the orders you actually complete. In practice:
+
+- **Reliable, active takers feel almost nothing.** The penalty is diluted by your completed-order volume, so a few abandoned locks barely move it when you have real fulfillment history.
+- **Lock-and-abandon behavior with little completed volume gets demoted fast** — the penalty isn't diluted, so it climbs past the thresholds quickly.
+
+See [Staying in good standing](#staying-in-good-standing) for what raises the penalty and how far it can demote you.
+
 ## The five tiers
 
 | Tier | Peer Pay volume | Cooldown | Fee discount |
