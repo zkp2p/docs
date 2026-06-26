@@ -28,19 +28,19 @@ Limits, thresholds, cooldowns, and fee discounts are set by the protocol and rea
 
 ## The five tiers
 
-| Tier | Peer Pay volume | Max per-order limit | Cooldown | Fee discount |
-|------|----------------:|--------------------:|:--------:|:------------:|
-| Peer Peasant | $0 | $500 | 12 hours | — |
-| Peer | $1,000 | $1,250 | 6 hours | 0.05% |
-| Peer Plus | $10,000 | $5,000 | None | 0.10% |
-| Peer Pro | $50,000 | $12,500 | None | 0.20% |
-| Peer Platinum | $100,000 | $25,000 | None | 0.30% |
+| Tier | Peer Pay volume | Cooldown | Fee discount |
+|------|----------------:|:--------:|:------------:|
+| Peer Peasant | $0 | 12 hours | — |
+| Peer | $1,000 | 6 hours | 0.05% |
+| Peer Plus | $10,000 | None | 0.10% |
+| Peer Pro | $50,000 | None | 0.20% |
+| Peer Platinum | $100,000 | None | 0.30% |
 
-Your per-order limit is **set for each payment method individually**, not as a single number across the board. The figure above is the **highest** limit available at your tier — reached on the lowest-risk methods. Every method's exact limit is listed in [Payment methods and limits](#payment-methods-and-limits) below, and the app always shows your real limit before you create an order.
+Your per-order limit is **set for each payment method individually** — there's no single across-the-board number. Each method has its own limit at every tier, listed in [Payment methods and limits](#payment-methods-and-limits) below. The app always shows your real limit for a method before you create an order.
 
 ## What your tier unlocks
 
-- **Larger orders** — your per-order limit grows with every tier. On the lowest-risk methods it rises from $500 at Peasant to $25,000 at Platinum.
+- **Larger orders** — every tier raises your per-order limit on each payment method. On the lowest-risk methods it rises from $500 at Peasant to $25,000 at Platinum (see the per-method tables below).
 - **Lower fees** — higher tiers earn a discount on the standard trading fee, up to 0.30% at Platinum.
 - **Shorter cooldowns** — the wait between orders shrinks as you climb and disappears entirely at Peer Plus and above.
 - **More payment methods** — some methods (such as PayPal) require a minimum tier before you can use them.
