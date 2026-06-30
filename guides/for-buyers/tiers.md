@@ -18,19 +18,21 @@ Higher tiers unlock larger orders, lower fees, shorter cooldowns, and access to 
 
 ## How you earn a tier
 
-Your tier is based on your **Peer Pay volume**: the cumulative value of your liquidity that has been filled through Peer Pay. The more volume you build, the higher your tier climbs.
+Your tier is based on your **weighted maker volume**: the cumulative value of your liquidity (the orders you provide as a maker) that has been filled across **all** payment methods — not just Peer Pay. Each method's filled volume is multiplied by a per-method multiplier before everything is added together, so volume on different payment methods counts toward your tier at different rates. The more weighted volume you build, the higher your tier climbs.
 
-You're always placed in the highest tier whose volume requirement you meet. New wallets start at Peer Peasant.
+Today, **Venmo, Cash App, and PayPal count at full weight (1.0×)** and **every other payment method counts at 0.2×**. For example, $10,000 of your liquidity filled on Venmo adds $10,000 of weighted volume, while $10,000 filled on Revolut adds $2,000.
+
+You're always placed in the highest tier whose weighted-volume requirement you meet. New wallets start at Peer Peasant.
 
 :::info
-Limits, thresholds, cooldowns, and fee discounts are set by the protocol and read live by the app. The numbers on this page are the current defaults and may be tuned over time — the app always shows your real, current values.
+Limits, thresholds, cooldowns, fee discounts, and the per-method volume multipliers are set by the protocol and read live by the app. The numbers and multipliers on this page are the current defaults and may be tuned over time — the app always shows your real, current values.
 :::
 
 ## How your tier is calculated
 
 Your tier comes from two things working together:
 
-1. **Your base tier** — set by your **Peer Pay volume** (above). The more volume you build, the higher your base tier.
+1. **Your base tier** — set by your **weighted maker volume** (above): your filled liquidity across all payment methods, each weighted by its per-method multiplier. The more weighted volume you build, the higher your base tier.
 2. **A reliability penalty** — a *lock score* that can pull your tier down if you repeatedly lock makers' liquidity and don't follow through.
 
 Your final tier is your base tier minus any reliability penalty. The penalty can only ever **demote** you — it never blocks you outright, and it's offset by the orders you actually complete. In practice:
@@ -42,7 +44,7 @@ See [Staying in good standing](#staying-in-good-standing) for what raises the pe
 
 ## The five tiers
 
-| Tier | Peer Pay volume | Cooldown | Fee discount |
+| Tier | Weighted volume | Cooldown | Fee discount |
 |------|----------------:|:--------:|:------------:|
 | Peer Peasant | $0 | 12 hours | — |
 | Peer | $1,000 | 6 hours | 0.05% |
