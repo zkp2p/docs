@@ -139,7 +139,3 @@ For example, if your volume qualifies you for Peer Plus but your penalty score i
 - **Profile** — your current tier, per-order limit, fee discount, and cooldown status.
 - **Order screen** — each payment method shows your effective limit and any restriction (including "Locked" if your tier is too low to use it).
 - **When a limit applies** — if an order exceeds your limit or a cooldown is active, the app shows your current limit or the remaining time.
-
-:::note
-Peer also maintains an invite-only **Peer President** tier for select partners, with the highest limits and no cooldowns.
-:::
