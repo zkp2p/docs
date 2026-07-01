@@ -19,7 +19,7 @@ Once ARM is running on your deposit, check periodically that your rates are comp
    Your deposit detail shows:
 
    - Each **currency** and **payment method** you accept
-   - Your current **spread** vs market (e.g. "+1.25%")
+   - Your current price versus market (e.g. "+1.25%")
    - Your **floor rate** if set (e.g. "1.01 USD / USDC")
 
    To see how you compare to other sellers, check the **Liquidity** tab. Or edit your deposit to see the orderbook visualization in Advanced mode - the chart shows your position relative to all other deposits at different rates.
@@ -46,7 +46,7 @@ The ARM dashboard at [arm.peer.xyz](https://arm.peer.xyz) gives you a real-time 
   - On-chain rate snapshots
   - Historical feed behavior
 
-  Useful for understanding if your spread is in line with what the oracles are reporting.
+  Useful for understanding if your price is in line with what the oracles are reporting.
 
 - **Deposits Tab**
 
@@ -71,17 +71,17 @@ The ARM dashboard at [arm.peer.xyz](https://arm.peer.xyz) gives you a real-time 
 
   Check the Liquidity tab regularly:
   - Are your rates in the ballpark of other sellers?
-  - Has the market shifted enough that your spread needs adjusting?
+  - Has the market shifted enough that your price edge needs adjusting?
   - Are new sellers undercutting you on a specific currency?
 
 - **Fill Rate**
 
   Track how quickly your orders are getting filled:
-  - Consistently fast fills = your pricing is good (maybe too good - consider widening your spread)
-  - Slow or no fills = your spread is too wide, or there's low demand for that currency
+  - Consistently fast fills = your pricing is good, or maybe too cheap, so consider increasing your premium
+  - Slow or no fills = your premium may be too high, or there's low demand for that currency
 
 :::info
-ARM can run without constant monitoring, but checking in and adjusting your spreads based on market conditions and fill rates will maximize your returns.
+ARM can run without constant monitoring, but checking in and adjusting your pricing based on market conditions and fill rates helps keep your liquidity competitive.
 :::
 
 ➡️ _Back to: [ARM Overview](automated-rate-management.md)_

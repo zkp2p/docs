@@ -45,13 +45,13 @@ Floor rates are available in the **Advanced** flow (toggle Advanced on in the to
 
    When the floor is active, a red **"Min"** line appears on the orderbook chart showing exactly where your floor sits relative to the market and your current rate. Your rate (yellow "You" line) will never drop below this red line.
 
-   ![Spread and floor configured](/img/arm/arm-advanced-spread-floor.png)
+   ![Price edge and floor configured](/img/arm/arm-advanced-spread-floor.png)
 
 4. **Review and Confirm**
 
-   The **Configured Rates** summary on the left will show both your spread and floor:
+   The **Configured Rates** summary on the left will show both your price versus market and floor:
 
-   - "Spread vs market +1.25%"
+   - "+1.25% vs market"
    - "Floor: 1.01 USD / USDC"
 
    Click **Review Deposit** to confirm.

@@ -73,10 +73,10 @@ Enter your new rate — e.g., changing **0.8 → 0.795** for GBP.
 - Check the Liquidity tab to see what other providers offer  
 - Look at external exchanges for reference FX rates  
 
-### Consider Spread and Competitiveness
+### Consider Price Edge and Competitiveness
 
-- **Lower spreads** (0.5–1%) = faster sales, lower margin  
-- **Higher spreads** (1–3%) = higher margin, slower sales  
+- Smaller premiums or discounts below market can fill faster
+- Larger premiums can earn more per fill, but may fill more slowly
 - Balance depends on your strategy  
 
 ### Monitor Performance
@@ -84,12 +84,12 @@ Enter your new rate — e.g., changing **0.8 → 0.795** for GBP.
 After updating rates:
 
 - Monitor how quickly your orders are filled  
-- If they're slow to fill → lower your spread  
-- If they're filling instantly → raise your spread slightly  
+- If they're slow to fill, reduce your premium or consider a discount
+- If they're filling instantly, consider increasing your premium slightly
 
 ### Currency-Specific Strategies
 
-- Popular currencies like EUR may allow higher spreads  
+- Popular currencies like EUR may allow higher premiums
 - Rare currencies might require more competitive rates  
 - Optimize for each currency independently  
 

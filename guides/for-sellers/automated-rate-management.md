@@ -5,18 +5,18 @@ title: Automated Rate Management (ARM) for Sellers
 
 # Automated Rate Management (ARM) for Sellers
 
-ARM automatically keeps your USDC conversion rates in sync with the live market using oracle price feeds from Chainlink and Pyth. Instead of manually updating your rates every time the market moves, you just set a **spread** and ARM handles the rest.
+ARM automatically keeps your USDC conversion rates in sync with the live market using oracle price feeds from Chainlink and Pyth. Instead of manually updating your rates every time the market moves, you set your premium or discount versus market and ARM handles the rest.
 
 ### Why Use ARM?
 
 - **No babysitting rates.** Your prices update automatically with the market, so you stay competitive without constantly checking and adjusting.
-- **Per-currency control.** Set different spreads for each currency you accept. Price EUR tightly and give yourself more room on TRY.
+- **Per-currency control.** Set different pricing for each currency you accept. Price EUR tightly and give yourself more room on TRY.
 - **Floor rate safety net.** Set a minimum rate you're willing to accept. ARM will never price below it.
 ### Guides
 
-- [How to Choose Your Spread](arm-choosing-a-spread.md)
-- [Set Your Spread: Express Flow](arm-spread-express.md)
-- [Set Your Spread: Advanced Flow](arm-spread-advanced.md)
+- [How to Choose Your Price Edge](arm-choosing-a-spread.md)
+- [Set Your Price Edge: Express Flow](arm-spread-express.md)
+- [Set Your Price Edge: Advanced Flow](arm-spread-advanced.md)
 - [How to Set a Floor Rate](arm-floor-rates.md)
 - [How to Monitor Your ARM Rates](arm-monitoring.md)
 
@@ -29,20 +29,20 @@ ARM supports 18 currencies including EUR, GBP, AUD, BRL, CAD, JPY, INR, SGD, and
 Every time a buyer wants to fill an order against your deposit, the protocol:
 
 1. Fetches the latest market price from Chainlink or Pyth oracles
-2. Applies your spread
+2. Applies your premium or discount versus market
 3. Uses that as your conversion rate
 
-If you've set a floor rate, the protocol uses whichever is higher: your spread-adjusted rate or your floor.
+If you've set a floor rate, the protocol uses whichever is higher: your market-adjusted rate or your floor.
 
 ### Express vs Advanced Flow
 
 When creating a deposit, you'll see an **Advanced** toggle in the top right corner.
 
-**Express flow** (Advanced off) is the quick setup. One currency, one platform, and a simple spread adjustment with +/- buttons. Good for getting started fast.
+**Express flow** (Advanced off) is the quick setup. One currency, one platform, and a simple percentage adjustment with +/- buttons. Good for getting started fast.
 
 ![Express flow](/img/arm/arm-express-flow.png)
 
-**Advanced flow** (Advanced on) gives you the full orderbook visualization, a spread slider ranging from -5% to +5%, floor rate controls, and support for multiple currencies on one deposit.
+**Advanced flow** (Advanced on) gives you the full orderbook visualization, a price-edge slider ranging from -5% to +5%, floor rate controls, and support for multiple currencies on one deposit.
 
 ![Advanced flow](/img/arm/arm-advanced-default.png)
 
@@ -51,10 +51,10 @@ When creating a deposit, you'll see an **Advanced** toggle in the top right corn
 | | ARM (Default) | Manual / Fixed Rate |
 |---|---|---|
 | Rate updates | Automatic, real-time | You update manually |
-| Effort | Set spread once, adjust occasionally | Monitor and update regularly |
+| Effort | Set price edge once, adjust occasionally | Monitor and update regularly |
 | Market risk | Tracks the market | Can become stale |
 | Best for | Most sellers | Sellers with strong market views |
 
 If you'd rather lock in a fixed rate, see the floor rate guide for how to opt out of ARM.
 
-➡️ _Start with: [How to Choose and Set Your Spread](arm-choosing-a-spread.md)_
+➡️ _Start with: [How to Choose and Set Your Price Edge](arm-choosing-a-spread.md)_
