@@ -17,7 +17,7 @@ When you delegate a deposit, the vault manager updates your pricing on your beha
 
 Use delegation if you do not want to manage rates yourself.
 
-If you want to keep control of your own spreads and floor rates, use [Automated Rate Management (ARM)](automated-rate-management.md) instead.
+If you want to keep control of your own pricing and floor rates, use [Automated Rate Management (ARM)](automated-rate-management.md) instead.
 
 ### How to turn it on
 

@@ -17,7 +17,7 @@ Visit [https://peer.xyz](https://peer.xyz) in your browser.
 ### Step 2: Check Current Market Rates
 
 - Click on the **Liquidity** tab in the main navigation bar  
-- Review current spreads and rates for the currencies you're interested in  
+- Review current prices versus market for the currencies you're interested in
 - Pay attention to available liquidity and limits for each option  
 
 ![Provide Step 2](/img/provide-liquidity/ProvideStep2.png)
@@ -119,8 +119,8 @@ Note: Buyers (takers) CAN pay you from a PayPal Business account — they pick "
 
 - Enter how much you want to sell your USDC for in each currency  
 - Adjust based on what you observed in Step 2
-- You can see your percentage spread in the middle column
-    - Green is above market rate, Grey is close to market rate, and Red is below market rate. 
+- You can see your percentage price edge versus market in the middle column
+    - Green is priced above market, grey is close to market, and red is priced below market.
 
 💡 **Consider**:
 - Market demand  
@@ -155,8 +155,8 @@ To override either limit, click **Order Limits** and enter your own values.
 ### Step 13: Review your details
 
 - Are my tags correct?
-- Are my spreads what I expected?
-- What proceeds can I expect from providing liquidity?
+- Are my premiums or discounts what I expected?
+- What proceeds can I expect if this liquidity fills?
 
 If all details are correct you can continue with your transaction! 
 
@@ -193,9 +193,9 @@ If all details are correct you can continue with your transaction!
 
 ### Setting Optimal Rates
 
-- Check the **Spread** column in the Liquidity tab  
-- Lower spreads (0.5–1%) = faster fills, less profit  
-- Higher spreads (1–3%) = slower fills, more profit  
+- Check the **vs market** price shown in the Liquidity tab
+- Smaller premiums or discounts below market can fill faster
+- Larger premiums can earn more per fill, but may fill more slowly
 
 ### Security Best Practices
 
