@@ -5,11 +5,11 @@
  * Tiers are inspired by precious metals/gems to create visual hierarchy.
  *
  * Tier Hierarchy (by volume):
- * - PEASANT: $0-1k weighted maker volume (Bronze)
- * - PEER: $1k-10k weighted maker volume (Silver)
- * - PLUS: $10k-50k weighted maker volume (Gold)
- * - PRO: $50k-100k weighted maker volume (Emerald)
- * - PLATINUM: $100k+ weighted maker volume (Platinum)
+ * - PEASANT: $0-1k Peer Pay volume (Bronze)
+ * - PEER: $1k-10k Peer Pay volume (Silver)
+ * - PLUS: $10k-50k Peer Pay volume (Gold)
+ * - PRO: $50k-100k Peer Pay volume (Emerald)
+ * - PLATINUM: $100k+ Peer Pay volume (Platinum)
  *
  * @packageDocumentation
  */
