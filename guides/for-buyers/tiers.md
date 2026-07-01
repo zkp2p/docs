@@ -59,7 +59,7 @@ Your per-order limit is **set for each payment method individually** — there's
 - **Larger orders** — every tier raises your per-order limit on each payment method. On the lowest-risk methods it rises from $500 at Peasant to $25,000 at Platinum (see the per-method tables below).
 - **Lower fees** — higher tiers earn a discount on the standard trading fee, up to 0.30% at Platinum.
 - **Shorter cooldowns** — the wait between orders shrinks as you climb and disappears entirely at Peer Plus and above.
-- **More payment methods** — some methods (such as PayPal) require a minimum tier before you can use them.
+- **More payment methods** — some methods (such as PayPal and Venmo) require a minimum tier before you can use them.
 
 ## Payment methods and limits
 
@@ -86,13 +86,13 @@ Reversible methods that carry chargeback risk. Limits are lower and a [cooldown]
 | Method | Peer Peasant | Peer | Peer Plus | Peer Pro | Peer Platinum |
 |--------|-------------:|-----:|----------:|---------:|--------------:|
 | Zelle | $150 | $375 | $1,500 | $3,750 | $7,500 |
-| Venmo | $5 | $250 | $1,000 | $2,500 | $5,000 |
+| Venmo | Locked | Locked | $1,000 | $2,500 | $5,000 |
 | Cash App | $100 | $250 | $1,000 | $2,500 | $5,000 |
 | Chime | $100 | $250 | $1,000 | $2,500 | $5,000 |
 | PayPal | Locked | Locked | $750 | $1,875 | $3,750 |
 
 :::note
-**PayPal** is locked below Peer Plus — you need to reach Peer Plus before you can use it. **Venmo** is limited to $5 per order at the Peer Peasant tier.
+**PayPal** and **Venmo** are locked below Peer Plus — you need to reach Peer Plus before you can use either.
 :::
 
 You can always see your exact limit for each method in the app before creating an order.
@@ -114,7 +114,7 @@ How cooldowns work:
 - Low-risk methods (Revolut, Wise, Monzo, and so on) stay available even during a cooldown.
 - If you try to order while on cooldown, the app shows the time remaining.
 
-**Example:** a Peer user completes a Venmo order, then waits 6 hours before using Venmo, Cash App, Zelle, or PayPal again — but can use Revolut, Wise, or Monzo right away.
+**Example:** a Peer user completes a Cash App order, then waits 6 hours before using Cash App, Zelle, or Chime again — but can use Revolut, Wise, or Monzo right away.
 
 ## Staying in good standing
 
