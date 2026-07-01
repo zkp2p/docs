@@ -5,12 +5,11 @@
  * Tiers are inspired by precious metals/gems to create visual hierarchy.
  *
  * Tier Hierarchy (by volume):
- * - PEASANT: $0-100 volume (Bronze)
- * - PEER: $100-1k volume (Silver)
- * - PLUS: $1k-10k volume (Gold)
- * - PRO: $10k-25k volume (Emerald)
- * - PLATINUM: $25k+ volume (Platinum)
- * - PEER_PRESIDENT: Invite-only (Diamond)
+ * - PEASANT: $0-1k weighted maker volume (Bronze)
+ * - PEER: $1k-10k weighted maker volume (Silver)
+ * - PLUS: $10k-50k weighted maker volume (Gold)
+ * - PRO: $50k-100k weighted maker volume (Emerald)
+ * - PLATINUM: $100k+ weighted maker volume (Platinum)
  *
  * @packageDocumentation
  */
@@ -27,8 +26,7 @@ export type TierLevel =
   | "PEER"
   | "PLUS"
   | "PRO"
-  | "PLATINUM"
-  | "PEER_PRESIDENT";
+  | "PLATINUM";
 
 /**
  * Standard tiers that can be ascended via volume
@@ -42,9 +40,9 @@ export const VOLUME_BASED_TIERS: TierLevel[] = [
 ];
 
 /**
- * All valid tiers including special/invite-only ones
+ * All valid tiers
  */
-export const ALL_TIERS: TierLevel[] = [...VOLUME_BASED_TIERS, "PEER_PRESIDENT"];
+export const ALL_TIERS: TierLevel[] = [...VOLUME_BASED_TIERS];
 
 /* ==========================================================================
    TIER COLORS
@@ -57,7 +55,7 @@ export const ALL_TIERS: TierLevel[] = [...VOLUME_BASED_TIERS, "PEER_PRESIDENT"];
  * intentionally distinct from the core Peer brand palette.
  */
 export const tierColors = {
-  /** Diamond (light cyan/ice blue) - PEER_PRESIDENT */
+  /** Diamond (light cyan/ice blue) */
   diamond: "#B9F2FF",
 
   /** Platinum (elite silver) - PLATINUM */
@@ -81,8 +79,6 @@ export const tierColors = {
  */
 export function getTierColor(tier: TierLevel | string): string {
   switch (tier) {
-    case "PEER_PRESIDENT":
-      return tierColors.diamond;
     case "PLATINUM":
       return tierColors.platinum;
     case "PRO":
@@ -121,14 +117,6 @@ export interface TierColorScheme {
  * Complete color schemes for each tier
  */
 export const tierColorSchemes: Record<TierLevel, TierColorScheme> = {
-  PEER_PRESIDENT: {
-    bg: "linear-gradient(135deg, rgba(185, 242, 255, 0.20) 0%, rgba(135, 206, 235, 0.12) 50%, rgba(185, 242, 255, 0.18) 100%)",
-    border: "rgba(185, 242, 255, 0.6)",
-    iconBg:
-      "linear-gradient(135deg, rgba(185, 242, 255, 0.35) 0%, rgba(135, 206, 235, 0.25) 100%)",
-    iconColor: tierColors.diamond,
-    subtextColor: "rgba(185, 242, 255, 0.95)",
-  },
   PLATINUM: {
     bg: "linear-gradient(135deg, rgba(229, 228, 226, 0.18) 0%, rgba(200, 200, 210, 0.10) 50%, rgba(229, 228, 226, 0.15) 100%)",
     border: "rgba(229, 228, 226, 0.5)",
@@ -205,13 +193,6 @@ export interface TierInfo {
  * Metadata for each tier
  */
 export const tierInfo: Record<TierLevel, TierInfo> = {
-  PEER_PRESIDENT: {
-    tier: "PEER_PRESIDENT",
-    name: "Peer President",
-    material: "Diamond",
-    color: tierColors.diamond,
-    isHidden: true,
-  },
   PLATINUM: {
     tier: "PLATINUM",
     name: "Platinum",
@@ -325,7 +306,7 @@ export const tierAnimations = {
     }
   `,
 
-  /** Premium rotating glow for diamond (peer president) */
+  /** Premium rotating glow for diamond */
   diamond: `
     0% {
       filter: drop-shadow(0 0 3px rgba(185, 242, 255, 0.5)) drop-shadow(0 -1px 2px rgba(255, 255, 255, 0.3));
@@ -350,8 +331,6 @@ export const tierAnimations = {
  */
 export function getTierAnimation(tier: TierLevel | string): string | undefined {
   switch (tier) {
-    case "PEER_PRESIDENT":
-      return tierAnimations.diamond;
     case "PLATINUM":
       return tierAnimations.platinumElite;
     case "PRO":
