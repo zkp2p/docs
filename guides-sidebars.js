@@ -31,6 +31,7 @@ module.exports = {
         'for-sellers/delegate-to-a-vault',
         'for-sellers/notifications',
         'for-sellers/private-orders',
+        'for-sellers/referrals',
         {
           type: 'category',
           label: 'Automated Rate Management (ARM)',
