@@ -18,7 +18,9 @@ Higher tiers unlock larger orders, lower fees, shorter cooldowns, and access to 
 
 ## How you earn a tier
 
-Your tier is based on your **weighted maker volume**: the value of your liquidity that has been filled through Peer, adjusted by each payment rail's tier-volume multiplier. The more qualifying maker volume you build, the higher your tier climbs.
+Your tier is based on **Peer Pay volume**. Historical maker volume earned before July 1, 2026 UTC is preserved, so past makers keep the tier they already earned. Going forward, only Peer Pay volume moves you up the tier ladder. Generic maker volume after the cutoff does not increase your tier.
+
+All Peer Pay rails count 1:1 toward the ladder. Per-platform weighting has been removed.
 
 You're always placed in the highest tier whose volume requirement you meet. New wallets start at Peer Peasant.
 
@@ -30,7 +32,7 @@ Limits, thresholds, cooldowns, and fee discounts are set by the protocol and rea
 
 Your tier comes from two things working together:
 
-1. **Your base tier** — set by your **weighted maker volume** (above). The more qualifying maker volume you build, the higher your base tier.
+1. **Your base tier** — set by preserved historical credit plus forward **Peer Pay volume** (above). The more qualifying Peer Pay volume you build, the higher your base tier.
 2. **A reliability penalty** — a *lock score* that can pull your tier down if you repeatedly lock makers' liquidity and don't follow through.
 
 Your final tier is your base tier minus any reliability penalty. The penalty can only ever **demote** you — it never blocks you outright, and it's offset by the orders you actually complete. In practice:
